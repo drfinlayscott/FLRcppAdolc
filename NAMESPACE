@@ -1,0 +1,2 @@
+import(FLCore)
+useDynLib(FLRcppAdolc)

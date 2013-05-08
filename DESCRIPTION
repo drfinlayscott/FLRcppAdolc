@@ -1,0 +1,17 @@
+Package: FLRcppAdolc
+Type: Package
+Title: Combine FLR, Rcpp and ADOLC
+Version: 1.0
+Date: 2013-04-04
+Author: Finlay Scott
+Maintainer: Finlay Scott <yourfault@somewhere.net>
+Description: More about what it does (maybe more than one line)
+License: GPL2 or later
+Depends:
+    Rcpp (>= 0.10.3)
+Imports:
+    FLCore
+LinkingTo: Rcpp
+Collate:
+    'RcppExports.R'
+    'help.R'

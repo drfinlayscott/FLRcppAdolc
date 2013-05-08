@@ -37,7 +37,7 @@ PKG_LIBS = $(SUBLIBS) `$(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()"`
 ##             (cd subdir; make)
 #
 
-SOURCES_C = RcppExports.cpp FLQuant.cpp
+SOURCES_C = RcppExports.cpp FLQuant.cpp tests/FLQuant_tests.cpp
 OBJECTS = $(SOURCES_C:.cpp=.o)
 
 SUBDIRS = adolc

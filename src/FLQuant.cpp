@@ -123,105 +123,11 @@ namespace Rcpp {
         return Rcpp::wrap(flq_s4);
     }
 }
-
-/*
- * Tests 
- * To be moved somewhere else
- */
-
-// [[Rcpp::export]]
-std::string test_default_constructor_units(){
-	FLQuant flq;
-	return flq.get_units();
-}
-
-// [[Rcpp::export]]
-Rcpp::NumericVector test_default_constructor_data(){
-	FLQuant flq;
-	return flq.get_data();
-}
-
-// [[Rcpp::export]]
-std::string test_sexp_constructor_units(SEXP flq_sexp){
-	FLQuant flq(flq_sexp);
-	return flq.get_units();
-}
-
-// [[Rcpp::export]]
-Rcpp::NumericVector test_sexp_constructor_data(SEXP flq_sexp){
-	FLQuant flq(flq_sexp);
-	return flq.get_data();
-}
-
-// [[Rcpp::export]]
-Rcpp::NumericVector test_FLQuant_as(FLQuant flq){
-	return flq.get_data();
-}
-
-// [[Rcpp::export]]
-FLQuant test_FLQuant_as_wrap(FLQuant flq){
-	return flq;
-}
-
-// [[Rcpp::export]]
-double test_get_accessor(FLQuant flq, int quant, int year, int unit, int season, int area, int iter){
-	double output = 0.0;
-	output = flq(quant,year,unit,season,area,iter);
-	return output;
-}
-
-// [[Rcpp::export]]
-FLQuant test_set_accessor(FLQuant flq, int quant, int year, int unit, int season, int area, int iter, double value){
-	flq(quant,year,unit,season,area,iter) = value;
-	return flq;
-}
-
-// [[Rcpp::export]]
-int test_get_nquant(FLQuant flq){
-	return flq.get_nquant();
-}
-
-// [[Rcpp::export]]
-int test_get_nyear(FLQuant flq){
-	return flq.get_nyear();
-}
-
-// [[Rcpp::export]]
-int test_get_nunit(FLQuant flq){
-	return flq.get_nunit();
-}
-
-
-// [[Rcpp::export]]
-int test_get_nseason(FLQuant flq){
-	return flq.get_nseason();
-}
-
-
-// [[Rcpp::export]]
-int test_get_narea(FLQuant flq){
-	return flq.get_narea();
-}
-
-// [[Rcpp::export]]
-int test_get_niter(FLQuant flq){
-	return flq.get_niter();
-}
-
-// [[Rcpp::export]]
-FLQuant test_copy_constructor(FLQuant flq1){
-	FLQuant flq2(flq1); // uses copy constructor
-	flq1(1,1,1,1,1,1) = 666.0;
-	return flq2;
-}
-
 // [[Rcpp::export]]
 FLQuant test_assignment_operator(FLQuant flq1){
 	FLQuant flq2 = flq1; // uses copy constructor
 	flq1(1,1,1,1,1,1) = 666.0;
 	return flq2;
 }
-
-
 
 

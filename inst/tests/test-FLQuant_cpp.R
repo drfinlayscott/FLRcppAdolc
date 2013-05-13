@@ -21,6 +21,14 @@ test_that("FLQuant constructors",{
     expect_that(c(flqs[["flq1"]][indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]), is_identical_to(value_in))
 })
 
+test_that("FLQuant get and set units accessors",{
+    flq_in <- FLQuant(rnorm(10*30*4*2*4*500), dim = c(10,30,4,2,4,500), units = "Kells")
+    # get
+    expect_that(test_FLQuant_get_units(flq_in), is_identical_to("Kells"))
+    # set
+    expect_that(units(test_FLQuant_set_units(flq_in, "Chaos")), is_identical_to("Chaos"))
+})
+
 test_that("FLQuant get dim accessors",{
     flq_in <- FLQuant(rnorm(10*30*4*2*4*500), dim = c(10,30,4,2,4,500))
     expect_that(length(dimnames(flq_in)$quant), is_identical_to(test_FLQuant_get_nquant(flq_in)))

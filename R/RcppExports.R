@@ -13,6 +13,14 @@ test_FLQuant_copy_constructor <- function(flq1, quant, year, unit, season, area,
     .Call('FLRcppAdolc_test_FLQuant_copy_constructor', PACKAGE = 'FLRcppAdolc', flq1, quant, year, unit, season, area, iter, value)
 }
 
+test_FLQuant_get_units <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuant_get_units', PACKAGE = 'FLRcppAdolc', flq)
+}
+
+test_FLQuant_set_units <- function(flq, new_units) {
+    .Call('FLRcppAdolc_test_FLQuant_set_units', PACKAGE = 'FLRcppAdolc', flq, new_units)
+}
+
 test_FLQuant_get_nquant <- function(flq) {
     .Call('FLRcppAdolc_test_FLQuant_get_nquant', PACKAGE = 'FLRcppAdolc', flq)
 }

@@ -43,6 +43,27 @@ BEGIN_RCPP
     return Rcpp::wrap(__result);
 END_RCPP
 }
+// test_FLQuant_get_units
+std::string test_FLQuant_get_units(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_get_units(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    std::string __result = test_FLQuant_get_units(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_set_units
+FLQuant test_FLQuant_set_units(FLQuant flq, std::string new_units);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_set_units(SEXP flqSEXP, SEXP new_unitsSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    std::string new_units = Rcpp::as<std::string >(new_unitsSEXP);
+    FLQuant __result = test_FLQuant_set_units(flq, new_units);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
 // test_FLQuant_get_nquant
 int test_FLQuant_get_nquant(FLQuant flq);
 RcppExport SEXP FLRcppAdolc_test_FLQuant_get_nquant(SEXP flqSEXP) {

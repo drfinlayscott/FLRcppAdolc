@@ -20,6 +20,17 @@ Rcpp::List test_FLQuant_copy_constructor(FLQuant flq1, int quant, int year, int 
 }
 
 // [[Rcpp::export]]
+std::string test_FLQuant_get_units(FLQuant flq){
+	return flq.get_units();
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_set_units(FLQuant flq, std::string new_units){
+	flq.set_units(new_units);
+	return flq;
+}
+
+// [[Rcpp::export]]
 int test_FLQuant_get_nquant(FLQuant flq){
 	return flq.get_nquant();
 }

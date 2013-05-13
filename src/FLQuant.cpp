@@ -48,6 +48,11 @@ std::string FLQuant::get_units() const{
 	return units;
 }
 
+
+void FLQuant::set_units(std::string new_units){
+	units = new_units;
+}
+
 Rcpp::NumericVector FLQuant::get_data() const{
 	return data;
 }

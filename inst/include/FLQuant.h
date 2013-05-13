@@ -19,9 +19,10 @@ class FLQuant {
 		FLQuant(const FLQuant& FLQuant_source); // copy constructor to ensure that copy of NumericVector is a deep copy
 
 		/* Get accessors 
-		 * Note the use of 'const' because these methods should promise not to modify the members
+		 * Note the use of 'const' because the get methods should promise not to modify the members (we are returning them)
 		 */
 		std::string get_units() const;
+		void set_units(std::string new_units);
 		Rcpp::NumericVector get_data() const;
 		double operator () (const int quant, const int year, const int unit, const int season, const int area, const int iter) const;
 		FLQuant& operator = (const FLQuant& FLQuant_source);

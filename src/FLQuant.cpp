@@ -123,11 +123,5 @@ namespace Rcpp {
         return Rcpp::wrap(flq_s4);
     }
 }
-// [[Rcpp::export]]
-FLQuant test_assignment_operator(FLQuant flq1){
-	FLQuant flq2 = flq1; // uses copy constructor
-	flq1(1,1,1,1,1,1) = 666.0;
-	return flq2;
-}
 
 

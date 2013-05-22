@@ -206,3 +206,18 @@ test_that("FLQuant difference operators", {
     expect_that(test_FLQuant_double_difference_operator(flq_in, value), is_identical_to(flq_in - value))
 })
 
+# What happens to logging negative values?
+test_that("FLQuant log and exp functions", {
+    flq_in <- abs(FLQuant(rnorm(10*20*4*2*4*100), dim = c(10,20,4,2,4,100)))
+    expect_that(log(flq_in), is_identical_to(test_FLQuant_log_function(flq_in)))
+    flq_in2 <- (FLQuant(rnorm(10*20*4*2*4*100), dim = c(10,20,4,2,4,100)))
+    expect_that(exp(flq_in2), is_identical_to(test_FLQuant_exp_function(flq_in2)))
+})
+
+test_that("FLQuant chaining operators", {
+    flq_in <- abs(FLQuant(rnorm(10*20*4*2*4*100), dim = c(10,20,4,2,4,100)))
+    flq_out <- test_FLQuant_chaining_operators(flq_in)
+    out = (log(flq_in + flq_in * flq_in * exp(flq_in)) - flq_in) / flq_in
+    expect_that(out@.Data, is_identical_to(flq_out@.Data))
+})
+

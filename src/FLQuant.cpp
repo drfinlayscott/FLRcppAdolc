@@ -96,6 +96,10 @@ void FLQuant::set_dimnames(const Rcpp::List dimnames){
 }
 */
 
+int FLQuant::get_size() const{
+	return data.size();
+}
+
 int FLQuant::get_nquant() const{
 	Rcpp::IntegerVector dims = data.attr("dim");
 	return dims(0);
@@ -202,8 +206,9 @@ FLQuant& FLQuant::operator *= (const FLQuant& flq_rhs){
     if (match_dims(flq_rhs) != 1){
         Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
     }
-    for (int i = 1; i <= data.size(); ++i)
+    for (int i = 1; i <= data.size(); ++i){
         (*this)(i) = (*this)(i) * flq_rhs(i); // Use the () operator instead of accessing data member directly so indexing starts at same place
+    }
     return *this;
 }
 
@@ -214,8 +219,9 @@ FLQuant FLQuant::operator * (const FLQuant& flq_rhs) const{
 }
 
 FLQuant& FLQuant::operator *= (const double& rhs){
-    for (int i = 1; i <= data.size(); ++i)
+    for (int i = 1; i <= data.size(); ++i){
         (*this)(i) = (*this)(i) * rhs; 
+    }
     return *this;
 }
 
@@ -229,8 +235,9 @@ FLQuant& FLQuant::operator /= (const FLQuant& flq_rhs){
     if (match_dims(flq_rhs) != 1){
         Rcpp::stop("You cannot divide FLQuants as your dimensions do not match.");
     }
-    for (int i = 1; i <= data.size(); ++i)
+    for (int i = 1; i <= data.size(); ++i){
         (*this)(i) = (*this)(i) / flq_rhs(i); // Use the () operator instead of accessing data member directly so indexing starts at same place
+    }
     return *this;
 }
 
@@ -241,8 +248,9 @@ FLQuant FLQuant::operator / (const FLQuant& flq_rhs) const{
 }
 
 FLQuant& FLQuant::operator /= (const double& rhs){
-    for (int i = 1; i <= data.size(); ++i)
+    for (int i = 1; i <= data.size(); ++i){
         (*this)(i) = (*this)(i) / rhs; 
+    }
     return *this;
 }
 
@@ -256,8 +264,9 @@ FLQuant& FLQuant::operator += (const FLQuant& flq_rhs){
     if (match_dims(flq_rhs) != 1){
         Rcpp::stop("You cannot add FLQuants as your dimensions do not match.");
     }
-    for (int i = 1; i <= data.size(); ++i)
+    for (int i = 1; i <= data.size(); ++i){
         (*this)(i) = (*this)(i) + flq_rhs(i); // Use the () operator instead of accessing data member directly so indexing starts at same place
+    }
     return *this;
 }
 
@@ -268,8 +277,9 @@ FLQuant FLQuant::operator + (const FLQuant& flq_rhs) const{
 }
 
 FLQuant& FLQuant::operator += (const double& rhs){
-    for (int i = 1; i <= data.size(); ++i)
+    for (int i = 1; i <= data.size(); ++i){
         (*this)(i) = (*this)(i) + rhs; 
+    }
     return *this;
 }
 
@@ -283,8 +293,9 @@ FLQuant& FLQuant::operator -= (const FLQuant& flq_rhs){
     if (match_dims(flq_rhs) != 1){
         Rcpp::stop("You cannot subtract FLQuants as your dimensions do not match.");
     }
-    for (int i = 1; i <= data.size(); ++i)
+    for (int i = 1; i <= data.size(); ++i){
         (*this)(i) = (*this)(i) - flq_rhs(i); // Use the () operator instead of accessing data member directly so indexing starts at same place
+    }
     return *this;
 }
 
@@ -295,8 +306,9 @@ FLQuant FLQuant::operator - (const FLQuant& flq_rhs) const{
 }
 
 FLQuant& FLQuant::operator -= (const double& rhs){
-    for (int i = 1; i <= data.size(); ++i)
+    for (int i = 1; i <= data.size(); ++i){
         (*this)(i) = (*this)(i) - rhs; 
+    }
     return *this;
 }
 
@@ -320,3 +332,21 @@ int FLQuant::match_dims(const FLQuant& b) const{
     }
     return 1; // Else all is good
 }
+
+/* Other functions */
+FLQuant log(const FLQuant& flq){
+    FLQuant out = flq;
+    for (int i = 1; i <= flq.get_size(); ++i){
+        out(i) = log(out(i));
+    }
+    return out;
+}
+
+FLQuant exp(const FLQuant& flq){
+    FLQuant out = flq;
+    for (int i = 1; i <= flq.get_size(); ++i){
+        out(i) = exp(out(i));
+    }
+    return out;
+}
+

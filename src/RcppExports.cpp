@@ -458,3 +458,33 @@ BEGIN_RCPP
     return Rcpp::wrap(__result);
 END_RCPP
 }
+// test_FLQuant_log_function
+FLQuant test_FLQuant_log_function(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_log_function(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    FLQuant __result = test_FLQuant_log_function(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_exp_function
+FLQuant test_FLQuant_exp_function(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_exp_function(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    FLQuant __result = test_FLQuant_exp_function(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_chaining_operators
+FLQuant test_FLQuant_chaining_operators(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_chaining_operators(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    FLQuant __result = test_FLQuant_chaining_operators(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}

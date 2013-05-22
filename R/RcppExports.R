@@ -161,3 +161,15 @@ test_FLQuant_double_difference_operator <- function(flq1, rhs) {
     .Call('FLRcppAdolc_test_FLQuant_double_difference_operator', PACKAGE = 'FLRcppAdolc', flq1, rhs)
 }
 
+test_FLQuant_log_function <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuant_log_function', PACKAGE = 'FLRcppAdolc', flq)
+}
+
+test_FLQuant_exp_function <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuant_exp_function', PACKAGE = 'FLRcppAdolc', flq)
+}
+
+test_FLQuant_chaining_operators <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuant_chaining_operators', PACKAGE = 'FLRcppAdolc', flq)
+}
+

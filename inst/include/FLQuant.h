@@ -24,6 +24,7 @@ class FLQuant {
 		 */
 		std::string get_units() const;
 		Rcpp::NumericVector get_data() const;
+		int get_size() const;
 		int get_nquant() const;
 		int get_nyear() const;
 		int get_nunit() const;
@@ -81,6 +82,8 @@ namespace Rcpp {
 }
 
 /* Other useful functions */
-int match_dims(const FLQuant a, const FLQuant b);
+//int match_dims(const FLQuant a, const FLQuant b);
+FLQuant log(const FLQuant& flq);
+FLQuant exp(const FLQuant& flq);
 
 

@@ -240,3 +240,19 @@ FLQuant test_FLQuant_double_difference_operator(FLQuant flq1, double rhs){
 	return flq3;
 }
 
+// [[Rcpp::export]]
+FLQuant test_FLQuant_log_function(FLQuant flq){
+    return log(flq);
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_exp_function(FLQuant flq){
+    return exp(flq);
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_chaining_operators(FLQuant flq){
+    FLQuant out;
+    out = (log(flq + flq * flq * exp(flq)) - flq) / flq;
+    return out;
+}

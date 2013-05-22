@@ -132,13 +132,61 @@ test_that("FLQuant assignment operator",{
 test_that("FLQuant multiplier operators", {
     flq_in <- FLQuant(rnorm(10*20*4*2*4*100), dim = c(10,20,4,2,4,100))
     flq_in2 <- FLQuant(rnorm(10*20*4*2*4*100), dim = c(10,20,4,2,4,100))
+    flq_in3 <- FLQuant(rnorm(5*20*4*2*4*100), dim = c(5,20,4,2,4,100))
+    # FLQ *= FLQ
+    flq_out <- test_FLQuant_FLQuant_multiplier_assignment_operator(flq_in,flq_in2)
+    expect_that(flq_out@.Data, is_identical_to((flq_in * flq_in2)@.Data)) # units will be different so only check data
+    expect_that(test_FLQuant_FLQuant_multiplier_assignment_operator(flq_in,flq_in3), throws_error())
+    # FLQ * FLQ
     flq_out <- test_FLQuant_FLQuant_multiplier_operator(flq_in,flq_in2)
-    # units will be different so only check data
     expect_that((flq_in * flq_in2)@.Data, is_identical_to(flq_out@.Data))
+    expect_that(test_FLQuant_FLQuant_multiplier_operator(flq_in,flq_in3), throws_error())
+    # Deep copy check
     flqs_out <- test_FLQuant_FLQuant_multiplier_uses_deep_copy(flq_in, flq_in2)
     expect_that((flq_in * flq_in2)@.Data, is_identical_to(flqs_out[["flq3"]]@.Data))
     expect_that(flq_in, is_identical_to(flqs_out[["flq1"]]))
     expect_that(flq_in2, is_identical_to(flqs_out[["flq2"]]))
 })
 
+test_that("FLQuant divide operators", {
+    flq_in <- FLQuant(rnorm(10*20*4*2*4*100), dim = c(10,20,4,2,4,100))
+    flq_in2 <- FLQuant(rnorm(10*20*4*2*4*100), dim = c(10,20,4,2,4,100))
+    flq_in3 <- FLQuant(rnorm(5*20*4*2*4*100), dim = c(5,20,4,2,4,100))
+    # FLQ /= FLQ
+    flq_out <- test_FLQuant_FLQuant_divide_assignment_operator(flq_in,flq_in2)
+    expect_that(flq_out@.Data, is_identical_to((flq_in / flq_in2)@.Data)) # units will be different so only check data
+    expect_that(test_FLQuant_FLQuant_divide_assignment_operator(flq_in,flq_in3), throws_error())
+    # FLQ / FLQ
+    flq_out <- test_FLQuant_FLQuant_divide_operator(flq_in,flq_in2)
+    expect_that((flq_in / flq_in2)@.Data, is_identical_to(flq_out@.Data))
+    expect_that(test_FLQuant_FLQuant_divide_operator(flq_in,flq_in3), throws_error())
+})
+
+test_that("FLQuant addition operators", {
+    flq_in <- FLQuant(rnorm(10*20*4*2*4*100), dim = c(10,20,4,2,4,100))
+    flq_in2 <- FLQuant(rnorm(10*20*4*2*4*100), dim = c(10,20,4,2,4,100))
+    flq_in3 <- FLQuant(rnorm(5*20*4*2*4*100), dim = c(5,20,4,2,4,100))
+    # FLQ += FLQ
+    flq_out <- test_FLQuant_FLQuant_addition_assignment_operator(flq_in,flq_in2)
+    expect_that(flq_out@.Data, is_identical_to((flq_in + flq_in2)@.Data)) # units will be different so only check data
+    expect_that(test_FLQuant_FLQuant_addition_assignment_operator(flq_in,flq_in3), throws_error())
+    # FLQ + FLQ
+    flq_out <- test_FLQuant_FLQuant_addition_operator(flq_in,flq_in2)
+    expect_that((flq_in + flq_in2)@.Data, is_identical_to(flq_out@.Data))
+    expect_that(test_FLQuant_FLQuant_addition_operator(flq_in,flq_in3), throws_error())
+})
+
+test_that("FLQuant difference operators", {
+    flq_in <- FLQuant(rnorm(10*20*4*2*4*100), dim = c(10,20,4,2,4,100))
+    flq_in2 <- FLQuant(rnorm(10*20*4*2*4*100), dim = c(10,20,4,2,4,100))
+    flq_in3 <- FLQuant(rnorm(5*20*4*2*4*100), dim = c(5,20,4,2,4,100))
+    # FLQ += FLQ
+    flq_out <- test_FLQuant_FLQuant_difference_assignment_operator(flq_in,flq_in2)
+    expect_that(flq_out@.Data, is_identical_to((flq_in - flq_in2)@.Data)) # units will be different so only check data
+    expect_that(test_FLQuant_FLQuant_difference_assignment_operator(flq_in,flq_in3), throws_error())
+    # FLQ + FLQ
+    flq_out <- test_FLQuant_FLQuant_difference_operator(flq_in,flq_in2)
+    expect_that((flq_in - flq_in2)@.Data, is_identical_to(flq_out@.Data))
+    expect_that(test_FLQuant_FLQuant_difference_operator(flq_in,flq_in3), throws_error())
+})
 

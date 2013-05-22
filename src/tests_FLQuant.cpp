@@ -137,8 +137,26 @@ int test_FLQuant_match_dims(FLQuant flq1, FLQuant flq2){
 }
 
 // [[Rcpp::export]]
+FLQuant test_FLQuant_FLQuant_multiplier_assignment_operator(FLQuant flq1, FLQuant flq2){
+	flq1 *= flq2;
+	return flq1;
+}
+
+// [[Rcpp::export]]
 FLQuant test_FLQuant_FLQuant_multiplier_operator(FLQuant flq1, FLQuant flq2){
 	FLQuant flq3 = flq1 * flq2;
+	return flq3;
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_FLQuant_divide_assignment_operator(FLQuant flq1, FLQuant flq2){
+	flq1 /= flq2;
+	return flq1;
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_FLQuant_divide_operator(FLQuant flq1, FLQuant flq2){
+	FLQuant flq3 = flq1 / flq2;
 	return flq3;
 }
 
@@ -148,5 +166,29 @@ Rcpp::List test_FLQuant_FLQuant_multiplier_uses_deep_copy(FLQuant flq1, FLQuant 
 	return Rcpp::List::create(Rcpp::Named("flq1", flq1),
 				Rcpp::Named("flq2",flq2),
 				Rcpp::Named("flq3",flq3));
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_FLQuant_addition_assignment_operator(FLQuant flq1, FLQuant flq2){
+	flq1 += flq2;
+	return flq1;
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_FLQuant_addition_operator(FLQuant flq1, FLQuant flq2){
+	FLQuant flq3 = flq1 + flq2;
+	return flq3;
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_FLQuant_difference_assignment_operator(FLQuant flq1, FLQuant flq2){
+	flq1 -= flq2;
+	return flq1;
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_FLQuant_difference_operator(FLQuant flq1, FLQuant flq2){
+	FLQuant flq3 = flq1 - flq2;
+	return flq3;
 }
 

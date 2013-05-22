@@ -46,8 +46,15 @@ class FLQuant {
 		double& operator () (const int element); // gets and sets an element so const not reinforced
 		double operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter) const; // only gets an element so const reinforced - however cannot return reference due to NumericVector() operator
 		double operator () (const int element) const; // only gets an element so const reinforced - - however cannot return reference due to NumericVector() operator
-        FLQuant operator * (const FLQuant& flq) const;
 		FLQuant& operator = (const FLQuant& FLQuant_source); // Assignment operator for a deep copy
+        FLQuant& operator *= (const FLQuant& flq_rhs);
+        FLQuant operator * (const FLQuant& flq_rhs) const;
+        FLQuant& operator /= (const FLQuant& flq_rhs);
+        FLQuant operator / (const FLQuant& flq_rhs) const;
+        FLQuant& operator += (const FLQuant& flq_rhs);
+        FLQuant operator + (const FLQuant& flq_rhs) const;
+        FLQuant& operator -= (const FLQuant& flq_rhs);
+        FLQuant operator - (const FLQuant& flq_rhs) const;
 
         /* Other methods */
         int match_dims(const FLQuant& flq) const;

@@ -146,6 +146,10 @@ test_that("FLQuant multiplier operators", {
     expect_that((flq_in * flq_in2)@.Data, is_identical_to(flqs_out[["flq3"]]@.Data))
     expect_that(flq_in, is_identical_to(flqs_out[["flq1"]]))
     expect_that(flq_in2, is_identical_to(flqs_out[["flq2"]]))
+    # FLQ *= and * double
+    value <- rnorm(1)
+    expect_that(test_FLQuant_double_multiplier_assignment_operator(flq_in, value), is_identical_to(flq_in * value))
+    expect_that(test_FLQuant_double_multiplier_operator(flq_in, value), is_identical_to(flq_in * value))
 })
 
 test_that("FLQuant divide operators", {
@@ -160,6 +164,10 @@ test_that("FLQuant divide operators", {
     flq_out <- test_FLQuant_FLQuant_divide_operator(flq_in,flq_in2)
     expect_that((flq_in / flq_in2)@.Data, is_identical_to(flq_out@.Data))
     expect_that(test_FLQuant_FLQuant_divide_operator(flq_in,flq_in3), throws_error())
+    # FLQ /= and / double
+    value <- rnorm(1)
+    expect_that(test_FLQuant_double_divide_assignment_operator(flq_in, value), is_identical_to(flq_in / value))
+    expect_that(test_FLQuant_double_divide_operator(flq_in, value), is_identical_to(flq_in / value))
 })
 
 test_that("FLQuant addition operators", {
@@ -174,6 +182,10 @@ test_that("FLQuant addition operators", {
     flq_out <- test_FLQuant_FLQuant_addition_operator(flq_in,flq_in2)
     expect_that((flq_in + flq_in2)@.Data, is_identical_to(flq_out@.Data))
     expect_that(test_FLQuant_FLQuant_addition_operator(flq_in,flq_in3), throws_error())
+    # FLQ += and + double
+    value <- rnorm(1)
+    expect_that(test_FLQuant_double_addition_assignment_operator(flq_in, value), is_identical_to(flq_in + value))
+    expect_that(test_FLQuant_double_addition_operator(flq_in, value), is_identical_to(flq_in + value))
 })
 
 test_that("FLQuant difference operators", {
@@ -188,5 +200,9 @@ test_that("FLQuant difference operators", {
     flq_out <- test_FLQuant_FLQuant_difference_operator(flq_in,flq_in2)
     expect_that((flq_in - flq_in2)@.Data, is_identical_to(flq_out@.Data))
     expect_that(test_FLQuant_FLQuant_difference_operator(flq_in,flq_in3), throws_error())
+    # FLQ -= and - double
+    value <- rnorm(1)
+    expect_that(test_FLQuant_double_difference_assignment_operator(flq_in, value), is_identical_to(flq_in - value))
+    expect_that(test_FLQuant_double_difference_operator(flq_in, value), is_identical_to(flq_in - value))
 })
 

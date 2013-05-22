@@ -213,6 +213,18 @@ FLQuant FLQuant::operator * (const FLQuant& flq_rhs) const{
     return flq_out;
 }
 
+FLQuant& FLQuant::operator *= (const double& rhs){
+    for (int i = 1; i <= data.size(); ++i)
+        (*this)(i) = (*this)(i) * rhs; 
+    return *this;
+}
+
+FLQuant FLQuant::operator * (const double& rhs) const{
+    FLQuant flq_out = *this; // Copy myself
+    flq_out *= rhs;
+    return flq_out;
+}
+
 FLQuant& FLQuant::operator /= (const FLQuant& flq_rhs){
     if (match_dims(flq_rhs) != 1){
         Rcpp::stop("You cannot divide FLQuants as your dimensions do not match.");
@@ -225,6 +237,18 @@ FLQuant& FLQuant::operator /= (const FLQuant& flq_rhs){
 FLQuant FLQuant::operator / (const FLQuant& flq_rhs) const{
     FLQuant flq_out = *this; // Copy myself
     flq_out /= flq_rhs;
+    return flq_out;
+}
+
+FLQuant& FLQuant::operator /= (const double& rhs){
+    for (int i = 1; i <= data.size(); ++i)
+        (*this)(i) = (*this)(i) / rhs; 
+    return *this;
+}
+
+FLQuant FLQuant::operator / (const double& rhs) const{
+    FLQuant flq_out = *this; // Copy myself
+    flq_out /= rhs;
     return flq_out;
 }
 
@@ -243,6 +267,18 @@ FLQuant FLQuant::operator + (const FLQuant& flq_rhs) const{
     return flq_out;
 }
 
+FLQuant& FLQuant::operator += (const double& rhs){
+    for (int i = 1; i <= data.size(); ++i)
+        (*this)(i) = (*this)(i) + rhs; 
+    return *this;
+}
+
+FLQuant FLQuant::operator + (const double& rhs) const{
+    FLQuant flq_out = *this; // Copy myself
+    flq_out += rhs;
+    return flq_out;
+}
+
 FLQuant& FLQuant::operator -= (const FLQuant& flq_rhs){
     if (match_dims(flq_rhs) != 1){
         Rcpp::stop("You cannot subtract FLQuants as your dimensions do not match.");
@@ -255,6 +291,18 @@ FLQuant& FLQuant::operator -= (const FLQuant& flq_rhs){
 FLQuant FLQuant::operator - (const FLQuant& flq_rhs) const{
     FLQuant flq_out = *this; // Copy myself
     flq_out -= flq_rhs;
+    return flq_out;
+}
+
+FLQuant& FLQuant::operator -= (const double& rhs){
+    for (int i = 1; i <= data.size(); ++i)
+        (*this)(i) = (*this)(i) - rhs; 
+    return *this;
+}
+
+FLQuant FLQuant::operator - (const double& rhs) const{
+    FLQuant flq_out = *this; // Copy myself
+    flq_out -= rhs;
     return flq_out;
 }
 

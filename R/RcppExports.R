@@ -173,3 +173,15 @@ test_FLQuant_chaining_operators <- function(flq) {
     .Call('FLRcppAdolc_test_FLQuant_chaining_operators', PACKAGE = 'FLRcppAdolc', flq)
 }
 
+test_FLStock_wrap <- function(fls_sexp) {
+    .Call('FLRcppAdolc_test_FLStock_wrap', PACKAGE = 'FLRcppAdolc', fls_sexp)
+}
+
+test_FLStock_sexp_constructor <- function(fls_sexp) {
+    .Call('FLRcppAdolc_test_FLStock_sexp_constructor', PACKAGE = 'FLRcppAdolc', fls_sexp)
+}
+
+test_FLStock_as <- function(fls) {
+    .Call('FLRcppAdolc_test_FLStock_as', PACKAGE = 'FLRcppAdolc', fls)
+}
+

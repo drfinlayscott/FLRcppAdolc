@@ -173,14 +173,14 @@ double FLQuant::operator () (const int element) const{
 /* Define template specialisations for as and wrap */
 namespace Rcpp {
     template <> FLQuant as(SEXP flq_sexp) {
-	FLQuant flq(flq_sexp);
+        FLQuant flq(flq_sexp);
         return flq;
     }
 
     template <> SEXP wrap(const FLQuant &flq) {
-	Rcpp::S4 flq_s4("FLQuant");
-	flq_s4.slot(".Data") = flq.get_data();
-	flq_s4.slot("units") = flq.get_units();
+        Rcpp::S4 flq_s4("FLQuant");
+        flq_s4.slot(".Data") = flq.get_data();
+        flq_s4.slot("units") = flq.get_units();
         return Rcpp::wrap(flq_s4);
     }
 }

@@ -1,19 +1,6 @@
 #include "../inst/include/FLQuant.h"
 
 // Destructor - not needed. The members NumericVector and string are RAII and therefore look after their own resources
-// set_units
-// set_dim
-// set_dimnames
-// Operators:
-// FLQuant + FLQuant
-// FLQuant + single numeric
-// FLQuant - FLQuant
-// FLQuant - single numeric
-// FLQuant * FLQuant
-// FLQuant * single numeric
-// FLQuant / FLQuant
-// FLQuant / single numeric
-// Check deep / shallow copy
 
 // Default constructor
 // No dimnames set as the array is null

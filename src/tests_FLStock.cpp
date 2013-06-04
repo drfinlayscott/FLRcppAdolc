@@ -17,3 +17,12 @@ FLQuant test_FLStock_sexp_constructor(SEXP fls_sexp){
 	return fls.stock_n;
 }
 
+// [[Rcpp::export]]
+Rcpp::List test_FLStock_copy_constructor(FLStock fls1, int quant, int year, int unit, int season, int area, int iter, double value){
+	FLStock fls2(fls1); // uses copy constructor
+	fls1.stock_n(quant,year,unit,season,area,iter) = value;
+	return Rcpp::List::create(Rcpp::Named("fls1", fls1),
+				Rcpp::Named("fls2",fls2));
+}
+
+

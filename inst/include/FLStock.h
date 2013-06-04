@@ -11,7 +11,7 @@ class FLStock {
         /* Constructors */
 		FLStock();
 		FLStock(SEXP fls_sexp);
-		//FLStock(const FLStock& FLStock_source); // copy constructor to ensure that copy is a deep copy - used when passing FLSs into functions
+		FLStock(const FLStock& FLStock_source); // copy constructor to ensure that copy is a deep copy - used when passing FLSs into functions
 
         /* Don't make the data private - else writing accessor methods for all these will be a massive pain */
         // The names etc

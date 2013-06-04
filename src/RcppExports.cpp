@@ -518,3 +518,20 @@ BEGIN_RCPP
     return Rcpp::wrap(__result);
 END_RCPP
 }
+// test_FLStock_copy_constructor
+Rcpp::List test_FLStock_copy_constructor(FLStock fls1, int quant, int year, int unit, int season, int area, int iter, double value);
+RcppExport SEXP FLRcppAdolc_test_FLStock_copy_constructor(SEXP fls1SEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLStock fls1 = Rcpp::as<FLStock >(fls1SEXP);
+    int quant = Rcpp::as<int >(quantSEXP);
+    int year = Rcpp::as<int >(yearSEXP);
+    int unit = Rcpp::as<int >(unitSEXP);
+    int season = Rcpp::as<int >(seasonSEXP);
+    int area = Rcpp::as<int >(areaSEXP);
+    int iter = Rcpp::as<int >(iterSEXP);
+    double value = Rcpp::as<double >(valueSEXP);
+    Rcpp::List __result = test_FLStock_copy_constructor(fls1, quant, year, unit, season, area, iter, value);
+    return Rcpp::wrap(__result);
+END_RCPP
+}

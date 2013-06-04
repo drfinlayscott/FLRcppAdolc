@@ -185,3 +185,7 @@ test_FLStock_sexp_constructor <- function(fls_sexp) {
     .Call('FLRcppAdolc_test_FLStock_sexp_constructor', PACKAGE = 'FLRcppAdolc', fls_sexp)
 }
 
+test_FLStock_copy_constructor <- function(fls1, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_FLStock_copy_constructor', PACKAGE = 'FLRcppAdolc', fls1, quant, year, unit, season, area, iter, value)
+}
+

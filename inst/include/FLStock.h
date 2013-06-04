@@ -36,6 +36,9 @@ class FLStock {
         FLQuant harvest;
         FLQuant harvest_spwn;
         FLQuant m_spwn;
+
+        /* Operators */
+		FLStock& operator = (const FLStock& FLStock_source); // Assignment operator for a deep copy
 };
 
 // Custom as-wrap methods

@@ -75,6 +75,34 @@ FLStock::FLStock(const FLStock& FLStock_source){
     m_spwn = FLStock_source.m_spwn;
 }
 
+// Assignment operator to ensure deep copy - else 'data' can be pointed at by multiple instances
+FLStock& FLStock::operator = (const FLStock& FLStock_source){
+	if (this != &FLStock_source){
+        name = FLStock_source.name;
+        desc = FLStock_source.desc;
+        range = FLStock_source.range;
+        catches = FLStock_source.catches;
+        catch_n = FLStock_source.catch_n;
+        catch_wt = FLStock_source.catch_wt;
+        discards = FLStock_source.discards;
+        discards_n = FLStock_source.discards_n;
+        discards_wt = FLStock_source.discards_wt;
+        landings = FLStock_source.landings;
+        landings_n = FLStock_source.landings_n;
+        landings_wt = FLStock_source.landings_wt;
+        stock = FLStock_source.stock;
+        stock_n = FLStock_source.stock_n;
+        stock_wt = FLStock_source.stock_wt;
+        m = FLStock_source.m;
+        mat = FLStock_source.mat;
+        harvest = FLStock_source.harvest;
+        harvest_spwn = FLStock_source.harvest_spwn;
+        m_spwn = FLStock_source.m_spwn;
+	}
+	return *this;
+}
+
+
 
 /* Define template specialisations for as and wrap */
 namespace Rcpp {

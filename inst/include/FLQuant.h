@@ -59,7 +59,6 @@ class FLQuant {
         FLQuant operator - (const FLQuant& flq_rhs) const;
         FLQuant& operator *= (const double& rhs);
         FLQuant operator * (const double& rhs) const;
-        // Newbies!
         FLQuant& operator /= (const double& rhs);
         FLQuant operator / (const double& rhs) const;
         FLQuant& operator += (const double& rhs);

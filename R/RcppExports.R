@@ -189,3 +189,7 @@ test_FLStock_copy_constructor <- function(fls1, quant, year, unit, season, area,
     .Call('FLRcppAdolc_test_FLStock_copy_constructor', PACKAGE = 'FLRcppAdolc', fls1, quant, year, unit, season, area, iter, value)
 }
 
+test_FLStock_assignment_operator <- function(fls1, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_FLStock_assignment_operator', PACKAGE = 'FLRcppAdolc', fls1, quant, year, unit, season, area, iter, value)
+}
+

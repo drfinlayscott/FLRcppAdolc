@@ -53,6 +53,7 @@ FLStock::FLStock(SEXP fls_sexp){
 /* Define template specialisations for as and wrap */
 namespace Rcpp {
     template <> FLStock as(SEXP fls_sexp) {
+        Rcpp::S4 fls_s4 = Rcpp::as<Rcpp::S4>(fls_sexp);
         FLStock fls(fls_sexp);
         return fls;
     }

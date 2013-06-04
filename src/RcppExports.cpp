@@ -488,6 +488,16 @@ BEGIN_RCPP
     return Rcpp::wrap(__result);
 END_RCPP
 }
+// test_FLStock_as
+FLQuant test_FLStock_as(FLStock fls);
+RcppExport SEXP FLRcppAdolc_test_FLStock_as(SEXP flsSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLStock fls = Rcpp::as<FLStock >(flsSEXP);
+    FLQuant __result = test_FLStock_as(fls);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
 // test_FLStock_wrap
 FLStock test_FLStock_wrap(SEXP fls_sexp);
 RcppExport SEXP FLRcppAdolc_test_FLStock_wrap(SEXP fls_sexpSEXP) {
@@ -505,16 +515,6 @@ BEGIN_RCPP
     Rcpp::RNGScope __rngScope;
     SEXP fls_sexp = Rcpp::as<SEXP >(fls_sexpSEXP);
     FLQuant __result = test_FLStock_sexp_constructor(fls_sexp);
-    return Rcpp::wrap(__result);
-END_RCPP
-}
-// test_FLStock_as
-FLQuant test_FLStock_as(FLStock fls);
-RcppExport SEXP FLRcppAdolc_test_FLStock_as(SEXP flsSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope __rngScope;
-    FLStock fls = Rcpp::as<FLStock >(flsSEXP);
-    FLQuant __result = test_FLStock_as(fls);
     return Rcpp::wrap(__result);
 END_RCPP
 }

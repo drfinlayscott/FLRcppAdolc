@@ -1,3 +1,4 @@
+/*
 #include "../../inst/include/FLStock.h"
 
 // [[Rcpp::export]]
@@ -32,4 +33,4 @@ Rcpp::List test_FLStock_assignment_operator(FLStock fls1, int quant, int year, i
 	return Rcpp::List::create(Rcpp::Named("fls1", fls1),
 				Rcpp::Named("fls2",fls2));
 }
-
+*/

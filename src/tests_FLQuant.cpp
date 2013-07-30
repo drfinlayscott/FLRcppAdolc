@@ -1,5 +1,36 @@
-#include "../../inst/include/FLQuant.h"
+#include "../../inst/include/FLQuant_base.h"
 
+// [[Rcpp::export]]
+void do_nothing_FLQuant(){
+    return;
+}
+
+// [[Rcpp::export]]
+void test_FLQuant_basic_constructor(){
+    FLQuant flq;
+    flq.what_am_i();
+    return;
+}
+
+// [[Rcpp::export]]
+void test_FLQuant_sexp_constructor(SEXP flq_sexp){
+	FLQuant flq(flq_sexp);
+	return;
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_as_wrap(FLQuant flq){
+	return flq;
+}
+
+//------------------ Arithmetic operators ----------------------
+// [[Rcpp::export]]
+FLQuant test_FLQuant_FLQuant_multiplier_assignment_operator(FLQuant flq1, FLQuant flq2){
+    flq1 *= flq2;
+    return flq1;
+}
+
+/*
 // [[Rcpp::export]]
 FLQuant test_FLQuant_as_wrap(FLQuant flq){
 	return flq;
@@ -256,3 +287,4 @@ FLQuant test_FLQuant_chaining_operators(FLQuant flq){
     out = (log(flq + flq * flq * exp(flq)) - flq) / flq;
     return out;
 }
+*/

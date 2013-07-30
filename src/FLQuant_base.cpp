@@ -1,14 +1,90 @@
-#include "../inst/include/FLQuant.h"
+#include "../inst/include/FLQuant_base.h"
 
 // Destructor - not needed. The members NumericVector and string are RAII and therefore look after their own resources
 
 // Default constructor
 // No dimnames set as the array is null
-FLQuant::FLQuant(){
-	data = Rcpp::NumericVector(); // Empty NumericVector - just numeric(0)
+template <typename T>
+FLQuant_base<T>::FLQuant_base(){
+    Rprintf("In FLQuant_base<T> basic constructor\n");
 	units = std::string(); // Empty string - just ""
+    dim = Rcpp::IntegerVector();
+    dimnames = Rcpp::List();
+    // Make NULL std::vector<T>?
 }
 
+// Generic SEXP constructor
+// Used as intrusive 'as'
+// Need to add check that the SEXP is an FLQuant
+template<typename T>
+FLQuant_base<T>::FLQuant_base(SEXP flq_sexp){
+    Rprintf("In FLQuant_base SEXP constructor\n");
+	Rcpp::S4 flq_s4 = Rcpp::as<Rcpp::S4>(flq_sexp);
+    Rcpp::NumericVector data_nv = flq_s4.slot(".Data");
+    // Initialise data to the correct size?
+    // Fill up data
+    data.insert(data.begin(), data_nv.begin(), data_nv.end());
+	units = Rcpp::as<std::string>(flq_s4.slot("units"));
+	dim = data_nv.attr("dim");
+	dimnames = data_nv.attr("dimnames");
+}
+
+/* Used as intrusive 'wrap'
+ * This needs to be specialised for T
+ * i.e. wrapping a double is different to wrapping adouble
+ * So this is a generic wrap that just returns a 0
+ */
+template<typename T>
+FLQuant_base<T>::operator SEXP() const{
+    Rprintf("Wrapping generic FLQuant_base. Probably not what you wanted.\n");
+    int x = 0;
+    return Rcpp::wrap(x);
+}
+
+// Specialise the wrap for an FLQuant
+template<>
+FLQuant_base<double>::operator SEXP() const{
+    Rprintf("Specialised wrapping FLQuant\n");
+    Rcpp::S4 flq_s4("FLQuant");
+    // Make and fill the NumericVector that will be the 'data' slot 
+    Rcpp::NumericVector data_nv;
+    for (vector<double>::const_iterator data_iterator = data.begin(); data_iterator != data.end(); ++data_iterator){ // iterator must be const because the method is const
+        data_nv.push_back(*data_iterator);
+    }
+    // Apply dims and dimnames
+	data_nv.attr("dim") = dim;
+	data_nv.attr("dimnames") = dimnames;
+    // Fill the slots
+    flq_s4.slot(".Data") = data_nv;
+    flq_s4.slot("units") = units;
+    return Rcpp::wrap(flq_s4);
+}
+
+
+
+template <typename T>
+void FLQuant_base<T>::what_am_i(){
+    Rprintf("I am an FLQuant_base<T>\n");
+    return;
+}
+
+/* Arithmetic operators
+ * Need to consider what happens with the combinations FLQuant<T1> * / + - FLQuant<T2>, i.e. what is the output type?
+ *  adouble *  double = adouble
+ *  adouble * adouble = adouble
+ *  double  *  double = double
+ *  Definition of friend function for arithmetic operation
+ */
+
+template<typename T1, typename T2>
+FLQuant_base<T1>& operator *= (FLQuant_base<T1>& lhs, const FLQuant_base<T2>& rhs){
+    Rprintf("In dummy_base<T1,T2> *=\n");
+    // Should have acccess to data member
+    std::transform(lhs.data.begin(), lhs.data.end(), rhs.data.begin(), lhs.data.begin(), std::multiplies<T1>());
+    return lhs;
+}
+
+/*
 // Constructor from an S4
 // Include test that the class in the SEXP is an FLQuant?
 FLQuant::FLQuant(SEXP flq_sexp){
@@ -31,8 +107,9 @@ FLQuant& FLQuant::operator = (const FLQuant& FLQuant_source){
 	}
 	return *this;
 }
-
+*/
 /* Accessor methods */
+/*
 std::string FLQuant::get_units() const{
 	return units;
 }
@@ -48,13 +125,14 @@ Rcpp::NumericVector FLQuant::get_data() const{
 void FLQuant::set_data(const Rcpp::NumericVector& data_in){
 	data  = Rcpp::clone<Rcpp::NumericVector>(data_in);
 }
-
+*/
 /*  A strange method this one. You can only set different dims
   if the data member doesn't have dimnames that match the different dims.
   But the data member will already dim and dimnames attributes that match,
   so you cannot change one on it's own.
   This method is therefore only really used if the data member has no existing attributes.
   This can happen, for example, if a sugar method is used which removes all attributes */
+/*
 void FLQuant::set_dim(const Rcpp::IntegerVector dim){
     // Error checks
     // Must have 6 dimensions
@@ -72,7 +150,7 @@ void FLQuant::set_dim(const Rcpp::IntegerVector dim){
     }
     data.attr("dim") = dim;
 }
-
+*/
 // This does not check that the dimnames are xxx, year, unit etc.
 /*
 void FLQuant::set_dimnames(const Rcpp::List dimnames){
@@ -82,7 +160,7 @@ void FLQuant::set_dimnames(const Rcpp::List dimnames){
     data.attr("dimnames") = dimnames;
 }
 */
-
+/*
 int FLQuant::get_size() const{
 	return data.size();
 }
@@ -169,8 +247,9 @@ double FLQuant::operator () (const int element) const{
     }
     return data[element-1];
 }
-
+*/
 /* Define template specialisations for as and wrap */
+/*
 namespace Rcpp {
     template <> FLQuant as(SEXP flq_sexp) {
         FLQuant flq(flq_sexp);
@@ -184,11 +263,12 @@ namespace Rcpp {
         return Rcpp::wrap(flq_s4);
     }
 }
-
+*/
 /* Mathematical operators */
 // Was going to use Rcpp sugar to multiply the data NumericVectors together
 // But this has the side effect of stripping out the dim and dimnames attributes
 // We could still use it and then set_dim and set_dimnames but that seems a bit long winded
+/*
 FLQuant& FLQuant::operator *= (const FLQuant& flq_rhs){
     if (match_dims(flq_rhs) != 1){
         Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
@@ -304,11 +384,12 @@ FLQuant FLQuant::operator - (const double& rhs) const{
     flq_out -= rhs;
     return flq_out;
 }
-
+*/
 /* Do the dimensions of two FLQuants match?
     If yes, return 1
     Else, return the negative of the first dimension that is wrong
 */
+/*
 int FLQuant::match_dims(const FLQuant& b) const{
     Rcpp::IntegerVector dims_a =  get_dim();
     Rcpp::IntegerVector dims_b =  b.get_dim();
@@ -319,8 +400,9 @@ int FLQuant::match_dims(const FLQuant& b) const{
     }
     return 1; // Else all is good
 }
-
+*/
 /* Other functions */
+/*
 FLQuant log(const FLQuant& flq){
     FLQuant out = flq;
     for (int i = 1; i <= flq.get_size(); ++i){
@@ -336,4 +418,17 @@ FLQuant exp(const FLQuant& flq){
     }
     return out;
 }
+*/
+
+
+// Explicit instantiations - alternatively put all the definitions into the header file
+// This way we have more control over what types the functions work with
+// Explicit instantiation of class
+template class FLQuant_base<double>;
+template class FLQuant_base<adouble>; // Necessary so that dummy_adouble can use the dummy_base<adouble> bits
+// Explicit instantiation of arithmetic friend functions
+template FLQuant_base<double>& operator *= (FLQuant_base<double>& lhs, const FLQuant_base<double>& rhs);
+template FLQuant_base<adouble>& operator *= (FLQuant_base<adouble>& lhs, const FLQuant_base<adouble>& rhs);
+template FLQuant_base<adouble>& operator *= (FLQuant_base<adouble>& lhs, const FLQuant_base<double>& rhs);
+
 

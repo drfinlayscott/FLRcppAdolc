@@ -1,3 +1,9 @@
+/* 
+ * Copyright 2013 FLR Team. Distributed under the GPL 2 or later
+ * Maintainer: Finlay Scott, JRC
+ */
+
+
 #include <RcppCommon.h>
 #include <Rcpp.h>
 #include <adolc.h>
@@ -5,7 +11,19 @@
 /*
  * FLQuant_base<T> template class
  * FLQuant_base<double> is an FLQuant
- * FLQuantAdolc inherits a FLQuant_base<adouble>
+ * I was originally thinking of having FLQuantAdolc as a new class that inherits FLQuant_base<adouble>.
+ * This would mean we could additional member variables and methods that were appropriate for FLQuantAdolc.
+ * This idea could be further expanded to a templated AD class, FLQuantAD_base<T> that could be used for AutoDiff classes as well as adouble
+ * The implementation is not difficult for some methods.
+ * Of course, all constructors, copy and assignement methods need to be specialised.
+ * But the get_x(), set_x(), element accessor () operators could be defined in the FLQuant_base and then used by all inherited classes with different <T>
+ * The problem is with a method that requires a copy to be made. If this method is 'only' declared in the base class, then slicing occurs when called by a derived class.
+ * For example, the multiplication operator, *, requires a copy of the lhs to be made (it works on the lhs object, lhs.(*)).
+ * If the lhs is actually FLQAdolc which as inherited FLQuant_base<adouble>, what appears in the * method is only the base FLQuant_base<adouble> object, not the full
+ * FLQAdolc object. All extra methods and variables are 'sliced' off. When the copy returns, it is only a FLQuant_base<adouble> not FLQAdolc.
+ * To get round this it would be possible to define lots of extra overloaded methods (e.g. FLQuantAdolc * FLQuant; FLQuantAdolc * FLQuant; FLQuant * FLQuantAdolc).
+ * This doesn't sounds like too much of a hassle but the overhead becomes substantial when we have * / + - operators, as well as ones that only a double, or an adouble.
+ * We can revisit this if necessary. For the time being, FLQuantAdolc is just FLQuant_base<adouble>.
  */
 
 template <typename T>
@@ -56,10 +74,22 @@ class FLQuant_base {
         */
         /* Mathematical operators */
 
-        /* arithmetic operator, it's a friend so that we can have access to internals */
+        /* arithmetic operator, it's a friend so that we can have access to internals
+         * See http://blog.emptycrate.com/node/448 for canonical forms*/
+        /*
         template <typename T1, typename T2>
         friend FLQuant_base<T1>& operator *= (FLQuant_base<T1>& lhs, const FLQuant_base<T2>& rhs);
-         
+        */
+        /*
+        template <typename T1, typename T2>
+        friend T1& operator *= (T1& lhs, const T2& rhs);
+        */
+
+        /*
+        template <typename T1, typename T2>
+        friend FLQuant_base<T1> operator * (const  FLQuant_base<T1>& lhs, const  FLQuant_base<T2>& rhs); // Multiplication 
+        */
+
         /*
         FLQuant& operator *= (const FLQuant& flq_rhs);
         FLQuant operator * (const FLQuant& flq_rhs) const;
@@ -99,6 +129,14 @@ class FLQuant_base {
 //int match_dims(const FLQuant a, const FLQuant b);
 //FLQuant log(const FLQuant& flq);
 //FLQuant exp(const FLQuant& flq);
+
+
+template <typename T1, typename T2>
+std::vector<T1> operator * (const std::vector<T1>& lhs, const std::vector<T2>& rhs); // Multiplication 
+
+//template <typename T1, typename T2>
+//std::vector<T1> operator * (const std::vector<T2>& lhs, const std::vector<T1>& rhs); // Multiplication 
+std::vector<adouble> operator * (const std::vector<double>& lhs, const std::vector<adouble>& rhs);
 
 typedef FLQuant_base<double> FLQuant;
 

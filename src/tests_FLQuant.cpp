@@ -1,3 +1,8 @@
+/* 
+ * Copyright 2013 FLR Team. Distributed under the GPL 2 or later
+ * Maintainer: Finlay Scott, JRC
+ */
+
 #include "../../inst/include/FLQuant_base.h"
 
 // [[Rcpp::export]]
@@ -24,11 +29,36 @@ FLQuant test_FLQuant_as_wrap(FLQuant flq){
 }
 
 //------------------ Arithmetic operators ----------------------
+
+// [[Rcpp::export]]
+void test_mult(){
+    std::vector<adouble> ad_in;
+    std::vector<adouble> ad_out;
+    std::vector<double> d_in;
+    std::vector<double> d_out;
+    Rprintf("d * d\n");
+    d_out = d_in * d_in;
+    Rprintf("ad * ad\n");
+    ad_out = ad_in * ad_in;
+    Rprintf("ad * d\n");
+    ad_out = ad_in * d_in;
+    Rprintf("d * ad\n");
+    ad_out = d_in * ad_in;
+}
+
+/*
 // [[Rcpp::export]]
 FLQuant test_FLQuant_FLQuant_multiplier_assignment_operator(FLQuant flq1, FLQuant flq2){
     flq1 *= flq2;
     return flq1;
 }
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_FLQuant_multiplier_operator(FLQuant flq1, FLQuant flq2){
+    FLQuant flq3 = flq1 * flq2;
+    return flq3;
+}
+*/
 
 /*
 // [[Rcpp::export]]

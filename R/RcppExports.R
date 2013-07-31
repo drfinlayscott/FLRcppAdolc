@@ -5,30 +5,6 @@ do_nothing_FLQuantAdolc <- function() {
     invisible(.Call('FLRcppAdolc_do_nothing_FLQuantAdolc', PACKAGE = 'FLRcppAdolc'))
 }
 
-test_FLQuantAdolc_basic_constructor <- function() {
-    invisible(.Call('FLRcppAdolc_test_FLQuantAdolc_basic_constructor', PACKAGE = 'FLRcppAdolc'))
-}
-
-test_FLQuantAdolc_sexp_constructor <- function(flq_sexp) {
-    invisible(.Call('FLRcppAdolc_test_FLQuantAdolc_sexp_constructor', PACKAGE = 'FLRcppAdolc', flq_sexp))
-}
-
-test_generic_FLQuant_base_wrap <- function(flq_sexp) {
-    .Call('FLRcppAdolc_test_generic_FLQuant_base_wrap', PACKAGE = 'FLRcppAdolc', flq_sexp)
-}
-
-test_FLQuantAdolc_as_wrap <- function(flqad) {
-    .Call('FLRcppAdolc_test_FLQuantAdolc_as_wrap', PACKAGE = 'FLRcppAdolc', flqad)
-}
-
-test_FLQuantAdolc_FLQuant_multiplier_assignment_operator <- function(flqad1, flq2) {
-    .Call('FLRcppAdolc_test_FLQuantAdolc_FLQuant_multiplier_assignment_operator', PACKAGE = 'FLRcppAdolc', flqad1, flq2)
-}
-
-test_FLQuantAdolc_FLQuantAdolc_multiplier_assignment_operator <- function(flqad1, flqad2) {
-    .Call('FLRcppAdolc_test_FLQuantAdolc_FLQuantAdolc_multiplier_assignment_operator', PACKAGE = 'FLRcppAdolc', flqad1, flqad2)
-}
-
 do_nothing_FLQuant <- function() {
     invisible(.Call('FLRcppAdolc_do_nothing_FLQuant', PACKAGE = 'FLRcppAdolc'))
 }
@@ -45,7 +21,7 @@ test_FLQuant_as_wrap <- function(flq) {
     .Call('FLRcppAdolc_test_FLQuant_as_wrap', PACKAGE = 'FLRcppAdolc', flq)
 }
 
-test_FLQuant_FLQuant_multiplier_assignment_operator <- function(flq1, flq2) {
-    .Call('FLRcppAdolc_test_FLQuant_FLQuant_multiplier_assignment_operator', PACKAGE = 'FLRcppAdolc', flq1, flq2)
+test_mult <- function() {
+    invisible(.Call('FLRcppAdolc_test_mult', PACKAGE = 'FLRcppAdolc'))
 }
 

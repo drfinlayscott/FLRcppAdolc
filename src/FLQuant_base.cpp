@@ -1,3 +1,8 @@
+/* 
+ * Copyright 2013 FLR Team. Distributed under the GPL 2 or later
+ * Maintainer: Finlay Scott, JRC
+ */
+
 #include "../inst/include/FLQuant_base.h"
 
 // Destructor - not needed. The members NumericVector and string are RAII and therefore look after their own resources
@@ -76,13 +81,46 @@ void FLQuant_base<T>::what_am_i(){
  *  Definition of friend function for arithmetic operation
  */
 
+// Multiplication assignment
+
+/*
+// T1 and T2 are FLQuant or FLQuantAdolc
+// Trying to get around making a new FLQuant_base<T1> which causes slicing in inherited types
+template<typename T1, typename T2>
+T1& operator *= (T1& lhs, const T2& rhs){
+    Rprintf("In dummy_base<T1,T2> * operator\n");
+    // Should have acccess to data member
+    // how to pull out type of data vector. Need it for multiplies bit
+    //typename lhs.data::value_type data_type;
+    std::vector<double> fuckoff;
+    std::vector<double>::value_type some_type; 
+    lhs.data;
+    //typename T1::data::value_type another_type;
+    //typename (lhs.data)::value_type another_type;
+    //std::transform(lhs.data.begin(), lhs.data.end(), rhs.data.begin(), lhs.data.begin(), std::multiplies<T1>()); //T1 is the problem. We want the type of the std::vector
+    //std::transform(lhs.data.begin(), lhs.data.end(), rhs.data.begin(), lhs.data.begin(), std::multiplies<another_type>());
+    //std::transform(lhs.data.begin(), lhs.data.end(), rhs.data.begin(), lhs.data.begin(), std::multiplies<T1::data::value_type>());
+    return lhs;
+}
 template<typename T1, typename T2>
 FLQuant_base<T1>& operator *= (FLQuant_base<T1>& lhs, const FLQuant_base<T2>& rhs){
-    Rprintf("In dummy_base<T1,T2> *=\n");
+    Rprintf("In dummy_base<T1,T2> * operator\n");
     // Should have acccess to data member
     std::transform(lhs.data.begin(), lhs.data.end(), rhs.data.begin(), lhs.data.begin(), std::multiplies<T1>());
     return lhs;
 }
+*/
+
+// Multiplication
+/*
+template <typename T1, typename T2>
+FLQuant_base<T1> operator * (const FLQuant_base<T1>& lhs, const  FLQuant_base<T2>& rhs){
+    Rprintf("In dummy_base<T1,T2> * operator\n");
+    FLQuant_base<T1> out = lhs; // Will not make FLQuantAdolc
+    //out *= rhs;
+    return out;
+}
+*/
 
 /*
 // Constructor from an S4
@@ -420,6 +458,27 @@ FLQuant exp(const FLQuant& flq){
 }
 */
 
+template <typename T1, typename T2>
+std::vector<T1> operator * (const std::vector<T1>& lhs, const std::vector<T2>& rhs){
+    Rprintf("T1 = T1 * T2\n");    
+    std::vector<T1> out;
+    return out;
+}
+
+std::vector<adouble> operator * (const std::vector<double>& lhs, const std::vector<adouble>& rhs){
+    Rprintf("adouble = double * adouble\n");    
+    std::vector<adouble> out;
+    return out;
+}
+
+
+// Instantiate
+template std::vector<double> operator * (const std::vector<double>& lhs, const std::vector<double>& rhs);
+template std::vector<adouble> operator * (const std::vector<adouble>& lhs, const std::vector<adouble>& rhs);
+template std::vector<adouble> operator * (const std::vector<adouble>& lhs, const std::vector<double>& rhs);
+// But this one
+//template std::vector<adouble> operator * (const std::vector<double>& lhs, const std::vector<adouble>& rhs);
+
 
 // Explicit instantiations - alternatively put all the definitions into the header file
 // This way we have more control over what types the functions work with
@@ -427,8 +486,14 @@ FLQuant exp(const FLQuant& flq){
 template class FLQuant_base<double>;
 template class FLQuant_base<adouble>; // Necessary so that dummy_adouble can use the dummy_base<adouble> bits
 // Explicit instantiation of arithmetic friend functions
-template FLQuant_base<double>& operator *= (FLQuant_base<double>& lhs, const FLQuant_base<double>& rhs);
-template FLQuant_base<adouble>& operator *= (FLQuant_base<adouble>& lhs, const FLQuant_base<adouble>& rhs);
-template FLQuant_base<adouble>& operator *= (FLQuant_base<adouble>& lhs, const FLQuant_base<double>& rhs);
+// *=
+//template FLQuant& operator *= (FLQuant& lhs, const FLQuant& rhs);
+//template FLQuant_base<double>& operator *= (FLQuant_base<double>& lhs, const FLQuant_base<double>& rhs);
+//template FLQuant_base<adouble>& operator *= (FLQuant_base<adouble>& lhs, const FLQuant_base<adouble>& rhs);
+//template FLQuant_base<adouble>& operator *= (FLQuant_base<adouble>& lhs, const FLQuant_base<double>& rhs);
+// *
+//template FLQuant_base<double> operator * (const FLQuant_base<double>& lhs, const FLQuant_base<double>& rhs);
+//template FLQuant_base<adouble> operator * (const FLQuant_base<adouble>& lhs, const FLQuant_base<adouble>& rhs);
+//template FLQuant_base<adouble> operator * (const FLQuant_base<adouble>& lhs, const FLQuant_base<double>& rhs);
 
 

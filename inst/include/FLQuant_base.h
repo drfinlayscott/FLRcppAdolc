@@ -33,16 +33,16 @@ class FLQuant_base {
 		FLQuant_base();
 		FLQuant_base(SEXP flq_sexp); // Used as intrusive 'as'
         operator SEXP() const; // Used as intrusive 'wrap'
-		//FLQuant_base(const FLQuant_base& FLQuant_base_source); // copy constructor to ensure that copy of NumericVector is a deep copy - used when passing FLQs into functions
+		FLQuant_base(const FLQuant_base& FLQuant_base_source); // copy constructor to ensure that copies (i.e. when passing to functions) are deep
+		FLQuant_base& operator = (const FLQuant_base& FLQuant_source); // Assignment operator for a deep copy
 
-        // Stupid helper function so that I can keep track of what is going on
-        void what_am_i();
 		/* Get accessors 
 		 * Note the use of 'const' because the get methods should promise not to modify the members (we are returning them)
 		 */
-        /*
+        std::vector<T> get_data() const;
 		std::string get_units() const;
-		Rcpp::NumericVector get_data() const;
+        Rcpp::IntegerVector get_dim() const;
+        Rcpp::List get_dimnames() const;
 		int get_size() const;
 		int get_nquant() const;
 		int get_nyear() const;
@@ -51,9 +51,6 @@ class FLQuant_base {
 		int get_narea() const;
 		int get_niter() const;
 		int get_data_element(const int quant, const int year, const int unit, const int season, const int area, const int iter) const;
-        Rcpp::IntegerVector get_dim() const;
-        Rcpp::List get_dimnames() const;
-        */
 
 		/* Set accessors */
         /*
@@ -70,7 +67,6 @@ class FLQuant_base {
 		double& operator () (const int element); // gets and sets an element so const not reinforced
 		double operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter) const; // only gets an element so const reinforced - however cannot return reference due to NumericVector() operator
 		double operator () (const int element) const; // only gets an element so const reinforced - - however cannot return reference due to NumericVector() operator
-		FLQuant& operator = (const FLQuant& FLQuant_source); // Assignment operator for a deep copy
         */
         /* Mathematical operators */
 
@@ -90,8 +86,29 @@ class FLQuant_base {
         friend FLQuant_base<T1> operator * (const  FLQuant_base<T1>& lhs, const  FLQuant_base<T2>& rhs); // Multiplication 
         */
 
+        // Multiplication assignment
+        FLQuant_base<T>& operator *= (const FLQuant_base<T>& rhs);
+        // For the special case of FLQuant_base<adouble> *= FLQuant_base<double>
+        template <typename T2>
+        FLQuant_base<T>& operator *= (const FLQuant_base<T2>& rhs);
+
+        // Multiplication
+        // Return same type as itself
+        FLQuant_base<T> operator * (const FLQuant_base<T>& flq_rhs) const;
+        // Tried to use templating to implement special cases of:
+        // FLQAD = FLQAD * FLQ
+        // FLQAD = FLQ * FLQAD
+        // But these special cases get ambiguous as it is not possible to overload on the return parameter
+        // Consequently the two following commented out declarations are ambiguous
+        // So until I get a better idea I have declared SPECIFIC functions outside of the class declaration
+        //template <typename T2>
+        //FLQuant_base<T> operator * (const FLQuant_base<T2>& rhs) const;
+        //template <typename T2>
+        //FLQuant_base<T2> operator * (const FLQuant_base<T2>& rhs) const;
+
+
+
         /*
-        FLQuant& operator *= (const FLQuant& flq_rhs);
         FLQuant operator * (const FLQuant& flq_rhs) const;
         FLQuant& operator /= (const FLQuant& flq_rhs);
         FLQuant operator / (const FLQuant& flq_rhs) const;
@@ -99,6 +116,7 @@ class FLQuant_base {
         FLQuant operator + (const FLQuant& flq_rhs) const;
         FLQuant& operator -= (const FLQuant& flq_rhs);
         FLQuant operator - (const FLQuant& flq_rhs) const;
+
         FLQuant& operator *= (const double& rhs);
         FLQuant operator * (const double& rhs) const;
         FLQuant& operator /= (const double& rhs);
@@ -119,6 +137,23 @@ class FLQuant_base {
         Rcpp::List dimnames;
 };
 
+typedef FLQuant_base<double> FLQuant;
+typedef FLQuant_base<adouble> FLQuantAdolc;
+
+
+//Canonical form: Type operator*(const Type &lhs, const Type &rhs); 
+// Multiplication methods - not templated due to abiguity problems
+//FLQuantAdolc operator * (const FLQuantAdolc &lhs, const FLQuant &rhs);
+//FLQuantAdolc operator * (const FLQuant &lhs, const FLQuantAdolc &rhs);
+
+// Template functions for multiplying FLQuant_base<>s
+// double gets swallowed up by whatever is multiplying it
+// FLQuant_base<anything>  = FLQuant_base<double> * FLQuant_base<anything>
+template <typename T>
+FLQuant_base<T> operator * (const FLQuant_base<double>& lhs, const FLQuant_base<T>& rhs);
+template <typename T>
+FLQuant_base<T> operator * (const FLQuant_base<T>& lhs, const FLQuant_base<double>& rhs);
+
 //// Custom as-wrap methods
 //Namespace Rcpp {
 //    template <> FLQuant as(SEXP flq_sexp);
@@ -131,13 +166,12 @@ class FLQuant_base {
 //FLQuant exp(const FLQuant& flq);
 
 
-template <typename T1, typename T2>
-std::vector<T1> operator * (const std::vector<T1>& lhs, const std::vector<T2>& rhs); // Multiplication 
+//template <typename T1, typename T2>
+//std::vector<T1> operator * (const std::vector<T1>& lhs, const std::vector<T2>& rhs); // Multiplication 
 
 //template <typename T1, typename T2>
 //std::vector<T1> operator * (const std::vector<T2>& lhs, const std::vector<T1>& rhs); // Multiplication 
-std::vector<adouble> operator * (const std::vector<double>& lhs, const std::vector<adouble>& rhs);
+//std::vector<adouble> operator * (const std::vector<double>& lhs, const std::vector<adouble>& rhs);
 
-typedef FLQuant_base<double> FLQuant;
 
 

@@ -11,73 +11,140 @@ void do_nothing_FLQuantAdolc(){
     return;
 }
 
-/*
-// [[Rcpp::export]]
-void test_FLQuantAD_base_constructor(){
-    FLQuantAD_base<adouble> flqad;
-    flqad.what_am_i();
-    //flqad.data;
-    return;
-}
 // [[Rcpp::export]]
 void test_FLQuantAdolc_basic_constructor(){
     FLQuantAdolc flqad;
-    flqad.what_am_i();
     return;
 }
 
 // [[Rcpp::export]]
-void test_FLQuantAdolc_sexp_constructor(SEXP flq_sexp){
+FLQuantAdolc test_FLQuantAdolc_sexp_constructor(SEXP flq_sexp){
 	FLQuantAdolc flqad(flq_sexp);
-	return;
-}
-
-// [[Rcpp::export]]
-FLQuant_base<adouble> test_generic_FLQuant_base_wrap(SEXP flq_sexp){
-    FLQuant_base<adouble> flqad(flq_sexp);
-    return flqad;
+	return flqad;
 }
 
 // [[Rcpp::export]]
 FLQuantAdolc test_FLQuantAdolc_as_wrap(FLQuantAdolc flqad){
 	return flqad;
 }
-*/
-//------------------ Arithmetic operators ----------------------
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_copy_constructor(FLQuantAdolc flqad){
+    FLQuantAdolc out = flqad;
+    return out;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_assignment_operator(FLQuantAdolc flqad){
+    FLQuantAdolc out;
+    out = flqad;
+    return out;
+}
+
+//------------------ Accessors ----------------------
 /*
 // [[Rcpp::export]]
-FLQuantAdolc test_FLQuantAdolc_FLQuant_multiplier_assignment_operator(FLQuantAdolc flqad1, FLQuant flq2){
-    flqad1.new_int = 12;
-    flqad1 *= flq2;
-    Rprintf("Value of new_int: %i\n", flqad1.new_int);
-    return flqad1;
-}
-
-// [[Rcpp::export]]
-FLQuantAdolc test_FLQuantAdolc_FLQuantAdolc_multiplier_assignment_operator(FLQuantAdolc flqad1, FLQuantAdolc flqad2){
-    flqad1.new_int = 12;
-    flqad2.new_int = 16;
-    flqad1 *= flqad2;
-    Rprintf("Value of flqad1 new_int: %i\n", flqad1.new_int);
-    Rprintf("Value of flqad2 new_int: %i\n", flqad2.new_int);
-    return flqad1;
-}
-
-// [[Rcpp::export]]
-FLQuantAdolc test_FLQuant_FLQuant_multiplier_operator(FLQuantAdolc flqad1, FLQuant flq2){
-    FLQuantAdolc flqad3 = flqad1 * flq2;
-    return flqad3;
-}
-
-// [[Rcpp::export]]
-FLQuantAdolc test_FLQuant_FLQuant_multiplier_operator(FLQuant flqad1, FLQuantAdolc flqad2){
-    FLQuantAdolc flqad3 = flqad1 * flqad2;
-    return flqad3;
-}
-
-// [[Rcpp::export]]
-FLQuantAdolc test_FLQuant_FLQuant_multiplier_operator(FLQuantAdolc flqad1, FLQuantAdolc flqad2){
-    FLQuantAdolc flqad3 = flqad1 * flqad2;
-    return flqad3;
+std::vector<adouble> test_FLQuantAdolc_get_data(FLQuantAdolc flq){
+	return flq.get_data();
 }
 */
+
+// [[Rcpp::export]]
+std::string test_FLQuantAdolc_get_units(FLQuantAdolc flq){
+	return flq.get_units();
+}
+
+// [[Rcpp::export]]
+Rcpp::IntegerVector test_FLQuantAdolc_get_dim(FLQuantAdolc flq){
+	return flq.get_dim();
+}
+
+// [[Rcpp::export]]
+Rcpp::List test_FLQuantAdolc_get_dimnames(FLQuantAdolc flq){
+	return flq.get_dimnames();
+}
+
+// [[Rcpp::export]]
+int test_FLQuantAdolc_get_nquant(FLQuantAdolc flq){
+	return flq.get_nquant();
+}
+
+// [[Rcpp::export]]
+int test_FLQuantAdolc_get_nyear(FLQuantAdolc flq){
+	return flq.get_nyear();
+}
+
+// [[Rcpp::export]]
+int test_FLQuantAdolc_get_nunit(FLQuantAdolc flq){
+	return flq.get_nunit();
+}
+
+// [[Rcpp::export]]
+int test_FLQuantAdolc_get_nseason(FLQuantAdolc flq){
+	return flq.get_nseason();
+}
+
+// [[Rcpp::export]]
+int test_FLQuantAdolc_get_narea(FLQuantAdolc flq){
+	return flq.get_narea();
+}
+
+// [[Rcpp::export]]
+int test_FLQuantAdolc_get_niter(FLQuantAdolc flq){
+	return flq.get_niter();
+}
+
+// [[Rcpp::export]]
+int test_FLQuantAdolc_get_data_element(const FLQuantAdolc flq, int quant, int year, int unit, int season, int area, int iter){
+	int out = 0;
+	out = flq.get_data_element(quant,year,unit,season,area,iter);
+	return out;
+}
+
+//------------------ Arithmetic operators ----------------------
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_FLQuantAdolc_multiplier_assignment_operator(FLQuantAdolc flqad1, FLQuantAdolc flqad2){
+    flqad1 *= flqad2;
+    return flqad1;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_FLQuant_multiplier_assignment_operator(FLQuantAdolc flqad1, FLQuant flq2){
+    flqad1 *= flq2;
+    return flqad1;
+}
+
+/* Doesn't compile; which is good as it isn't supposed to. Just checking understanding of the member method.
+// [[Rcpp::export]]
+FLQuant test_FLQuant_FLQuantAdolc_multiplier_assignment_operator(FLQuant flq1, FLQuantAdolc flqad2){
+    flq1 *= flqad2;
+    return flq1;
+}
+*/
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_FLQuantAdolc_multiplier_operator(FLQuantAdolc flqad1, FLQuantAdolc flqad2){
+    FLQuantAdolc flqad3 = flqad1 * flqad2;
+    return flqad3;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_FLQuant_multiplier_operator(FLQuantAdolc flqad1, FLQuant flq2){
+    FLQuantAdolc flqad3;
+    flqad3 = flqad1 * flq2;
+    return flqad3;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuant_FLQuantAdolc_multiplier_operator(FLQuant flq1, FLQuantAdolc flqad2){
+    FLQuantAdolc flqad3 = flq1 * flqad2;
+    return flqad3;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_FLQuant_FLQuantAdolc_multiplier_operator(FLQuantAdolc flqad1, FLQuant flq2, FLQuantAdolc flqad3){
+    FLQuantAdolc flqad4;
+    flqad4 = flqad1 * flq2 * flqad3;
+    return flqad4;
+}
+

@@ -13,57 +13,7 @@ void do_nothing_FLQuant(){
 // [[Rcpp::export]]
 void test_FLQuant_basic_constructor(){
     FLQuant flq;
-    flq.what_am_i();
     return;
-}
-
-// [[Rcpp::export]]
-void test_FLQuant_sexp_constructor(SEXP flq_sexp){
-	FLQuant flq(flq_sexp);
-	return;
-}
-
-// [[Rcpp::export]]
-FLQuant test_FLQuant_as_wrap(FLQuant flq){
-	return flq;
-}
-
-//------------------ Arithmetic operators ----------------------
-
-// [[Rcpp::export]]
-void test_mult(){
-    std::vector<adouble> ad_in;
-    std::vector<adouble> ad_out;
-    std::vector<double> d_in;
-    std::vector<double> d_out;
-    Rprintf("d * d\n");
-    d_out = d_in * d_in;
-    Rprintf("ad * ad\n");
-    ad_out = ad_in * ad_in;
-    Rprintf("ad * d\n");
-    ad_out = ad_in * d_in;
-    Rprintf("d * ad\n");
-    ad_out = d_in * ad_in;
-}
-
-/*
-// [[Rcpp::export]]
-FLQuant test_FLQuant_FLQuant_multiplier_assignment_operator(FLQuant flq1, FLQuant flq2){
-    flq1 *= flq2;
-    return flq1;
-}
-
-// [[Rcpp::export]]
-FLQuant test_FLQuant_FLQuant_multiplier_operator(FLQuant flq1, FLQuant flq2){
-    FLQuant flq3 = flq1 * flq2;
-    return flq3;
-}
-*/
-
-/*
-// [[Rcpp::export]]
-FLQuant test_FLQuant_as_wrap(FLQuant flq){
-	return flq;
 }
 
 // [[Rcpp::export]]
@@ -72,6 +22,26 @@ FLQuant test_FLQuant_sexp_constructor(SEXP flq_sexp){
 	return flq;
 }
 
+// [[Rcpp::export]]
+FLQuant test_FLQuant_as_wrap(FLQuant flq){
+	return flq;
+}
+
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_copy_constructor(FLQuant flq){
+    FLQuant out = flq;
+    return out;
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_assignment_operator(FLQuant flq){
+    FLQuant out;
+    out = flq;
+    return out;
+}
+
+/*
 // [[Rcpp::export]]
 Rcpp::List test_FLQuant_copy_constructor(FLQuant flq1, int quant, int year, int unit, int season, int area, int iter, double value){
 	FLQuant flq2(flq1); // uses copy constructor
@@ -87,6 +57,13 @@ Rcpp::List test_FLQuant_assignment_operator(FLQuant flq1, int quant, int year, i
 	return Rcpp::List::create(Rcpp::Named("flq1", flq1),
 				Rcpp::Named("flq2",flq2));
 }
+*/
+
+//------------------ Accessors ----------------------
+// [[Rcpp::export]]
+std::vector<double> test_FLQuant_get_data(FLQuant flq){
+	return flq.get_data();
+}
 
 // [[Rcpp::export]]
 std::string test_FLQuant_get_units(FLQuant flq){
@@ -94,20 +71,13 @@ std::string test_FLQuant_get_units(FLQuant flq){
 }
 
 // [[Rcpp::export]]
-FLQuant test_FLQuant_set_units(FLQuant flq, std::string new_units){
-	flq.set_units(new_units);
-	return flq;
+Rcpp::IntegerVector test_FLQuant_get_dim(FLQuant flq){
+	return flq.get_dim();
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericVector test_FLQuant_get_data(FLQuant flq){
-	return flq.get_data();
-}
-
-// [[Rcpp::export]]
-FLQuant test_FLQuant_set_data(FLQuant flq, Rcpp::NumericVector data_in){
-	flq.set_data(data_in);
-	return flq;
+Rcpp::List test_FLQuant_get_dimnames(FLQuant flq){
+	return flq.get_dimnames();
 }
 
 // [[Rcpp::export]]
@@ -138,6 +108,41 @@ int test_FLQuant_get_narea(FLQuant flq){
 // [[Rcpp::export]]
 int test_FLQuant_get_niter(FLQuant flq){
 	return flq.get_niter();
+}
+
+// [[Rcpp::export]]
+int test_FLQuant_get_data_element(const FLQuant flq, int quant, int year, int unit, int season, int area, int iter){
+	int out = 0;
+	out = flq.get_data_element(quant,year,unit,season,area,iter);
+	return out;
+}
+
+
+
+//------------------ Arithmetic operators ----------------------
+// [[Rcpp::export]]
+FLQuant test_FLQuant_FLQuant_multiplier_assignment_operator(FLQuant flq1, FLQuant flq2){
+    flq1 *= flq2;
+    return flq1;
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_FLQuant_multiplier_operator(FLQuant flq1, FLQuant flq2){
+    FLQuant flq3 = flq1 * flq2;
+    return flq3;
+}
+
+/*
+// [[Rcpp::export]]
+FLQuant test_FLQuant_set_units(FLQuant flq, std::string new_units){
+	flq.set_units(new_units);
+	return flq;
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_set_data(FLQuant flq, Rcpp::NumericVector data_in){
+	flq.set_data(data_in);
+	return flq;
 }
 
 // [[Rcpp::export]]

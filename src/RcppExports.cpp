@@ -15,6 +15,228 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// test_FLQuantAdolc_basic_constructor
+void test_FLQuantAdolc_basic_constructor();
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_basic_constructor() {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    test_FLQuantAdolc_basic_constructor();
+    return R_NilValue;
+END_RCPP
+}
+// test_FLQuantAdolc_sexp_constructor
+FLQuantAdolc test_FLQuantAdolc_sexp_constructor(SEXP flq_sexp);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_sexp_constructor(SEXP flq_sexpSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    SEXP flq_sexp = Rcpp::as<SEXP >(flq_sexpSEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_sexp_constructor(flq_sexp);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_as_wrap
+FLQuantAdolc test_FLQuantAdolc_as_wrap(FLQuantAdolc flqad);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_as_wrap(SEXP flqadSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flqad = Rcpp::as<FLQuantAdolc >(flqadSEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_as_wrap(flqad);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_copy_constructor
+FLQuantAdolc test_FLQuantAdolc_copy_constructor(FLQuantAdolc flqad);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_copy_constructor(SEXP flqadSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flqad = Rcpp::as<FLQuantAdolc >(flqadSEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_copy_constructor(flqad);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_assignment_operator
+FLQuantAdolc test_FLQuantAdolc_assignment_operator(FLQuantAdolc flqad);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_assignment_operator(SEXP flqadSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flqad = Rcpp::as<FLQuantAdolc >(flqadSEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_assignment_operator(flqad);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_get_units
+std::string test_FLQuantAdolc_get_units(FLQuantAdolc flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_get_units(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flq = Rcpp::as<FLQuantAdolc >(flqSEXP);
+    std::string __result = test_FLQuantAdolc_get_units(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_get_dim
+Rcpp::IntegerVector test_FLQuantAdolc_get_dim(FLQuantAdolc flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_get_dim(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flq = Rcpp::as<FLQuantAdolc >(flqSEXP);
+    Rcpp::IntegerVector __result = test_FLQuantAdolc_get_dim(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_get_dimnames
+Rcpp::List test_FLQuantAdolc_get_dimnames(FLQuantAdolc flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_get_dimnames(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flq = Rcpp::as<FLQuantAdolc >(flqSEXP);
+    Rcpp::List __result = test_FLQuantAdolc_get_dimnames(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_get_nquant
+int test_FLQuantAdolc_get_nquant(FLQuantAdolc flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_get_nquant(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flq = Rcpp::as<FLQuantAdolc >(flqSEXP);
+    int __result = test_FLQuantAdolc_get_nquant(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_get_nyear
+int test_FLQuantAdolc_get_nyear(FLQuantAdolc flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_get_nyear(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flq = Rcpp::as<FLQuantAdolc >(flqSEXP);
+    int __result = test_FLQuantAdolc_get_nyear(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_get_nunit
+int test_FLQuantAdolc_get_nunit(FLQuantAdolc flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_get_nunit(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flq = Rcpp::as<FLQuantAdolc >(flqSEXP);
+    int __result = test_FLQuantAdolc_get_nunit(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_get_nseason
+int test_FLQuantAdolc_get_nseason(FLQuantAdolc flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_get_nseason(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flq = Rcpp::as<FLQuantAdolc >(flqSEXP);
+    int __result = test_FLQuantAdolc_get_nseason(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_get_narea
+int test_FLQuantAdolc_get_narea(FLQuantAdolc flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_get_narea(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flq = Rcpp::as<FLQuantAdolc >(flqSEXP);
+    int __result = test_FLQuantAdolc_get_narea(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_get_niter
+int test_FLQuantAdolc_get_niter(FLQuantAdolc flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_get_niter(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flq = Rcpp::as<FLQuantAdolc >(flqSEXP);
+    int __result = test_FLQuantAdolc_get_niter(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_get_data_element
+int test_FLQuantAdolc_get_data_element(const FLQuantAdolc flq, int quant, int year, int unit, int season, int area, int iter);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_get_data_element(SEXP flqSEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flq = Rcpp::as<FLQuantAdolc >(flqSEXP);
+    int quant = Rcpp::as<int >(quantSEXP);
+    int year = Rcpp::as<int >(yearSEXP);
+    int unit = Rcpp::as<int >(unitSEXP);
+    int season = Rcpp::as<int >(seasonSEXP);
+    int area = Rcpp::as<int >(areaSEXP);
+    int iter = Rcpp::as<int >(iterSEXP);
+    int __result = test_FLQuantAdolc_get_data_element(flq, quant, year, unit, season, area, iter);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_FLQuantAdolc_multiplier_assignment_operator
+FLQuantAdolc test_FLQuantAdolc_FLQuantAdolc_multiplier_assignment_operator(FLQuantAdolc flqad1, FLQuantAdolc flqad2);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_FLQuantAdolc_multiplier_assignment_operator(SEXP flqad1SEXP, SEXP flqad2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flqad1 = Rcpp::as<FLQuantAdolc >(flqad1SEXP);
+    FLQuantAdolc flqad2 = Rcpp::as<FLQuantAdolc >(flqad2SEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_FLQuantAdolc_multiplier_assignment_operator(flqad1, flqad2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_FLQuant_multiplier_assignment_operator
+FLQuantAdolc test_FLQuantAdolc_FLQuant_multiplier_assignment_operator(FLQuantAdolc flqad1, FLQuant flq2);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_FLQuant_multiplier_assignment_operator(SEXP flqad1SEXP, SEXP flq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flqad1 = Rcpp::as<FLQuantAdolc >(flqad1SEXP);
+    FLQuant flq2 = Rcpp::as<FLQuant >(flq2SEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_FLQuant_multiplier_assignment_operator(flqad1, flq2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_FLQuantAdolc_multiplier_operator
+FLQuantAdolc test_FLQuantAdolc_FLQuantAdolc_multiplier_operator(FLQuantAdolc flqad1, FLQuantAdolc flqad2);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_FLQuantAdolc_multiplier_operator(SEXP flqad1SEXP, SEXP flqad2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flqad1 = Rcpp::as<FLQuantAdolc >(flqad1SEXP);
+    FLQuantAdolc flqad2 = Rcpp::as<FLQuantAdolc >(flqad2SEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_FLQuantAdolc_multiplier_operator(flqad1, flqad2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_FLQuant_multiplier_operator
+FLQuantAdolc test_FLQuantAdolc_FLQuant_multiplier_operator(FLQuantAdolc flqad1, FLQuant flq2);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_FLQuant_multiplier_operator(SEXP flqad1SEXP, SEXP flq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flqad1 = Rcpp::as<FLQuantAdolc >(flqad1SEXP);
+    FLQuant flq2 = Rcpp::as<FLQuant >(flq2SEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_FLQuant_multiplier_operator(flqad1, flq2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_FLQuantAdolc_multiplier_operator
+FLQuantAdolc test_FLQuant_FLQuantAdolc_multiplier_operator(FLQuant flq1, FLQuantAdolc flqad2);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_FLQuantAdolc_multiplier_operator(SEXP flq1SEXP, SEXP flqad2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq1 = Rcpp::as<FLQuant >(flq1SEXP);
+    FLQuantAdolc flqad2 = Rcpp::as<FLQuantAdolc >(flqad2SEXP);
+    FLQuantAdolc __result = test_FLQuant_FLQuantAdolc_multiplier_operator(flq1, flqad2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_FLQuant_FLQuantAdolc_multiplier_operator
+FLQuantAdolc test_FLQuantAdolc_FLQuant_FLQuantAdolc_multiplier_operator(FLQuantAdolc flqad1, FLQuant flq2, FLQuantAdolc flqad3);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_FLQuant_FLQuantAdolc_multiplier_operator(SEXP flqad1SEXP, SEXP flq2SEXP, SEXP flqad3SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flqad1 = Rcpp::as<FLQuantAdolc >(flqad1SEXP);
+    FLQuant flq2 = Rcpp::as<FLQuant >(flq2SEXP);
+    FLQuantAdolc flqad3 = Rcpp::as<FLQuantAdolc >(flqad3SEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_FLQuant_FLQuantAdolc_multiplier_operator(flqad1, flq2, flqad3);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
 // do_nothing_FLQuant
 void do_nothing_FLQuant();
 RcppExport SEXP FLRcppAdolc_do_nothing_FLQuant() {
@@ -34,13 +256,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // test_FLQuant_sexp_constructor
-void test_FLQuant_sexp_constructor(SEXP flq_sexp);
+FLQuant test_FLQuant_sexp_constructor(SEXP flq_sexp);
 RcppExport SEXP FLRcppAdolc_test_FLQuant_sexp_constructor(SEXP flq_sexpSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope __rngScope;
     SEXP flq_sexp = Rcpp::as<SEXP >(flq_sexpSEXP);
-    test_FLQuant_sexp_constructor(flq_sexp);
-    return R_NilValue;
+    FLQuant __result = test_FLQuant_sexp_constructor(flq_sexp);
+    return Rcpp::wrap(__result);
 END_RCPP
 }
 // test_FLQuant_as_wrap
@@ -53,12 +275,161 @@ BEGIN_RCPP
     return Rcpp::wrap(__result);
 END_RCPP
 }
-// test_mult
-void test_mult();
-RcppExport SEXP FLRcppAdolc_test_mult() {
+// test_FLQuant_copy_constructor
+FLQuant test_FLQuant_copy_constructor(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_copy_constructor(SEXP flqSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope __rngScope;
-    test_mult();
-    return R_NilValue;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    FLQuant __result = test_FLQuant_copy_constructor(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_assignment_operator
+FLQuant test_FLQuant_assignment_operator(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_assignment_operator(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    FLQuant __result = test_FLQuant_assignment_operator(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_get_data
+std::vector<double> test_FLQuant_get_data(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_get_data(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    std::vector<double> __result = test_FLQuant_get_data(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_get_units
+std::string test_FLQuant_get_units(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_get_units(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    std::string __result = test_FLQuant_get_units(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_get_dim
+Rcpp::IntegerVector test_FLQuant_get_dim(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_get_dim(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    Rcpp::IntegerVector __result = test_FLQuant_get_dim(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_get_dimnames
+Rcpp::List test_FLQuant_get_dimnames(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_get_dimnames(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    Rcpp::List __result = test_FLQuant_get_dimnames(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_get_nquant
+int test_FLQuant_get_nquant(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_get_nquant(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    int __result = test_FLQuant_get_nquant(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_get_nyear
+int test_FLQuant_get_nyear(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_get_nyear(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    int __result = test_FLQuant_get_nyear(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_get_nunit
+int test_FLQuant_get_nunit(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_get_nunit(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    int __result = test_FLQuant_get_nunit(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_get_nseason
+int test_FLQuant_get_nseason(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_get_nseason(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    int __result = test_FLQuant_get_nseason(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_get_narea
+int test_FLQuant_get_narea(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_get_narea(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    int __result = test_FLQuant_get_narea(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_get_niter
+int test_FLQuant_get_niter(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_get_niter(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    int __result = test_FLQuant_get_niter(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_get_data_element
+int test_FLQuant_get_data_element(const FLQuant flq, int quant, int year, int unit, int season, int area, int iter);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_get_data_element(SEXP flqSEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    int quant = Rcpp::as<int >(quantSEXP);
+    int year = Rcpp::as<int >(yearSEXP);
+    int unit = Rcpp::as<int >(unitSEXP);
+    int season = Rcpp::as<int >(seasonSEXP);
+    int area = Rcpp::as<int >(areaSEXP);
+    int iter = Rcpp::as<int >(iterSEXP);
+    int __result = test_FLQuant_get_data_element(flq, quant, year, unit, season, area, iter);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_FLQuant_multiplier_assignment_operator
+FLQuant test_FLQuant_FLQuant_multiplier_assignment_operator(FLQuant flq1, FLQuant flq2);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_FLQuant_multiplier_assignment_operator(SEXP flq1SEXP, SEXP flq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq1 = Rcpp::as<FLQuant >(flq1SEXP);
+    FLQuant flq2 = Rcpp::as<FLQuant >(flq2SEXP);
+    FLQuant __result = test_FLQuant_FLQuant_multiplier_assignment_operator(flq1, flq2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_FLQuant_multiplier_operator
+FLQuant test_FLQuant_FLQuant_multiplier_operator(FLQuant flq1, FLQuant flq2);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_FLQuant_multiplier_operator(SEXP flq1SEXP, SEXP flq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq1 = Rcpp::as<FLQuant >(flq1SEXP);
+    FLQuant flq2 = Rcpp::as<FLQuant >(flq2SEXP);
+    FLQuant __result = test_FLQuant_FLQuant_multiplier_operator(flq1, flq2);
+    return Rcpp::wrap(__result);
 END_RCPP
 }

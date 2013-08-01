@@ -5,8 +5,6 @@
 
 #include "../inst/include/FLQuant_base.h"
 
-// Destructor - not needed. The members NumericVector and string are RAII and therefore look after their own resources
-
 // Default constructor
 // No dimnames set as the array is null
 template <typename T>
@@ -46,10 +44,10 @@ FLQuant_base<T>::operator SEXP() const{
     return Rcpp::wrap(x);
 }
 
-// Specialise the wrap for an FLQuant
+// Specialise the wrap for an FLQuant_base<double>
 template<>
 FLQuant_base<double>::operator SEXP() const{
-    Rprintf("Specialised wrapping FLQuant\n");
+    Rprintf("Specialised wrapping FLQuant_base<double>\n");
     Rcpp::S4 flq_s4("FLQuant");
     // Make and fill the NumericVector that will be the 'data' slot 
     Rcpp::NumericVector data_nv;
@@ -65,23 +63,230 @@ FLQuant_base<double>::operator SEXP() const{
     return Rcpp::wrap(flq_s4);
 }
 
-
-
-template <typename T>
-void FLQuant_base<T>::what_am_i(){
-    Rprintf("I am an FLQuant_base<T>\n");
-    return;
+// Specialise the wrap for an FLQuant_base<adouble>
+// Necessary because we have to pull .value() out
+template<>
+FLQuant_base<adouble>::operator SEXP() const{
+    Rprintf("Specialised wrapping FLQuant_base<adouble>\n");
+    Rcpp::S4 flq_s4("FLQuant");
+    // Make and fill the NumericVector that will be the 'data' slot 
+    Rcpp::NumericVector data_nv;
+    for (vector<adouble>::const_iterator data_iterator = data.begin(); data_iterator != data.end(); ++data_iterator){ // iterator must be const because the method is const
+        data_nv.push_back((*data_iterator).value());
+    }
+    // Apply dims and dimnames
+	data_nv.attr("dim") = dim;
+	data_nv.attr("dimnames") = dimnames;
+    // Fill the slots
+    flq_s4.slot(".Data") = data_nv;
+    flq_s4.slot("units") = units;
+    return Rcpp::wrap(flq_s4);
 }
 
-/* Arithmetic operators
- * Need to consider what happens with the combinations FLQuant<T1> * / + - FLQuant<T2>, i.e. what is the output type?
+// Copy constructor - else 'data' can be pointed at by multiple instances
+template<typename T>
+FLQuant_base<T>::FLQuant_base(const FLQuant_base<T>& FLQuant_source){
+    Rprintf("In FLQuant_base<T> copy constructor\n");
+	data  = FLQuant_source.data; // std::vector always does deep copy
+	units = FLQuant_source.units; // std::string always does deep copy
+    dim = Rcpp::clone<Rcpp::IntegerVector>(FLQuant_source.dim);
+    dimnames = Rcpp::clone<Rcpp::List>(FLQuant_source.dimnames);
+}
+
+// Assignment operator to ensure deep copy - else 'data' can be pointed at by multiple instances
+template<typename T>
+FLQuant_base<T>& FLQuant_base<T>::operator = (const FLQuant_base<T>& FLQuant_source){
+    Rprintf("In FLQuant_base<T> assignment operator\n");
+	if (this != &FLQuant_source){
+        data  = FLQuant_source.data; // std::vector always does deep copy
+        units = FLQuant_source.units; // std::string always does deep copy
+        dim = Rcpp::clone<Rcpp::IntegerVector>(FLQuant_source.dim);
+        dimnames = Rcpp::clone<Rcpp::List>(FLQuant_source.dimnames);
+	}
+	return *this;
+}
+
+//------------------ Accessors ---------------------------------
+
+template <typename T>
+std::vector<T> FLQuant_base<T>::get_data() const{
+	return data;
+}
+
+template <typename T>
+std::string FLQuant_base<T>::get_units() const{
+	return units;
+}
+
+template <typename T>
+Rcpp::IntegerVector FLQuant_base<T>::get_dim() const{
+	return dim;
+}
+
+template <typename T>
+Rcpp::List FLQuant_base<T>::get_dimnames() const{
+	return dimnames;
+}
+
+template <typename T>
+int FLQuant_base<T>::get_size() const{
+	return data.size();
+}
+
+template <typename T>
+int FLQuant_base<T>::get_nquant() const{
+	Rcpp::IntegerVector dim = get_dim();
+	return dim(0);
+}
+
+template <typename T>
+int FLQuant_base<T>::get_nyear() const{
+	Rcpp::IntegerVector dim = get_dim();
+	return dim(1);
+}
+
+template <typename T>
+int FLQuant_base<T>::get_nunit() const{
+	Rcpp::IntegerVector dim = get_dim();
+	return dim(2);
+}
+
+template <typename T>
+int FLQuant_base<T>::get_nseason() const{
+	Rcpp::IntegerVector dim = get_dim();
+	return dim(3);
+}
+
+template <typename T>
+int FLQuant_base<T>::get_narea() const{
+	Rcpp::IntegerVector dim = get_dim();
+	return dim(4);
+}
+
+template <typename T>
+int FLQuant_base<T>::get_niter() const{
+	Rcpp::IntegerVector dim = get_dim();
+	return dim(5);
+}
+
+// Note that elements start at 1 NOT 0!
+template <typename T>
+int FLQuant_base<T>::get_data_element(const int quant, const int year, const int unit, const int season, const int area, const int iter) const{
+    Rcpp::IntegerVector dim = get_dim();
+    if ((quant > dim(0)) || (year > dim[1]) || (unit > dim(2)) || (season > dim(3)) || (area > dim(4)) || (iter > dim(5))){
+            Rcpp::stop("Trying to access element outside of dim range.");
+    }
+	unsigned int element = (get_narea() * get_nseason() * get_nunit() * get_nyear() * get_nquant() * (iter - 1)) +
+			(get_nseason() * get_nunit() * get_nyear() * get_nquant() * (area - 1)) +
+			(get_nunit() * get_nyear() * get_nquant() * (season - 1)) +
+			(get_nyear() * get_nquant() * (unit - 1)) +
+			(get_nquant() * (year - 1)) +
+			(quant - 1); 
+	return element;
+}
+
+
+
+//------------------ Arithmetic operators -------------------
+/*  * Need to consider what happens with the combinations FLQuant<T1> * / + - FLQuant<T2>, i.e. what is the output type?
  *  adouble *  double = adouble
  *  adouble * adouble = adouble
  *  double  *  double = double
  *  Definition of friend function for arithmetic operation
  */
 
-// Multiplication assignment
+// Multiplication self assignment
+template<typename T>
+FLQuant_base<T>& FLQuant_base<T>::operator *= (const FLQuant_base<T>& rhs){
+    Rprintf("In self multiplication assignment\n");
+    //if (match_dims(flq_rhs) != 1){
+    //    Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
+    //}
+    std::transform((*this).data.begin(), (*this).data.end(), rhs.data.begin(), (*this).data.begin(), std::multiplies<T>());
+    return *this;
+}
+// Special case of multiplication assignment 
+// Instantiation below ensures that it will only compile for FLQuantAdolc *= FLQuant
+// FLQuant *= FLQuantAdolc will not compile as cannot have double = double * adouble
+// Needs to be instanitated due to extra template class, T2
+template <typename T>
+template <typename T2>
+FLQuant_base<T>& FLQuant_base<T>::operator *= (const FLQuant_base<T2>& rhs){
+        Rprintf("In T1*=T2 multiplication assignment\n");
+        // Check dims
+        std::vector<T2> rhs_data = rhs.get_data();
+        std::transform((*this).data.begin(), (*this).data.end(), rhs_data.begin(), (*this).data.begin(), std::multiplies<T>());
+        return *this;
+}
+
+// General multiplication
+template <typename T>
+FLQuant_base<T> FLQuant_base<T>::operator * (const FLQuant_base<T>& rhs) const{
+    Rprintf("In self multiplication\n");
+    FLQuant_base<T> out = *this; // Copy myself
+    out *= rhs;
+    return out;
+}
+
+/*
+FLQuantAdolc operator * (const FLQuantAdolc &lhs, const FLQuant &rhs){
+    Rprintf("FLQAD = FLQAD * FLQ\n");
+    FLQuantAdolc out = lhs;
+    return out;
+}
+
+FLQuantAdolc operator * (const FLQuant &lhs, const FLQuantAdolc &rhs){
+    Rprintf("FLQAD = FLQA* FLQAD\n");
+    FLQuantAdolc out = rhs;
+    return out;
+
+}
+*/
+
+/*
+// Special multiplication case, where LHS and RHS are different Types
+// FLQAD = FLQAD * FLQ
+template <typename T>
+template <typename T2>
+FLQuant_base<T> FLQuant_base<T>::operator * (const FLQuant_base<T2>& rhs) const{
+    Rprintf("In generic T = T * T2\n");
+    FLQuant_base<T> out = *this; // Copy myself
+    out *= rhs;
+    return out;
+}
+
+// Special multiplication case, where LHS and RHS are different Types
+// FLQAD = FLQ * FLQAD
+template <typename T>
+template <typename T2>
+FLQuant_base<T2> FLQuant_base<T>::operator * (const FLQuant_base<T2>& rhs) const{
+    Rprintf("In T2 = T * T2\n");
+    FLQuant_base<T2> out = rhs;
+    //out *= rhs;
+    return out;
+}
+
+*/
+// Outside of class
+template <typename T>
+FLQuant_base<T> operator * (const FLQuant_base<double>& lhs, const FLQuant_base<T>& rhs){
+    Rprintf("FLQuant_base<double> * FLQuant_base<T>\n");
+    // Check dims
+    FLQuant_base<T> out = rhs;
+    out *= lhs;
+    return out;
+
+}
+
+template <typename T>
+FLQuant_base<T> operator * (const FLQuant_base<T>& lhs, const FLQuant_base<double>& rhs){
+    Rprintf("FLQuant_base<T> * FLQuant_base<double>\n");
+    // Check dims
+    FLQuant_base<T> out = lhs;
+    out *= rhs;
+    return out;
+}
+
 
 /*
 // T1 and T2 are FLQuant or FLQuantAdolc
@@ -123,41 +328,11 @@ FLQuant_base<T1> operator * (const FLQuant_base<T1>& lhs, const  FLQuant_base<T2
 */
 
 /*
-// Constructor from an S4
-// Include test that the class in the SEXP is an FLQuant?
-FLQuant::FLQuant(SEXP flq_sexp){
-	Rcpp::S4 flq_s4 = Rcpp::as<Rcpp::S4>(flq_sexp);
-	data = flq_s4.slot(".Data");
-	units = Rcpp::as<std::string>(flq_s4.slot("units"));
-}
-
-// Copy constructor - else 'data' can be pointed at by multiple instances
-FLQuant::FLQuant(const FLQuant& FLQuant_source){
-	data  = Rcpp::clone<Rcpp::NumericVector>(FLQuant_source.data);
-	units = FLQuant_source.units; // std::string always does deep copy
-}
-
-// Assignment operator to ensure deep copy - else 'data' can be pointed at by multiple instances
-FLQuant& FLQuant::operator = (const FLQuant& FLQuant_source){
-	if (this != &FLQuant_source){
-		data  = Rcpp::clone<Rcpp::NumericVector>(FLQuant_source.data); // Clone for a deep copy
-		units = FLQuant_source.units; // std::string always does deep copy
-	}
-	return *this;
-}
 */
 /* Accessor methods */
 /*
-std::string FLQuant::get_units() const{
-	return units;
-}
-
 void FLQuant::set_units(const std::string new_units){
 	units = new_units;
-}
-
-Rcpp::NumericVector FLQuant::get_data() const{
-	return data;
 }
 
 void FLQuant::set_data(const Rcpp::NumericVector& data_in){
@@ -199,63 +374,6 @@ void FLQuant::set_dimnames(const Rcpp::List dimnames){
 }
 */
 /*
-int FLQuant::get_size() const{
-	return data.size();
-}
-
-int FLQuant::get_nquant() const{
-	Rcpp::IntegerVector dims = data.attr("dim");
-	return dims(0);
-}
-
-int FLQuant::get_nyear() const{
-	Rcpp::IntegerVector dims = data.attr("dim");
-	return dims(1);
-}
-
-int FLQuant::get_nunit() const{
-	Rcpp::IntegerVector dims = data.attr("dim");
-	return dims(2);
-}
-
-int FLQuant::get_nseason() const{
-	Rcpp::IntegerVector dims = data.attr("dim");
-	return dims(3);
-}
-
-int FLQuant::get_narea() const{
-	Rcpp::IntegerVector dims = data.attr("dim");
-	return dims(4);
-}
-
-int FLQuant::get_niter() const{
-	Rcpp::IntegerVector dims = data.attr("dim");
-	return dims(5);
-}
-
-Rcpp::IntegerVector FLQuant::get_dim() const{
-    return data.attr("dim");
-}
-
-Rcpp::List FLQuant::get_dimnames() const{
-    return data.attr("dimnames");
-}
-
-// Note that elements start at 1 NOT 0!
-int FLQuant::get_data_element(const int quant, const int year, const int unit, const int season, const int area, const int iter) const{
-    Rcpp::IntegerVector dims = data.attr("dim");
-    if ((quant > dims(0)) || (year > dims[1]) || (unit > dims(2)) || (season > dims(3)) || (area > dims(4)) || (iter > dims(5))){
-            Rcpp::stop("Trying to access element outside of dim range.");
-    }
-	unsigned int element = (get_narea() * get_nseason() * get_nunit() * get_nyear() * get_nquant() * (iter - 1)) +
-			(get_nseason() * get_nunit() * get_nyear() * get_nquant() * (area - 1)) +
-			(get_nunit() * get_nyear() * get_nquant() * (season - 1)) +
-			(get_nyear() * get_nquant() * (unit - 1)) +
-			(get_nquant() * (year - 1)) +
-			(quant - 1); 
-	return element;
-}
-
 // Data accessor - all dims
 double& FLQuant::operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter){
 	unsigned int element = get_data_element(quant, year, unit, season, area, iter);
@@ -458,6 +576,7 @@ FLQuant exp(const FLQuant& flq){
 }
 */
 
+/*
 template <typename T1, typename T2>
 std::vector<T1> operator * (const std::vector<T1>& lhs, const std::vector<T2>& rhs){
     Rprintf("T1 = T1 * T2\n");    
@@ -470,21 +589,36 @@ std::vector<adouble> operator * (const std::vector<double>& lhs, const std::vect
     std::vector<adouble> out;
     return out;
 }
+*/
 
-
+/*
 // Instantiate
 template std::vector<double> operator * (const std::vector<double>& lhs, const std::vector<double>& rhs);
 template std::vector<adouble> operator * (const std::vector<adouble>& lhs, const std::vector<adouble>& rhs);
 template std::vector<adouble> operator * (const std::vector<adouble>& lhs, const std::vector<double>& rhs);
 // But this one
 //template std::vector<adouble> operator * (const std::vector<double>& lhs, const std::vector<adouble>& rhs);
+*/
 
-
-// Explicit instantiations - alternatively put all the definitions into the header file
-// This way we have more control over what types the functions work with
+/* Explicit instantiations - alternatively put all the definitions into the header file
+ * This way we have more control over what types the functions work with
+ */
 // Explicit instantiation of class
 template class FLQuant_base<double>;
-template class FLQuant_base<adouble>; // Necessary so that dummy_adouble can use the dummy_base<adouble> bits
+template class FLQuant_base<adouble>;
+// Instantiate class methods with mixed types 
+template FLQuant_base<adouble>& FLQuant_base<adouble>::operator *= (const FLQuant_base<double>& rhs);
+
+//template FLQuant_base<double> FLQuant_base<double>::operator * (const FLQuant_base<double>& flq_rhs) const;
+//template FLQuant_base<adouble> FLQuant_base<adouble>::operator * (const FLQuant_base<adouble>& flq_rhs) const;
+//template FLQuant_base<adouble> FLQuant_base<adouble>::operator * (const FLQuant_base<double>& flq_rhs) const;
+//template FLQuant_base<adouble> FLQuant_base<double>::operator * (const FLQuant_base<adouble>& rhs) const;
+
+// Explicit instantiation of extra artithmetic functions
+template FLQuant_base<adouble> operator * (const FLQuant_base<double>& lhs, const FLQuant_base<adouble>& rhs);
+template FLQuant_base<adouble> operator * (const FLQuant_base<adouble>& lhs, const FLQuant_base<double>& rhs);
+
+
 // Explicit instantiation of arithmetic friend functions
 // *=
 //template FLQuant& operator *= (FLQuant& lhs, const FLQuant& rhs);

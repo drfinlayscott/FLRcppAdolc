@@ -65,6 +65,30 @@ test_FLQuantAdolc_get_data_element <- function(flq, quant, year, unit, season, a
     .Call('FLRcppAdolc_test_FLQuantAdolc_get_data_element', PACKAGE = 'FLRcppAdolc', flq, quant, year, unit, season, area, iter)
 }
 
+test_FLQuantAdolc_get_const_single_index_accessor <- function(flq, element) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_get_const_single_index_accessor', PACKAGE = 'FLRcppAdolc', flq, element)
+}
+
+test_FLQuantAdolc_get_single_index_accessor <- function(flq, element) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_get_single_index_accessor', PACKAGE = 'FLRcppAdolc', flq, element)
+}
+
+test_FLQuantAdolc_set_single_index_accessor <- function(flq, element, value) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_set_single_index_accessor', PACKAGE = 'FLRcppAdolc', flq, element, value)
+}
+
+test_FLQuantAdolc_const_get_accessor <- function(flq, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_const_get_accessor', PACKAGE = 'FLRcppAdolc', flq, quant, year, unit, season, area, iter)
+}
+
+test_FLQuantAdolc_get_accessor <- function(flq, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_get_accessor', PACKAGE = 'FLRcppAdolc', flq, quant, year, unit, season, area, iter)
+}
+
+test_FLQuantAdolc_set_accessor <- function(flq, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_set_accessor', PACKAGE = 'FLRcppAdolc', flq, quant, year, unit, season, area, iter, value)
+}
+
 test_FLQuantAdolc_FLQuantAdolc_multiplier_assignment_operator <- function(flqad1, flqad2) {
     .Call('FLRcppAdolc_test_FLQuantAdolc_FLQuantAdolc_multiplier_assignment_operator', PACKAGE = 'FLRcppAdolc', flqad1, flqad2)
 }
@@ -155,6 +179,30 @@ test_FLQuant_get_niter <- function(flq) {
 
 test_FLQuant_get_data_element <- function(flq, quant, year, unit, season, area, iter) {
     .Call('FLRcppAdolc_test_FLQuant_get_data_element', PACKAGE = 'FLRcppAdolc', flq, quant, year, unit, season, area, iter)
+}
+
+test_FLQuant_get_const_single_index_accessor <- function(flq, element) {
+    .Call('FLRcppAdolc_test_FLQuant_get_const_single_index_accessor', PACKAGE = 'FLRcppAdolc', flq, element)
+}
+
+test_FLQuant_get_single_index_accessor <- function(flq, element) {
+    .Call('FLRcppAdolc_test_FLQuant_get_single_index_accessor', PACKAGE = 'FLRcppAdolc', flq, element)
+}
+
+test_FLQuant_set_single_index_accessor <- function(flq, element, value) {
+    .Call('FLRcppAdolc_test_FLQuant_set_single_index_accessor', PACKAGE = 'FLRcppAdolc', flq, element, value)
+}
+
+test_FLQuant_const_get_accessor <- function(flq, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_FLQuant_const_get_accessor', PACKAGE = 'FLRcppAdolc', flq, quant, year, unit, season, area, iter)
+}
+
+test_FLQuant_get_accessor <- function(flq, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_FLQuant_get_accessor', PACKAGE = 'FLRcppAdolc', flq, quant, year, unit, season, area, iter)
+}
+
+test_FLQuant_set_accessor <- function(flq, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_FLQuant_set_accessor', PACKAGE = 'FLRcppAdolc', flq, quant, year, unit, season, area, iter, value)
 }
 
 test_FLQuant_FLQuant_multiplier_assignment_operator <- function(flq1, flq2) {

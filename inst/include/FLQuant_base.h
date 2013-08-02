@@ -31,6 +31,7 @@ class FLQuant_base {
 	public:
         /* Constructors */
 		FLQuant_base();
+		//FLQuant_base(FLQuant_base<T> flq_in); // Make an FLQuantAdolc from an FLQuant
 		FLQuant_base(SEXP flq_sexp); // Used as intrusive 'as'
         operator SEXP() const; // Used as intrusive 'wrap'
 		FLQuant_base(const FLQuant_base& FLQuant_base_source); // copy constructor to ensure that copies (i.e. when passing to functions) are deep
@@ -58,16 +59,14 @@ class FLQuant_base {
 		void set_data(const Rcpp::NumericVector& data_in);
         void set_dim(const Rcpp::IntegerVector dim);
         void set_dimnames(const Rcpp::List dimnames);
-        void set_attr(const Rcpp::IntegerVector dims, const Rcpp::List dimnames);
         */
 
         /* Overloaded operators */
-        /*
-		double& operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter); // gets and sets an element so const not reinforced
-		double& operator () (const int element); // gets and sets an element so const not reinforced
-		double operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter) const; // only gets an element so const reinforced - however cannot return reference due to NumericVector() operator
-		double operator () (const int element) const; // only gets an element so const reinforced - - however cannot return reference due to NumericVector() operator
-        */
+		T operator () (const int element) const; // only gets an element so const reinforced - - however cannot return reference due to NumericVector() operator
+		T operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter) const; // only gets an element so const reinforced - however cannot return reference due to NumericVector() operator
+		T& operator () (const int element); // gets and sets an element so const not reinforced
+		T& operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter); // gets and sets an element so const not reinforced
+
         /* Mathematical operators */
 
         /* arithmetic operator, it's a friend so that we can have access to internals

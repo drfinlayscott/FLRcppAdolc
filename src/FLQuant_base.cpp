@@ -185,6 +185,42 @@ int FLQuant_base<T>::get_data_element(const int quant, const int year, const int
 	return element;
 }
 
+// Get only data accessor - single element
+template <typename T>
+T FLQuant_base<T>::operator () (const int element) const{
+    Rprintf("In const single element accessor\n");
+    if (element > get_size()){
+        Rcpp::stop("Trying to access element larger than data size.");
+    }
+    return data[element-1];
+}
+
+// Data accessor - single element
+template <typename T>
+T& FLQuant_base<T>::operator () (const int element){
+    Rprintf("In single element accessor\n");
+    if (element > data.size()){
+        Rcpp::stop("Trying to access element larger than data size.");
+    }
+	return data[element-1];
+}
+
+// Get only data accessor - all dims
+template <typename T>
+T FLQuant_base<T>::operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter) const{
+    Rprintf("In const multiple element accessor\n");
+	unsigned int element = get_data_element(quant, year, unit, season, area, iter);
+	return data[element];
+}
+
+// Data accessor - all dims
+template <typename T>
+T& FLQuant_base<T>::operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter){
+    Rprintf("In multiple element accessor\n");
+	unsigned int element = get_data_element(quant, year, unit, season, area, iter);
+	return data[element];
+}
+
 
 
 //------------------ Arithmetic operators -------------------
@@ -374,35 +410,6 @@ void FLQuant::set_dimnames(const Rcpp::List dimnames){
 }
 */
 /*
-// Data accessor - all dims
-double& FLQuant::operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter){
-	unsigned int element = get_data_element(quant, year, unit, season, area, iter);
-	return data(element);
-}
-
-// Data accessor - single element
-double& FLQuant::operator () (const int element){
-    if (element > data.size()){
-    Rcpp::stop("Trying to access element larger than data size.");
-    }
-	return data(element-1);
-}
-
-// Get only data accessor - all dims
-double FLQuant::operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter) const{
-	unsigned int element = get_data_element(quant, year, unit, season, area, iter);
-    //double & out = data[element];
-	return data[element];
-    //return out;
-}
-
-// Get only data accessor - single element
-double FLQuant::operator () (const int element) const{
-    if (element > data.size()){
-    Rcpp::stop("Trying to access element larger than data size.");
-    }
-    return data[element-1];
-}
 */
 /* Define template specialisations for as and wrap */
 /*

@@ -117,6 +117,46 @@ int test_FLQuant_get_data_element(const FLQuant flq, int quant, int year, int un
 	return out;
 }
 
+// [[Rcpp::export]]
+double test_FLQuant_get_const_single_index_accessor(const FLQuant flq, const int element){
+	double output = 0.0;
+	output = flq(element);
+	return output;
+}
+
+// [[Rcpp::export]]
+double test_FLQuant_get_single_index_accessor(FLQuant flq, int element){
+	double output = 0.0;
+	output = flq(element);
+	return output;
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_set_single_index_accessor(FLQuant flq, int element, double value){
+    flq(element) = value;
+    return flq;
+}
+
+// [[Rcpp::export]]
+double test_FLQuant_const_get_accessor(const FLQuant flq, int quant, int year, int unit, int season, int area, int iter){
+	double output = 0.0;
+	output = flq(quant,year,unit,season,area,iter);
+	return output;
+}
+
+// [[Rcpp::export]]
+double test_FLQuant_get_accessor(FLQuant flq, int quant, int year, int unit, int season, int area, int iter){
+	double output = 0.0;
+	output = flq(quant,year,unit,season,area,iter);
+	return output;
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_set_accessor(FLQuant flq, int quant, int year, int unit, int season, int area, int iter, double value){
+	flq(quant,year,unit,season,area,iter) = value;
+	return flq;
+}
+
 
 
 //------------------ Arithmetic operators ----------------------
@@ -161,20 +201,6 @@ Rcpp::List test_FLQuant_get_dimnames(FLQuant flq){
     return flq.get_dimnames();
 }
 
-// [[Rcpp::export]]
-double test_FLQuant_get_accessor(const FLQuant flq, int quant, int year, int unit, int season, int area, int iter){
-	double output = 0.0;
-	output = flq(quant,year,unit,season,area,iter);
-	return output;
-}
-
-// [[Rcpp::export]]
-double test_FLQuant_get_single_index_accessor(const FLQuant flq, int element){
-	double output = 0.0;
-	output = flq(element);
-	return output;
-}
-
 // Checking that returned values cannot affect the flq
 // [[Rcpp::export]]
 Rcpp::List test_FLQuant_get_single_index_accessor2(const FLQuant flq, int element){
@@ -184,13 +210,6 @@ Rcpp::List test_FLQuant_get_single_index_accessor2(const FLQuant flq, int elemen
     return Rcpp::List::create(Rcpp::Named("flq_out", flq),
             Rcpp::Named("output", output));
 }
-
-// [[Rcpp::export]]
-FLQuant test_FLQuant_set_accessor(FLQuant flq, int quant, int year, int unit, int season, int area, int iter, double value){
-	flq(quant,year,unit,season,area,iter) = value;
-	return flq;
-}
-
 // [[Rcpp::export]]
 FLQuant test_FLQuant_set_single_index_accessor(FLQuant flq, int element, double value){
 	flq(element) = value;

@@ -3,7 +3,6 @@
  * Maintainer: Finlay Scott, JRC
  */
 
-
 #include "../../inst/include/FLQuant_base.h"
 
 // [[Rcpp::export]]
@@ -100,6 +99,47 @@ int test_FLQuantAdolc_get_data_element(const FLQuantAdolc flq, int quant, int ye
 	out = flq.get_data_element(quant,year,unit,season,area,iter);
 	return out;
 }
+
+// [[Rcpp::export]]
+double test_FLQuantAdolc_get_const_single_index_accessor(const FLQuantAdolc flq, const int element){
+	adouble output = 0.0;
+	output = flq(element);
+	return output.value();
+}
+
+// [[Rcpp::export]]
+double test_FLQuantAdolc_get_single_index_accessor(FLQuantAdolc flq, int element){
+	adouble output = 0.0;
+	output = flq(element);
+	return output.value();
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_set_single_index_accessor(FLQuantAdolc flq, int element, double value){
+    flq(element) = value;
+    return flq;
+}
+
+// [[Rcpp::export]]
+double test_FLQuantAdolc_const_get_accessor(const FLQuantAdolc flq, int quant, int year, int unit, int season, int area, int iter){
+	adouble output = 0.0;
+	output = flq(quant,year,unit,season,area,iter);
+	return output.value();
+}
+
+// [[Rcpp::export]]
+double test_FLQuantAdolc_get_accessor(FLQuantAdolc flq, int quant, int year, int unit, int season, int area, int iter){
+	adouble output = 0.0;
+	output = flq(quant,year,unit,season,area,iter);
+	return output.value();
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_set_accessor(FLQuantAdolc flq, int quant, int year, int unit, int season, int area, int iter, double value){
+	flq(quant,year,unit,season,area,iter) = value;
+	return flq;
+}
+
 
 //------------------ Arithmetic operators ----------------------
 // [[Rcpp::export]]

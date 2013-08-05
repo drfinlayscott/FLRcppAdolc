@@ -113,6 +113,18 @@ test_FLQuantAdolc_FLQuant_FLQuantAdolc_multiplier_operator <- function(flqad1, f
     .Call('FLRcppAdolc_test_FLQuantAdolc_FLQuant_FLQuantAdolc_multiplier_operator', PACKAGE = 'FLRcppAdolc', flqad1, flq2, flqad3)
 }
 
+test_FLQuantAdolc_FLQuantAdolc_match_dims <- function(flq1, flq2) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_FLQuantAdolc_match_dims', PACKAGE = 'FLRcppAdolc', flq1, flq2)
+}
+
+test_FLQuantAdolc_FLQuant_match_dims <- function(flq1, flq2) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_FLQuant_match_dims', PACKAGE = 'FLRcppAdolc', flq1, flq2)
+}
+
+test_FLQuant_FLQuantAdolc_match_dims <- function(flq1, flq2) {
+    .Call('FLRcppAdolc_test_FLQuant_FLQuantAdolc_match_dims', PACKAGE = 'FLRcppAdolc', flq1, flq2)
+}
+
 do_nothing_FLQuant <- function() {
     invisible(.Call('FLRcppAdolc_do_nothing_FLQuant', PACKAGE = 'FLRcppAdolc'))
 }
@@ -211,5 +223,9 @@ test_FLQuant_FLQuant_multiplier_assignment_operator <- function(flq1, flq2) {
 
 test_FLQuant_FLQuant_multiplier_operator <- function(flq1, flq2) {
     .Call('FLRcppAdolc_test_FLQuant_FLQuant_multiplier_operator', PACKAGE = 'FLRcppAdolc', flq1, flq2)
+}
+
+test_FLQuant_FLQuant_match_dims <- function(flq1, flq2) {
+    .Call('FLRcppAdolc_test_FLQuant_FLQuant_match_dims', PACKAGE = 'FLRcppAdolc', flq1, flq2)
 }
 

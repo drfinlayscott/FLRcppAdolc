@@ -172,6 +172,12 @@ FLQuant test_FLQuant_FLQuant_multiplier_operator(FLQuant flq1, FLQuant flq2){
     return flq3;
 }
 
+//------------------ Others --------------------------------------
+// [[Rcpp::export]]
+int test_FLQuant_FLQuant_match_dims(FLQuant flq1, FLQuant flq2){
+    return flq1.match_dims(flq2);
+}
+
 /*
 // [[Rcpp::export]]
 FLQuant test_FLQuant_set_units(FLQuant flq, std::string new_units){
@@ -214,11 +220,6 @@ Rcpp::List test_FLQuant_get_single_index_accessor2(const FLQuant flq, int elemen
 FLQuant test_FLQuant_set_single_index_accessor(FLQuant flq, int element, double value){
 	flq(element) = value;
 	return flq;
-}
-
-// [[Rcpp::export]]
-int test_FLQuant_match_dims(FLQuant flq1, FLQuant flq2){
-    return flq1.match_dims(flq2);
 }
 
 // [[Rcpp::export]]

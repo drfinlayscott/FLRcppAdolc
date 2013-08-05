@@ -41,6 +41,7 @@ FLQuantAdolc test_FLQuantAdolc_assignment_operator(FLQuantAdolc flqad){
 }
 
 //------------------ Accessors ----------------------
+// Cannot return vector of adoubles
 /*
 // [[Rcpp::export]]
 std::vector<adouble> test_FLQuantAdolc_get_data(FLQuantAdolc flq){
@@ -188,3 +189,18 @@ FLQuantAdolc test_FLQuantAdolc_FLQuant_FLQuantAdolc_multiplier_operator(FLQuantA
     return flqad4;
 }
 
+//------------------ Others --------------------------------------
+// [[Rcpp::export]]
+int test_FLQuantAdolc_FLQuantAdolc_match_dims(FLQuantAdolc flq1, FLQuantAdolc flq2){
+    return flq1.match_dims(flq2);
+}
+
+// [[Rcpp::export]]
+int test_FLQuantAdolc_FLQuant_match_dims(FLQuantAdolc flq1, FLQuant flq2){
+    return flq1.match_dims(flq2);
+}
+
+// [[Rcpp::export]]
+int test_FLQuant_FLQuantAdolc_match_dims(FLQuant flq1, FLQuantAdolc flq2){
+    return flq1.match_dims(flq2);
+}

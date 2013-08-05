@@ -44,7 +44,7 @@ class FLQuant_base {
 		std::string get_units() const;
         Rcpp::IntegerVector get_dim() const;
         Rcpp::List get_dimnames() const;
-		int get_size() const;
+		unsigned int get_size() const;
 		int get_nquant() const;
 		int get_nyear() const;
 		int get_nunit() const;
@@ -62,9 +62,9 @@ class FLQuant_base {
         */
 
         /* Overloaded operators */
-		T operator () (const int element) const; // only gets an element so const reinforced - - however cannot return reference due to NumericVector() operator
+		T operator () (const unsigned int element) const; // only gets an element so const reinforced - - however cannot return reference due to NumericVector() operator
 		T operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter) const; // only gets an element so const reinforced - however cannot return reference due to NumericVector() operator
-		T& operator () (const int element); // gets and sets an element so const not reinforced
+		T& operator () (const unsigned int element); // gets and sets an element so const not reinforced
 		T& operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter); // gets and sets an element so const not reinforced
 
         /* Mathematical operators */
@@ -87,9 +87,13 @@ class FLQuant_base {
 
         // Multiplication assignment
         FLQuant_base<T>& operator *= (const FLQuant_base<T>& rhs);
+        FLQuant_base<T>& operator *= (const T& rhs);
         // For the special case of FLQuant_base<adouble> *= FLQuant_base<double>
         template <typename T2>
         FLQuant_base<T>& operator *= (const FLQuant_base<T2>& rhs);
+        // For the special case of FLQuant_base<adouble> *= double
+        template <typename T2>
+        FLQuant_base<T>& operator *= (const T2& rhs);
 
         // Multiplication
         // Return same type as itself
@@ -127,7 +131,9 @@ class FLQuant_base {
         */
 
         /* Other methods */
-        //int match_dims(const FLQuant& flq) const;
+        int match_dims(const FLQuant_base<T>& flq) const;
+        template <typename T2>
+        int match_dims(const FLQuant_base<T2>& flq) const;
 
     protected:
         std::vector<T> data;
@@ -160,7 +166,7 @@ FLQuant_base<T> operator * (const FLQuant_base<T>& lhs, const FLQuant_base<doubl
 //}
 
 /* Other useful functions */
-//int match_dims(const FLQuant a, const FLQuant b);
+int dim_matcher(const Rcpp::IntegerVector a, const Rcpp::IntegerVector b);
 //FLQuant log(const FLQuant& flq);
 //FLQuant exp(const FLQuant& flq);
 

@@ -320,6 +320,39 @@ BEGIN_RCPP
     return Rcpp::wrap(__result);
 END_RCPP
 }
+// test_FLQuantAdolc_FLQuantAdolc_match_dims
+int test_FLQuantAdolc_FLQuantAdolc_match_dims(FLQuantAdolc flq1, FLQuantAdolc flq2);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_FLQuantAdolc_match_dims(SEXP flq1SEXP, SEXP flq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flq1 = Rcpp::as<FLQuantAdolc >(flq1SEXP);
+    FLQuantAdolc flq2 = Rcpp::as<FLQuantAdolc >(flq2SEXP);
+    int __result = test_FLQuantAdolc_FLQuantAdolc_match_dims(flq1, flq2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_FLQuant_match_dims
+int test_FLQuantAdolc_FLQuant_match_dims(FLQuantAdolc flq1, FLQuant flq2);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_FLQuant_match_dims(SEXP flq1SEXP, SEXP flq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flq1 = Rcpp::as<FLQuantAdolc >(flq1SEXP);
+    FLQuant flq2 = Rcpp::as<FLQuant >(flq2SEXP);
+    int __result = test_FLQuantAdolc_FLQuant_match_dims(flq1, flq2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_FLQuantAdolc_match_dims
+int test_FLQuant_FLQuantAdolc_match_dims(FLQuant flq1, FLQuantAdolc flq2);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_FLQuantAdolc_match_dims(SEXP flq1SEXP, SEXP flq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq1 = Rcpp::as<FLQuant >(flq1SEXP);
+    FLQuantAdolc flq2 = Rcpp::as<FLQuantAdolc >(flq2SEXP);
+    int __result = test_FLQuant_FLQuantAdolc_match_dims(flq1, flq2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
 // do_nothing_FLQuant
 void do_nothing_FLQuant();
 RcppExport SEXP FLRcppAdolc_do_nothing_FLQuant() {
@@ -596,6 +629,17 @@ BEGIN_RCPP
     FLQuant flq1 = Rcpp::as<FLQuant >(flq1SEXP);
     FLQuant flq2 = Rcpp::as<FLQuant >(flq2SEXP);
     FLQuant __result = test_FLQuant_FLQuant_multiplier_operator(flq1, flq2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_FLQuant_match_dims
+int test_FLQuant_FLQuant_match_dims(FLQuant flq1, FLQuant flq2);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_FLQuant_match_dims(SEXP flq1SEXP, SEXP flq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq1 = Rcpp::as<FLQuant >(flq1SEXP);
+    FLQuant flq2 = Rcpp::as<FLQuant >(flq2SEXP);
+    int __result = test_FLQuant_FLQuant_match_dims(flq1, flq2);
     return Rcpp::wrap(__result);
 END_RCPP
 }

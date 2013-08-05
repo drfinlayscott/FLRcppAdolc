@@ -129,7 +129,7 @@ Rcpp::List FLQuant_base<T>::get_dimnames() const{
 }
 
 template <typename T>
-int FLQuant_base<T>::get_size() const{
+unsigned int FLQuant_base<T>::get_size() const{
 	return data.size();
 }
 
@@ -187,7 +187,7 @@ int FLQuant_base<T>::get_data_element(const int quant, const int year, const int
 
 // Get only data accessor - single element
 template <typename T>
-T FLQuant_base<T>::operator () (const int element) const{
+T FLQuant_base<T>::operator () (const unsigned int element) const{
     Rprintf("In const single element accessor\n");
     if (element > get_size()){
         Rcpp::stop("Trying to access element larger than data size.");
@@ -197,9 +197,9 @@ T FLQuant_base<T>::operator () (const int element) const{
 
 // Data accessor - single element
 template <typename T>
-T& FLQuant_base<T>::operator () (const int element){
+T& FLQuant_base<T>::operator () (const unsigned int element){
     Rprintf("In single element accessor\n");
-    if (element > data.size()){
+    if (element > get_size()){
         Rcpp::stop("Trying to access element larger than data size.");
     }
 	return data[element-1];
@@ -552,18 +552,25 @@ FLQuant FLQuant::operator - (const double& rhs) const{
     If yes, return 1
     Else, return the negative of the first dimension that is wrong
 */
-/*
-int FLQuant::match_dims(const FLQuant& b) const{
+
+template <typename T>
+int FLQuant_base<T>::match_dims(const FLQuant_base<T>& b) const{
     Rcpp::IntegerVector dims_a =  get_dim();
     Rcpp::IntegerVector dims_b =  b.get_dim();
-    for (int i=0; i<6; ++i){
-        if (dims_a(i) != dims_b(i)){
-            return -1 * (i+1); // Return negative of what dim does not match
-        }
-    }
-    return 1; // Else all is good
+    return dim_matcher(dims_a, dims_b);
 }
-*/
+
+// Repetition of above - can we consolidate?
+template <typename T>
+template <typename T2>
+int FLQuant_base<T>::match_dims(const FLQuant_base<T2>& b) const{
+    Rcpp::IntegerVector dims_a =  get_dim();
+    Rcpp::IntegerVector dims_b =  b.get_dim();
+    return dim_matcher(dims_a, dims_b);
+}
+
+
+
 /* Other functions */
 /*
 FLQuant log(const FLQuant& flq){
@@ -598,6 +605,15 @@ std::vector<adouble> operator * (const std::vector<double>& lhs, const std::vect
 }
 */
 
+int dim_matcher(const Rcpp::IntegerVector dims_a, const Rcpp::IntegerVector dims_b){
+    for (int i=0; i<6; ++i){
+        if (dims_a(i) != dims_b(i)){
+            return -1 * (i+1); // Return negative of what dim does not match
+        }
+    }
+    return 1; // Else all is good
+}
+
 /*
 // Instantiate
 template std::vector<double> operator * (const std::vector<double>& lhs, const std::vector<double>& rhs);
@@ -615,6 +631,8 @@ template class FLQuant_base<double>;
 template class FLQuant_base<adouble>;
 // Instantiate class methods with mixed types 
 template FLQuant_base<adouble>& FLQuant_base<adouble>::operator *= (const FLQuant_base<double>& rhs);
+template int FLQuant_base<adouble>::match_dims(const FLQuant_base<double>& b) const;
+template int FLQuant_base<double>::match_dims(const FLQuant_base<adouble>& b) const;
 
 //template FLQuant_base<double> FLQuant_base<double>::operator * (const FLQuant_base<double>& flq_rhs) const;
 //template FLQuant_base<adouble> FLQuant_base<adouble>::operator * (const FLQuant_base<adouble>& flq_rhs) const;

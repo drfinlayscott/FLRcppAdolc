@@ -99,16 +99,26 @@ class FLQuant_base {
         FLQuant_base<T> operator / (const FLQuant_base<T>& rhs) const;
         FLQuant_base<T> operator / (const T& rhs) const;
 
+        // Subtraction assignment
+        FLQuant_base<T>& operator -= (const FLQuant_base<T>& rhs);
+        FLQuant_base<T>& operator -= (const T& rhs);
+        // For the special case of FLQuant_base<adouble> *= FLQuant_base<double>
+        template <typename T2>
+        FLQuant_base<T>& operator -= (const FLQuant_base<T2>& rhs);
+        // For the special case of FLQuant_base<adouble> *= double
+        template <typename T2>
+        FLQuant_base<T>& operator -= (const T2& rhs);
+        // Division
+        // Return same type as itself
+        FLQuant_base<T> operator - (const FLQuant_base<T>& rhs) const;
+        FLQuant_base<T> operator - (const T& rhs) const;
+
         /*
         FLQuant& operator += (const FLQuant& flq_rhs);
         FLQuant operator + (const FLQuant& flq_rhs) const;
-        FLQuant& operator -= (const FLQuant& flq_rhs);
-        FLQuant operator - (const FLQuant& flq_rhs) const;
 
         FLQuant& operator += (const double& rhs);
         FLQuant operator + (const double& rhs) const;
-        FLQuant& operator -= (const double& rhs);
-        FLQuant operator - (const double& rhs) const;
         */
 
         /* Other methods */
@@ -181,6 +191,27 @@ template <typename T>
 FLQuant_base<T> operator / (const FLQuant_base<double>& lhs, const T& rhs);
 template <typename T>
 FLQuant_base<T> operator / (const T& lhs, const FLQuant_base<double>& rhs);
+
+// Subtraction
+template <typename T>
+FLQuant_base<T> operator - (const FLQuant_base<double>& lhs, const FLQuant_base<T>& rhs);
+template <typename T>
+FLQuant_base<T> operator - (const FLQuant_base<T>& lhs, const FLQuant_base<double>& rhs);
+// No template - resolves ambiguity
+FLQuant_base<double> operator - (const double& lhs, const FLQuant_base<double>& rhs);
+// For FLQuant_base<adouble> = adouble - FLQuant_base<adouble>
+template <typename T>
+FLQuant_base<T> operator - (const T& lhs, const FLQuant_base<T>& rhs);
+// For FLQuant_base<adouble> = double - FLQuant_base<adouble>
+template <typename T>
+FLQuant_base<T> operator - (const double& lhs, const FLQuant_base<T>& rhs);
+template <typename T>
+FLQuant_base<T> operator - (const FLQuant_base<T>& lhs, const double& rhs);
+// For FLQuant_base<adouble> = FLQuant_base<double> - adouble
+template <typename T>
+FLQuant_base<T> operator - (const FLQuant_base<double>& lhs, const T& rhs);
+template <typename T>
+FLQuant_base<T> operator - (const T& lhs, const FLQuant_base<double>& rhs);
 
 //FLQuant log(const FLQuant& flq);
 //FLQuant exp(const FLQuant& flq);

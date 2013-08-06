@@ -402,6 +402,204 @@ BEGIN_RCPP
     return Rcpp::wrap(__result);
 END_RCPP
 }
+// test_FLQuant_FLQuant_subtraction_assignment_operator
+FLQuant test_FLQuant_FLQuant_subtraction_assignment_operator(FLQuant flq1, FLQuant flq2);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_FLQuant_subtraction_assignment_operator(SEXP flq1SEXP, SEXP flq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq1 = Rcpp::as<FLQuant >(flq1SEXP);
+    FLQuant flq2 = Rcpp::as<FLQuant >(flq2SEXP);
+    FLQuant __result = test_FLQuant_FLQuant_subtraction_assignment_operator(flq1, flq2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_FLQuant_subtraction_assignment_operator
+FLQuantAdolc test_FLQuantAdolc_FLQuant_subtraction_assignment_operator(FLQuantAdolc flqad1, FLQuant flq2);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_FLQuant_subtraction_assignment_operator(SEXP flqad1SEXP, SEXP flq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flqad1 = Rcpp::as<FLQuantAdolc >(flqad1SEXP);
+    FLQuant flq2 = Rcpp::as<FLQuant >(flq2SEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_FLQuant_subtraction_assignment_operator(flqad1, flq2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_FLQuantAdolc_subtraction_assignment_operator
+FLQuantAdolc test_FLQuantAdolc_FLQuantAdolc_subtraction_assignment_operator(FLQuantAdolc flqad1, FLQuantAdolc flqad2);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_FLQuantAdolc_subtraction_assignment_operator(SEXP flqad1SEXP, SEXP flqad2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flqad1 = Rcpp::as<FLQuantAdolc >(flqad1SEXP);
+    FLQuantAdolc flqad2 = Rcpp::as<FLQuantAdolc >(flqad2SEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_FLQuantAdolc_subtraction_assignment_operator(flqad1, flqad2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_double_subtraction_assignment_operator
+FLQuant test_FLQuant_double_subtraction_assignment_operator(FLQuant flq1, double value);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_double_subtraction_assignment_operator(SEXP flq1SEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq1 = Rcpp::as<FLQuant >(flq1SEXP);
+    double value = Rcpp::as<double >(valueSEXP);
+    FLQuant __result = test_FLQuant_double_subtraction_assignment_operator(flq1, value);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_double_subtraction_assignment_operator
+FLQuantAdolc test_FLQuantAdolc_double_subtraction_assignment_operator(FLQuantAdolc flqad1, double value);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_double_subtraction_assignment_operator(SEXP flqad1SEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flqad1 = Rcpp::as<FLQuantAdolc >(flqad1SEXP);
+    double value = Rcpp::as<double >(valueSEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_double_subtraction_assignment_operator(flqad1, value);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_adouble_subtraction_assignment_operator
+FLQuantAdolc test_FLQuantAdolc_adouble_subtraction_assignment_operator(FLQuantAdolc flqad1, double value);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_adouble_subtraction_assignment_operator(SEXP flqad1SEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flqad1 = Rcpp::as<FLQuantAdolc >(flqad1SEXP);
+    double value = Rcpp::as<double >(valueSEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_adouble_subtraction_assignment_operator(flqad1, value);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_FLQuant_subtraction_operator
+FLQuant test_FLQuant_FLQuant_subtraction_operator(FLQuant flq1, FLQuant flq2);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_FLQuant_subtraction_operator(SEXP flq1SEXP, SEXP flq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq1 = Rcpp::as<FLQuant >(flq1SEXP);
+    FLQuant flq2 = Rcpp::as<FLQuant >(flq2SEXP);
+    FLQuant __result = test_FLQuant_FLQuant_subtraction_operator(flq1, flq2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_FLQuant_subtraction_operator
+FLQuantAdolc test_FLQuantAdolc_FLQuant_subtraction_operator(FLQuantAdolc flqad1, FLQuant flq2);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_FLQuant_subtraction_operator(SEXP flqad1SEXP, SEXP flq2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flqad1 = Rcpp::as<FLQuantAdolc >(flqad1SEXP);
+    FLQuant flq2 = Rcpp::as<FLQuant >(flq2SEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_FLQuant_subtraction_operator(flqad1, flq2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_FLQuantAdolc_subtraction_operator
+FLQuantAdolc test_FLQuant_FLQuantAdolc_subtraction_operator(FLQuant flq1, FLQuantAdolc flqad2);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_FLQuantAdolc_subtraction_operator(SEXP flq1SEXP, SEXP flqad2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq1 = Rcpp::as<FLQuant >(flq1SEXP);
+    FLQuantAdolc flqad2 = Rcpp::as<FLQuantAdolc >(flqad2SEXP);
+    FLQuantAdolc __result = test_FLQuant_FLQuantAdolc_subtraction_operator(flq1, flqad2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_FLQuantAdolc_subtraction_operator
+FLQuantAdolc test_FLQuantAdolc_FLQuantAdolc_subtraction_operator(FLQuantAdolc flqad1, FLQuantAdolc flqad2);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_FLQuantAdolc_subtraction_operator(SEXP flqad1SEXP, SEXP flqad2SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flqad1 = Rcpp::as<FLQuantAdolc >(flqad1SEXP);
+    FLQuantAdolc flqad2 = Rcpp::as<FLQuantAdolc >(flqad2SEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_FLQuantAdolc_subtraction_operator(flqad1, flqad2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_double_subtraction_operator
+FLQuant test_FLQuant_double_subtraction_operator(FLQuant flq1, double value);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_double_subtraction_operator(SEXP flq1SEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq1 = Rcpp::as<FLQuant >(flq1SEXP);
+    double value = Rcpp::as<double >(valueSEXP);
+    FLQuant __result = test_FLQuant_double_subtraction_operator(flq1, value);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_double_FLQuant_subtraction_operator
+FLQuant test_double_FLQuant_subtraction_operator(double value, FLQuant flq1);
+RcppExport SEXP FLRcppAdolc_test_double_FLQuant_subtraction_operator(SEXP valueSEXP, SEXP flq1SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    double value = Rcpp::as<double >(valueSEXP);
+    FLQuant flq1 = Rcpp::as<FLQuant >(flq1SEXP);
+    FLQuant __result = test_double_FLQuant_subtraction_operator(value, flq1);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_double_FLQuantAdolc_subtraction_operator
+FLQuantAdolc test_double_FLQuantAdolc_subtraction_operator(double value, FLQuantAdolc flq1);
+RcppExport SEXP FLRcppAdolc_test_double_FLQuantAdolc_subtraction_operator(SEXP valueSEXP, SEXP flq1SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    double value = Rcpp::as<double >(valueSEXP);
+    FLQuantAdolc flq1 = Rcpp::as<FLQuantAdolc >(flq1SEXP);
+    FLQuantAdolc __result = test_double_FLQuantAdolc_subtraction_operator(value, flq1);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_double_subtraction_operator
+FLQuantAdolc test_FLQuantAdolc_double_subtraction_operator(FLQuantAdolc flq1, double value);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_double_subtraction_operator(SEXP flq1SEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flq1 = Rcpp::as<FLQuantAdolc >(flq1SEXP);
+    double value = Rcpp::as<double >(valueSEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_double_subtraction_operator(flq1, value);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_adouble_subtraction_operator
+FLQuantAdolc test_FLQuant_adouble_subtraction_operator(FLQuant flq1, double value);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_adouble_subtraction_operator(SEXP flq1SEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq1 = Rcpp::as<FLQuant >(flq1SEXP);
+    double value = Rcpp::as<double >(valueSEXP);
+    FLQuantAdolc __result = test_FLQuant_adouble_subtraction_operator(flq1, value);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_adouble_FLQuant_subtraction_operator
+FLQuantAdolc test_adouble_FLQuant_subtraction_operator(double value, FLQuant flq1);
+RcppExport SEXP FLRcppAdolc_test_adouble_FLQuant_subtraction_operator(SEXP valueSEXP, SEXP flq1SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    double value = Rcpp::as<double >(valueSEXP);
+    FLQuant flq1 = Rcpp::as<FLQuant >(flq1SEXP);
+    FLQuantAdolc __result = test_adouble_FLQuant_subtraction_operator(value, flq1);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_adouble_subtraction_operator
+FLQuantAdolc test_FLQuantAdolc_adouble_subtraction_operator(FLQuantAdolc flq1, double value);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_adouble_subtraction_operator(SEXP flq1SEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flq1 = Rcpp::as<FLQuantAdolc >(flq1SEXP);
+    double value = Rcpp::as<double >(valueSEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_adouble_subtraction_operator(flq1, value);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_adouble_FLQuantAdolc_subtraction_operator
+FLQuantAdolc test_adouble_FLQuantAdolc_subtraction_operator(double value, FLQuantAdolc flq1);
+RcppExport SEXP FLRcppAdolc_test_adouble_FLQuantAdolc_subtraction_operator(SEXP valueSEXP, SEXP flq1SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    double value = Rcpp::as<double >(valueSEXP);
+    FLQuantAdolc flq1 = Rcpp::as<FLQuantAdolc >(flq1SEXP);
+    FLQuantAdolc __result = test_adouble_FLQuantAdolc_subtraction_operator(value, flq1);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
 // test_FLQuantAdolc_FLQuant_FLQuantAdolc_multiplier_operator
 FLQuantAdolc test_FLQuantAdolc_FLQuant_FLQuantAdolc_multiplier_operator(FLQuantAdolc flqad1, FLQuant flq2, FLQuantAdolc flqad3);
 RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_FLQuant_FLQuantAdolc_multiplier_operator(SEXP flqad1SEXP, SEXP flq2SEXP, SEXP flqad3SEXP) {

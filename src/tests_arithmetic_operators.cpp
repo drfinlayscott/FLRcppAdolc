@@ -208,7 +208,7 @@ FLQuantAdolc test_FLQuantAdolc_adouble_division_assignment_operator(FLQuantAdolc
     return flqad1;
 }
 
-/* Binary Multiplication
+/* Binary division
  * 12 of them
  */
 
@@ -288,6 +288,132 @@ FLQuantAdolc test_FLQuantAdolc_adouble_division_operator(FLQuantAdolc flq1, doub
 FLQuantAdolc test_adouble_FLQuantAdolc_division_operator(double value, FLQuantAdolc flq1){
     adouble ad_value = value;
     FLQuantAdolc flq3 = ad_value / flq1;
+    return flq3;
+}
+
+//------------------ Subtraction ----------------------
+
+/* Subtraction assignment
+ * 6 of them
+ */
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_FLQuant_subtraction_assignment_operator(FLQuant flq1, FLQuant flq2){
+    flq1 -= flq2;
+    return flq1;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_FLQuant_subtraction_assignment_operator(FLQuantAdolc flqad1, FLQuant flq2){
+    flqad1 -= flq2;
+    return flqad1;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_FLQuantAdolc_subtraction_assignment_operator(FLQuantAdolc flqad1, FLQuantAdolc flqad2){
+    flqad1 -= flqad2;
+    return flqad1;
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_double_subtraction_assignment_operator(FLQuant flq1, double value){
+    flq1 -= value;
+    return flq1;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_double_subtraction_assignment_operator(FLQuantAdolc flqad1, double value){
+    flqad1 -= value;
+    return flqad1;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_adouble_subtraction_assignment_operator(FLQuantAdolc flqad1, double value){
+    adouble ad_value = value;
+    flqad1 -= ad_value;
+    return flqad1;
+}
+
+/* Binary subtraction
+ * 12 of them
+ */
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_FLQuant_subtraction_operator(FLQuant flq1, FLQuant flq2){
+    FLQuant flq3 = flq1 - flq2;
+    return flq3;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_FLQuant_subtraction_operator(FLQuantAdolc flqad1, FLQuant flq2){
+    FLQuantAdolc flqad3;
+    flqad3 = flqad1 - flq2;
+    return flqad3;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuant_FLQuantAdolc_subtraction_operator(FLQuant flq1, FLQuantAdolc flqad2){
+    FLQuantAdolc flqad3;
+    flqad3 = flq1 - flqad2;
+    return flqad3;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_FLQuantAdolc_subtraction_operator(FLQuantAdolc flqad1, FLQuantAdolc flqad2){
+    FLQuantAdolc flqad3;
+    flqad3 = flqad1 - flqad2;
+    return flqad3;
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_double_subtraction_operator(FLQuant flq1, double value){
+    FLQuant flq3 = flq1 - value;
+    return flq3;
+}
+
+// [[Rcpp::export]]
+FLQuant test_double_FLQuant_subtraction_operator(double value, FLQuant flq1){
+    FLQuant flq3 = value - flq1;
+    return flq3;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_double_FLQuantAdolc_subtraction_operator(double value, FLQuantAdolc flq1){
+    FLQuantAdolc flq3 = value - flq1;
+    return flq3;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_double_subtraction_operator(FLQuantAdolc flq1, double value){
+    FLQuantAdolc flq3 = flq1 - value;
+    return flq3;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuant_adouble_subtraction_operator(FLQuant flq1, double value){
+    adouble ad_value = value;
+    FLQuantAdolc flq3 = flq1 - ad_value;
+    return flq3;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_adouble_FLQuant_subtraction_operator(double value, FLQuant flq1){
+    adouble ad_value = value;
+    FLQuantAdolc flq3 = ad_value - flq1;
+    return flq3;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_adouble_subtraction_operator(FLQuantAdolc flq1, double value){
+    adouble ad_value = value;
+    FLQuantAdolc flq3 = flq1 - ad_value;
+    return flq3;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_adouble_FLQuantAdolc_subtraction_operator(double value, FLQuantAdolc flq1){
+    adouble ad_value = value;
+    FLQuantAdolc flq3 = ad_value - flq1;
     return flq3;
 }
 

@@ -145,6 +145,78 @@ test_adouble_FLQuantAdolc_division_operator <- function(value, flq1) {
     .Call('FLRcppAdolc_test_adouble_FLQuantAdolc_division_operator', PACKAGE = 'FLRcppAdolc', value, flq1)
 }
 
+test_FLQuant_FLQuant_subtraction_assignment_operator <- function(flq1, flq2) {
+    .Call('FLRcppAdolc_test_FLQuant_FLQuant_subtraction_assignment_operator', PACKAGE = 'FLRcppAdolc', flq1, flq2)
+}
+
+test_FLQuantAdolc_FLQuant_subtraction_assignment_operator <- function(flqad1, flq2) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_FLQuant_subtraction_assignment_operator', PACKAGE = 'FLRcppAdolc', flqad1, flq2)
+}
+
+test_FLQuantAdolc_FLQuantAdolc_subtraction_assignment_operator <- function(flqad1, flqad2) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_FLQuantAdolc_subtraction_assignment_operator', PACKAGE = 'FLRcppAdolc', flqad1, flqad2)
+}
+
+test_FLQuant_double_subtraction_assignment_operator <- function(flq1, value) {
+    .Call('FLRcppAdolc_test_FLQuant_double_subtraction_assignment_operator', PACKAGE = 'FLRcppAdolc', flq1, value)
+}
+
+test_FLQuantAdolc_double_subtraction_assignment_operator <- function(flqad1, value) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_double_subtraction_assignment_operator', PACKAGE = 'FLRcppAdolc', flqad1, value)
+}
+
+test_FLQuantAdolc_adouble_subtraction_assignment_operator <- function(flqad1, value) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_adouble_subtraction_assignment_operator', PACKAGE = 'FLRcppAdolc', flqad1, value)
+}
+
+test_FLQuant_FLQuant_subtraction_operator <- function(flq1, flq2) {
+    .Call('FLRcppAdolc_test_FLQuant_FLQuant_subtraction_operator', PACKAGE = 'FLRcppAdolc', flq1, flq2)
+}
+
+test_FLQuantAdolc_FLQuant_subtraction_operator <- function(flqad1, flq2) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_FLQuant_subtraction_operator', PACKAGE = 'FLRcppAdolc', flqad1, flq2)
+}
+
+test_FLQuant_FLQuantAdolc_subtraction_operator <- function(flq1, flqad2) {
+    .Call('FLRcppAdolc_test_FLQuant_FLQuantAdolc_subtraction_operator', PACKAGE = 'FLRcppAdolc', flq1, flqad2)
+}
+
+test_FLQuantAdolc_FLQuantAdolc_subtraction_operator <- function(flqad1, flqad2) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_FLQuantAdolc_subtraction_operator', PACKAGE = 'FLRcppAdolc', flqad1, flqad2)
+}
+
+test_FLQuant_double_subtraction_operator <- function(flq1, value) {
+    .Call('FLRcppAdolc_test_FLQuant_double_subtraction_operator', PACKAGE = 'FLRcppAdolc', flq1, value)
+}
+
+test_double_FLQuant_subtraction_operator <- function(value, flq1) {
+    .Call('FLRcppAdolc_test_double_FLQuant_subtraction_operator', PACKAGE = 'FLRcppAdolc', value, flq1)
+}
+
+test_double_FLQuantAdolc_subtraction_operator <- function(value, flq1) {
+    .Call('FLRcppAdolc_test_double_FLQuantAdolc_subtraction_operator', PACKAGE = 'FLRcppAdolc', value, flq1)
+}
+
+test_FLQuantAdolc_double_subtraction_operator <- function(flq1, value) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_double_subtraction_operator', PACKAGE = 'FLRcppAdolc', flq1, value)
+}
+
+test_FLQuant_adouble_subtraction_operator <- function(flq1, value) {
+    .Call('FLRcppAdolc_test_FLQuant_adouble_subtraction_operator', PACKAGE = 'FLRcppAdolc', flq1, value)
+}
+
+test_adouble_FLQuant_subtraction_operator <- function(value, flq1) {
+    .Call('FLRcppAdolc_test_adouble_FLQuant_subtraction_operator', PACKAGE = 'FLRcppAdolc', value, flq1)
+}
+
+test_FLQuantAdolc_adouble_subtraction_operator <- function(flq1, value) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_adouble_subtraction_operator', PACKAGE = 'FLRcppAdolc', flq1, value)
+}
+
+test_adouble_FLQuantAdolc_subtraction_operator <- function(value, flq1) {
+    .Call('FLRcppAdolc_test_adouble_FLQuantAdolc_subtraction_operator', PACKAGE = 'FLRcppAdolc', value, flq1)
+}
+
 test_FLQuantAdolc_FLQuant_FLQuantAdolc_multiplier_operator <- function(flqad1, flq2, flqad3) {
     .Call('FLRcppAdolc_test_FLQuantAdolc_FLQuant_FLQuantAdolc_multiplier_operator', PACKAGE = 'FLRcppAdolc', flqad1, flq2, flqad3)
 }

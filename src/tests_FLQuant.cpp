@@ -172,6 +172,24 @@ FLQuant test_FLQuant_FLQuant_multiplier_operator(FLQuant flq1, FLQuant flq2){
     return flq3;
 }
 
+// [[Rcpp::export]]
+FLQuant test_FLQuant_double_multiplier_assignment_operator(FLQuant flq1, double value){
+    flq1 *= value;
+    return flq1;
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_double_multiplier_operator(FLQuant flq1, double value){
+    FLQuant flq3 = flq1 * value;
+    return flq3;
+}
+
+// [[Rcpp::export]]
+FLQuant test_double_FLQuant_multiplier_operator(double value, FLQuant flq1){
+    FLQuant flq3 = value * flq1;
+    return flq3;
+}
+
 //------------------ Others --------------------------------------
 // [[Rcpp::export]]
 int test_FLQuant_FLQuant_match_dims(FLQuant flq1, FLQuant flq2){

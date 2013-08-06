@@ -106,6 +106,29 @@ FLQuant_base<T>& FLQuant_base<T>::operator = (const FLQuant_base<T>& FLQuant_sou
 	return *this;
 }
 
+// Construct FLQuant_base<T> from an FLQuant_base<T2>
+// Need specialisation
+template <typename T>
+template <typename T2>
+FLQuant_base<T>::FLQuant_base(const FLQuant_base<T2>& FLQuant_source){
+    Rprintf("In constructor for FLQuant_base<T>(FLQuant_base<T2>)\n");
+    Rcpp::stop("I have no specific instructions for these types. Please add a specialisation\n");
+}
+
+// Specialise the FLQuant_base<T>(FLQuant_base<T2>) constructor 
+// Make an FLQuantAdolc from an FLQuant
+template <>
+template <>
+FLQuant_base<adouble>::FLQuant_base(const FLQuant_base<double>& FLQuant_source){
+    Rprintf("Making an FLQuantAdolc from an FLQuant\n");
+    units = FLQuant_source.get_units(); // std::string always does deep copy
+    dim = FLQuant_source.get_dim();
+    dimnames = FLQuant_source.get_dimnames(); 
+    std::vector<double> source_data = FLQuant_source.get_data();
+    data.insert(data.begin(), source_data.begin(), source_data.end());
+}
+
+
 //------------------ Accessors ---------------------------------
 
 template <typename T>
@@ -235,9 +258,9 @@ T& FLQuant_base<T>::operator () (const unsigned int quant, const unsigned int ye
 template<typename T>
 FLQuant_base<T>& FLQuant_base<T>::operator *= (const FLQuant_base<T>& rhs){
     Rprintf("In self multiplication assignment\n");
-    //if (match_dims(flq_rhs) != 1){
-    //    Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
-    //}
+    if (match_dims(rhs) != 1){
+        Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
+    }
     std::transform((*this).data.begin(), (*this).data.end(), rhs.data.begin(), (*this).data.begin(), std::multiplies<T>());
     return *this;
 }
@@ -248,17 +271,51 @@ FLQuant_base<T>& FLQuant_base<T>::operator *= (const FLQuant_base<T>& rhs){
 template <typename T>
 template <typename T2>
 FLQuant_base<T>& FLQuant_base<T>::operator *= (const FLQuant_base<T2>& rhs){
-        Rprintf("In T1*=T2 multiplication assignment\n");
-        // Check dims
-        std::vector<T2> rhs_data = rhs.get_data();
-        std::transform((*this).data.begin(), (*this).data.end(), rhs_data.begin(), (*this).data.begin(), std::multiplies<T>());
-        return *this;
+    Rprintf("In T1*=T2 multiplication assignment\n");
+    if (match_dims(rhs) != 1){
+        Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
+    }
+    std::vector<T2> rhs_data = rhs.get_data();
+    std::transform((*this).data.begin(), (*this).data.end(), rhs_data.begin(), (*this).data.begin(), std::multiplies<T>());
+    return *this;
+}
+
+// FLQuant *= double
+// FLQuantAdolc *= adouble
+template <typename T>
+FLQuant_base<T>& FLQuant_base<T>::operator *= (const T& rhs){
+    Rprintf("In scalar T=*T multiplication assignment\n");
+    std::transform((*this).data.begin(), (*this).data.end(), (*this).data.begin(), std::bind1st(std::multiplies<T>(),rhs)); 
+    return *this;
+}
+
+// Special case of multiplication assignment 
+// Used for FLQuantAdolc *= double
+// Needs to be instanitated due to extra template class, T2
+template <typename T>
+template <typename T2>
+FLQuant_base<T>& FLQuant_base<T>::operator *= (const T2& rhs){
+    Rprintf("In scalar T=*T2 multiplication assignment\n");
+    std::transform((*this).data.begin(), (*this).data.end(), (*this).data.begin(), std::bind1st(std::multiplies<T>(),rhs)); 
+    return *this;
 }
 
 // General multiplication
+// FLQuant_base<T> * FLQuant_base<T>
 template <typename T>
 FLQuant_base<T> FLQuant_base<T>::operator * (const FLQuant_base<T>& rhs) const{
     Rprintf("In self multiplication\n");
+    if (match_dims(rhs) != 1){
+        Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
+    }
+    FLQuant_base<T> out = *this; // Copy myself
+    out *= rhs;
+    return out;
+}
+
+// FLQuant_base<T> * T
+template <typename T>
+FLQuant_base<T> FLQuant_base<T>::operator * (const T& rhs) const{
     FLQuant_base<T> out = *this; // Copy myself
     out *= rhs;
     return out;
@@ -307,7 +364,9 @@ FLQuant_base<T2> FLQuant_base<T>::operator * (const FLQuant_base<T2>& rhs) const
 template <typename T>
 FLQuant_base<T> operator * (const FLQuant_base<double>& lhs, const FLQuant_base<T>& rhs){
     Rprintf("FLQuant_base<double> * FLQuant_base<T>\n");
-    // Check dims
+    if (lhs.match_dims(rhs) != 1){
+        Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
+    }
     FLQuant_base<T> out = rhs;
     out *= lhs;
     return out;
@@ -317,12 +376,47 @@ FLQuant_base<T> operator * (const FLQuant_base<double>& lhs, const FLQuant_base<
 template <typename T>
 FLQuant_base<T> operator * (const FLQuant_base<T>& lhs, const FLQuant_base<double>& rhs){
     Rprintf("FLQuant_base<T> * FLQuant_base<double>\n");
-    // Check dims
+    if (lhs.match_dims(rhs) != 1){
+        Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
+    }
     FLQuant_base<T> out = lhs;
     out *= rhs;
     return out;
 }
 
+template <typename T>
+FLQuant_base<T> operator * (const T& lhs, const FLQuant_base<T>& rhs){
+    FLQuant_base<T> out = rhs;
+    out *= lhs;
+    return out;
+}
+
+template <typename T>
+FLQuant_base<T> operator * (const double& lhs, const FLQuant_base<T>& rhs){
+    FLQuant_base<T> out = rhs;
+    out *= lhs;
+    return out;
+}
+
+FLQuant_base<double> operator * (const double& lhs, const FLQuant_base<double>& rhs){
+    FLQuant_base<double> out = rhs;
+    out *= lhs;
+    return out;
+}
+
+template <typename T>
+FLQuant_base<T> operator * (const FLQuant_base<double>& lhs, const T& rhs){
+    FLQuant_base<T> out(lhs);
+    out *= rhs;
+    return out;
+}
+
+template <typename T>
+FLQuant_base<T> operator * (const T& lhs, const FLQuant_base<double>& rhs){
+    FLQuant_base<T> out(rhs);
+    out *= lhs;
+    return out;
+}
 
 /*
 // T1 and T2 are FLQuant or FLQuantAdolc
@@ -560,7 +654,6 @@ int FLQuant_base<T>::match_dims(const FLQuant_base<T>& b) const{
     return dim_matcher(dims_a, dims_b);
 }
 
-// Repetition of above - can we consolidate?
 template <typename T>
 template <typename T2>
 int FLQuant_base<T>::match_dims(const FLQuant_base<T2>& b) const{
@@ -633,6 +726,7 @@ template class FLQuant_base<adouble>;
 template FLQuant_base<adouble>& FLQuant_base<adouble>::operator *= (const FLQuant_base<double>& rhs);
 template int FLQuant_base<adouble>::match_dims(const FLQuant_base<double>& b) const;
 template int FLQuant_base<double>::match_dims(const FLQuant_base<adouble>& b) const;
+template FLQuant_base<adouble>& FLQuant_base<adouble>::operator *= (const double& rhs);
 
 //template FLQuant_base<double> FLQuant_base<double>::operator * (const FLQuant_base<double>& flq_rhs) const;
 //template FLQuant_base<adouble> FLQuant_base<adouble>::operator * (const FLQuant_base<adouble>& flq_rhs) const;
@@ -643,6 +737,12 @@ template int FLQuant_base<double>::match_dims(const FLQuant_base<adouble>& b) co
 template FLQuant_base<adouble> operator * (const FLQuant_base<double>& lhs, const FLQuant_base<adouble>& rhs);
 template FLQuant_base<adouble> operator * (const FLQuant_base<adouble>& lhs, const FLQuant_base<double>& rhs);
 
+//template FLQuant_base<double> operator * (const double& lhs, const FLQuant_base<double>& rhs);
+template FLQuant_base<adouble> operator * (const adouble& lhs, const FLQuant_base<adouble>& rhs);
+//template FLQuant_base<adouble> operator * (const adouble& lhs, const FLQuant_base<double>& rhs);
+template FLQuant_base<adouble> operator * (const double& lhs, const FLQuant_base<adouble>& rhs);
+template FLQuant_base<adouble> operator * (const FLQuant_base<double>& lhs, const adouble& rhs);
+template FLQuant_base<adouble> operator * (const adouble& lhs, const FLQuant_base<double>& rhs);
 
 // Explicit instantiation of arithmetic friend functions
 // *=

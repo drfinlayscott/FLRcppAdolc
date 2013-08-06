@@ -31,11 +31,13 @@ class FLQuant_base {
 	public:
         /* Constructors */
 		FLQuant_base();
-		//FLQuant_base(FLQuant_base<T> flq_in); // Make an FLQuantAdolc from an FLQuant
 		FLQuant_base(SEXP flq_sexp); // Used as intrusive 'as'
         operator SEXP() const; // Used as intrusive 'wrap'
 		FLQuant_base(const FLQuant_base& FLQuant_base_source); // copy constructor to ensure that copies (i.e. when passing to functions) are deep
 		FLQuant_base& operator = (const FLQuant_base& FLQuant_source); // Assignment operator for a deep copy
+
+        template <typename T2>
+		FLQuant_base(const FLQuant_base<T2>& FLQuant_source); // Make an FLQuantAdolc from an FLQuant
 
 		/* Get accessors 
 		 * Note the use of 'const' because the get methods should promise not to modify the members (we are returning them)
@@ -97,7 +99,8 @@ class FLQuant_base {
 
         // Multiplication
         // Return same type as itself
-        FLQuant_base<T> operator * (const FLQuant_base<T>& flq_rhs) const;
+        FLQuant_base<T> operator * (const FLQuant_base<T>& rhs) const;
+        FLQuant_base<T> operator * (const T& rhs) const;
         // Tried to use templating to implement special cases of:
         // FLQAD = FLQAD * FLQ
         // FLQAD = FLQ * FLQAD
@@ -158,6 +161,22 @@ template <typename T>
 FLQuant_base<T> operator * (const FLQuant_base<double>& lhs, const FLQuant_base<T>& rhs);
 template <typename T>
 FLQuant_base<T> operator * (const FLQuant_base<T>& lhs, const FLQuant_base<double>& rhs);
+// FLQuant = FLQuant * double
+// FLQuantAdolc = FLQuantAdolc * adouble
+// FLQuant_base<> = <> * FLQuant_base
+// No template - resolves ambiguity
+FLQuant_base<double> operator * (const double& lhs, const FLQuant_base<double>& rhs);
+// For FLQuant_base<adouble> = adouble * FLQuant_base<adouble>
+template <typename T>
+FLQuant_base<T> operator * (const T& lhs, const FLQuant_base<T>& rhs);
+// For FLQuant_base<adouble> = double * FLQuant_base<adouble>
+template <typename T>
+FLQuant_base<T> operator * (const double& lhs, const FLQuant_base<T>& rhs);
+// For FLQuant_base<adouble> = FLQuant_base<double> * adouble
+template <typename T>
+FLQuant_base<T> operator * (const FLQuant_base<double>& lhs, const T& rhs);
+template <typename T>
+FLQuant_base<T> operator * (const T& lhs, const FLQuant_base<double>& rhs);
 
 //// Custom as-wrap methods
 //Namespace Rcpp {

@@ -40,6 +40,12 @@ FLQuantAdolc test_FLQuantAdolc_assignment_operator(FLQuantAdolc flqad){
     return out;
 }
 
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_FLQuant_constructor(FLQuant flq1){
+    FLQuantAdolc out(flq1);
+    return out;
+}
+
 //------------------ Accessors ----------------------
 // Cannot return vector of adoubles
 /*
@@ -188,6 +194,54 @@ FLQuantAdolc test_FLQuantAdolc_FLQuant_FLQuantAdolc_multiplier_operator(FLQuantA
     flqad4 = flqad1 * flq2 * flqad3;
     return flqad4;
 }
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_adouble_multiplier_assignment_operator(FLQuantAdolc flq1, double value){
+    adouble ad_value = value;
+    flq1 *= ad_value;
+    return flq1;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_adouble_multiplier_operator(FLQuantAdolc flq1, double value){
+    adouble ad_value = value;
+    FLQuantAdolc flq3 = flq1 * ad_value;
+    return flq3;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_double_multiplier_assignment_operator(FLQuantAdolc flq1, double value){
+    flq1 *= value;
+    return flq1;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_adouble_FLQuantAdolc_multiplier_operator(double value, FLQuantAdolc flq1){
+    adouble ad_value = value;
+    FLQuantAdolc flq3 = ad_value * flq1;
+    return flq3;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_double_FLQuantAdolc_multiplier_operator(double value, FLQuantAdolc flq1){
+    FLQuantAdolc flq3 = value * flq1;
+    return flq3;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuant_adouble_multiplier_operator(FLQuant flq1, double value){
+    adouble ad_value = value;
+    FLQuantAdolc flq3 = flq1 * ad_value;
+    return flq3;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_adouble_FLQuant_multiplier_operator(double value, FLQuant flq1){
+    adouble ad_value = value;
+    FLQuantAdolc flq3 = ad_value * flq1;
+    return flq3;
+}
+
 
 //------------------ Others --------------------------------------
 // [[Rcpp::export]]

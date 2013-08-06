@@ -56,9 +56,9 @@ class FLQuant_base {
 		int get_data_element(const int quant, const int year, const int unit, const int season, const int area, const int iter) const;
 
 		/* Set accessors */
+		void set_data(const std::vector<T>& data_in);
         /*
 		void set_units(const std::string new_units);
-		void set_data(const Rcpp::NumericVector& data_in);
         void set_dim(const Rcpp::IntegerVector dim);
         void set_dimnames(const Rcpp::List dimnames);
         */
@@ -71,22 +71,6 @@ class FLQuant_base {
 
         /* Mathematical operators */
 
-        /* arithmetic operator, it's a friend so that we can have access to internals
-         * See http://blog.emptycrate.com/node/448 for canonical forms*/
-        /*
-        template <typename T1, typename T2>
-        friend FLQuant_base<T1>& operator *= (FLQuant_base<T1>& lhs, const FLQuant_base<T2>& rhs);
-        */
-        /*
-        template <typename T1, typename T2>
-        friend T1& operator *= (T1& lhs, const T2& rhs);
-        */
-
-        /*
-        template <typename T1, typename T2>
-        friend FLQuant_base<T1> operator * (const  FLQuant_base<T1>& lhs, const  FLQuant_base<T2>& rhs); // Multiplication 
-        */
-
         // Multiplication assignment
         FLQuant_base<T>& operator *= (const FLQuant_base<T>& rhs);
         FLQuant_base<T>& operator *= (const T& rhs);
@@ -96,37 +80,31 @@ class FLQuant_base {
         // For the special case of FLQuant_base<adouble> *= double
         template <typename T2>
         FLQuant_base<T>& operator *= (const T2& rhs);
-
         // Multiplication
         // Return same type as itself
         FLQuant_base<T> operator * (const FLQuant_base<T>& rhs) const;
         FLQuant_base<T> operator * (const T& rhs) const;
-        // Tried to use templating to implement special cases of:
-        // FLQAD = FLQAD * FLQ
-        // FLQAD = FLQ * FLQAD
-        // But these special cases get ambiguous as it is not possible to overload on the return parameter
-        // Consequently the two following commented out declarations are ambiguous
-        // So until I get a better idea I have declared SPECIFIC functions outside of the class declaration
-        //template <typename T2>
-        //FLQuant_base<T> operator * (const FLQuant_base<T2>& rhs) const;
-        //template <typename T2>
-        //FLQuant_base<T2> operator * (const FLQuant_base<T2>& rhs) const;
 
-
+        // Division assignment
+        FLQuant_base<T>& operator /= (const FLQuant_base<T>& rhs);
+        FLQuant_base<T>& operator /= (const T& rhs);
+        // For the special case of FLQuant_base<adouble> *= FLQuant_base<double>
+        template <typename T2>
+        FLQuant_base<T>& operator /= (const FLQuant_base<T2>& rhs);
+        // For the special case of FLQuant_base<adouble> *= double
+        template <typename T2>
+        FLQuant_base<T>& operator /= (const T2& rhs);
+        // Division
+        // Return same type as itself
+        FLQuant_base<T> operator / (const FLQuant_base<T>& rhs) const;
+        FLQuant_base<T> operator / (const T& rhs) const;
 
         /*
-        FLQuant operator * (const FLQuant& flq_rhs) const;
-        FLQuant& operator /= (const FLQuant& flq_rhs);
-        FLQuant operator / (const FLQuant& flq_rhs) const;
         FLQuant& operator += (const FLQuant& flq_rhs);
         FLQuant operator + (const FLQuant& flq_rhs) const;
         FLQuant& operator -= (const FLQuant& flq_rhs);
         FLQuant operator - (const FLQuant& flq_rhs) const;
 
-        FLQuant& operator *= (const double& rhs);
-        FLQuant operator * (const double& rhs) const;
-        FLQuant& operator /= (const double& rhs);
-        FLQuant operator / (const double& rhs) const;
         FLQuant& operator += (const double& rhs);
         FLQuant operator + (const double& rhs) const;
         FLQuant& operator -= (const double& rhs);
@@ -148,23 +126,26 @@ class FLQuant_base {
 typedef FLQuant_base<double> FLQuant;
 typedef FLQuant_base<adouble> FLQuantAdolc;
 
+//---------- Other useful functions ------------------------
+int dim_matcher(const Rcpp::IntegerVector a, const Rcpp::IntegerVector b);
 
+//------------ Non-member arithmetic methods with mixed types --------------
 //Canonical form: Type operator*(const Type &lhs, const Type &rhs); 
-// Multiplication methods - not templated due to abiguity problems
-//FLQuantAdolc operator * (const FLQuantAdolc &lhs, const FLQuant &rhs);
-//FLQuantAdolc operator * (const FLQuant &lhs, const FLQuantAdolc &rhs);
-
-// Template functions for multiplying FLQuant_base<>s
 // double gets swallowed up by whatever is multiplying it
+// This means that the operations involving a double need to be individually specified, else ambiguities arise
 // FLQuant_base<anything>  = FLQuant_base<double> * FLQuant_base<anything>
+// FLQuant = FLQuant * double
+// FLQuantAdolc = FLQuantAdolc * adouble
+// FLQuant_base<> = <> * FLQuant_base
+
+// The templated functions are all instantiated at the bottom of FLQuant_base.cpp
+
+// Multiplication
 template <typename T>
 FLQuant_base<T> operator * (const FLQuant_base<double>& lhs, const FLQuant_base<T>& rhs);
 template <typename T>
 FLQuant_base<T> operator * (const FLQuant_base<T>& lhs, const FLQuant_base<double>& rhs);
-// FLQuant = FLQuant * double
-// FLQuantAdolc = FLQuantAdolc * adouble
-// FLQuant_base<> = <> * FLQuant_base
-// No template - resolves ambiguity
+// No template - resolves ambiguity arising from double * FLQ<T> and <T> * FLQ<T> (if T is double, which one is called?)
 FLQuant_base<double> operator * (const double& lhs, const FLQuant_base<double>& rhs);
 // For FLQuant_base<adouble> = adouble * FLQuant_base<adouble>
 template <typename T>
@@ -172,30 +153,39 @@ FLQuant_base<T> operator * (const T& lhs, const FLQuant_base<T>& rhs);
 // For FLQuant_base<adouble> = double * FLQuant_base<adouble>
 template <typename T>
 FLQuant_base<T> operator * (const double& lhs, const FLQuant_base<T>& rhs);
+template <typename T>
+FLQuant_base<T> operator * (const FLQuant_base<T>& lhs, const double& rhs);
 // For FLQuant_base<adouble> = FLQuant_base<double> * adouble
 template <typename T>
 FLQuant_base<T> operator * (const FLQuant_base<double>& lhs, const T& rhs);
 template <typename T>
 FLQuant_base<T> operator * (const T& lhs, const FLQuant_base<double>& rhs);
 
-//// Custom as-wrap methods
-//Namespace Rcpp {
-//    template <> FLQuant as(SEXP flq_sexp);
-//    template <> SEXP wrap(const FLQuant &flq);
-//}
+// Division
+template <typename T>
+FLQuant_base<T> operator / (const FLQuant_base<double>& lhs, const FLQuant_base<T>& rhs);
+template <typename T>
+FLQuant_base<T> operator / (const FLQuant_base<T>& lhs, const FLQuant_base<double>& rhs);
+// No template - resolves ambiguity
+FLQuant_base<double> operator / (const double& lhs, const FLQuant_base<double>& rhs);
+// For FLQuant_base<adouble> = adouble / FLQuant_base<adouble>
+template <typename T>
+FLQuant_base<T> operator / (const T& lhs, const FLQuant_base<T>& rhs);
+// For FLQuant_base<adouble> = double / FLQuant_base<adouble>
+template <typename T>
+FLQuant_base<T> operator / (const double& lhs, const FLQuant_base<T>& rhs);
+template <typename T>
+FLQuant_base<T> operator / (const FLQuant_base<T>& lhs, const double& rhs);
+// For FLQuant_base<adouble> = FLQuant_base<double> / adouble
+template <typename T>
+FLQuant_base<T> operator / (const FLQuant_base<double>& lhs, const T& rhs);
+template <typename T>
+FLQuant_base<T> operator / (const T& lhs, const FLQuant_base<double>& rhs);
 
-/* Other useful functions */
-int dim_matcher(const Rcpp::IntegerVector a, const Rcpp::IntegerVector b);
 //FLQuant log(const FLQuant& flq);
 //FLQuant exp(const FLQuant& flq);
 
 
-//template <typename T1, typename T2>
-//std::vector<T1> operator * (const std::vector<T1>& lhs, const std::vector<T2>& rhs); // Multiplication 
-
-//template <typename T1, typename T2>
-//std::vector<T1> operator * (const std::vector<T2>& lhs, const std::vector<T1>& rhs); // Multiplication 
-//std::vector<adouble> operator * (const std::vector<double>& lhs, const std::vector<adouble>& rhs);
 
 
 

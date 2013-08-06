@@ -156,38 +156,12 @@ FLQuant test_FLQuant_set_accessor(FLQuant flq, int quant, int year, int unit, in
 	flq(quant,year,unit,season,area,iter) = value;
 	return flq;
 }
-
-
-
-//------------------ Arithmetic operators ----------------------
-// [[Rcpp::export]]
-FLQuant test_FLQuant_FLQuant_multiplier_assignment_operator(FLQuant flq1, FLQuant flq2){
-    flq1 *= flq2;
-    return flq1;
-}
+//------------ Set methods -------------------------
 
 // [[Rcpp::export]]
-FLQuant test_FLQuant_FLQuant_multiplier_operator(FLQuant flq1, FLQuant flq2){
-    FLQuant flq3 = flq1 * flq2;
-    return flq3;
-}
-
-// [[Rcpp::export]]
-FLQuant test_FLQuant_double_multiplier_assignment_operator(FLQuant flq1, double value){
-    flq1 *= value;
-    return flq1;
-}
-
-// [[Rcpp::export]]
-FLQuant test_FLQuant_double_multiplier_operator(FLQuant flq1, double value){
-    FLQuant flq3 = flq1 * value;
-    return flq3;
-}
-
-// [[Rcpp::export]]
-FLQuant test_double_FLQuant_multiplier_operator(double value, FLQuant flq1){
-    FLQuant flq3 = value * flq1;
-    return flq3;
+FLQuant test_FLQuant_set_data(FLQuant flq, std::vector<double> data_in){
+	flq.set_data(data_in);
+	return flq;
 }
 
 //------------------ Others --------------------------------------
@@ -200,12 +174,6 @@ int test_FLQuant_FLQuant_match_dims(FLQuant flq1, FLQuant flq2){
 // [[Rcpp::export]]
 FLQuant test_FLQuant_set_units(FLQuant flq, std::string new_units){
 	flq.set_units(new_units);
-	return flq;
-}
-
-// [[Rcpp::export]]
-FLQuant test_FLQuant_set_data(FLQuant flq, Rcpp::NumericVector data_in){
-	flq.set_data(data_in);
 	return flq;
 }
 

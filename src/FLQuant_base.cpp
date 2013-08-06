@@ -244,9 +244,19 @@ T& FLQuant_base<T>::operator () (const unsigned int quant, const unsigned int ye
 	return data[element];
 }
 
+//------------- Setting methods ----------------
 
+template <typename T>
+void FLQuant_base<T>::set_data(const std::vector<T>& data_in){
+    Rcpp::IntegerVector dim = get_dim();
+    unsigned int dim_prod = (dim[0] * dim[1] * dim[2]* dim[3]* dim[4]* dim[5]);
+    if(dim_prod != data_in.size()){
+        Rcpp::stop("Cannot set data. Data size does not match dims.\n");
+    }
+    data = data_in;
+}
 
-//------------------ Arithmetic operators -------------------
+//------------------ Multiplication operators -------------------
 /*  * Need to consider what happens with the combinations FLQuant<T1> * / + - FLQuant<T2>, i.e. what is the output type?
  *  adouble *  double = adouble
  *  adouble * adouble = adouble
@@ -321,45 +331,6 @@ FLQuant_base<T> FLQuant_base<T>::operator * (const T& rhs) const{
     return out;
 }
 
-/*
-FLQuantAdolc operator * (const FLQuantAdolc &lhs, const FLQuant &rhs){
-    Rprintf("FLQAD = FLQAD * FLQ\n");
-    FLQuantAdolc out = lhs;
-    return out;
-}
-
-FLQuantAdolc operator * (const FLQuant &lhs, const FLQuantAdolc &rhs){
-    Rprintf("FLQAD = FLQA* FLQAD\n");
-    FLQuantAdolc out = rhs;
-    return out;
-
-}
-*/
-
-/*
-// Special multiplication case, where LHS and RHS are different Types
-// FLQAD = FLQAD * FLQ
-template <typename T>
-template <typename T2>
-FLQuant_base<T> FLQuant_base<T>::operator * (const FLQuant_base<T2>& rhs) const{
-    Rprintf("In generic T = T * T2\n");
-    FLQuant_base<T> out = *this; // Copy myself
-    out *= rhs;
-    return out;
-}
-
-// Special multiplication case, where LHS and RHS are different Types
-// FLQAD = FLQ * FLQAD
-template <typename T>
-template <typename T2>
-FLQuant_base<T2> FLQuant_base<T>::operator * (const FLQuant_base<T2>& rhs) const{
-    Rprintf("In T2 = T * T2\n");
-    FLQuant_base<T2> out = rhs;
-    //out *= rhs;
-    return out;
-}
-
-*/
 // Outside of class
 template <typename T>
 FLQuant_base<T> operator * (const FLQuant_base<double>& lhs, const FLQuant_base<T>& rhs){
@@ -398,6 +369,13 @@ FLQuant_base<T> operator * (const double& lhs, const FLQuant_base<T>& rhs){
     return out;
 }
 
+template <typename T>
+FLQuant_base<T> operator * (const FLQuant_base<T>& lhs, const double& rhs){
+    FLQuant_base<T> out = lhs;
+    out *= rhs;
+    return out;
+}
+
 FLQuant_base<double> operator * (const double& lhs, const FLQuant_base<double>& rhs){
     FLQuant_base<double> out = rhs;
     out *= lhs;
@@ -418,56 +396,144 @@ FLQuant_base<T> operator * (const T& lhs, const FLQuant_base<double>& rhs){
     return out;
 }
 
-/*
-// T1 and T2 are FLQuant or FLQuantAdolc
-// Trying to get around making a new FLQuant_base<T1> which causes slicing in inherited types
-template<typename T1, typename T2>
-T1& operator *= (T1& lhs, const T2& rhs){
-    Rprintf("In dummy_base<T1,T2> * operator\n");
-    // Should have acccess to data member
-    // how to pull out type of data vector. Need it for multiplies bit
-    //typename lhs.data::value_type data_type;
-    std::vector<double> fuckoff;
-    std::vector<double>::value_type some_type; 
-    lhs.data;
-    //typename T1::data::value_type another_type;
-    //typename (lhs.data)::value_type another_type;
-    //std::transform(lhs.data.begin(), lhs.data.end(), rhs.data.begin(), lhs.data.begin(), std::multiplies<T1>()); //T1 is the problem. We want the type of the std::vector
-    //std::transform(lhs.data.begin(), lhs.data.end(), rhs.data.begin(), lhs.data.begin(), std::multiplies<another_type>());
-    //std::transform(lhs.data.begin(), lhs.data.end(), rhs.data.begin(), lhs.data.begin(), std::multiplies<T1::data::value_type>());
-    return lhs;
-}
-template<typename T1, typename T2>
-FLQuant_base<T1>& operator *= (FLQuant_base<T1>& lhs, const FLQuant_base<T2>& rhs){
-    Rprintf("In dummy_base<T1,T2> * operator\n");
-    // Should have acccess to data member
-    std::transform(lhs.data.begin(), lhs.data.end(), rhs.data.begin(), lhs.data.begin(), std::multiplies<T1>());
-    return lhs;
-}
-*/
+//------------------ Division operators -------------------
 
-// Multiplication
-/*
-template <typename T1, typename T2>
-FLQuant_base<T1> operator * (const FLQuant_base<T1>& lhs, const  FLQuant_base<T2>& rhs){
-    Rprintf("In dummy_base<T1,T2> * operator\n");
-    FLQuant_base<T1> out = lhs; // Will not make FLQuantAdolc
-    //out *= rhs;
+// Division self assignment
+template<typename T>
+FLQuant_base<T>& FLQuant_base<T>::operator /= (const FLQuant_base<T>& rhs){
+    if (match_dims(rhs) != 1){
+        Rcpp::stop("You cannot divide FLQuants as your dimensions do not match.");
+    }
+    std::transform((*this).data.begin(), (*this).data.end(), rhs.data.begin(), (*this).data.begin(), std::divides<T>());
+    return *this;
+}
+// Special case of division assignment 
+// Instantiation below ensures that it will only compile for FLQuantAdolc /= FLQuant
+template <typename T>
+template <typename T2>
+FLQuant_base<T>& FLQuant_base<T>::operator /= (const FLQuant_base<T2>& rhs){
+    if (match_dims(rhs) != 1){
+        Rcpp::stop("You cannot divide FLQuants as your dimensions do not match.");
+    }
+    std::vector<T2> rhs_data = rhs.get_data();
+    std::transform((*this).data.begin(), (*this).data.end(), rhs_data.begin(), (*this).data.begin(), std::divides<T>());
+    return *this;
+}
+
+// FLQuant /= double
+// FLQuantAdolc /= adouble
+template <typename T>
+FLQuant_base<T>& FLQuant_base<T>::operator /= (const T& rhs){
+    std::transform((*this).data.begin(), (*this).data.end(), (*this).data.begin(), std::bind2nd(std::divides<T>(),rhs)); 
+    return *this;
+}
+
+// Special case of division assignment 
+// Used for FLQuantAdolc /= double
+// Needs to be instanitated due to extra template class, T2
+template <typename T>
+template <typename T2>
+FLQuant_base<T>& FLQuant_base<T>::operator /= (const T2& rhs){
+    std::transform((*this).data.begin(), (*this).data.end(), (*this).data.begin(), std::bind2nd(std::divides<T>(),rhs)); 
+    return *this;
+}
+
+// General division 
+// FLQuant_base<T> / FLQuant_base<T>
+template <typename T>
+FLQuant_base<T> FLQuant_base<T>::operator / (const FLQuant_base<T>& rhs) const{
+    if (match_dims(rhs) != 1){
+        Rcpp::stop("You cannot divide FLQuants as your dimensions do not match.");
+    }
+    FLQuant_base<T> out = *this; // Copy myself
+    out /= rhs;
     return out;
 }
-*/
 
-/*
-*/
+// FLQuant_base<T> / T
+template <typename T>
+FLQuant_base<T> FLQuant_base<T>::operator / (const T& rhs) const{
+    FLQuant_base<T> out = *this; // Copy myself
+    out /= rhs;
+    return out;
+}
+
+// Declared outside of class
+template <typename T>
+FLQuant_base<T> operator / (const FLQuant_base<double>& lhs, const FLQuant_base<T>& rhs){
+    if (lhs.match_dims(rhs) != 1){
+        Rcpp::stop("You cannot divide FLQuants as your dimensions do not match.");
+    }
+    FLQuant_base<T> out(lhs);
+    out /= rhs;
+    return out;
+}
+
+template <typename T>
+FLQuant_base<T> operator / (const FLQuant_base<T>& lhs, const FLQuant_base<double>& rhs){
+    if (lhs.match_dims(rhs) != 1){
+        Rcpp::stop("You cannot divide FLQuants as your dimensions do not match.");
+    }
+    FLQuant_base<T> out = lhs;
+    out /= rhs;
+    return out;
+}
+
+template <typename T>
+FLQuant_base<T> operator / (const T& lhs, const FLQuant_base<T>& rhs){
+    FLQuant_base<T> out = rhs;
+    std::vector<T> out_data = out.get_data();
+    std::transform(out_data.begin(), out_data.end(), out_data.begin(), std::bind1st(std::divides<T>(),lhs)); 
+    out.set_data(out_data);
+    return out;
+}
+
+template <typename T>
+FLQuant_base<T> operator / (const double& lhs, const FLQuant_base<T>& rhs){
+    FLQuant_base<T> out = rhs;
+    std::vector<T> out_data = out.get_data();
+    std::transform(out_data.begin(), out_data.end(), out_data.begin(), std::bind1st(std::divides<T>(),lhs)); 
+    out.set_data(out_data);
+    return out;
+}
+
+FLQuant_base<double> operator / (const double& lhs, const FLQuant_base<double>& rhs){
+    FLQuant_base<double> out = rhs;
+    std::vector<double> out_data = out.get_data();
+    std::transform(out_data.begin(), out_data.end(), out_data.begin(), std::bind1st(std::divides<double>(),lhs)); 
+    out.set_data(out_data);
+    return out;
+}
+
+template <typename T>
+FLQuant_base<T> operator / (const FLQuant_base<T>& lhs, const double& rhs){
+    FLQuant_base<T> out = lhs;
+    out /= rhs;
+    return out;
+}
+
+template <typename T>
+FLQuant_base<T> operator / (const FLQuant_base<double>& lhs, const T& rhs){
+    FLQuant_base<T> out(lhs);
+    out /= rhs;
+    return out;
+}
+
+template <typename T>
+FLQuant_base<T> operator / (const T& lhs, const FLQuant_base<double>& rhs){
+    FLQuant_base<T> out(rhs);
+    std::vector<T> out_data = out.get_data();
+    std::transform(out_data.begin(), out_data.end(), out_data.begin(), std::bind1st(std::divides<T>(),lhs)); 
+    out.set_data(out_data);
+    return out;
+}
+
 /* Accessor methods */
 /*
 void FLQuant::set_units(const std::string new_units){
 	units = new_units;
 }
 
-void FLQuant::set_data(const Rcpp::NumericVector& data_in){
-	data  = Rcpp::clone<Rcpp::NumericVector>(data_in);
-}
 */
 /*  A strange method this one. You can only set different dims
   if the data member doesn't have dimnames that match the different dims.
@@ -707,52 +773,38 @@ int dim_matcher(const Rcpp::IntegerVector dims_a, const Rcpp::IntegerVector dims
     return 1; // Else all is good
 }
 
-/*
-// Instantiate
-template std::vector<double> operator * (const std::vector<double>& lhs, const std::vector<double>& rhs);
-template std::vector<adouble> operator * (const std::vector<adouble>& lhs, const std::vector<adouble>& rhs);
-template std::vector<adouble> operator * (const std::vector<adouble>& lhs, const std::vector<double>& rhs);
-// But this one
-//template std::vector<adouble> operator * (const std::vector<double>& lhs, const std::vector<adouble>& rhs);
-*/
-
 /* Explicit instantiations - alternatively put all the definitions into the header file
  * This way we have more control over what types the functions work with
  */
 // Explicit instantiation of class
 template class FLQuant_base<double>;
 template class FLQuant_base<adouble>;
-// Instantiate class methods with mixed types 
+
+// Instantiate arithmetic class methods with mixed types 
 template FLQuant_base<adouble>& FLQuant_base<adouble>::operator *= (const FLQuant_base<double>& rhs);
+template FLQuant_base<adouble>& FLQuant_base<adouble>::operator *= (const double& rhs);
+template FLQuant_base<adouble>& FLQuant_base<adouble>::operator /= (const FLQuant_base<double>& rhs);
+template FLQuant_base<adouble>& FLQuant_base<adouble>::operator /= (const double& rhs);
+// Instantiate other class methods with mixed types 
 template int FLQuant_base<adouble>::match_dims(const FLQuant_base<double>& b) const;
 template int FLQuant_base<double>::match_dims(const FLQuant_base<adouble>& b) const;
-template FLQuant_base<adouble>& FLQuant_base<adouble>::operator *= (const double& rhs);
 
-//template FLQuant_base<double> FLQuant_base<double>::operator * (const FLQuant_base<double>& flq_rhs) const;
-//template FLQuant_base<adouble> FLQuant_base<adouble>::operator * (const FLQuant_base<adouble>& flq_rhs) const;
-//template FLQuant_base<adouble> FLQuant_base<adouble>::operator * (const FLQuant_base<double>& flq_rhs) const;
-//template FLQuant_base<adouble> FLQuant_base<double>::operator * (const FLQuant_base<adouble>& rhs) const;
 
 // Explicit instantiation of extra artithmetic functions
+// Multiplication
 template FLQuant_base<adouble> operator * (const FLQuant_base<double>& lhs, const FLQuant_base<adouble>& rhs);
 template FLQuant_base<adouble> operator * (const FLQuant_base<adouble>& lhs, const FLQuant_base<double>& rhs);
-
-//template FLQuant_base<double> operator * (const double& lhs, const FLQuant_base<double>& rhs);
 template FLQuant_base<adouble> operator * (const adouble& lhs, const FLQuant_base<adouble>& rhs);
-//template FLQuant_base<adouble> operator * (const adouble& lhs, const FLQuant_base<double>& rhs);
 template FLQuant_base<adouble> operator * (const double& lhs, const FLQuant_base<adouble>& rhs);
+template FLQuant_base<adouble> operator * (const FLQuant_base<adouble>& lhs, const double& rhs);
 template FLQuant_base<adouble> operator * (const FLQuant_base<double>& lhs, const adouble& rhs);
 template FLQuant_base<adouble> operator * (const adouble& lhs, const FLQuant_base<double>& rhs);
-
-// Explicit instantiation of arithmetic friend functions
-// *=
-//template FLQuant& operator *= (FLQuant& lhs, const FLQuant& rhs);
-//template FLQuant_base<double>& operator *= (FLQuant_base<double>& lhs, const FLQuant_base<double>& rhs);
-//template FLQuant_base<adouble>& operator *= (FLQuant_base<adouble>& lhs, const FLQuant_base<adouble>& rhs);
-//template FLQuant_base<adouble>& operator *= (FLQuant_base<adouble>& lhs, const FLQuant_base<double>& rhs);
-// *
-//template FLQuant_base<double> operator * (const FLQuant_base<double>& lhs, const FLQuant_base<double>& rhs);
-//template FLQuant_base<adouble> operator * (const FLQuant_base<adouble>& lhs, const FLQuant_base<adouble>& rhs);
-//template FLQuant_base<adouble> operator * (const FLQuant_base<adouble>& lhs, const FLQuant_base<double>& rhs);
-
+// Division
+template FLQuant_base<adouble> operator / (const FLQuant_base<double>& lhs, const FLQuant_base<adouble>& rhs);
+template FLQuant_base<adouble> operator / (const FLQuant_base<adouble>& lhs, const FLQuant_base<double>& rhs);
+template FLQuant_base<adouble> operator / (const adouble& lhs, const FLQuant_base<adouble>& rhs);
+template FLQuant_base<adouble> operator / (const double& lhs, const FLQuant_base<adouble>& rhs);
+template FLQuant_base<adouble> operator / (const FLQuant_base<adouble>& lhs, const double& rhs);
+template FLQuant_base<adouble> operator / (const FLQuant_base<double>& lhs, const adouble& rhs);
+template FLQuant_base<adouble> operator / (const adouble& lhs, const FLQuant_base<double>& rhs);
 

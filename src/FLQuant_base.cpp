@@ -39,7 +39,7 @@ FLQuant_base<T>::FLQuant_base(SEXP flq_sexp){
  */
 template<typename T>
 FLQuant_base<T>::operator SEXP() const{
-    //Rprintf("Wrapping generic FLQuant_base. Probably not what you wanted.\n");
+    Rprintf("Wrapping generic FLQuant_base. Probably not what you wanted.\n");
     int x = 0;
     return Rcpp::wrap(x);
 }

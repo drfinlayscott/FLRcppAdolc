@@ -3,7 +3,6 @@
  * Maintainer: Finlay Scott, JRC
  */
 
-
 #include "../inst/include/FLStock.h"
 
 // Default constructor
@@ -11,7 +10,7 @@
 FLStock::FLStock(){
     name = std::string();
     desc = std::string(); 
-    range = Rcpp::NumericVector(); // Could force it to be 7 elements with dimnames?
+    range = Rcpp::NumericVector();
     catches = FLQuant();
     catch_n = FLQuant();  
     catch_wt = FLQuant(); 
@@ -32,6 +31,7 @@ FLStock::FLStock(){
 }
 
 // Constructor from a SEXP S4 FLStock
+// Used as intrusive 'as'
 FLStock::FLStock(SEXP fls_sexp){
     Rcpp::S4 fls_s4 = Rcpp::as<Rcpp::S4>(fls_sexp);
     name = Rcpp::as<std::string>(fls_s4.slot("name"));
@@ -57,11 +57,10 @@ FLStock::FLStock(SEXP fls_sexp){
 }
 
 // Copy constructor - else members can be pointed at by multiple instances
-// May not be necessary as all the members of this class have deep copy constructors anyway
 FLStock::FLStock(const FLStock& FLStock_source){
     name = FLStock_source.name;
     desc = FLStock_source.desc;
-    range = FLStock_source.range;
+    range = Rcpp::clone<Rcpp::NumericVector>(FLStock_source.range);
     catches = FLStock_source.catches;
     catch_n = FLStock_source.catch_n;
     catch_wt = FLStock_source.catch_wt;
@@ -86,7 +85,7 @@ FLStock& FLStock::operator = (const FLStock& FLStock_source){
 	if (this != &FLStock_source){
         name = FLStock_source.name;
         desc = FLStock_source.desc;
-        range = FLStock_source.range;
+        range = Rcpp::clone<Rcpp::NumericVector>(FLStock_source.range);
         catches = FLStock_source.catches;
         catch_n = FLStock_source.catch_n;
         catch_wt = FLStock_source.catch_wt;
@@ -108,39 +107,33 @@ FLStock& FLStock::operator = (const FLStock& FLStock_source){
 	return *this;
 }
 
-
-
-/* Define template specialisations for as and wrap */
-namespace Rcpp {
-    template <> FLStock as(SEXP fls_sexp) {
-        Rcpp::S4 fls_s4 = Rcpp::as<Rcpp::S4>(fls_sexp);
-        FLStock fls(fls_sexp);
-        return fls;
-    }
-
-    template <> SEXP wrap(const FLStock &fls) {
+/* Intrusive 'wrap' */
+FLStock::operator SEXP() const{
+    Rprintf("Wrapping FLStock.\n");
         Rcpp::S4 fls_s4("FLStock");
-        fls_s4.slot("name") = fls.name;
-        fls_s4.slot("desc") = fls.desc;
-        fls_s4.slot("range") = fls.range;
-        fls_s4.slot("catch") = fls.catches;
-        fls_s4.slot("catch.n") = fls.catch_n;
-        fls_s4.slot("catch.wt") = fls.catch_wt;
-        fls_s4.slot("discards") = fls.discards;
-        fls_s4.slot("discards.n") = fls.discards_n;
-        fls_s4.slot("discards.wt") = fls.discards_wt;
-        fls_s4.slot("landings") = fls.landings;
-        fls_s4.slot("landings.n") = fls.landings_n;
-        fls_s4.slot("landings.wt") = fls.landings_wt;
-        fls_s4.slot("stock") = fls.stock;
-        fls_s4.slot("stock.n") = fls.stock_n;
-        fls_s4.slot("stock.wt") = fls.stock_wt;
-        fls_s4.slot("m") = fls.m;
-        fls_s4.slot("mat") = fls.mat;
-        fls_s4.slot("harvest") = fls.harvest;
-        fls_s4.slot("harvest.spwn") = fls.harvest_spwn;
-        fls_s4.slot("m.spwn") = fls.m_spwn;
+        fls_s4.slot("name") = name;
+        fls_s4.slot("desc") = desc;
+        fls_s4.slot("range") = range;
+        fls_s4.slot("catch") = catches;
+        fls_s4.slot("catch.n") = catch_n;
+        fls_s4.slot("catch.wt") = catch_wt;
+        fls_s4.slot("discards") = discards;
+        fls_s4.slot("discards.n") = discards_n;
+        fls_s4.slot("discards.wt") = discards_wt;
+        fls_s4.slot("landings") = landings;
+        fls_s4.slot("landings.n") = landings_n;
+        fls_s4.slot("landings.wt") = landings_wt;
+        fls_s4.slot("stock") = stock;
+        fls_s4.slot("stock.n") = stock_n;
+        fls_s4.slot("stock.wt") = stock_wt;
+        fls_s4.slot("m") = m;
+        fls_s4.slot("mat") = mat;
+        fls_s4.slot("harvest") = harvest;
+        fls_s4.slot("harvest.spwn") = harvest_spwn;
+        fls_s4.slot("m.spwn") = m_spwn;
         return Rcpp::wrap(fls_s4);
-    }
 }
 
+//template class FLQuant_base<double>;
+//template class FLStock;
+//class FLStock;

@@ -39,7 +39,7 @@ PKG_LIBS =`$(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()"` $(SUBLIBS)
 #
 
 #SOURCES_C = FLQuant.cpp FLStock.cpp tests_FLQuant.cpp tests_FLStock.cpp RcppExports.cpp 
-SOURCES_C = FLQuant_base.cpp tests_FLQuant.cpp tests_FLQuantAdolc.cpp tests_arithmetic_operators.cpp RcppExports.cpp 
+SOURCES_C = FLQuant_base.cpp FLStock.cpp tests_FLQuant.cpp tests_FLQuantAdolc.cpp tests_arithmetic_operators.cpp tests_FLStock.cpp RcppExports.cpp 
 OBJECTS = $(SOURCES_C:.cpp=.o)
 
 SUBDIRS = adolc

@@ -9,7 +9,7 @@
 // No dimnames set as the array is null
 template <typename T>
 FLQuant_base<T>::FLQuant_base(){
-    Rprintf("In FLQuant_base<T> basic constructor\n");
+    //Rprintf("In FLQuant_base<T> basic constructor\n");
 	units = std::string(); // Empty string - just ""
     dim = Rcpp::IntegerVector();
     dimnames = Rcpp::List();
@@ -21,7 +21,7 @@ FLQuant_base<T>::FLQuant_base(){
 // Need to add check that the SEXP is an FLQuant
 template<typename T>
 FLQuant_base<T>::FLQuant_base(SEXP flq_sexp){
-    Rprintf("In FLQuant_base SEXP constructor\n");
+    //Rprintf("In FLQuant_base SEXP constructor\n");
 	Rcpp::S4 flq_s4 = Rcpp::as<Rcpp::S4>(flq_sexp);
     Rcpp::NumericVector data_nv = flq_s4.slot(".Data");
     // Initialise data to the correct size?
@@ -39,7 +39,7 @@ FLQuant_base<T>::FLQuant_base(SEXP flq_sexp){
  */
 template<typename T>
 FLQuant_base<T>::operator SEXP() const{
-    Rprintf("Wrapping generic FLQuant_base. Probably not what you wanted.\n");
+    //Rprintf("Wrapping generic FLQuant_base. Probably not what you wanted.\n");
     int x = 0;
     return Rcpp::wrap(x);
 }
@@ -47,7 +47,7 @@ FLQuant_base<T>::operator SEXP() const{
 // Specialise the wrap for an FLQuant_base<double>
 template<>
 FLQuant_base<double>::operator SEXP() const{
-    Rprintf("Specialised wrapping FLQuant_base<double>\n");
+    //Rprintf("Specialised wrapping FLQuant_base<double>\n");
     Rcpp::S4 flq_s4("FLQuant");
     // Make and fill the NumericVector that will be the 'data' slot 
     Rcpp::NumericVector data_nv;
@@ -67,7 +67,7 @@ FLQuant_base<double>::operator SEXP() const{
 // Necessary because we have to pull .value() out
 template<>
 FLQuant_base<adouble>::operator SEXP() const{
-    Rprintf("Specialised wrapping FLQuant_base<adouble>\n");
+    //Rprintf("Specialised wrapping FLQuant_base<adouble>\n");
     Rcpp::S4 flq_s4("FLQuant");
     // Make and fill the NumericVector that will be the 'data' slot 
     Rcpp::NumericVector data_nv;
@@ -86,7 +86,7 @@ FLQuant_base<adouble>::operator SEXP() const{
 // Copy constructor - else 'data' can be pointed at by multiple instances
 template<typename T>
 FLQuant_base<T>::FLQuant_base(const FLQuant_base<T>& FLQuant_source){
-    Rprintf("In FLQuant_base<T> copy constructor\n");
+    //Rprintf("In FLQuant_base<T> copy constructor\n");
 	data  = FLQuant_source.data; // std::vector always does deep copy
 	units = FLQuant_source.units; // std::string always does deep copy
     dim = Rcpp::clone<Rcpp::IntegerVector>(FLQuant_source.dim);
@@ -96,7 +96,7 @@ FLQuant_base<T>::FLQuant_base(const FLQuant_base<T>& FLQuant_source){
 // Assignment operator to ensure deep copy - else 'data' can be pointed at by multiple instances
 template<typename T>
 FLQuant_base<T>& FLQuant_base<T>::operator = (const FLQuant_base<T>& FLQuant_source){
-    Rprintf("In FLQuant_base<T> assignment operator\n");
+    //Rprintf("In FLQuant_base<T> assignment operator\n");
 	if (this != &FLQuant_source){
         data  = FLQuant_source.data; // std::vector always does deep copy
         units = FLQuant_source.units; // std::string always does deep copy
@@ -111,7 +111,7 @@ FLQuant_base<T>& FLQuant_base<T>::operator = (const FLQuant_base<T>& FLQuant_sou
 template <typename T>
 template <typename T2>
 FLQuant_base<T>::FLQuant_base(const FLQuant_base<T2>& FLQuant_source){
-    Rprintf("In constructor for FLQuant_base<T>(FLQuant_base<T2>)\n");
+    //Rprintf("In constructor for FLQuant_base<T>(FLQuant_base<T2>)\n");
     Rcpp::stop("I have no specific instructions for these types. Please add a specialisation\n");
 }
 
@@ -120,7 +120,7 @@ FLQuant_base<T>::FLQuant_base(const FLQuant_base<T2>& FLQuant_source){
 template <>
 template <>
 FLQuant_base<adouble>::FLQuant_base(const FLQuant_base<double>& FLQuant_source){
-    Rprintf("Making an FLQuantAdolc from an FLQuant\n");
+    //Rprintf("Making an FLQuantAdolc from an FLQuant\n");
     units = FLQuant_source.get_units(); // std::string always does deep copy
     dim = FLQuant_source.get_dim();
     dimnames = FLQuant_source.get_dimnames(); 
@@ -211,7 +211,7 @@ int FLQuant_base<T>::get_data_element(const int quant, const int year, const int
 // Get only data accessor - single element
 template <typename T>
 T FLQuant_base<T>::operator () (const unsigned int element) const{
-    Rprintf("In const single element accessor\n");
+    //Rprintf("In const single element accessor\n");
     if (element > get_size()){
         Rcpp::stop("Trying to access element larger than data size.");
     }
@@ -221,7 +221,7 @@ T FLQuant_base<T>::operator () (const unsigned int element) const{
 // Data accessor - single element
 template <typename T>
 T& FLQuant_base<T>::operator () (const unsigned int element){
-    Rprintf("In single element accessor\n");
+    //Rprintf("In single element accessor\n");
     if (element > get_size()){
         Rcpp::stop("Trying to access element larger than data size.");
     }
@@ -231,7 +231,7 @@ T& FLQuant_base<T>::operator () (const unsigned int element){
 // Get only data accessor - all dims
 template <typename T>
 T FLQuant_base<T>::operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter) const{
-    Rprintf("In const multiple element accessor\n");
+    //Rprintf("In const multiple element accessor\n");
 	unsigned int element = get_data_element(quant, year, unit, season, area, iter);
 	return data[element];
 }
@@ -239,7 +239,7 @@ T FLQuant_base<T>::operator () (const unsigned int quant, const unsigned int yea
 // Data accessor - all dims
 template <typename T>
 T& FLQuant_base<T>::operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter){
-    Rprintf("In multiple element accessor\n");
+    //Rprintf("In multiple element accessor\n");
 	unsigned int element = get_data_element(quant, year, unit, season, area, iter);
 	return data[element];
 }
@@ -267,7 +267,7 @@ void FLQuant_base<T>::set_data(const std::vector<T>& data_in){
 // Multiplication self assignment
 template<typename T>
 FLQuant_base<T>& FLQuant_base<T>::operator *= (const FLQuant_base<T>& rhs){
-    Rprintf("In self multiplication assignment\n");
+    //Rprintf("In self multiplication assignment\n");
     if (match_dims(rhs) != 1){
         Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
     }
@@ -281,7 +281,7 @@ FLQuant_base<T>& FLQuant_base<T>::operator *= (const FLQuant_base<T>& rhs){
 template <typename T>
 template <typename T2>
 FLQuant_base<T>& FLQuant_base<T>::operator *= (const FLQuant_base<T2>& rhs){
-    Rprintf("In T1*=T2 multiplication assignment\n");
+    //Rprintf("In T1*=T2 multiplication assignment\n");
     if (match_dims(rhs) != 1){
         Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
     }
@@ -294,7 +294,7 @@ FLQuant_base<T>& FLQuant_base<T>::operator *= (const FLQuant_base<T2>& rhs){
 // FLQuantAdolc *= adouble
 template <typename T>
 FLQuant_base<T>& FLQuant_base<T>::operator *= (const T& rhs){
-    Rprintf("In scalar T=*T multiplication assignment\n");
+    //Rprintf("In scalar T=*T multiplication assignment\n");
     std::transform((*this).data.begin(), (*this).data.end(), (*this).data.begin(), std::bind1st(std::multiplies<T>(),rhs)); 
     return *this;
 }
@@ -305,7 +305,7 @@ FLQuant_base<T>& FLQuant_base<T>::operator *= (const T& rhs){
 template <typename T>
 template <typename T2>
 FLQuant_base<T>& FLQuant_base<T>::operator *= (const T2& rhs){
-    Rprintf("In scalar T=*T2 multiplication assignment\n");
+    //Rprintf("In scalar T=*T2 multiplication assignment\n");
     std::transform((*this).data.begin(), (*this).data.end(), (*this).data.begin(), std::bind1st(std::multiplies<T>(),rhs)); 
     return *this;
 }
@@ -314,7 +314,7 @@ FLQuant_base<T>& FLQuant_base<T>::operator *= (const T2& rhs){
 // FLQuant_base<T> * FLQuant_base<T>
 template <typename T>
 FLQuant_base<T> FLQuant_base<T>::operator * (const FLQuant_base<T>& rhs) const{
-    Rprintf("In self multiplication\n");
+    //Rprintf("In self multiplication\n");
     if (match_dims(rhs) != 1){
         Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
     }
@@ -334,7 +334,7 @@ FLQuant_base<T> FLQuant_base<T>::operator * (const T& rhs) const{
 // Outside of class
 template <typename T>
 FLQuant_base<T> operator * (const FLQuant_base<double>& lhs, const FLQuant_base<T>& rhs){
-    Rprintf("FLQuant_base<double> * FLQuant_base<T>\n");
+    //Rprintf("FLQuant_base<double> * FLQuant_base<T>\n");
     if (lhs.match_dims(rhs) != 1){
         Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
     }
@@ -346,7 +346,7 @@ FLQuant_base<T> operator * (const FLQuant_base<double>& lhs, const FLQuant_base<
 
 template <typename T>
 FLQuant_base<T> operator * (const FLQuant_base<T>& lhs, const FLQuant_base<double>& rhs){
-    Rprintf("FLQuant_base<T> * FLQuant_base<double>\n");
+    //Rprintf("FLQuant_base<T> * FLQuant_base<double>\n");
     if (lhs.match_dims(rhs) != 1){
         Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
     }

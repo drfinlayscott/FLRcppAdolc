@@ -309,8 +309,8 @@ test_composite_arithmetic_operators <- function(flqad, flq, value) {
     .Call('FLRcppAdolc_test_composite_arithmetic_operators', PACKAGE = 'FLRcppAdolc', flqad, flq, value)
 }
 
-do_nothing_FLQuantAdolc <- function() {
-    invisible(.Call('FLRcppAdolc_do_nothing_FLQuantAdolc', PACKAGE = 'FLRcppAdolc'))
+test_FLQuantAdolc_as_wrap <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_as_wrap', PACKAGE = 'FLRcppAdolc', flq)
 }
 
 test_FLQuantAdolc_basic_constructor <- function() {
@@ -321,20 +321,24 @@ test_FLQuantAdolc_sexp_constructor <- function(flq_sexp) {
     .Call('FLRcppAdolc_test_FLQuantAdolc_sexp_constructor', PACKAGE = 'FLRcppAdolc', flq_sexp)
 }
 
-test_FLQuantAdolc_as_wrap <- function(flqad) {
-    .Call('FLRcppAdolc_test_FLQuantAdolc_as_wrap', PACKAGE = 'FLRcppAdolc', flqad)
+test_FLQuantAdolc_copy_constructor <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_copy_constructor', PACKAGE = 'FLRcppAdolc', flq)
 }
 
-test_FLQuantAdolc_copy_constructor <- function(flqad) {
-    .Call('FLRcppAdolc_test_FLQuantAdolc_copy_constructor', PACKAGE = 'FLRcppAdolc', flqad)
+test_FLQuantAdolc_copy_constructor2 <- function(flq1, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_copy_constructor2', PACKAGE = 'FLRcppAdolc', flq1, quant, year, unit, season, area, iter, value)
 }
 
-test_FLQuantAdolc_assignment_operator <- function(flqad) {
-    .Call('FLRcppAdolc_test_FLQuantAdolc_assignment_operator', PACKAGE = 'FLRcppAdolc', flqad)
+test_FLQuantAdolc_assignment_operator <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_assignment_operator', PACKAGE = 'FLRcppAdolc', flq)
 }
 
-test_FLQuantAdolc_FLQuant_constructor <- function(flq1) {
-    .Call('FLRcppAdolc_test_FLQuantAdolc_FLQuant_constructor', PACKAGE = 'FLRcppAdolc', flq1)
+test_FLQuantAdolc_assignment_operator2 <- function(flq1, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_assignment_operator2', PACKAGE = 'FLRcppAdolc', flq1, quant, year, unit, season, area, iter, value)
+}
+
+test_FLQuantAdolc_from_FLQuant_constructor <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_from_FLQuant_constructor', PACKAGE = 'FLRcppAdolc', flq)
 }
 
 test_FLQuantAdolc_get_units <- function(flq) {
@@ -347,6 +351,10 @@ test_FLQuantAdolc_get_dim <- function(flq) {
 
 test_FLQuantAdolc_get_dimnames <- function(flq) {
     .Call('FLRcppAdolc_test_FLQuantAdolc_get_dimnames', PACKAGE = 'FLRcppAdolc', flq)
+}
+
+test_FLQuantAdolc_get_size <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_get_size', PACKAGE = 'FLRcppAdolc', flq)
 }
 
 test_FLQuantAdolc_get_nquant <- function(flq) {

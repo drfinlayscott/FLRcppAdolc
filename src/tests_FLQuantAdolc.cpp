@@ -5,52 +5,69 @@
 
 #include "../../inst/include/FLQuant_base.h"
 
+// ADOLC(QUANT) constructor
+
 // [[Rcpp::export]]
-void do_nothing_FLQuantAdolc(){
-    return;
+FLQuantAdolc test_FLQuantAdolc_as_wrap(FLQuantAdolc flq){
+	return flq;
 }
 
 // [[Rcpp::export]]
 void test_FLQuantAdolc_basic_constructor(){
-    FLQuantAdolc flqad;
+    FLQuantAdolc flq;
     return;
 }
 
 // [[Rcpp::export]]
 FLQuantAdolc test_FLQuantAdolc_sexp_constructor(SEXP flq_sexp){
-	FLQuantAdolc flqad(flq_sexp);
-	return flqad;
+	FLQuantAdolc flq(flq_sexp);
+	return flq;
 }
 
 // [[Rcpp::export]]
-FLQuantAdolc test_FLQuantAdolc_as_wrap(FLQuantAdolc flqad){
-	return flqad;
-}
-
-// [[Rcpp::export]]
-FLQuantAdolc test_FLQuantAdolc_copy_constructor(FLQuantAdolc flqad){
-    FLQuantAdolc out = flqad;
+FLQuantAdolc test_FLQuantAdolc_copy_constructor(FLQuantAdolc flq){
+    FLQuantAdolc out(flq);
     return out;
 }
 
+// Checking that a deep copy has been made
 // [[Rcpp::export]]
-FLQuantAdolc test_FLQuantAdolc_assignment_operator(FLQuantAdolc flqad){
+Rcpp::List test_FLQuantAdolc_copy_constructor2(FLQuantAdolc flq1, int quant, int year, int unit, int season, int area, int iter, double value){
+	FLQuantAdolc flq2(flq1); 
+    adouble ad_value = value;
+	flq2(quant,year,unit,season,area,iter) = ad_value;
+	return Rcpp::List::create(Rcpp::Named("flq1", flq1),
+                            Rcpp::Named("flq2",flq2));
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_assignment_operator(FLQuantAdolc flq){
     FLQuantAdolc out;
-    out = flqad;
+    out = flq;
     return out;
 }
 
+// Checking that a deep copy has been made
 // [[Rcpp::export]]
-FLQuantAdolc test_FLQuantAdolc_FLQuant_constructor(FLQuant flq1){
-    FLQuantAdolc out(flq1);
-    return out;
+Rcpp::List test_FLQuantAdolc_assignment_operator2(FLQuantAdolc flq1, int quant, int year, int unit, int season, int area, int iter, double value){
+	FLQuantAdolc flq2;
+    flq2 = flq1; 
+    adouble ad_value = value;
+	flq2(quant,year,unit,season,area,iter) = ad_value;
+	return Rcpp::List::create(Rcpp::Named("flq1", flq1),
+				Rcpp::Named("flq2",flq2));
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_from_FLQuant_constructor(FLQuant flq){
+    FLQuantAdolc flqad(flq);
+    return flqad;
 }
 
 //------------------ Accessors ----------------------
-// Cannot return vector of adoubles
 /*
 // [[Rcpp::export]]
-std::vector<adouble> test_FLQuantAdolc_get_data(FLQuantAdolc flq){
+std::vector<double> test_FLQuantAdolc_get_data(FLQuantAdolc flq){
 	return flq.get_data();
 }
 */
@@ -68,6 +85,11 @@ Rcpp::IntegerVector test_FLQuantAdolc_get_dim(FLQuantAdolc flq){
 // [[Rcpp::export]]
 Rcpp::List test_FLQuantAdolc_get_dimnames(FLQuantAdolc flq){
 	return flq.get_dimnames();
+}
+
+// [[Rcpp::export]]
+int test_FLQuantAdolc_get_size(FLQuantAdolc flq){
+	return flq.get_size();
 }
 
 // [[Rcpp::export]]
@@ -100,6 +122,8 @@ int test_FLQuantAdolc_get_niter(FLQuantAdolc flq){
 	return flq.get_niter();
 }
 
+//---------- () accessors -----------------
+
 // [[Rcpp::export]]
 int test_FLQuantAdolc_get_data_element(const FLQuantAdolc flq, int quant, int year, int unit, int season, int area, int iter){
 	int out = 0;
@@ -123,7 +147,8 @@ double test_FLQuantAdolc_get_single_index_accessor(FLQuantAdolc flq, int element
 
 // [[Rcpp::export]]
 FLQuantAdolc test_FLQuantAdolc_set_single_index_accessor(FLQuantAdolc flq, int element, double value){
-    flq(element) = value;
+    adouble ad_value = value;
+    flq(element) = ad_value;
     return flq;
 }
 
@@ -143,12 +168,19 @@ double test_FLQuantAdolc_get_accessor(FLQuantAdolc flq, int quant, int year, int
 
 // [[Rcpp::export]]
 FLQuantAdolc test_FLQuantAdolc_set_accessor(FLQuantAdolc flq, int quant, int year, int unit, int season, int area, int iter, double value){
-	flq(quant,year,unit,season,area,iter) = value;
+    adouble ad_value = value;
+	flq(quant,year,unit,season,area,iter) = ad_value;
 	return flq;
 }
+//------------ Set methods -------------------------
 
-
-//------------------ Arithmetic operators ----------------------
+/*
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_set_data(FLQuantAdolc flq, std::vector<double> data_in){
+	flq.set_data(data_in);
+	return flq;
+}
+*/
 
 //------------------ Others --------------------------------------
 // [[Rcpp::export]]

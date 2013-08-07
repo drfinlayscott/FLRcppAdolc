@@ -21,6 +21,7 @@ class FLStock {
 		FLStock(const FLStock& FLStock_source); // copy constructor to ensure that copy is a deep copy - used when passing FLSs into functions
 		FLStock& operator = (const FLStock& FLStock_source); // Assignment operator for a deep copy
 
+
         /* These data members are public but the actual data in the FLQuant members is not.
          * It can only be accessed by the () operators */
         // The FLQuant slots
@@ -49,3 +50,4 @@ class FLStock {
 
 };
 
+// FLQuant get_catch_n(FLStock fls);

@@ -109,7 +109,7 @@ FLStock& FLStock::operator = (const FLStock& FLStock_source){
 
 /* Intrusive 'wrap' */
 FLStock::operator SEXP() const{
-    Rprintf("Wrapping FLStock.\n");
+    //Rprintf("Wrapping FLStock.\n");
         Rcpp::S4 fls_s4("FLStock");
         fls_s4.slot("name") = name;
         fls_s4.slot("desc") = desc;
@@ -134,6 +134,9 @@ FLStock::operator SEXP() const{
         return Rcpp::wrap(fls_s4);
 }
 
-//template class FLQuant_base<double>;
-//template class FLStock;
-//class FLStock;
+/*
+FLQuant get_catch_n(FLStock fls){
+    FLQuant catch_n = fls.catch_n;
+    return catch_n;
+}
+*/

@@ -50,3 +50,21 @@ Rcpp::List test_FLStock_assignment_operator(FLStock fls1, int quant, int year, i
 	return Rcpp::List::create(Rcpp::Named("fls1", fls1),
 				Rcpp::Named("fls2",fls2));
 }
+
+
+/*
+// [[Rcpp::export]]
+FLQuant test_FLStock_FLQuant_accessor(FLStock fls){
+    FLQuant catch_n = get_catch_n(fls);
+    return catch_n;
+}
+
+// [[Rcpp::export]]
+double test_FLStock_FLQuant_data_accessor(FLStock fls){
+    double value = 0;
+    value = get_catch_n(fls)(1,1,1,1,1,1);
+    return value;
+}
+
+*/
+

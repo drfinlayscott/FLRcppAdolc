@@ -15,3 +15,4 @@ LinkingTo: Rcpp
 Collate:
     'RcppExports.R'
     'help.R'
+    'test_helper_functions.R'

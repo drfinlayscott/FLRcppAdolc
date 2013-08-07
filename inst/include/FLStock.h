@@ -3,26 +3,26 @@
  * Maintainer: Finlay Scott, JRC
  */
 
-//#include <RcppCommon.h>
-//#include <Rcpp.h>
-#include "FLQuant.h"
+#include "FLQuant_base.h"
 
 /*
  * FLStock class
+ * Only uses FLQuant, not FLQuantAdolc
+ * It will be possible to make an FLStockAdolc or even template it FLStock_base<T> but until then...
  */
 
 class FLStock {
     public:
         /* Constructors */
 		FLStock();
-		FLStock(SEXP fls_sexp);
+		FLStock(SEXP fls_sexp); // Used as intrusive 'as'
+        operator SEXP() const; // Used as intrusive 'wrap'
 		FLStock(const FLStock& FLStock_source); // copy constructor to ensure that copy is a deep copy - used when passing FLSs into functions
+		FLStock& operator = (const FLStock& FLStock_source); // Assignment operator for a deep copy
 
-        /* Don't make the data private - else writing accessor methods for all these will be a massive pain */
-        // The names etc
-        std::string name;
-        std::string desc;
-        Rcpp::NumericVector range;
+
+        /* These data members are public but the actual data in the FLQuant members is not.
+         * It can only be accessed by the () operators */
         // The FLQuant slots
         FLQuant catches;  // catch is a reserved word
         FLQuant catch_n;  
@@ -42,13 +42,11 @@ class FLStock {
         FLQuant harvest_spwn;
         FLQuant m_spwn;
 
-        /* Operators */
-		FLStock& operator = (const FLStock& FLStock_source); // Assignment operator for a deep copy
+    private:
+        std::string name;
+        std::string desc;
+        Rcpp::NumericVector range;
+
 };
 
-// Custom as-wrap methods
-namespace Rcpp {
-    template <> FLStock as(SEXP fls_sexp);
-    template <> SEXP wrap(const FLStock &fls);
-}
-
+// FLQuant get_catch_n(FLStock fls);

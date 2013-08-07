@@ -574,9 +574,6 @@ FLQuant_base<T>& FLQuant_base<T>::operator -= (const T2& rhs){
 // FLQuant_base<T> - FLQuant_base<T>
 template <typename T>
 FLQuant_base<T> FLQuant_base<T>::operator - (const FLQuant_base<T>& rhs) const{
-    if (match_dims(rhs) != 1){
-        Rcpp::stop("You cannot subtract FLQuants as your dimensions do not match.");
-    }
     FLQuant_base<T> out = *this; // Copy myself
     out -= rhs;
     return out;
@@ -593,9 +590,6 @@ FLQuant_base<T> FLQuant_base<T>::operator - (const T& rhs) const{
 // Declared outside of class
 template <typename T>
 FLQuant_base<T> operator - (const FLQuant_base<double>& lhs, const FLQuant_base<T>& rhs){
-    if (lhs.match_dims(rhs) != 1){
-        Rcpp::stop("You cannot subtract FLQuants as your dimensions do not match.");
-    }
     FLQuant_base<T> out(lhs);
     out -= rhs;
     return out;
@@ -603,9 +597,6 @@ FLQuant_base<T> operator - (const FLQuant_base<double>& lhs, const FLQuant_base<
 
 template <typename T>
 FLQuant_base<T> operator - (const FLQuant_base<T>& lhs, const FLQuant_base<double>& rhs){
-    if (lhs.match_dims(rhs) != 1){
-        Rcpp::stop("You cannot subtract FLQuants as your dimensions do not match.");
-    }
     FLQuant_base<T> out = lhs;
     out -= rhs;
     return out;
@@ -657,6 +648,124 @@ FLQuant_base<T> operator - (const T& lhs, const FLQuant_base<double>& rhs){
     std::vector<T> out_data = out.get_data();
     std::transform(out_data.begin(), out_data.end(), out_data.begin(), std::bind1st(std::minus<T>(),lhs)); 
     out.set_data(out_data);
+    return out;
+}
+
+//------------------ Addition operators -------------------
+
+// Addition self assignment
+template<typename T>
+FLQuant_base<T>& FLQuant_base<T>::operator += (const FLQuant_base<T>& rhs){
+    if (match_dims(rhs) != 1){
+        Rcpp::stop("You cannot add FLQuants as your dimensions do not match.");
+    }
+    std::transform((*this).data.begin(), (*this).data.end(), rhs.data.begin(), (*this).data.begin(), std::plus<T>());
+    return *this;
+}
+// Special case of addition assignment 
+// Instantiation below ensures that it will only compile for FLQuantAdolc += FLQuant
+// FLQuant += FLQuantAdolc will not compile as cannot have double = double + adouble
+// Needs to be instanitated due to extra template class, T2
+template <typename T>
+template <typename T2>
+FLQuant_base<T>& FLQuant_base<T>::operator += (const FLQuant_base<T2>& rhs){
+    if (match_dims(rhs) != 1){
+        Rcpp::stop("You cannot add FLQuants as your dimensions do not match.");
+    }
+    std::vector<T2> rhs_data = rhs.get_data();
+    std::transform((*this).data.begin(), (*this).data.end(), rhs_data.begin(), (*this).data.begin(), std::plus<T>());
+    return *this;
+}
+
+// FLQuant += double
+// FLQuantAdolc += adouble
+template <typename T>
+FLQuant_base<T>& FLQuant_base<T>::operator += (const T& rhs){
+    std::transform((*this).data.begin(), (*this).data.end(), (*this).data.begin(), std::bind1st(std::plus<T>(),rhs)); 
+    return *this;
+}
+
+// Special case of addition assignment 
+// Used for FLQuantAdolc += double
+// Needs to be instanitated due to extra template class, T2
+template <typename T>
+template <typename T2>
+FLQuant_base<T>& FLQuant_base<T>::operator += (const T2& rhs){
+    std::transform((*this).data.begin(), (*this).data.end(), (*this).data.begin(), std::bind1st(std::plus<T>(),rhs)); 
+    return *this;
+}
+
+// General multiplication
+// FLQuant_base<T> + FLQuant_base<T>
+template <typename T>
+FLQuant_base<T> FLQuant_base<T>::operator + (const FLQuant_base<T>& rhs) const{
+    FLQuant_base<T> out = *this; // Copy myself
+    out += rhs;
+    return out;
+}
+
+// FLQuant_base<T> + T
+template <typename T>
+FLQuant_base<T> FLQuant_base<T>::operator + (const T& rhs) const{
+    FLQuant_base<T> out = *this; // Copy myself
+    out += rhs;
+    return out;
+}
+
+// Declared outside of class
+template <typename T>
+FLQuant_base<T> operator + (const FLQuant_base<double>& lhs, const FLQuant_base<T>& rhs){
+    FLQuant_base<T> out = rhs;
+    out += lhs;
+    return out;
+
+}
+
+template <typename T>
+FLQuant_base<T> operator + (const FLQuant_base<T>& lhs, const FLQuant_base<double>& rhs){
+    FLQuant_base<T> out = lhs;
+    out += rhs;
+    return out;
+}
+
+template <typename T>
+FLQuant_base<T> operator + (const T& lhs, const FLQuant_base<T>& rhs){
+    FLQuant_base<T> out = rhs;
+    out += lhs;
+    return out;
+}
+
+template <typename T>
+FLQuant_base<T> operator + (const double& lhs, const FLQuant_base<T>& rhs){
+    FLQuant_base<T> out = rhs;
+    out += lhs;
+    return out;
+}
+
+template <typename T>
+FLQuant_base<T> operator + (const FLQuant_base<T>& lhs, const double& rhs){
+    FLQuant_base<T> out = lhs;
+    out += rhs;
+    return out;
+}
+
+FLQuant_base<double> operator + (const double& lhs, const FLQuant_base<double>& rhs){
+    FLQuant_base<double> out = rhs;
+    out += lhs;
+    return out;
+}
+
+template <typename T>
+FLQuant_base<T> operator + (const FLQuant_base<double>& lhs, const T& rhs){
+    FLQuant_base<T> out(lhs);
+    out += rhs;
+    return out;
+}
+
+template <typename T>
+FLQuant_base<T> operator + (const T& lhs, const FLQuant_base<double>& rhs){
+    FLQuant_base<T> out(rhs);
+    out += lhs;
     return out;
 }
 
@@ -919,6 +1028,8 @@ template FLQuant_base<adouble>& FLQuant_base<adouble>::operator /= (const FLQuan
 template FLQuant_base<adouble>& FLQuant_base<adouble>::operator /= (const double& rhs);
 template FLQuant_base<adouble>& FLQuant_base<adouble>::operator -= (const FLQuant_base<double>& rhs);
 template FLQuant_base<adouble>& FLQuant_base<adouble>::operator -= (const double& rhs);
+template FLQuant_base<adouble>& FLQuant_base<adouble>::operator += (const FLQuant_base<double>& rhs);
+template FLQuant_base<adouble>& FLQuant_base<adouble>::operator += (const double& rhs);
 // Instantiate other class methods with mixed types 
 template int FLQuant_base<adouble>::match_dims(const FLQuant_base<double>& b) const;
 template int FLQuant_base<double>::match_dims(const FLQuant_base<adouble>& b) const;
@@ -949,5 +1060,13 @@ template FLQuant_base<adouble> operator - (const double& lhs, const FLQuant_base
 template FLQuant_base<adouble> operator - (const FLQuant_base<adouble>& lhs, const double& rhs);
 template FLQuant_base<adouble> operator - (const FLQuant_base<double>& lhs, const adouble& rhs);
 template FLQuant_base<adouble> operator - (const adouble& lhs, const FLQuant_base<double>& rhs);
+// Addition
+template FLQuant_base<adouble> operator + (const FLQuant_base<double>& lhs, const FLQuant_base<adouble>& rhs);
+template FLQuant_base<adouble> operator + (const FLQuant_base<adouble>& lhs, const FLQuant_base<double>& rhs);
+template FLQuant_base<adouble> operator + (const adouble& lhs, const FLQuant_base<adouble>& rhs);
+template FLQuant_base<adouble> operator + (const double& lhs, const FLQuant_base<adouble>& rhs);
+template FLQuant_base<adouble> operator + (const FLQuant_base<adouble>& lhs, const double& rhs);
+template FLQuant_base<adouble> operator + (const FLQuant_base<double>& lhs, const adouble& rhs);
+template FLQuant_base<adouble> operator + (const adouble& lhs, const FLQuant_base<double>& rhs);
 
 

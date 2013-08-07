@@ -1,18 +1,5 @@
 context("Arithmetic operators for FLQuant and FLQuantAdolc")
 
-random_FLQuant_generator <- function(max_age = 10, max_year = 10, max_unit = 5, max_season = 4, max_area = 4, max_iter = 50){
-    nage <- runif(1,min=1, max=max_age)
-    nyear <- runif(1,min=1, max=max_year)
-    nunit <- runif(1,min=1, max=max_unit)
-    nseason <- runif(1,min=1, max=max_season)
-    narea <- runif(1,min=1, max=max_area)
-    niter <- runif(1,min=1, max=max_iter)
-    values <- rnorm(nage*nyear*nunit*nseason*narea*niter, sd = 100)
-    flq <- FLQuant(values, dimnames = list(age = 1:nage, year = 1:nyear, unit = 1:nunit, season = 1:nseason, area = 1:narea, iter = 1:niter))
-    units(flq) <- as.character(abs(rnorm(1)))
-    return(flq);
-}
-
 # There are 18 options per operator
 # For example, consider the '*' operator:
 # 6 operator assignment
@@ -175,3 +162,58 @@ test_that("subtraction",{
     expect_that(flq_out, is_identical_to(value - flq1))
 })
 
+test_that("addition",{
+    flq1 <- random_FLQuant_generator()
+    flq2 <- flq1
+    flq2[] <- rnorm(prod(dim(flq1)),sd = 10)
+    value <- rnorm(1)
+    # Addition assignment
+    flq_out <- test_FLQuant_FLQuant_addition_assignment_operator(flq1, flq2)
+    expect_that(flq_out@.Data, is_identical_to(flq1@.Data + flq2@.Data))
+    flq_out <- test_FLQuantAdolc_FLQuant_addition_assignment_operator(flq1, flq2)
+    expect_that(flq_out@.Data, is_identical_to(flq1@.Data + flq2@.Data))
+    flq_out <- test_FLQuantAdolc_FLQuantAdolc_addition_assignment_operator(flq1, flq2)
+    expect_that(flq_out@.Data, is_identical_to(flq1@.Data + flq2@.Data))
+    flq_out <- test_FLQuant_double_addition_assignment_operator(flq1, value)
+    expect_that(flq_out, is_identical_to(flq1 + value))
+    flq_out <- test_FLQuantAdolc_double_addition_assignment_operator(flq1, value)
+    expect_that(flq_out, is_identical_to(flq1 + value))
+    flq_out <- test_FLQuantAdolc_adouble_addition_assignment_operator(flq1, value)
+    expect_that(flq_out, is_identical_to(flq1 + value))
+    # Binary addition FLQ<> + FLQ<>
+    flq_out <- test_FLQuant_FLQuant_addition_operator(flq1, flq2)
+    expect_that(flq_out@.Data, is_identical_to(flq1@.Data + flq2@.Data))
+    flq_out <- test_FLQuantAdolc_FLQuant_addition_operator(flq1, flq2)
+    expect_that(flq_out@.Data, is_identical_to(flq1@.Data + flq2@.Data))
+    flq_out <- test_FLQuant_FLQuantAdolc_addition_operator(flq1, flq2)
+    expect_that(flq_out@.Data, is_identical_to(flq1@.Data + flq2@.Data))
+    flq_out <- test_FLQuantAdolc_FLQuantAdolc_addition_operator(flq1, flq2)
+    expect_that(flq_out@.Data, is_identical_to(flq1@.Data + flq2@.Data))
+    # Binary addition FLQ<> + scalar
+    flq_out <- test_FLQuant_double_addition_operator(flq1, value)
+    expect_that(flq_out, is_identical_to(flq1 + value))
+    flq_out <- test_double_FLQuant_addition_operator(value, flq1)
+    expect_that(flq_out, is_identical_to(value + flq1))
+    flq_out <-  test_FLQuantAdolc_double_addition_assignment_operator(flq1, value)
+    expect_that(flq_out, is_identical_to(flq1 + value))
+    flq_out <-  test_double_FLQuantAdolc_addition_operator(value, flq1)
+    expect_that(flq_out, is_identical_to(value + flq1))
+    flq_out <- test_FLQuant_adouble_addition_operator(flq1, value)
+    expect_that(flq_out, is_identical_to(flq1 + value))
+    flq_out <- test_adouble_FLQuant_addition_operator(value, flq1)
+    expect_that(flq_out, is_identical_to(value + flq1))
+    flq_out <- test_FLQuantAdolc_adouble_addition_operator(flq1, value)
+    expect_that(flq_out, is_identical_to(flq1 + value))
+    flq_out <- test_adouble_FLQuantAdolc_addition_operator(value, flq1)
+    expect_that(flq_out, is_identical_to(value + flq1))
+})
+
+test_that("composite_arithmetic",{
+    flq <- random_FLQuant_generator()
+    flqad <- flq
+    flqad[] <- rnorm(prod(dim(flq)),sd = 10)
+    value <- rnorm(1)
+    flq_out <- test_composite_arithmetic_operators(flqad, flq, value)
+    result <- ((((value * flq) + value) - flq) / flq) * ((value / flqad) - value)
+    expect_that(flq_out@.Data, is_identical_to(result@.Data))
+})

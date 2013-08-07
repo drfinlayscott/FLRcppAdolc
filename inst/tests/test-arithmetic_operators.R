@@ -217,3 +217,17 @@ test_that("composite_arithmetic",{
     result <- ((((value * flq) + value) - flq) / flq) * ((value / flqad) - value)
     expect_that(flq_out@.Data, is_identical_to(result@.Data))
 })
+
+test_that("log and exp",{
+    flq <- abs(random_FLQuant_generator())
+    # log
+    flq_out <- test_FLQuant_log(flq)
+    expect_that(flq_out@.Data, is_identical_to(log(flq)@.Data))
+    flq_out <- test_FLQuantAdolc_log(flq)
+    expect_that(flq_out@.Data, is_identical_to(log(flq)@.Data))
+    # exp
+    flq_out <- test_FLQuant_exp(flq)
+    expect_that(flq_out@.Data, is_identical_to(exp(flq)@.Data))
+    flq_out <- test_FLQuantAdolc_exp(flq)
+    expect_that(flq_out@.Data, is_identical_to(exp(flq)@.Data))
+})

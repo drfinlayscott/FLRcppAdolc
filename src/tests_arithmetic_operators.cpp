@@ -544,6 +544,31 @@ FLQuantAdolc test_adouble_FLQuantAdolc_addition_operator(double value, FLQuantAd
     return flq3;
 }
 
+//--------- log and exp functions ----------------------
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_log(FLQuant flq){
+    FLQuant flq_out = log(flq);
+    return flq_out;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_log(FLQuantAdolc flq){
+    FLQuantAdolc flq_out = log(flq);
+    return flq_out;
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_exp(FLQuant flq){
+    FLQuant flq_out = exp(flq);
+    return flq_out;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_exp(FLQuantAdolc flq){
+    FLQuantAdolc flq_out = exp(flq);
+    return flq_out;
+}
 
 
 //----------- Composite tests -----------------

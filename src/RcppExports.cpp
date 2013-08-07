@@ -798,6 +798,46 @@ BEGIN_RCPP
     return Rcpp::wrap(__result);
 END_RCPP
 }
+// test_FLQuant_log
+FLQuant test_FLQuant_log(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_log(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    FLQuant __result = test_FLQuant_log(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_log
+FLQuantAdolc test_FLQuantAdolc_log(FLQuantAdolc flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_log(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flq = Rcpp::as<FLQuantAdolc >(flqSEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_log(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_exp
+FLQuant test_FLQuant_exp(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_exp(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    FLQuant __result = test_FLQuant_exp(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuantAdolc_exp
+FLQuantAdolc test_FLQuantAdolc_exp(FLQuantAdolc flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_exp(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flq = Rcpp::as<FLQuantAdolc >(flqSEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_exp(flq);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
 // test_composite_arithmetic_operators
 FLQuantAdolc test_composite_arithmetic_operators(FLQuantAdolc flqad, FLQuant flq, double value);
 RcppExport SEXP FLRcppAdolc_test_composite_arithmetic_operators(SEXP flqadSEXP, SEXP flqSEXP, SEXP valueSEXP) {

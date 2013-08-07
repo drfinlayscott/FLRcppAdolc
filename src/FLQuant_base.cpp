@@ -769,191 +769,7 @@ FLQuant_base<T> operator + (const T& lhs, const FLQuant_base<double>& rhs){
     return out;
 }
 
-/* Accessor methods */
-/*
-void FLQuant::set_units(const std::string new_units){
-	units = new_units;
-}
-
-*/
-/*  A strange method this one. You can only set different dims
-  if the data member doesn't have dimnames that match the different dims.
-  But the data member will already dim and dimnames attributes that match,
-  so you cannot change one on it's own.
-  This method is therefore only really used if the data member has no existing attributes.
-  This can happen, for example, if a sugar method is used which removes all attributes */
-/*
-void FLQuant::set_dim(const Rcpp::IntegerVector dim){
-    // Error checks
-    // Must have 6 dimensions
-    const int ndim = dim.size();
-    if (ndim != 6){
-        Rcpp::stop("Trying to set dim attribute when ndim != 6");
-    }
-    // Product of dimensions must equal length of data NumericVector
-    int prod_dim = 1;
-    for (int i = 0; i < 6; ++i){
-        prod_dim = prod_dim * dim(i);
-    }
-    if (prod_dim != data.size()){
-        Rcpp::stop("Trying to set dim attribute which has a different total size to the data member");
-    }
-    data.attr("dim") = dim;
-}
-*/
-// This does not check that the dimnames are xxx, year, unit etc.
-/*
-void FLQuant::set_dimnames(const Rcpp::List dimnames){
-    if (dimnames.size() != 6){
-        Rcpp::stop("Dimnames must be of length 6");
-    }
-    data.attr("dimnames") = dimnames;
-}
-*/
-/*
-*/
-/* Define template specialisations for as and wrap */
-/*
-namespace Rcpp {
-    template <> FLQuant as(SEXP flq_sexp) {
-        FLQuant flq(flq_sexp);
-        return flq;
-    }
-
-    template <> SEXP wrap(const FLQuant &flq) {
-        Rcpp::S4 flq_s4("FLQuant");
-        flq_s4.slot(".Data") = flq.get_data();
-        flq_s4.slot("units") = flq.get_units();
-        return Rcpp::wrap(flq_s4);
-    }
-}
-*/
-/* Mathematical operators */
-// Was going to use Rcpp sugar to multiply the data NumericVectors together
-// But this has the side effect of stripping out the dim and dimnames attributes
-// We could still use it and then set_dim and set_dimnames but that seems a bit long winded
-/*
-FLQuant& FLQuant::operator *= (const FLQuant& flq_rhs){
-    if (match_dims(flq_rhs) != 1){
-        Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
-    }
-    for (int i = 1; i <= data.size(); ++i){
-        (*this)(i) = (*this)(i) * flq_rhs(i); // Use the () operator instead of accessing data member directly so indexing starts at same place
-    }
-    return *this;
-}
-
-FLQuant FLQuant::operator * (const FLQuant& flq_rhs) const{
-    FLQuant flq_out = *this; // Copy myself
-    flq_out *= flq_rhs;
-    return flq_out;
-}
-
-FLQuant& FLQuant::operator *= (const double& rhs){
-    for (int i = 1; i <= data.size(); ++i){
-        (*this)(i) = (*this)(i) * rhs; 
-    }
-    return *this;
-}
-
-FLQuant FLQuant::operator * (const double& rhs) const{
-    FLQuant flq_out = *this; // Copy myself
-    flq_out *= rhs;
-    return flq_out;
-}
-
-FLQuant& FLQuant::operator /= (const FLQuant& flq_rhs){
-    if (match_dims(flq_rhs) != 1){
-        Rcpp::stop("You cannot divide FLQuants as your dimensions do not match.");
-    }
-    for (int i = 1; i <= data.size(); ++i){
-        (*this)(i) = (*this)(i) / flq_rhs(i); // Use the () operator instead of accessing data member directly so indexing starts at same place
-    }
-    return *this;
-}
-
-FLQuant FLQuant::operator / (const FLQuant& flq_rhs) const{
-    FLQuant flq_out = *this; // Copy myself
-    flq_out /= flq_rhs;
-    return flq_out;
-}
-
-FLQuant& FLQuant::operator /= (const double& rhs){
-    for (int i = 1; i <= data.size(); ++i){
-        (*this)(i) = (*this)(i) / rhs; 
-    }
-    return *this;
-}
-
-FLQuant FLQuant::operator / (const double& rhs) const{
-    FLQuant flq_out = *this; // Copy myself
-    flq_out /= rhs;
-    return flq_out;
-}
-
-FLQuant& FLQuant::operator += (const FLQuant& flq_rhs){
-    if (match_dims(flq_rhs) != 1){
-        Rcpp::stop("You cannot add FLQuants as your dimensions do not match.");
-    }
-    for (int i = 1; i <= data.size(); ++i){
-        (*this)(i) = (*this)(i) + flq_rhs(i); // Use the () operator instead of accessing data member directly so indexing starts at same place
-    }
-    return *this;
-}
-
-FLQuant FLQuant::operator + (const FLQuant& flq_rhs) const{
-    FLQuant flq_out = *this; // Copy myself
-    flq_out += flq_rhs;
-    return flq_out;
-}
-
-FLQuant& FLQuant::operator += (const double& rhs){
-    for (int i = 1; i <= data.size(); ++i){
-        (*this)(i) = (*this)(i) + rhs; 
-    }
-    return *this;
-}
-
-FLQuant FLQuant::operator + (const double& rhs) const{
-    FLQuant flq_out = *this; // Copy myself
-    flq_out += rhs;
-    return flq_out;
-}
-
-FLQuant& FLQuant::operator -= (const FLQuant& flq_rhs){
-    if (match_dims(flq_rhs) != 1){
-        Rcpp::stop("You cannot subtract FLQuants as your dimensions do not match.");
-    }
-    for (int i = 1; i <= data.size(); ++i){
-        (*this)(i) = (*this)(i) - flq_rhs(i); // Use the () operator instead of accessing data member directly so indexing starts at same place
-    }
-    return *this;
-}
-
-FLQuant FLQuant::operator - (const FLQuant& flq_rhs) const{
-    FLQuant flq_out = *this; // Copy myself
-    flq_out -= flq_rhs;
-    return flq_out;
-}
-
-FLQuant& FLQuant::operator -= (const double& rhs){
-    for (int i = 1; i <= data.size(); ++i){
-        (*this)(i) = (*this)(i) - rhs; 
-    }
-    return *this;
-}
-
-FLQuant FLQuant::operator - (const double& rhs) const{
-    FLQuant flq_out = *this; // Copy myself
-    flq_out -= rhs;
-    return flq_out;
-}
-*/
-/* Do the dimensions of two FLQuants match?
-    If yes, return 1
-    Else, return the negative of the first dimension that is wrong
-*/
-
+/* Other methods */
 template <typename T>
 int FLQuant_base<T>::match_dims(const FLQuant_base<T>& b) const{
     Rcpp::IntegerVector dims_a =  get_dim();
@@ -972,38 +788,28 @@ int FLQuant_base<T>::match_dims(const FLQuant_base<T2>& b) const{
 
 
 /* Other functions */
-/*
-FLQuant log(const FLQuant& flq){
-    FLQuant out = flq;
-    for (int i = 1; i <= flq.get_size(); ++i){
-        out(i) = log(out(i));
+//FLQuant_base<T> log(const FLQuant_base<T>& flq);
+//FLQuant_base<T> exp(const FLQuant_base<T>& flq);
+
+template <typename T>
+FLQuant_base<T> log(FLQuant_base<T>& flq){
+    std::vector<T> data = flq.get_data();
+    for (typename std::vector<T>::iterator data_iterator = data.begin(); data_iterator != data.end(); ++data_iterator){
+        (*data_iterator) = log(*data_iterator);
     }
-    return out;
+    flq.set_data(data);
+    return flq;
 }
 
-FLQuant exp(const FLQuant& flq){
-    FLQuant out = flq;
-    for (int i = 1; i <= flq.get_size(); ++i){
-        out(i) = exp(out(i));
+template <typename T>
+FLQuant_base<T> exp(FLQuant_base<T>& flq){
+    std::vector<T> data = flq.get_data();
+    for (typename std::vector<T>::iterator data_iterator = data.begin(); data_iterator != data.end(); ++data_iterator){
+        (*data_iterator) = exp(*data_iterator);
     }
-    return out;
+    flq.set_data(data);
+    return flq;
 }
-*/
-
-/*
-template <typename T1, typename T2>
-std::vector<T1> operator * (const std::vector<T1>& lhs, const std::vector<T2>& rhs){
-    Rprintf("T1 = T1 * T2\n");    
-    std::vector<T1> out;
-    return out;
-}
-
-std::vector<adouble> operator * (const std::vector<double>& lhs, const std::vector<adouble>& rhs){
-    Rprintf("adouble = double * adouble\n");    
-    std::vector<adouble> out;
-    return out;
-}
-*/
 
 int dim_matcher(const Rcpp::IntegerVector dims_a, const Rcpp::IntegerVector dims_b){
     for (int i=0; i<6; ++i){
@@ -1030,12 +836,12 @@ template FLQuant_base<adouble>& FLQuant_base<adouble>::operator -= (const FLQuan
 template FLQuant_base<adouble>& FLQuant_base<adouble>::operator -= (const double& rhs);
 template FLQuant_base<adouble>& FLQuant_base<adouble>::operator += (const FLQuant_base<double>& rhs);
 template FLQuant_base<adouble>& FLQuant_base<adouble>::operator += (const double& rhs);
+
 // Instantiate other class methods with mixed types 
 template int FLQuant_base<adouble>::match_dims(const FLQuant_base<double>& b) const;
 template int FLQuant_base<double>::match_dims(const FLQuant_base<adouble>& b) const;
 
-
-// Explicit instantiation of extra artithmetic functions
+// Explicit instantiation of extra templated artithmetic functions
 // Multiplication
 template FLQuant_base<adouble> operator * (const FLQuant_base<double>& lhs, const FLQuant_base<adouble>& rhs);
 template FLQuant_base<adouble> operator * (const FLQuant_base<adouble>& lhs, const FLQuant_base<double>& rhs);
@@ -1069,4 +875,9 @@ template FLQuant_base<adouble> operator + (const FLQuant_base<adouble>& lhs, con
 template FLQuant_base<adouble> operator + (const FLQuant_base<double>& lhs, const adouble& rhs);
 template FLQuant_base<adouble> operator + (const adouble& lhs, const FLQuant_base<double>& rhs);
 
+// Explicit instantiation of other functions
+template FLQuant_base<double> log(FLQuant_base<double>& flq);
+template FLQuant_base<adouble> log(FLQuant_base<adouble>& flq);
+template FLQuant_base<double> exp(FLQuant_base<double>& flq);
+template FLQuant_base<adouble> exp(FLQuant_base<adouble>& flq);
 

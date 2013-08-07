@@ -39,9 +39,7 @@ class FLQuant_base {
         template <typename T2>
 		FLQuant_base(const FLQuant_base<T2>& FLQuant_source); // Make an FLQuantAdolc from an FLQuant
 
-		/* Get accessors 
-		 * Note the use of 'const' because the get methods should promise not to modify the members (we are returning them)
-		 */
+		/* Get accessors */
         std::vector<T> get_data() const;
 		std::string get_units() const;
         Rcpp::IntegerVector get_dim() const;
@@ -57,13 +55,8 @@ class FLQuant_base {
 
 		/* Set accessors */
 		void set_data(const std::vector<T>& data_in);
-        /*
-		void set_units(const std::string new_units);
-        void set_dim(const Rcpp::IntegerVector dim);
-        void set_dimnames(const Rcpp::List dimnames);
-        */
 
-        /* Overloaded operators */
+        /* () accessors */
 		T operator () (const unsigned int element) const; // only gets an element so const reinforced - - however cannot return reference due to NumericVector() operator
 		T operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter) const; // only gets an element so const reinforced - however cannot return reference due to NumericVector() operator
 		T& operator () (const unsigned int element); // gets and sets an element so const not reinforced
@@ -139,17 +132,20 @@ typedef FLQuant_base<double> FLQuant;
 typedef FLQuant_base<adouble> FLQuantAdolc;
 
 //---------- Other useful functions ------------------------
+
 int dim_matcher(const Rcpp::IntegerVector a, const Rcpp::IntegerVector b);
 
 //------------ Non-member arithmetic methods with mixed types --------------
-// Canonical form: Type operator*(const Type &lhs, const Type &rhs); 
-// double gets swallowed up by whatever is multiplying it.
-// This means that the operations involving a double need to be individually specified.
-// Need to be careful of ambiguities arise,
-// FLQuant_base<anything>  = FLQuant_base<double> * FLQuant_base<anything>
-// FLQuant = FLQuant * double
-// FLQuantAdolc = FLQuantAdolc * adouble
-// FLQuant_base<> = <> * FLQuant_base
+
+/* Canonical form: Type operator*(const Type &lhs, const Type &rhs); 
+* double gets swallowed up by whatever is multiplying it.
+* This means that the operations involving a double need to be individually specified.
+* Need to be careful of ambiguities arise,
+* FLQuant_base<anything>  = FLQuant_base<double> * FLQuant_base<anything>
+* FLQuant = FLQuant * double
+* FLQuantAdolc = FLQuantAdolc * adouble
+* FLQuant_base<> = <> * FLQuant_base
+*/
 
 // The templated functions are all instantiated at the bottom of FLQuant_base.cpp
 
@@ -237,8 +233,11 @@ FLQuant_base<T> operator + (const FLQuant_base<double>& lhs, const T& rhs);
 template <typename T>
 FLQuant_base<T> operator + (const T& lhs, const FLQuant_base<double>& rhs);
 
-//FLQuant log(const FLQuant& flq);
-//FLQuant exp(const FLQuant& flq);
+// Other arithmetic operations
+template <typename T>
+FLQuant_base<T> log(FLQuant_base<T>& flq);
+template <typename T>
+FLQuant_base<T> exp(FLQuant_base<T>& flq);
 
 
 

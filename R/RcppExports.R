@@ -289,6 +289,22 @@ test_adouble_FLQuantAdolc_addition_operator <- function(value, flq1) {
     .Call('FLRcppAdolc_test_adouble_FLQuantAdolc_addition_operator', PACKAGE = 'FLRcppAdolc', value, flq1)
 }
 
+test_FLQuant_log <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuant_log', PACKAGE = 'FLRcppAdolc', flq)
+}
+
+test_FLQuantAdolc_log <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_log', PACKAGE = 'FLRcppAdolc', flq)
+}
+
+test_FLQuant_exp <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuant_exp', PACKAGE = 'FLRcppAdolc', flq)
+}
+
+test_FLQuantAdolc_exp <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_exp', PACKAGE = 'FLRcppAdolc', flq)
+}
+
 test_composite_arithmetic_operators <- function(flqad, flq, value) {
     .Call('FLRcppAdolc_test_composite_arithmetic_operators', PACKAGE = 'FLRcppAdolc', flqad, flq, value)
 }

@@ -321,6 +321,10 @@ test_FLQuantAdolc_sexp_constructor <- function(flq_sexp) {
     .Call('FLRcppAdolc_test_FLQuantAdolc_sexp_constructor', PACKAGE = 'FLRcppAdolc', flq_sexp)
 }
 
+test_FLQuantAdolc_dim_constructor <- function(nquant, nyear, nunit, nseason, narea, niter) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_dim_constructor', PACKAGE = 'FLRcppAdolc', nquant, nyear, nunit, nseason, narea, niter)
+}
+
 test_FLQuantAdolc_copy_constructor <- function(flq) {
     .Call('FLRcppAdolc_test_FLQuantAdolc_copy_constructor', PACKAGE = 'FLRcppAdolc', flq)
 }
@@ -431,6 +435,10 @@ test_FLQuant_basic_constructor <- function() {
 
 test_FLQuant_sexp_constructor <- function(flq_sexp) {
     .Call('FLRcppAdolc_test_FLQuant_sexp_constructor', PACKAGE = 'FLRcppAdolc', flq_sexp)
+}
+
+test_FLQuant_dim_constructor <- function(nquant, nyear, nunit, nseason, narea, niter) {
+    .Call('FLRcppAdolc_test_FLQuant_dim_constructor', PACKAGE = 'FLRcppAdolc', nquant, nyear, nunit, nseason, narea, niter)
 }
 
 test_FLQuant_copy_constructor <- function(flq) {

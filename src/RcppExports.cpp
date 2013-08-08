@@ -879,6 +879,21 @@ BEGIN_RCPP
     return Rcpp::wrap(__result);
 END_RCPP
 }
+// test_FLQuantAdolc_dim_constructor
+FLQuantAdolc test_FLQuantAdolc_dim_constructor(int nquant, int nyear, int nunit, int nseason, int narea, int niter);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_dim_constructor(SEXP nquantSEXP, SEXP nyearSEXP, SEXP nunitSEXP, SEXP nseasonSEXP, SEXP nareaSEXP, SEXP niterSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    int nquant = Rcpp::as<int >(nquantSEXP);
+    int nyear = Rcpp::as<int >(nyearSEXP);
+    int nunit = Rcpp::as<int >(nunitSEXP);
+    int nseason = Rcpp::as<int >(nseasonSEXP);
+    int narea = Rcpp::as<int >(nareaSEXP);
+    int niter = Rcpp::as<int >(niterSEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_dim_constructor(nquant, nyear, nunit, nseason, narea, niter);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
 // test_FLQuantAdolc_copy_constructor
 FLQuantAdolc test_FLQuantAdolc_copy_constructor(FLQuantAdolc flq);
 RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_copy_constructor(SEXP flqSEXP) {
@@ -1201,6 +1216,21 @@ BEGIN_RCPP
     Rcpp::RNGScope __rngScope;
     SEXP flq_sexp = Rcpp::as<SEXP >(flq_sexpSEXP);
     FLQuant __result = test_FLQuant_sexp_constructor(flq_sexp);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_dim_constructor
+FLQuant test_FLQuant_dim_constructor(int nquant, int nyear, int nunit, int nseason, int narea, int niter);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_dim_constructor(SEXP nquantSEXP, SEXP nyearSEXP, SEXP nunitSEXP, SEXP nseasonSEXP, SEXP nareaSEXP, SEXP niterSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    int nquant = Rcpp::as<int >(nquantSEXP);
+    int nyear = Rcpp::as<int >(nyearSEXP);
+    int nunit = Rcpp::as<int >(nunitSEXP);
+    int nseason = Rcpp::as<int >(nseasonSEXP);
+    int narea = Rcpp::as<int >(nareaSEXP);
+    int niter = Rcpp::as<int >(niterSEXP);
+    FLQuant __result = test_FLQuant_dim_constructor(nquant, nyear, nunit, nseason, narea, niter);
     return Rcpp::wrap(__result);
 END_RCPP
 }

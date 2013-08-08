@@ -32,6 +32,26 @@ FLQuant_base<T>::FLQuant_base(SEXP flq_sexp){
 	dimnames = data_nv.attr("dimnames");
 }
 
+// Make an FLQuant of a certain size filled with 0
+// Note that units and dimnames have not been set
+template <typename T>
+FLQuant_base<T>::FLQuant_base(const int nquant, const int nyear, const int nunit, const int nseason, const int narea, const int niter){
+    Rprintf("Making a new FLQuant_base<T> with user defined dims\n");
+	units = std::string(); // Empty string - just ""
+    dim = Rcpp::IntegerVector::create(nquant, nyear, nunit, nseason, narea, niter);
+    data = std::vector<T>(nquant * nyear * nunit * nseason * narea * niter);
+    // How to fill dimnames up appropriately?
+    // Just of the right size at the moment.
+    // Could use ::create to pass in actual characters, but then do we want just 1:nage, 1:nyear etc?
+    dimnames = Rcpp::List::create(
+            Rcpp::Named("quant", Rcpp::CharacterVector(nquant)),
+            Rcpp::Named("year", Rcpp::CharacterVector(nyear)),
+            Rcpp::Named("unit", Rcpp::CharacterVector(nunit)),
+            Rcpp::Named("season", Rcpp::CharacterVector(nseason)),
+            Rcpp::Named("area", Rcpp::CharacterVector(narea)),
+            Rcpp::Named("iter", Rcpp::CharacterVector(niter)));
+}
+
 /* Used as intrusive 'wrap'
  * This needs to be specialised for T
  * i.e. wrapping a double is different to wrapping adouble
@@ -818,6 +838,17 @@ int dim_matcher(const Rcpp::IntegerVector dims_a, const Rcpp::IntegerVector dims
         }
     }
     return 1; // Else all is good
+}
+
+// Shortcut methods
+template <typename T>
+FLQuant_base<T> year_sum(const FLQuant_base<T>& flq){
+    Rprintf("In year_sum\n");
+    Rcpp::IntegerVector dim = flq.get_dim();
+    // Need to make an empty FLQ with the right dim
+    // New constructor?
+    FLQuant_base<T> sum_flq;
+    return sum_flq;
 }
 
 /* Explicit instantiations - alternatively put all the definitions into the header file

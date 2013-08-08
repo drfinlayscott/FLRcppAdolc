@@ -35,9 +35,10 @@ class FLQuant_base {
         operator SEXP() const; // Used as intrusive 'wrap'
 		FLQuant_base(const FLQuant_base& FLQuant_base_source); // copy constructor to ensure that copies (i.e. when passing to functions) are deep
 		FLQuant_base& operator = (const FLQuant_base& FLQuant_source); // Assignment operator for a deep copy
+        FLQuant_base(const int nquant, const int nyear, const int nunit, const int nseason, const int narea, const int niter); // Make an empty FLQuant
 
         template <typename T2>
-		FLQuant_base(const FLQuant_base<T2>& FLQuant_source); // Make an FLQuantAdolc from an FLQuant
+		FLQuant_base(const FLQuant_base<T2>& FLQuant_source); // Specialised to make an FLQuantAdolc from an FLQuant
 
 		/* Get accessors */
         std::vector<T> get_data() const;
@@ -239,7 +240,9 @@ FLQuant_base<T> log(FLQuant_base<T>& flq);
 template <typename T>
 FLQuant_base<T> exp(FLQuant_base<T>& flq);
 
-
+// Shortcut methods
+template <typename T>
+FLQuant_base<T> year_sum(const FLQuant_base<T>& flq);
 
 
 

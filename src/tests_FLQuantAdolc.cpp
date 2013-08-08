@@ -25,6 +25,12 @@ FLQuantAdolc test_FLQuantAdolc_sexp_constructor(SEXP flq_sexp){
 }
 
 // [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_dim_constructor(int nquant, int nyear, int nunit, int nseason, int narea, int niter){
+    FLQuantAdolc flq(nquant, nyear, nunit, nseason, narea, niter);
+    return flq;
+}
+
+// [[Rcpp::export]]
 FLQuantAdolc test_FLQuantAdolc_copy_constructor(FLQuantAdolc flq){
     FLQuantAdolc out(flq);
     return out;

@@ -13,6 +13,11 @@ test_that("FLQuant constructors",{
     # SEXP constructor - used in as
     flq_out <- test_FLQuant_sexp_constructor(flq_in)
     expect_that(flq_in, is_identical_to(flq_out))
+    # dim constructor
+    dims <- round(runif(6, min = 1, max = 5))
+    flq_out <- test_FLQuant_dim_constructor(dims[1], dims[2], dims[3], dims[4], dims[5], dims[6])
+    expect_that(all(flq_out == 0), is_true())
+    expect_that(dim(flq_out), equals(dims))
     # Copy constructor
     flq_out <- test_FLQuant_copy_constructor(flq_in)
     expect_that(flq_in, is_identical_to(flq_out))

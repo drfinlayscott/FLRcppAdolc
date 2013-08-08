@@ -5,6 +5,8 @@
 
 #include "../../inst/include/FLQuant_base.h"
 
+// Constructors and copiers
+
 // [[Rcpp::export]]
 FLQuant test_FLQuant_as_wrap(FLQuant flq){
 	return flq;
@@ -20,6 +22,12 @@ void test_FLQuant_basic_constructor(){
 FLQuant test_FLQuant_sexp_constructor(SEXP flq_sexp){
 	FLQuant flq(flq_sexp);
 	return flq;
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_dim_constructor(int nquant, int nyear, int nunit, int nseason, int narea, int niter){
+    FLQuant flq(nquant, nyear, nunit, nseason, narea, niter);
+    return flq;
 }
 
 // [[Rcpp::export]]

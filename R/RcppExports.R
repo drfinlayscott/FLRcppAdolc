@@ -413,6 +413,10 @@ test_FLQuantAdolc_set_accessor <- function(flq, quant, year, unit, season, area,
     .Call('FLRcppAdolc_test_FLQuantAdolc_set_accessor', PACKAGE = 'FLRcppAdolc', flq, quant, year, unit, season, area, iter, value)
 }
 
+test_FLQuantAdolc_set_dimnames <- function(flq, new_dimnames) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_set_dimnames', PACKAGE = 'FLRcppAdolc', flq, new_dimnames)
+}
+
 test_FLQuantAdolc_FLQuantAdolc_match_dims <- function(flq1, flq2) {
     .Call('FLRcppAdolc_test_FLQuantAdolc_FLQuantAdolc_match_dims', PACKAGE = 'FLRcppAdolc', flq1, flq2)
 }
@@ -533,8 +537,16 @@ test_FLQuant_set_data <- function(flq, data_in) {
     .Call('FLRcppAdolc_test_FLQuant_set_data', PACKAGE = 'FLRcppAdolc', flq, data_in)
 }
 
+test_FLQuant_set_dimnames <- function(flq, new_dimnames) {
+    .Call('FLRcppAdolc_test_FLQuant_set_dimnames', PACKAGE = 'FLRcppAdolc', flq, new_dimnames)
+}
+
 test_FLQuant_FLQuant_match_dims <- function(flq1, flq2) {
     .Call('FLRcppAdolc_test_FLQuant_FLQuant_match_dims', PACKAGE = 'FLRcppAdolc', flq1, flq2)
+}
+
+test_FLQuant_year_sum <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuant_year_sum', PACKAGE = 'FLRcppAdolc', flq)
 }
 
 test_FLQ_in_FLS <- function(flq) {

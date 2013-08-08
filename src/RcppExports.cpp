@@ -1157,6 +1157,17 @@ BEGIN_RCPP
     return Rcpp::wrap(__result);
 END_RCPP
 }
+// test_FLQuantAdolc_set_dimnames
+FLQuantAdolc test_FLQuantAdolc_set_dimnames(FLQuantAdolc flq, Rcpp::List new_dimnames);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_set_dimnames(SEXP flqSEXP, SEXP new_dimnamesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuantAdolc flq = Rcpp::as<FLQuantAdolc >(flqSEXP);
+    Rcpp::List new_dimnames = Rcpp::as<Rcpp::List >(new_dimnamesSEXP);
+    FLQuantAdolc __result = test_FLQuantAdolc_set_dimnames(flq, new_dimnames);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
 // test_FLQuantAdolc_FLQuantAdolc_match_dims
 int test_FLQuantAdolc_FLQuantAdolc_match_dims(FLQuantAdolc flq1, FLQuantAdolc flq2);
 RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_FLQuantAdolc_match_dims(SEXP flq1SEXP, SEXP flq2SEXP) {
@@ -1508,6 +1519,17 @@ BEGIN_RCPP
     return Rcpp::wrap(__result);
 END_RCPP
 }
+// test_FLQuant_set_dimnames
+FLQuant test_FLQuant_set_dimnames(FLQuant flq, Rcpp::List new_dimnames);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_set_dimnames(SEXP flqSEXP, SEXP new_dimnamesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    Rcpp::List new_dimnames = Rcpp::as<Rcpp::List >(new_dimnamesSEXP);
+    FLQuant __result = test_FLQuant_set_dimnames(flq, new_dimnames);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
 // test_FLQuant_FLQuant_match_dims
 int test_FLQuant_FLQuant_match_dims(FLQuant flq1, FLQuant flq2);
 RcppExport SEXP FLRcppAdolc_test_FLQuant_FLQuant_match_dims(SEXP flq1SEXP, SEXP flq2SEXP) {
@@ -1516,6 +1538,16 @@ BEGIN_RCPP
     FLQuant flq1 = Rcpp::as<FLQuant >(flq1SEXP);
     FLQuant flq2 = Rcpp::as<FLQuant >(flq2SEXP);
     int __result = test_FLQuant_FLQuant_match_dims(flq1, flq2);
+    return Rcpp::wrap(__result);
+END_RCPP
+}
+// test_FLQuant_year_sum
+FLQuant test_FLQuant_year_sum(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_year_sum(SEXP flqSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    FLQuant flq = Rcpp::as<FLQuant >(flqSEXP);
+    FLQuant __result = test_FLQuant_year_sum(flq);
     return Rcpp::wrap(__result);
 END_RCPP
 }

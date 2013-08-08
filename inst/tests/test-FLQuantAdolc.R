@@ -59,6 +59,20 @@ test_that("FLQuantAdolc get accessors",{
     expect_that(c(flq[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]), is_identical_to(c(flq)[element+1]))
 })
 
+test_that("set",{
+    # set_dimnames
+    flq_in <- random_FLQuant_generator()
+    new_dimnames <- dimnames(flq_in)
+    new_dimnames[[1]][1] <- as.character(rnorm(1))
+    flq_out <- test_FLQuantAdolc_set_dimnames(flq_in, new_dimnames)
+    expect_that(dimnames(flq_out)[[1]][1], is_identical_to(new_dimnames[[1]][1]))
+    expect_that(c(flq_out@.Data), is_identical_to(c(flq_in@.Data)))
+    expect_that(dim(flq_out), is_identical_to(dim(flq_in)))
+    # Check falure
+    new_dimnames[[3]] <- c(new_dimnames[[3]],"extra")
+    expect_that(test_FLQuantAdolc_set_dimnames(flq_in, new_dimnames), throws_error())
+})
+
 test_that("FLQuantAdolc get and set data accessors", {
     flq <- random_FLQuant_generator()
     indices <- round(runif(6,min=1, max = dim(flq)))

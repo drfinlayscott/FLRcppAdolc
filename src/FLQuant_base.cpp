@@ -216,7 +216,7 @@ int FLQuant_base<T>::get_niter() const{
 template <typename T>
 int FLQuant_base<T>::get_data_element(const int quant, const int year, const int unit, const int season, const int area, const int iter) const{
     Rcpp::IntegerVector dim = get_dim();
-    if ((quant > dim(0)) || (year > dim[1]) || (unit > dim(2)) || (season > dim(3)) || (area > dim(4)) || (iter > dim(5))){
+    if ((quant > dim(0)) || (year > dim(1)) || (unit > dim(2)) || (season > dim(3)) || (area > dim(4)) || (iter > dim(5))){
             Rcpp::stop("Trying to access element outside of dim range.");
     }
 	unsigned int element = (get_narea() * get_nseason() * get_nunit() * get_nyear() * get_nquant() * (iter - 1)) +
@@ -274,6 +274,21 @@ void FLQuant_base<T>::set_data(const std::vector<T>& data_in){
         Rcpp::stop("Cannot set data. Data size does not match dims.\n");
     }
     data = data_in;
+}
+
+// Checks if dimnames dimensions fit current dim
+template <typename T>
+void FLQuant_base<T>::set_dimnames(const Rcpp::List& dimnames_in){
+    Rcpp::CharacterVector name;
+    int dim_length = 0;
+    for (int i = 0; i <= 5; ++i){
+        name = dimnames_in[i];
+        dim_length = name.size();
+        if (dim_length != dim[i]){
+            Rcpp::stop("Cannot set dimnames as new dimnames are different size to current dimensions\n");
+        }
+    }
+    dimnames = dimnames_in;
 }
 
 //------------------ Multiplication operators -------------------
@@ -847,7 +862,12 @@ FLQuant_base<T> year_sum(const FLQuant_base<T>& flq){
     Rcpp::IntegerVector dim = flq.get_dim();
     // Need to make an empty FLQ with the right dim
     // New constructor?
-    FLQuant_base<T> sum_flq;
+    FLQuant_base<T> sum_flq(dim[0], 1, dim[2], dim[3], dim[4], dim[5]);
+
+    Rcpp::List dimnames = flq.get_dimnames();
+    dimnames["year"] = Rcpp::CharacterVector::create("1");
+    // Set dimnames
+    sum_flq.set_dimnames(dimnames);
     return sum_flq;
 }
 
@@ -911,4 +931,6 @@ template FLQuant_base<double> log(FLQuant_base<double>& flq);
 template FLQuant_base<adouble> log(FLQuant_base<adouble>& flq);
 template FLQuant_base<double> exp(FLQuant_base<double>& flq);
 template FLQuant_base<adouble> exp(FLQuant_base<adouble>& flq);
+template FLQuant_base<double> year_sum(const FLQuant_base<double>& flq);
+template FLQuant_base<adouble> year_sum(const FLQuant_base<adouble>& flq);
 

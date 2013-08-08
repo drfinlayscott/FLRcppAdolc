@@ -188,6 +188,13 @@ FLQuantAdolc test_FLQuantAdolc_set_data(FLQuantAdolc flq, std::vector<double> da
 }
 */
 
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_set_dimnames(FLQuantAdolc flq, Rcpp::List new_dimnames){
+    flq.set_dimnames(new_dimnames);
+    return flq;
+
+}
+
 //------------------ Others --------------------------------------
 // [[Rcpp::export]]
 int test_FLQuantAdolc_FLQuantAdolc_match_dims(FLQuantAdolc flq1, FLQuantAdolc flq2){

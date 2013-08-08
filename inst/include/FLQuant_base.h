@@ -56,6 +56,7 @@ class FLQuant_base {
 
 		/* Set accessors */
 		void set_data(const std::vector<T>& data_in);
+        void set_dimnames(const Rcpp::List& dimnames_in);
 
         /* () accessors */
 		T operator () (const unsigned int element) const; // only gets an element so const reinforced - - however cannot return reference due to NumericVector() operator

@@ -36,7 +36,7 @@ FLQuant_base<T>::FLQuant_base(SEXP flq_sexp){
 // Note that units and dimnames have not been set
 template <typename T>
 FLQuant_base<T>::FLQuant_base(const int nquant, const int nyear, const int nunit, const int nseason, const int narea, const int niter){
-    Rprintf("Making a new FLQuant_base<T> with user defined dims\n");
+    //Rprintf("Making a new FLQuant_base<T> with user defined dims\n");
 	units = std::string(); // Empty string - just ""
     dim = Rcpp::IntegerVector::create(nquant, nyear, nunit, nseason, narea, niter);
     data = std::vector<T>(nquant * nyear * nunit * nseason * narea * niter);

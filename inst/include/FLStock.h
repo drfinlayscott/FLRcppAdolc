@@ -3,8 +3,13 @@
  * Maintainer: Finlay Scott, JRC
  */
 
+// Necessary check to avoid the redefinition of FLQuant_base in the RcppExports.cpp
+#ifndef _FLQuant_base_
+#define _FLQuant_base_
+
 #include "FLQuant_base.h"
 
+#endif
 /*
  * FLStock class
  * Only uses FLQuant, not FLQuantAdolc

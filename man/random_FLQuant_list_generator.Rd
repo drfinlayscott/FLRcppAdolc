@@ -1,11 +1,13 @@
-\name{random_FLQuant_generator}
-\alias{random_FLQuant_generator}
-\title{Generate randomly sized and filled FLQuant objects}
+\name{random_FLQuant_list_generator}
+\alias{random_FLQuant_list_generator}
+\title{Generate lists of randomly sized and filled FLQuant objects}
 \usage{
-random_FLQuant_generator(max_age = 10, max_year = 10, max_unit = 5,
-  max_season = 4, max_area = 4, max_iter = 50, sd = 100)
+random_FLQuant_list_generator(max_elements = 10, ...)
 }
 \arguments{
+  \item{max_elements}{The maximum number of elements in the
+  list. Default is 10.}
+
   \item{max_age}{The maximum number of ages of the FLQuant.
   Default is 10.}
 
@@ -31,9 +33,10 @@ random_FLQuant_generator(max_age = 10, max_year = 10, max_unit = 5,
 An FLQuant
 }
 \description{
-Generate a randomly sized FLQuant filled with normally
-distributed random numbers with a mean of 0. Used for
-automatic testing.
+Generate a list of randomly sized FLQuant objects filled
+with normally distributed random numbers with a mean of 0.
+Used for automatic testing, particularly of the
+FLQuant7_base<T> class in CPP.
 }
 \examples{
 flq <- random_FLQuant_generator()

@@ -5,6 +5,6 @@
 \alias{FLRcppAdolc-package}
 \title{Attempting to link FLR and ADOLC using Rcpp}
 \description{
-  Some guff on FLR and Rcpp and ADOLC Very important
+Some guff on FLR and Rcpp and ADOLC Very important
 }
 

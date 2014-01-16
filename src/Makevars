@@ -45,7 +45,7 @@ PKG_LIBS =`$(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()"` $(SUBLIBS)
 #
 
 ##SOURCES_C = FLQuant_base.cpp FLStock.cpp fwdBiol.cpp tests_FLQuant.cpp tests_FLQuantAdolc.cpp tests_arithmetic_operators.cpp tests_FLStock.cpp RcppExports.cpp 
-SOURCES_C = FLQuant_base.cpp FLStock.cpp fwdBiol.cpp projection.cpp FLQuant_multidim.cpp tests_FLQuant.cpp tests_FLQuantAdolc.cpp tests_arithmetic_operators.cpp tests_FLStock.cpp tests_fwdBiol.cpp tests_projection.cpp tests_FLQuant_multidim.cpp RcppExports.cpp 
+SOURCES_C = FLQuant_base.cpp FLStock.cpp fwdBiol.cpp FLQuant_multidim.cpp FLCatch.cpp tests_FLQuant.cpp tests_FLQuantAdolc.cpp tests_arithmetic_operators.cpp tests_FLStock.cpp tests_fwdBiol.cpp tests_FLQuant_multidim.cpp tests_FLCatch.cpp RcppExports.cpp 
 OBJECTS = $(SOURCES_C:.cpp=.o)
 
 SUBDIRS = adolc

@@ -10,6 +10,7 @@
 #include "FLQuant_base.h"
 
 #endif
+
 /*
  * FLStock class
  * Only uses FLQuant, not FLQuantAdolc

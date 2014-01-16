@@ -10,5 +10,6 @@ License: GPL2 or later
 Depends:
     Rcpp (>= 0.10.3)
 Imports:
-    FLCore
+    FLCore,
+    FLFishery
 LinkingTo: Rcpp

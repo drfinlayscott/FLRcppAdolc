@@ -1,4 +1,5 @@
 export(random_FLBiol_generator)
+export(random_FLCatch_generator)
 export(random_FLQuant_generator)
 export(random_FLQuant_list_generator)
 import(FLCore)

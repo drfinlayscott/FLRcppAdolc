@@ -76,7 +76,7 @@ fwdBiol_base<T>& fwdBiol_base<T>::operator = (const fwdBiol_base<T>& fwdBiol_sou
 // Returns an FLBiol and ignores the SRR
 template <typename T>
 fwdBiol_base<T>::operator SEXP() const{
-    Rprintf("Wrapping fwdBiol_base<T>.\n");
+    //Rprintf("Wrapping fwdBiol_base<T>.\n");
     Rcpp::S4 flb_s4("FLBiol");
     flb_s4.slot("name") = name;
     flb_s4.slot("desc") = desc;

@@ -92,3 +92,39 @@ random_FLBiol_generator <- function(sd=100, ...){
     return(biol)
 }
 
+#' Generate randomly sized and filled FLCatch objects
+#'
+#' Generate an FLCatch of random size and filled with normally distributed random numbers with a mean of 0.
+#' Used for automatic testing, particularly of the FLCatch class in CPP.
+#' 
+#' @param max_age The maximum number of ages of the FLCatch. Default is 10. 
+#' @param max_year The maximum number of years of the FLCatch. Default is 10. 
+#' @param max_unit The maximum number of units of the FLCatch. Default is 5. 
+#' @param max_season The maximum number of seasons of the FLCatch. Default is 4. 
+#' @param max_area The maximum number of areas of the FLCatch. Default is 4. 
+#' @param max_iter The maximum number of iters of the FLCatch. Default is 50. 
+#' @param sd The standard deviation of the random numbers. Passed to rnorm() Default is 100.
+#' @export
+#' @return An FLCatch
+#' @examples
+#' flc <- random_FLCatch_generator()
+#' summary(flc)
+random_FLCatch_generator <- function(sd=100, ...){
+    flq <- random_FLQuant_generator(sd=sd, ...)
+    catch <- FLCatch(landings.n = flq)
+    #landings.wt(catch) <- rnorm(prod(dim(flq)),sd=sd)
+    #discards.n(catch) <- rnorm(prod(dim(flq)),sd=sd)
+    #discards.wt(catch) <- rnorm(prod(dim(flq)),sd=sd)
+    #catch.sel(catch) <- rnorm(prod(dim(flq)),sd=sd)
+    #price(catch) <- rnorm(prod(dim(flq)),sd=sd)
+    landings.wt(catch)[] <- rnorm(prod(dim(flq)),sd=sd)
+    discards.n(catch)[] <- rnorm(prod(dim(flq)),sd=sd)
+    discards.wt(catch)[] <- rnorm(prod(dim(flq)),sd=sd)
+    catch.sel(catch)[] <- rnorm(prod(dim(flq)),sd=sd)
+    price(catch)[] <- rnorm(prod(dim(flq)),sd=sd)
+    # catch.q(catch) # undefined right now
+    name(catch) <- as.character(rnorm(1)*1000)
+    desc(catch) <- as.character(rnorm(1)*1000)
+    return(catch)
+}
+

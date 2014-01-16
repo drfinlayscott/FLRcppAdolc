@@ -89,29 +89,49 @@ fwdBiol_base<T>::operator SEXP() const{
     return Rcpp::wrap(flb_s4);
 }
 
-// accessor
+// Get const accessors
+template <typename T>
+FLQuant_base<T> fwdBiol_base<T>::n() const {
+    return n_flq;
+}
+
+template <typename T>
+FLQuant fwdBiol_base<T>::wt() const {
+    return wt_flq;
+}
+
+template <typename T>
+FLQuant fwdBiol_base<T>::m() const {
+    return m_flq;
+}
+template <typename T>
+FLQuant fwdBiol_base<T>::spwn() const {
+    return spwn_flq;
+}
+template <typename T>
+FLQuant fwdBiol_base<T>::fec() const {
+    return fec_flq;
+}
+
+// Get and set accessors
 template <typename T>
 FLQuant_base<T>& fwdBiol_base<T>::n() {
     return n_flq;
 }
 
-// accessor
 template <typename T>
 FLQuant& fwdBiol_base<T>::wt() {
     return wt_flq;
 }
 
-// accessor
 template <typename T>
 FLQuant& fwdBiol_base<T>::m() {
     return m_flq;
 }
-// accessor
 template <typename T>
 FLQuant& fwdBiol_base<T>::spwn() {
     return spwn_flq;
 }
-// accessor
 template <typename T>
 FLQuant& fwdBiol_base<T>::fec() {
     return fec_flq;

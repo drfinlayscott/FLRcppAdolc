@@ -95,7 +95,39 @@ FLCatch_base<T>::operator SEXP() const{
     return Rcpp::wrap(flc_s4);
 }
 
-// accessors
+// Accessors
+// Get only
+template <typename T>
+FLQuant_base<T> FLCatch_base<T>::landings_n() const {
+    return landings_n_flq;
+}
+
+template <typename T>
+FLQuant_base<T> FLCatch_base<T>::discards_n() const {
+    return discards_n_flq;
+}
+
+template <typename T>
+FLQuant FLCatch_base<T>::landings_wt() const {
+    return landings_wt_flq;
+}
+
+template <typename T>
+FLQuant FLCatch_base<T>::discards_wt() const {
+    return discards_wt_flq;
+}
+
+template <typename T>
+FLQuant FLCatch_base<T>::catch_sel() const {
+    return catch_sel_flq;
+}
+
+template <typename T>
+FLQuant FLCatch_base<T>::price() const {
+    return price_flq;
+}
+
+// Get and Set
 template <typename T>
 FLQuant_base<T>& FLCatch_base<T>::landings_n() {
     return landings_n_flq;
@@ -131,6 +163,17 @@ FLQuant& FLCatch_base<T>::catch_q() {
     return catch_q_flq;
 }
 */
+
+// methods
+
+/*
+template <typename T>
+FLQuant_base<T> FLCatch_base<T>::landings() {
+    return landings_n_flq;
+}
+*/
+
+
 
 // Explicit instantiation of class
 template class FLCatch_base<double>;

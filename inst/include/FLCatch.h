@@ -31,6 +31,14 @@ class FLCatch_base {
 		FLCatch_base& operator = (const FLCatch_base& FLCatch_base_source); // Assignment operator for a deep copy
 
         // Accessor methods for the slots
+        // Get only
+        FLQuant_base<T> landings_n() const;
+        FLQuant_base<T> discards_n() const;
+        FLQuant landings_wt() const;
+        FLQuant discards_wt() const;
+        FLQuant catch_sel() const;
+        FLQuant price() const;
+        // Get and Set
         FLQuant_base<T>& landings_n();
         FLQuant_base<T>& discards_n();
         FLQuant& landings_wt();
@@ -38,6 +46,17 @@ class FLCatch_base {
         FLQuant& catch_sel();
         FLQuant& price();
         //FLQuant& catch_q();
+
+        // Methods
+        FLQuant_base<T> landings();
+        FLQuant_base<T> discards();
+        FLQuant_base<T> catches();
+        FLQuant_base<T> catch_n();
+        FLQuant_base<T> catch_wt();
+        FLQuant_base<T> landings_sel();
+        FLQuant_base<T> discards_sel();
+        FLQuant_base<T> discards_ratio();
+
 
         std::string get_name() const;
         std::string get_desc() const;

@@ -94,6 +94,34 @@ Rcpp::List test_FLCatchAdolc_assignment_operator2(FLCatchAdolc flc1, int quant, 
 }
 
 // [[Rcpp::export]]
+Rcpp::NumericVector test_FLCatch_const_get_accessors(const FLCatch flc,int quant, int year, int unit, int season, int area, int iter){
+    Rcpp::NumericVector out(6);
+    out[0] = flc.landings_n()(quant, year, unit, season, area, iter);
+    out[1] = flc.discards_n()(quant, year, unit, season, area, iter);
+    out[2] = flc.landings_wt()(quant, year, unit, season, area, iter);
+    out[3] = flc.discards_wt()(quant, year, unit, season, area, iter);
+    out[4] = flc.catch_sel()(quant, year, unit, season, area, iter);
+    out[5] = flc.price()(quant, year, unit, season, area, iter);
+    //out[6] = flc.catch_q()(quant, year, unit, season, area, iter);
+    return out;
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericVector test_FLCatchAdolc_const_get_accessors(const FLCatchAdolc flc,int quant, int year, int unit, int season, int area, int iter){
+    Rcpp::NumericVector out(6);
+    adouble ad_value0 = flc.landings_n()(quant, year, unit, season, area, iter);
+    adouble ad_value1 = flc.discards_n()(quant, year, unit, season, area, iter);
+    out[0] = ad_value0.value();
+    out[1] = ad_value1.value();
+    out[2] = flc.landings_wt()(quant, year, unit, season, area, iter);
+    out[3] = flc.discards_wt()(quant, year, unit, season, area, iter);
+    out[4] = flc.catch_sel()(quant, year, unit, season, area, iter);
+    out[5] = flc.price()(quant, year, unit, season, area, iter);
+    //out[6] = flc.catch_q()(quant, year, unit, season, area, iter);
+    return out;
+}
+
+// [[Rcpp::export]]
 Rcpp::NumericVector test_FLCatch_get_accessors(FLCatch flc,int quant, int year, int unit, int season, int area, int iter){
     Rcpp::NumericVector out(6);
     out[0] = flc.landings_n()(quant, year, unit, season, area, iter);

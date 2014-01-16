@@ -31,6 +31,12 @@ class fwdBiol_base {
 		fwdBiol_base(const fwdBiol_base& fwdBiol_base_source); // copy constructor to ensure that copy is a deep copy - used when passing FLSs into functions
 		fwdBiol_base& operator = (const fwdBiol_base& fwdBiol_base_source); // Assignment operator for a deep copy
 
+        // Get accessors with const reinforced
+        FLQuant_base<T> n() const;
+        FLQuant wt() const;
+        FLQuant m() const;
+        FLQuant spwn() const;
+        FLQuant fec() const;
         // Accessor methods for the slots
         FLQuant_base<T>& n();
         FLQuant& wt();

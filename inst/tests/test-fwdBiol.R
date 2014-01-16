@@ -50,7 +50,25 @@ test_that("FLQuant7 constructors - double",{
 })
 
 test_that("fwdBiol get and set data accessors", {
-    # Get
+    # Get const double
+    flb_in <- random_FLBiol_generator()
+    indices <- round(runif(6,min=1, max = dim(n(flb_in))))
+    values_out <- test_fwdBiol_const_get_accessors(flb_in, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6])
+    values_in <- c(c(n(flb_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(m(flb_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(wt(flb_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(fec(flb_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(spwn(flb_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]))
+    expect_that(values_out, is_identical_to(values_in))
+    # Get const Adolc
+    values_out <- test_fwdBiolAdolc_const_get_accessors(flb_in, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6])
+    values_in <- c(c(n(flb_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(m(flb_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(wt(flb_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(fec(flb_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(spwn(flb_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]))
+    expect_that(values_out, is_identical_to(values_in))
+    # Get double
     flb_in <- random_FLBiol_generator()
     indices <- round(runif(6,min=1, max = dim(n(flb_in))))
     values_out <- test_fwdBiol_get_accessors(flb_in, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6])
@@ -60,6 +78,7 @@ test_that("fwdBiol get and set data accessors", {
                 c(fec(flb_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
                 c(spwn(flb_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]))
     expect_that(values_out, is_identical_to(values_in))
+    # Get Adolc
     values_out <- test_fwdBiolAdolc_get_accessors(flb_in, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6])
     values_in <- c(c(n(flb_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
                 c(m(flb_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),

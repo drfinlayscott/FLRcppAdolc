@@ -90,9 +90,31 @@ Rcpp::List test_fwdBiolAdolc_assignment_operator2(fwdBiolAdolc fwdb1, int quant,
 }
 
 // [[Rcpp::export]]
+Rcpp::NumericVector test_fwdBiol_const_get_accessors(const fwdBiol fwdb,int quant, int year, int unit, int season, int area, int iter){
+    Rcpp::NumericVector out(5);
+    out[0] = fwdb.n()(quant, year, unit, season, area, iter);
+    out[1] = fwdb.m()(quant, year, unit, season, area, iter);
+    out[2] = fwdb.wt()(quant, year, unit, season, area, iter);
+    out[3] = fwdb.fec()(quant, year, unit, season, area, iter);
+    out[4] = fwdb.spwn()(quant, year, unit, season, area, iter);
+    return out;
+}
+
+// [[Rcpp::export]]
 Rcpp::NumericVector test_fwdBiol_get_accessors(fwdBiol fwdb,int quant, int year, int unit, int season, int area, int iter){
     Rcpp::NumericVector out(5);
     out[0] = fwdb.n()(quant, year, unit, season, area, iter);
+    out[1] = fwdb.m()(quant, year, unit, season, area, iter);
+    out[2] = fwdb.wt()(quant, year, unit, season, area, iter);
+    out[3] = fwdb.fec()(quant, year, unit, season, area, iter);
+    out[4] = fwdb.spwn()(quant, year, unit, season, area, iter);
+    return out;
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericVector test_fwdBiolAdolc_const_get_accessors(const fwdBiolAdolc fwdb,int quant, int year, int unit, int season, int area, int iter){
+    Rcpp::NumericVector out(5);
+    out[0] = fwdb.n()(quant, year, unit, season, area, iter).value();
     out[1] = fwdb.m()(quant, year, unit, season, area, iter);
     out[2] = fwdb.wt()(quant, year, unit, season, area, iter);
     out[3] = fwdb.fec()(quant, year, unit, season, area, iter);

@@ -51,6 +51,30 @@ test_that("FLQuant7 constructors - double",{
 })
 
 test_that("FLCatch get and set data accessors", {
+    # Get const double
+    flc_in <- random_FLCatch_generator()
+    indices <- round(runif(6,min=1, max = dim(landings.n(flc_in))))
+    values_out <- test_FLCatch_const_get_accessors(flc_in, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6])
+    values_in <- c(c(landings.n(flc_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(discards.n(flc_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(landings.wt(flc_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(discards.wt(flc_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(catch.sel(flc_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(price(flc_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]))
+                #c(catch.q(flc_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+    expect_that(values_out, is_identical_to(values_in))
+    # Get const Adolc
+    flc_in <- random_FLCatch_generator()
+    indices <- round(runif(6,min=1, max = dim(landings.n(flc_in))))
+    values_out <- test_FLCatchAdolc_const_get_accessors(flc_in, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6])
+    values_in <- c(c(landings.n(flc_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(discards.n(flc_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(landings.wt(flc_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(discards.wt(flc_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(catch.sel(flc_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+                c(price(flc_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]))
+                #c(catch.q(flc_in)[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]),
+    expect_that(values_out, is_identical_to(values_in))
     # Get double
     flc_in <- random_FLCatch_generator()
     indices <- round(runif(6,min=1, max = dim(landings.n(flc_in))))

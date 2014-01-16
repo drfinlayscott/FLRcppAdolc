@@ -30,7 +30,7 @@ random_FLQuant_list_generator(max_elements = 10, ...)
   Passed to rnorm() Default is 100.}
 }
 \value{
-An FLQuant
+A list of FLQuant objects
 }
 \description{
 Generate a list of randomly sized FLQuant objects filled
@@ -39,8 +39,9 @@ Used for automatic testing, particularly of the
 FLQuant7_base<T> class in CPP.
 }
 \examples{
-flq <- random_FLQuant_generator()
-dim(flq)
-summary(flq)
+flq_list <- random_FLQuant_list_generator()
+length(flq_list)
+summary(flq_list)
+lapply(flq_list, summary)
 }
 

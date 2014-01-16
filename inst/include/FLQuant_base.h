@@ -8,6 +8,7 @@
 #include <Rcpp.h>
 #include <adolc.h>
 
+#define _FLQuant_base_
 /*
  * FLQuant_base<T> template class
  * FLQuant_base<double> is an FLQuant

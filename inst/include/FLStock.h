@@ -3,7 +3,12 @@
  * Maintainer: Finlay Scott, JRC
  */
 
+#ifndef _FLQuant_base_
+#define _FLQuant_base_
+
 #include "FLQuant_base.h"
+
+#endif
 
 /*
  * FLStock class

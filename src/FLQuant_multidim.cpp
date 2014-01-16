@@ -37,7 +37,7 @@ template<typename T>
 FLQuant7_base<T>::operator SEXP() const{
     //Rprintf("Wrapping FLQuant7_base<T>.\n");
     Rcpp::List list_out;
-    for (int i = 0; i < get_ndim7(); i++){
+    for (unsigned int i = 0; i < get_ndim7(); i++){
         list_out.push_back(data[i]);
     }
     // Or, using iterators.
@@ -70,8 +70,8 @@ FLQuant7_base<T>& FLQuant7_base<T>::operator = (const FLQuant7_base<T>& FLQuant7
 /*--------------- Accessors -------------------*/
 
 template <typename T>
-int FLQuant7_base<T>::get_ndim7() const {
-    int length = data.size();
+unsigned int FLQuant7_base<T>::get_ndim7() const {
+    unsigned int length = data.size();
     return length;
 }
 

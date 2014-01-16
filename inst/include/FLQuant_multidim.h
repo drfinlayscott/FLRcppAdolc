@@ -38,7 +38,7 @@ class FLQuant7_base {
 		FLQuant_base<T>& operator () (const unsigned int element); // gets and sets an FLQuant so const not reinforced
 		T& operator () (const unsigned int dim7,const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter); // gets and sets an element so const not reinforced
         void operator() (const FLQuant_base<T> flq); // Add another FLQuant_base<T> to the data
-        int get_ndim7() const;
+        unsigned int get_ndim7() const;
 
     private:
 

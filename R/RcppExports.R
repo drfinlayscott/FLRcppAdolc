@@ -717,80 +717,64 @@ test_fwdBiol_sexp_constructor <- function(flb_sexp) {
     .Call('FLRcppAdolc_test_fwdBiol_sexp_constructor', PACKAGE = 'FLRcppAdolc', flb_sexp)
 }
 
-test_fwdBiol_wrap <- function(flb_sexp) {
-    .Call('FLRcppAdolc_test_fwdBiol_wrap', PACKAGE = 'FLRcppAdolc', flb_sexp)
-}
-
-test_fwdBiol_as <- function(fwdb) {
-    .Call('FLRcppAdolc_test_fwdBiol_as', PACKAGE = 'FLRcppAdolc', fwdb)
+test_fwdBiolAdolc_sexp_constructor <- function(flb_sexp) {
+    .Call('FLRcppAdolc_test_fwdBiolAdolc_sexp_constructor', PACKAGE = 'FLRcppAdolc', flb_sexp)
 }
 
 test_fwdBiol_as_wrap <- function(fwdb) {
     .Call('FLRcppAdolc_test_fwdBiol_as_wrap', PACKAGE = 'FLRcppAdolc', fwdb)
 }
 
-test_fwdBiol_copy_constructor <- function(fwdb1, quant, year, unit, season, area, iter, value) {
-    .Call('FLRcppAdolc_test_fwdBiol_copy_constructor', PACKAGE = 'FLRcppAdolc', fwdb1, quant, year, unit, season, area, iter, value)
+test_fwdBiolAdolc_as_wrap <- function(fwdb) {
+    .Call('FLRcppAdolc_test_fwdBiolAdolc_as_wrap', PACKAGE = 'FLRcppAdolc', fwdb)
 }
 
-test_fwdBiol_assignment_operator <- function(fwdb1, quant, year, unit, season, area, iter, value) {
-    .Call('FLRcppAdolc_test_fwdBiol_assignment_operator', PACKAGE = 'FLRcppAdolc', fwdb1, quant, year, unit, season, area, iter, value)
+test_fwdBiol_copy_constructor <- function(fwdb1) {
+    .Call('FLRcppAdolc_test_fwdBiol_copy_constructor', PACKAGE = 'FLRcppAdolc', fwdb1)
 }
 
-test_fwdBiol_double_sexp_constructor <- function(flb_sexp) {
-    .Call('FLRcppAdolc_test_fwdBiol_double_sexp_constructor', PACKAGE = 'FLRcppAdolc', flb_sexp)
+test_fwdBiolAdolc_copy_constructor <- function(fwdb1) {
+    .Call('FLRcppAdolc_test_fwdBiolAdolc_copy_constructor', PACKAGE = 'FLRcppAdolc', fwdb1)
 }
 
-test_fwdBiol_Adolc_sexp_constructor <- function(flb_sexp) {
-    .Call('FLRcppAdolc_test_fwdBiol_Adolc_sexp_constructor', PACKAGE = 'FLRcppAdolc', flb_sexp)
+test_fwdBiol_copy_constructor2 <- function(fwdb1, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_fwdBiol_copy_constructor2', PACKAGE = 'FLRcppAdolc', fwdb1, quant, year, unit, season, area, iter, value)
 }
 
-test_fwdBiol_double_as_wrap <- function(fwdb) {
-    .Call('FLRcppAdolc_test_fwdBiol_double_as_wrap', PACKAGE = 'FLRcppAdolc', fwdb)
+test_fwdBiolAdolc_copy_constructor2 <- function(fwdb1, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_fwdBiolAdolc_copy_constructor2', PACKAGE = 'FLRcppAdolc', fwdb1, quant, year, unit, season, area, iter, value)
 }
 
-test_fwdBiol_Adolc_as_wrap <- function(fwdb) {
-    .Call('FLRcppAdolc_test_fwdBiol_Adolc_as_wrap', PACKAGE = 'FLRcppAdolc', fwdb)
+test_fwdBiol_assignment_operator <- function(fwdb1) {
+    .Call('FLRcppAdolc_test_fwdBiol_assignment_operator', PACKAGE = 'FLRcppAdolc', fwdb1)
 }
 
-test_fwdBiol_double_copy_constructor <- function(fwdb1, quant, year, unit, season, area, iter, value) {
-    .Call('FLRcppAdolc_test_fwdBiol_double_copy_constructor', PACKAGE = 'FLRcppAdolc', fwdb1, quant, year, unit, season, area, iter, value)
+test_fwdBiolAdolc_assignment_operator <- function(fwdb1) {
+    .Call('FLRcppAdolc_test_fwdBiolAdolc_assignment_operator', PACKAGE = 'FLRcppAdolc', fwdb1)
 }
 
-test_fwdBiol_Adolc_copy_constructor <- function(fwdb1, quant, year, unit, season, area, iter, value) {
-    .Call('FLRcppAdolc_test_fwdBiol_Adolc_copy_constructor', PACKAGE = 'FLRcppAdolc', fwdb1, quant, year, unit, season, area, iter, value)
+test_fwdBiol_assignment_operator2 <- function(fwdb1, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_fwdBiol_assignment_operator2', PACKAGE = 'FLRcppAdolc', fwdb1, quant, year, unit, season, area, iter, value)
 }
 
-test_fwdBiol_double_assignment_operator <- function(fwdb1, quant, year, unit, season, area, iter, value) {
-    .Call('FLRcppAdolc_test_fwdBiol_double_assignment_operator', PACKAGE = 'FLRcppAdolc', fwdb1, quant, year, unit, season, area, iter, value)
+test_fwdBiolAdolc_assignment_operator2 <- function(fwdb1, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_fwdBiolAdolc_assignment_operator2', PACKAGE = 'FLRcppAdolc', fwdb1, quant, year, unit, season, area, iter, value)
 }
 
-test_fwdBiol_Adolc_assignment_operator <- function(fwdb1, quant, year, unit, season, area, iter, value) {
-    .Call('FLRcppAdolc_test_fwdBiol_Adolc_assignment_operator', PACKAGE = 'FLRcppAdolc', fwdb1, quant, year, unit, season, area, iter, value)
+test_fwdBiol_get_accessors <- function(fwdb, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_fwdBiol_get_accessors', PACKAGE = 'FLRcppAdolc', fwdb, quant, year, unit, season, area, iter)
 }
 
-test_operating_model_constructors <- function(fwdb) {
-    .Call('FLRcppAdolc_test_operating_model_constructors', PACKAGE = 'FLRcppAdolc', fwdb)
+test_fwdBiolAdolc_get_accessors <- function(fwdb, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_fwdBiolAdolc_get_accessors', PACKAGE = 'FLRcppAdolc', fwdb, quant, year, unit, season, area, iter)
 }
 
-test_timestep_to_year_operating_model <- function(fwdb, timestep) {
-    .Call('FLRcppAdolc_test_timestep_to_year_operating_model', PACKAGE = 'FLRcppAdolc', fwdb, timestep)
+test_fwdBiol_set_accessors <- function(fwdb, quant, year, unit, season, area, iter, values) {
+    .Call('FLRcppAdolc_test_fwdBiol_set_accessors', PACKAGE = 'FLRcppAdolc', fwdb, quant, year, unit, season, area, iter, values)
 }
 
-test_7dim_FLQuant <- function(flq1, flq2) {
-    .Call('FLRcppAdolc_test_7dim_FLQuant', PACKAGE = 'FLRcppAdolc', flq1, flq2)
-}
-
-test_8dim_FLQuant <- function(flq1, flq2, flq3, flq4) {
-    .Call('FLRcppAdolc_test_8dim_FLQuant', PACKAGE = 'FLRcppAdolc', flq1, flq2, flq3, flq4)
-}
-
-test_8dim_FLQuant_double <- function(flq1, flq2, flq3, flq4) {
-    .Call('FLRcppAdolc_test_8dim_FLQuant_double', PACKAGE = 'FLRcppAdolc', flq1, flq2, flq3, flq4)
-}
-
-test_fwdBiols <- function(fwdb1, fwdb2) {
-    .Call('FLRcppAdolc_test_fwdBiols', PACKAGE = 'FLRcppAdolc', fwdb1, fwdb2)
+test_fwdBiolAdolc_set_accessors <- function(fwdb, quant, year, unit, season, area, iter, values) {
+    .Call('FLRcppAdolc_test_fwdBiolAdolc_set_accessors', PACKAGE = 'FLRcppAdolc', fwdb, quant, year, unit, season, area, iter, values)
 }
 
 test_year_season_to_timestep_FLQuant_double <- function(flq, year, season) {

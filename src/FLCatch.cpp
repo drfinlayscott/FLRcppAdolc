@@ -165,14 +165,17 @@ FLQuant& FLCatch_base<T>::catch_q() {
 */
 
 // methods
-
-/*
 template <typename T>
-FLQuant_base<T> FLCatch_base<T>::landings() {
-    return landings_n_flq;
+FLQuant_base<T> FLCatch_base<T>::landings() const {
+    FLQuant_base<T> landings = quant_sum(landings_n() * landings_wt());
+    return landings;
 }
-*/
 
+template <typename T>
+FLQuant_base<T> FLCatch_base<T>::discards() const {
+    FLQuant_base<T> discards = quant_sum(discards_n() * discards_wt());
+    return discards;
+}
 
 
 // Explicit instantiation of class

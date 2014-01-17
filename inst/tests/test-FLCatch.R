@@ -155,3 +155,34 @@ test_that("FLCatch get and set data accessors", {
     #expect_that(c(catch.q(flc_out))[-element], is_identical_to(c(catch.q(flc_in))[-element]))
 })
 
+test_that("FLCatch methods", {
+    flc_in <- random_FLCatch_generator()
+    # landings
+    l_in <- landings(flc_in)
+    l_out <- test_FLCatch_landings(flc_in)
+    #expect_that(l_out, is_identical_to(l_in)) # units not dealt with correctly
+    expect_that(dimnames(l_out), is_identical_to(dimnames(l_in))) # units not dealt with correctly
+    expect_that(l_out@.Data, equals(l_in@.Data)) # quant sums causes numerical differences
+    l_out <- test_FLCatchAdolc_landings(flc_in)
+    #expect_that(l_out, is_identical_to(l_in)) # units not dealt with correctly
+    expect_that(dimnames(l_out), is_identical_to(dimnames(l_in))) # units not dealt with correctly
+    expect_that(l_out@.Data, equals(l_in@.Data)) # quant sums causes numerical differences
+    # discards
+    d_in <- discards(flc_in)
+    d_out <- test_FLCatch_discards(flc_in)
+    #expect_that(d_out, is_identicad_to(d_in)) # units not dealt with correctly
+    expect_that(dimnames(d_out), is_identical_to(dimnames(d_in))) # units not dealt with correctly
+    expect_that(d_out@.Data, equals(d_in@.Data)) # quant sums causes numerical differences
+    d_out <- test_FLCatchAdolc_discards(flc_in)
+    #expect_that(d_out, is_identicad_to(d_in)) # units not dealt with correctly
+    expect_that(dimnames(d_out), is_identical_to(dimnames(d_in))) # units not dealt with correctly
+    expect_that(d_out@.Data, equals(d_in@.Data)) # quant sums causes numerical differences
+
+
+
+})
+
+
+
+
+

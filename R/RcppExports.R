@@ -385,6 +385,22 @@ test_FLCatchAdolc_set_accessors <- function(flc, quant, year, unit, season, area
     .Call('FLRcppAdolc_test_FLCatchAdolc_set_accessors', PACKAGE = 'FLRcppAdolc', flc, quant, year, unit, season, area, iter, values)
 }
 
+test_FLCatch_landings <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatch_landings', PACKAGE = 'FLRcppAdolc', flc)
+}
+
+test_FLCatchAdolc_landings <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatchAdolc_landings', PACKAGE = 'FLRcppAdolc', flc)
+}
+
+test_FLCatch_discards <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatch_discards', PACKAGE = 'FLRcppAdolc', flc)
+}
+
+test_FLCatchAdolc_discards <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatchAdolc_discards', PACKAGE = 'FLRcppAdolc', flc)
+}
+
 test_FLQuantAdolc_as_wrap <- function(flq) {
     .Call('FLRcppAdolc_test_FLQuantAdolc_as_wrap', PACKAGE = 'FLRcppAdolc', flq)
 }

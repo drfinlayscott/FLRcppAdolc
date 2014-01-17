@@ -175,6 +175,23 @@ FLCatchAdolc test_FLCatchAdolc_set_accessors(FLCatchAdolc flc, int quant, int ye
     return flc;
 }
 
+// [[Rcpp::export]]
+FLQuant test_FLCatch_landings(const FLCatch flc){
+    return flc.landings();
+}
 
+// [[Rcpp::export]]
+FLQuantAdolc test_FLCatchAdolc_landings(const FLCatchAdolc flc){
+    return flc.landings();
+}
 
+// [[Rcpp::export]]
+FLQuant test_FLCatch_discards(const FLCatch flc){
+    return flc.discards();
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLCatchAdolc_discards(const FLCatchAdolc flc){
+    return flc.discards();
+}
 

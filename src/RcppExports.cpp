@@ -1586,6 +1586,66 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// test_FLCatch_landings
+FLQuant test_FLCatch_landings(const FLCatch flc);
+RcppExport SEXP FLRcppAdolc_test_FLCatch_landings(SEXP flcSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const FLCatch >::type flc(flcSEXP );
+        FLQuant __result = test_FLCatch_landings(flc);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLCatchAdolc_landings
+FLQuantAdolc test_FLCatchAdolc_landings(const FLCatchAdolc flc);
+RcppExport SEXP FLRcppAdolc_test_FLCatchAdolc_landings(SEXP flcSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const FLCatchAdolc >::type flc(flcSEXP );
+        FLQuantAdolc __result = test_FLCatchAdolc_landings(flc);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLCatch_discards
+FLQuant test_FLCatch_discards(const FLCatch flc);
+RcppExport SEXP FLRcppAdolc_test_FLCatch_discards(SEXP flcSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const FLCatch >::type flc(flcSEXP );
+        FLQuant __result = test_FLCatch_discards(flc);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLCatchAdolc_discards
+FLQuantAdolc test_FLCatchAdolc_discards(const FLCatchAdolc flc);
+RcppExport SEXP FLRcppAdolc_test_FLCatchAdolc_discards(SEXP flcSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const FLCatchAdolc >::type flc(flcSEXP );
+        FLQuantAdolc __result = test_FLCatchAdolc_discards(flc);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // test_FLQuantAdolc_as_wrap
 FLQuantAdolc test_FLQuantAdolc_as_wrap(FLQuantAdolc flq);
 RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_as_wrap(SEXP flqSEXP) {

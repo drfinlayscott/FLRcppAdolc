@@ -167,19 +167,28 @@ test_that("FLCatch methods", {
     #expect_that(l_out, is_identical_to(l_in)) # units not dealt with correctly
     expect_that(dimnames(l_out), is_identical_to(dimnames(l_in))) # units not dealt with correctly
     expect_that(l_out@.Data, equals(l_in@.Data)) # quant sums causes numerical differences
+
     # discards
     d_in <- discards(flc_in)
     d_out <- test_FLCatch_discards(flc_in)
-    #expect_that(d_out, is_identicad_to(d_in)) # units not dealt with correctly
+    #expect_that(d_out, is_identical_to(d_in)) # units not dealt with correctly
     expect_that(dimnames(d_out), is_identical_to(dimnames(d_in))) # units not dealt with correctly
     expect_that(d_out@.Data, equals(d_in@.Data)) # quant sums causes numerical differences
     d_out <- test_FLCatchAdolc_discards(flc_in)
-    #expect_that(d_out, is_identicad_to(d_in)) # units not dealt with correctly
+    #expect_that(d_out, is_identical_to(d_in)) # units not dealt with correctly
     expect_that(dimnames(d_out), is_identical_to(dimnames(d_in))) # units not dealt with correctly
     expect_that(d_out@.Data, equals(d_in@.Data)) # quant sums causes numerical differences
 
-
-
+    # catch_n
+    cn_in <- catch.n(flc_in)
+    cn_out <- test_FLCatch_catch_n(flc_in)
+    #expect_that(cn_out, is_identical_to(cn_in)) # units not dealt with correctly
+    expect_that(dimnames(cn_out), is_identical_to(dimnames(cn_in))) # units not dealt with correctly
+    expect_that(cn_out@.Data, equals(cn_in@.Data)) # quant sums causes numerical differences
+    cn_out <- test_FLCatchAdolc_catch_n(flc_in)
+    #expect_that(cn_out, is_identicad_to(cn_in)) # units not dealt with correctly
+    expect_that(dimnames(cn_out), is_identical_to(dimnames(cn_in))) # units not dealt with correctly
+    expect_that(cn_out@.Data, equals(cn_in@.Data)) # quant sums causes numerical differences
 })
 
 

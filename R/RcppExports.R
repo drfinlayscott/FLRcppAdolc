@@ -401,6 +401,14 @@ test_FLCatchAdolc_discards <- function(flc) {
     .Call('FLRcppAdolc_test_FLCatchAdolc_discards', PACKAGE = 'FLRcppAdolc', flc)
 }
 
+test_FLCatch_catch_n <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatch_catch_n', PACKAGE = 'FLRcppAdolc', flc)
+}
+
+test_FLCatchAdolc_catch_n <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatchAdolc_catch_n', PACKAGE = 'FLRcppAdolc', flc)
+}
+
 test_FLQuantAdolc_as_wrap <- function(flq) {
     .Call('FLRcppAdolc_test_FLQuantAdolc_as_wrap', PACKAGE = 'FLRcppAdolc', flq)
 }

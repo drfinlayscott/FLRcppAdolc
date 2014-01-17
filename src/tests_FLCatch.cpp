@@ -195,3 +195,13 @@ FLQuantAdolc test_FLCatchAdolc_discards(const FLCatchAdolc flc){
     return flc.discards();
 }
 
+// [[Rcpp::export]]
+FLQuant test_FLCatch_catch_n(const FLCatch flc){
+    return flc.catch_n();
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLCatchAdolc_catch_n(const FLCatchAdolc flc){
+    return flc.catch_n();
+}
+

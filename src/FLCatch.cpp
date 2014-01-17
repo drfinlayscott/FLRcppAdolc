@@ -177,6 +177,12 @@ FLQuant_base<T> FLCatch_base<T>::discards() const {
     return discards;
 }
 
+template <typename T>
+FLQuant_base<T> FLCatch_base<T>::catch_n() const {
+    FLQuant_base<T> catch_n = discards_n() + landings_n();
+    return catch_n;
+}
+
 
 // Explicit instantiation of class
 template class FLCatch_base<double>;

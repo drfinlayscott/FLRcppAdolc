@@ -2084,6 +2084,21 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// test_FLQuantAdolc_quant_sum
+FLQuantAdolc test_FLQuantAdolc_quant_sum(FLQuantAdolc flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_quant_sum(SEXP flqSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuantAdolc >::type flq(flqSEXP );
+        FLQuantAdolc __result = test_FLQuantAdolc_quant_sum(flq);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // test_FLQuant_as_wrap
 FLQuant test_FLQuant_as_wrap(FLQuant flq);
 RcppExport SEXP FLRcppAdolc_test_FLQuant_as_wrap(SEXP flqSEXP) {
@@ -2550,6 +2565,22 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// test_FLQuant_set_units
+FLQuant test_FLQuant_set_units(FLQuant flq, std::string new_units);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_set_units(SEXP flqSEXP, SEXP new_unitsSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuant >::type flq(flqSEXP );
+        Rcpp::traits::input_parameter< std::string >::type new_units(new_unitsSEXP );
+        FLQuant __result = test_FLQuant_set_units(flq, new_units);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // test_FLQuant_FLQuant_match_dims
 int test_FLQuant_FLQuant_match_dims(FLQuant flq1, FLQuant flq2);
 RcppExport SEXP FLRcppAdolc_test_FLQuant_FLQuant_match_dims(SEXP flq1SEXP, SEXP flq2SEXP) {
@@ -2566,15 +2597,15 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// test_FLQuant_year_sum
-FLQuant test_FLQuant_year_sum(FLQuant flq);
-RcppExport SEXP FLRcppAdolc_test_FLQuant_year_sum(SEXP flqSEXP) {
+// test_FLQuant_quant_sum
+FLQuant test_FLQuant_quant_sum(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_quant_sum(SEXP flqSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< FLQuant >::type flq(flqSEXP );
-        FLQuant __result = test_FLQuant_year_sum(flq);
+        FLQuant __result = test_FLQuant_quant_sum(flq);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

@@ -181,6 +181,14 @@ FLQuant test_FLQuant_set_dimnames(FLQuant flq, Rcpp::List new_dimnames){
 
 }
 
+// [[Rcpp::export]]
+FLQuant test_FLQuant_set_units(FLQuant flq, std::string new_units){
+    flq.set_units(new_units);
+    return flq;
+
+}
+
+
 //------------------ Others --------------------------------------
 // [[Rcpp::export]]
 int test_FLQuant_FLQuant_match_dims(FLQuant flq1, FLQuant flq2){
@@ -188,8 +196,16 @@ int test_FLQuant_FLQuant_match_dims(FLQuant flq1, FLQuant flq2){
 }
 
 //--------- Shortcuts ----------------------
+/*
 // [[Rcpp::export]]
 FLQuant test_FLQuant_year_sum(FLQuant flq){
     FLQuant flq_out = year_sum(flq);
+    return flq_out;
+}
+*/
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_quant_sum(FLQuant flq){
+    FLQuant flq_out = quant_sum(flq);
     return flq_out;
 }

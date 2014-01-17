@@ -26,6 +26,8 @@ FLQuant_base<T>::FLQuant_base(SEXP flq_sexp){
     Rcpp::NumericVector data_nv = flq_s4.slot(".Data");
     // Initialise data to the correct size?
     // Fill up data
+    // Add reserve() in here first to make data the correct size?
+    // data(nquant * nyear * nunit * nseason * narea * niter)?
     data.insert(data.begin(), data_nv.begin(), data_nv.end());
 	units = Rcpp::as<std::string>(flq_s4.slot("units"));
 	dim = data_nv.attr("dim");
@@ -71,6 +73,8 @@ FLQuant_base<double>::operator SEXP() const{
     Rcpp::S4 flq_s4("FLQuant");
     // Make and fill the NumericVector that will be the 'data' slot 
     Rcpp::NumericVector data_nv;
+    // reserve() space?
+    // Rcpp::NumericVector data_nv(number of elements);nquant * nyear * nunit * nseason * narea * niter
     for (vector<double>::const_iterator data_iterator = data.begin(); data_iterator != data.end(); ++data_iterator){ // iterator must be const because the method is const
         data_nv.push_back(*data_iterator);
     }
@@ -289,6 +293,11 @@ void FLQuant_base<T>::set_dimnames(const Rcpp::List& dimnames_in){
         }
     }
     dimnames = dimnames_in;
+}
+
+template <typename T>
+void FLQuant_base<T>::set_units(const std::string& units_in){
+    units = units_in;
 }
 
 //------------------ Multiplication operators -------------------
@@ -855,7 +864,7 @@ int dim_matcher(const Rcpp::IntegerVector dims_a, const Rcpp::IntegerVector dims
     return 1; // Else all is good
 }
 
-// Shortcut methods
+/*------------- Shortcut methods ----------------*/
 template <typename T>
 FLQuant_base<T> year_sum(const FLQuant_base<T>& flq){
     Rprintf("In year_sum\n");
@@ -871,6 +880,43 @@ FLQuant_base<T> year_sum(const FLQuant_base<T>& flq){
     return sum_flq;
 }
 
+template <typename T>
+FLQuant_base<T> quant_sum(const FLQuant_base<T>& flq){
+    Rcpp::IntegerVector dim = flq.get_dim();
+    // Make an empty FLQ with the right dim
+    FLQuant_base<T> sum_flq(1, dim[1], dim[2], dim[3], dim[4], dim[5]);
+    //// Set dimnames and units
+    Rcpp::List dimnames = flq.get_dimnames();
+    dimnames[0] = Rcpp::CharacterVector::create("all");
+    sum_flq.set_dimnames(dimnames);
+    sum_flq.set_units(flq.get_units());
+    // Old school summing - looks ugly
+    // Cannot use accumulate() as not defined for adouble
+    T sum = 0;
+    for (int iters=1; iters <= flq.get_niter(); ++iters){
+        for (int areas=1; areas <= flq.get_narea(); ++areas){
+            for (int seasons=1; seasons <= flq.get_nseason(); ++seasons){
+                for (int units=1; units <= flq.get_nunit(); ++units){
+                    for (int years=1; years <= flq.get_nyear(); ++years){
+                        sum = 0;
+                        for (int quants=1; quants <= flq.get_nquant(); ++quants){
+                            sum += flq(quants, years, units, seasons, areas, iters);
+                        }
+                        sum_flq(1, years, units, seasons, areas, iters) = sum;
+    }}}}}
+    // This also works - not so nested but maybe harder to decipher
+    //int nquant = flq.get_nquant();
+    //for (int chunk_counter=1; chunk_counter <= (flq.get_size()) / nquant; ++chunk_counter){
+    //    T sum = 0;
+    //    for (int quant_counter = (chunk_counter * nquant - nquant + 1); quant_counter <= (chunk_counter * nquant); ++quant_counter){
+    //        sum = sum + flq(quant_counter);
+    //    }
+    //    sum_flq(chunk_counter) = sum;
+    //}
+    return sum_flq;
+}
+
+/*----------------------------------------------------*/
 /* Explicit instantiations - alternatively put all the definitions into the header file
  * This way we have more control over what types the functions work with
  */
@@ -934,3 +980,5 @@ template FLQuant_base<adouble> exp(FLQuant_base<adouble>& flq);
 template FLQuant_base<double> year_sum(const FLQuant_base<double>& flq);
 template FLQuant_base<adouble> year_sum(const FLQuant_base<adouble>& flq);
 
+template FLQuant_base<double> quant_sum(const FLQuant_base<double>& flq);
+template FLQuant_base<adouble> quant_sum(const FLQuant_base<adouble>& flq);

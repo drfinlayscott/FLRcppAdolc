@@ -30,7 +30,7 @@ random_FLQuant_generator <- function(max_age = 10, max_year = 10, max_unit = 5, 
     niter <- runif(1,min=1, max=max_iter)
     values <- rnorm(nage*nyear*nunit*nseason*narea*niter, sd = sd)
     flq <- FLQuant(values, dimnames = list(age = 1:nage, year = 1:nyear, unit = 1:nunit, season = 1:nseason, area = 1:narea, iter = 1:niter))
-    units(flq) <- as.character(abs(rnorm(1)))
+    units(flq) <- as.character(signif(abs(rnorm(1)),3))
     return(flq)
 }
 

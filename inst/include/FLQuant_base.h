@@ -58,6 +58,7 @@ class FLQuant_base {
 		/* Set accessors */
 		void set_data(const std::vector<T>& data_in);
         void set_dimnames(const Rcpp::List& dimnames_in);
+        void set_units(const std::string& units_in);
 
         /* () accessors */
 		T operator () (const unsigned int element) const; // only gets an element so const reinforced - - however cannot return reference due to NumericVector() operator
@@ -246,5 +247,6 @@ FLQuant_base<T> exp(FLQuant_base<T>& flq);
 template <typename T>
 FLQuant_base<T> year_sum(const FLQuant_base<T>& flq);
 
-
+template <typename T>
+FLQuant_base<T> quant_sum(const FLQuant_base<T>& flq);
 

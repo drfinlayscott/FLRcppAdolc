@@ -149,16 +149,5 @@ test_that("FLQuant match_dims method works", {
     expect_that(test_FLQuant_FLQuant_match_dims(flq, flq6), is_identical_to(-6L))
 })
 
-test_that("FLQuant summary functions", {
-          # Test quant_sum
-    flq_in <- random_FLQuant_generator()
-    flq_out <- test_FLQuant_quant_sum(flq_in)
-    flq_sum <- quantSums(flq_in)
-    expect_that(dim(flq_out), is_identical_to(dim(flq_sum)))
-    expect_that(dimnames(flq_out), is_identical_to(dimnames(flq_sum)))
-    expect_that(units(flq_out), is_identical_to(units(flq_sum)))
-    expect_that(flq_out, equals(flq_sum)) # Not using identical as small numeric differences as + mathematical operation
-})
-
 
 

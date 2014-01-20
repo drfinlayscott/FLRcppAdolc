@@ -231,3 +231,42 @@ test_that("log and exp",{
     flq_out <- test_FLQuantAdolc_exp(flq)
     expect_that(flq_out@.Data, is_identical_to(exp(flq)@.Data))
 })
+
+
+#flq1 <- random_FLQuant_generator()
+#qs1 <- quantSums(flq1)
+#qs2 <- apply(flq1, 2:6, sum)
+#expect_that(qs1, is_identical_to(qs2))
+#sum <- 0
+#for (i in 1:dim(flq1)[1]){
+#    sum <- sum + flq1[i,1,1,1,1,1]
+#}
+#expect_that(c(sum), is_identical_to(c(qs1[1,1,1,1,1,1])))
+#expect_that(c(sum), equals(c(qs1[1,1,1,1,1,1])))
+#c(sum) - c(qs1[1,1,1,1,1,1])
+## Which is more accurate - apply or +
+#sum2 <- sum(flq1[,1,1,1,1,1])
+#expect_that(c(sum2), is_identical_to(c(qs1[1,1,1,1,1,1])))
+## sum different to +
+
+test_that("FLQuant and FLQuantAdolc summary functions", {
+    # Test quant_sum
+    flq_in <- random_FLQuant_generator()
+    flq_out <- test_FLQuant_quant_sum(flq_in)
+    flq_sum <- quantSums(flq_in)
+    expect_that(dim(flq_out), is_identical_to(dim(flq_sum)))
+    expect_that(dimnames(flq_out), is_identical_to(dimnames(flq_sum)))
+    expect_that(units(flq_out), is_identical_to(units(flq_sum)))
+    expect_that(flq_out, equals(flq_sum)) # Not using identical as small numeric differences as + mathematical operation - see above
+    # Adolc quant_sum
+    flq_out <- test_FLQuantAdolc_quant_sum(flq_in)
+    flq_sum <- quantSums(flq_in)
+    expect_that(dim(flq_out), is_identical_to(dim(flq_sum)))
+    expect_that(dimnames(flq_out), is_identical_to(dimnames(flq_sum)))
+    expect_that(units(flq_out), is_identical_to(units(flq_sum)))
+    expect_that(flq_out, equals(flq_sum)) # Not using identical as small numeric differences as + mathematical operation - see above
+})
+
+
+
+

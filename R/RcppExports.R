@@ -457,6 +457,22 @@ test_FLCatchAdolc_discards_ratio <- function(flc) {
     .Call('FLRcppAdolc_test_FLCatchAdolc_discards_ratio', PACKAGE = 'FLRcppAdolc', flc)
 }
 
+test_FLCatch_landings_sel <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatch_landings_sel', PACKAGE = 'FLRcppAdolc', flc)
+}
+
+test_FLCatchAdolc_landings_sel <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatchAdolc_landings_sel', PACKAGE = 'FLRcppAdolc', flc)
+}
+
+test_FLCatch_discards_sel <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatch_discards_sel', PACKAGE = 'FLRcppAdolc', flc)
+}
+
+test_FLCatchAdolc_discards_sel <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatchAdolc_discards_sel', PACKAGE = 'FLRcppAdolc', flc)
+}
+
 test_FLQuantAdolc_as_wrap <- function(flq) {
     .Call('FLRcppAdolc_test_FLQuantAdolc_as_wrap', PACKAGE = 'FLRcppAdolc', flq)
 }

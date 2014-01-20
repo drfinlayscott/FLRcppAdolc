@@ -202,37 +202,17 @@ FLQuant_base<T> FLCatch_base<T>::discards_ratio() const {
 }
 
 
-//template <typename T>
-//FLQuant_base<T> FLCatch_base<T>::landings_sel() const {
-//    FLQuant_base<T> landings_sel = catch_sel() * (1.0 - discards_ratio());
-//    // Scaled by max
-//    return landings_sel;
-//}
+template <typename T>
+FLQuant_base<T> FLCatch_base<T>::landings_sel() const {
+    FLQuant_base<T> landings_sel = catch_sel() * (1.0 - discards_ratio());
+    return scale_by_max_quant(landings_sel);
+}
 
-//# landings.sel, discards.sel {{{
-//setMethod("landings.sel", signature(object="FLCatch"),
-//	function(object) {
-//		res <- catch.sel(object) * (1 - discards.ratio(object))
-//		return(res %/% apply(res, 2:6, max))
-//	}
-//)
-//
-//setMethod("discards.sel", signature(object="FLCatch"),
-//	function(object) {
-//		res <- catch.sel(object) * discards.ratio(object)
-//		return(res %/% apply(res, 2:6, max))
-//	}
-//) # }}}
-//
-//# discards.ratio {{{
-//setMethod("discards.ratio", signature(object="FLCatch"),
-//	function(object) {
-//		return(discards.n(object) / catch.n(object))
-//	}
-//) # }}}
-
-
-
+template <typename T>
+FLQuant_base<T> FLCatch_base<T>::discards_sel() const {
+    FLQuant_base<T> discards_sel = catch_sel() * discards_ratio();
+    return scale_by_max_quant(discards_sel);
+}
 
 // Explicit instantiation of class
 template class FLCatch_base<double>;

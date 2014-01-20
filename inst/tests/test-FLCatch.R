@@ -216,6 +216,24 @@ test_that("FLCatch methods", {
     dr_out <- test_FLCatchAdolc_discards_ratio(flc_in)
     expect_that(dimnames(dr_out), is_identical_to(dimnames(dr_in))) # units not dealt with correctly
     expect_that(dr_out@.Data, equals(dr_in@.Data)) # quant sums causes numerical differences
+
+    # landings_sel
+    ls_in <- landings.sel(flc_in)
+    ls_out <- test_FLCatch_landings_sel(flc_in)
+    expect_that(dimnames(ls_out), is_identical_to(dimnames(ls_in))) 
+    expect_that(ls_out@.Data, is_identical_to(ls_in@.Data)) 
+    ls_out <- test_FLCatchAdolc_landings_sel(flc_in)
+    expect_that(dimnames(ls_out), is_identical_to(dimnames(ls_in))) 
+    expect_that(ls_out@.Data, is_identical_to(ls_in@.Data)) 
+
+    # discards_sel
+    ds_in <- discards.sel(flc_in)
+    ds_out <- test_FLCatch_discards_sel(flc_in)
+    expect_that(dimnames(ds_out), is_identical_to(dimnames(ds_in))) 
+    expect_that(ds_out@.Data, is_identical_to(ds_in@.Data)) 
+    ds_out <- test_FLCatchAdolc_discards_sel(flc_in)
+    expect_that(dimnames(ds_out), is_identical_to(dimnames(ds_in))) 
+    expect_that(ds_out@.Data, is_identical_to(ds_in@.Data)) 
 })
 
 

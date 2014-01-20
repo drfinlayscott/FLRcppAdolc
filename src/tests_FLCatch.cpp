@@ -205,3 +205,33 @@ FLQuantAdolc test_FLCatchAdolc_catch_n(const FLCatchAdolc flc){
     return flc.catch_n();
 }
 
+// [[Rcpp::export]]
+FLQuant test_FLCatch_catch_wt(const FLCatch flc){
+    return flc.catch_wt();
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLCatchAdolc_catch_wt(const FLCatchAdolc flc){
+    return flc.catch_wt();
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLCatch_catches(const FLCatch flc){
+    return flc.catches();
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLCatchAdolc_catches(const FLCatchAdolc flc){
+    return flc.catches();
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLCatch_discards_ratio(const FLCatch flc){
+    return flc.discards_ratio();
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLCatchAdolc_discards_ratio(const FLCatchAdolc flc){
+    return flc.discards_ratio();
+}
+

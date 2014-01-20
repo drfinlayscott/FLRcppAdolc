@@ -204,8 +204,3 @@ FLQuant test_FLQuant_year_sum(FLQuant flq){
 }
 */
 
-// [[Rcpp::export]]
-FLQuant test_FLQuant_quant_sum(FLQuant flq){
-    FLQuant flq_out = quant_sum(flq);
-    return flq_out;
-}

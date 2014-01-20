@@ -916,6 +916,39 @@ FLQuant_base<T> quant_sum(const FLQuant_base<T>& flq){
     return sum_flq;
 }
 
+// max_quant - returns an FLQuant with size 1 in first dimension containing the maximum value of the quant dimension
+// Would like to be able to use template functions max and max_element
+// But we have to be careful when using conditionals and Adolc adouble
+// So we do it using the fmax() function from Adolc
+// Might be possible to use template functions if we moved to CppAD
+template <typename T>
+FLQuant_base<T> max_quant(const FLQuant_base<T>& flq){
+    Rcpp::IntegerVector dim = flq.get_dim();
+    // Make an empty FLQ with the right dim
+    FLQuant_base<T> max_flq(1, dim[1], dim[2], dim[3], dim[4], dim[5]);
+    //// Set dimnames and units
+    Rcpp::List dimnames = flq.get_dimnames();
+    dimnames[0] = Rcpp::CharacterVector::create("all");
+    max_flq.set_dimnames(dimnames);
+    max_flq.set_units(flq.get_units());
+    // Old school summing - looks ugly
+    T max = 0;
+    for (int iters=1; iters <= flq.get_niter(); ++iters){
+        for (int areas=1; areas <= flq.get_narea(); ++areas){
+            for (int seasons=1; seasons <= flq.get_nseason(); ++seasons){
+                for (int units=1; units <= flq.get_nunit(); ++units){
+                    for (int years=1; years <= flq.get_nyear(); ++years){
+                        max = flq(1, years, units, seasons, areas, iters);
+                        for (int quants=1; quants <= flq.get_nquant(); ++quants){
+                            max = fmax(max, flq(quants, years, units, seasons, areas, iters));
+                        }
+                        max_flq(1, years, units, seasons, areas, iters) = max;
+    }}}}}
+    return max_flq;
+}
+
+
+
 /*----------------------------------------------------*/
 /* Explicit instantiations - alternatively put all the definitions into the header file
  * This way we have more control over what types the functions work with
@@ -982,3 +1015,8 @@ template FLQuant_base<adouble> year_sum(const FLQuant_base<adouble>& flq);
 
 template FLQuant_base<double> quant_sum(const FLQuant_base<double>& flq);
 template FLQuant_base<adouble> quant_sum(const FLQuant_base<adouble>& flq);
+
+template FLQuant_base<double> max_quant(const FLQuant_base<double>& flq);
+template FLQuant_base<adouble> max_quant(const FLQuant_base<adouble>& flq);
+
+

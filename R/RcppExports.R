@@ -309,6 +309,22 @@ test_composite_arithmetic_operators <- function(flqad, flq, value) {
     .Call('FLRcppAdolc_test_composite_arithmetic_operators', PACKAGE = 'FLRcppAdolc', flqad, flq, value)
 }
 
+test_FLQuant_quant_sum <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuant_quant_sum', PACKAGE = 'FLRcppAdolc', flq)
+}
+
+test_FLQuantAdolc_quant_sum <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_quant_sum', PACKAGE = 'FLRcppAdolc', flq)
+}
+
+test_FLQuant_max_quant <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuant_max_quant', PACKAGE = 'FLRcppAdolc', flq)
+}
+
+test_FLQuantAdolc_max_quant <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_max_quant', PACKAGE = 'FLRcppAdolc', flq)
+}
+
 test_simple_FLCatch_sexp_constructor <- function(flc_sexp) {
     .Call('FLRcppAdolc_test_simple_FLCatch_sexp_constructor', PACKAGE = 'FLRcppAdolc', flc_sexp)
 }
@@ -407,6 +423,30 @@ test_FLCatch_catch_n <- function(flc) {
 
 test_FLCatchAdolc_catch_n <- function(flc) {
     .Call('FLRcppAdolc_test_FLCatchAdolc_catch_n', PACKAGE = 'FLRcppAdolc', flc)
+}
+
+test_FLCatch_catch_wt <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatch_catch_wt', PACKAGE = 'FLRcppAdolc', flc)
+}
+
+test_FLCatchAdolc_catch_wt <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatchAdolc_catch_wt', PACKAGE = 'FLRcppAdolc', flc)
+}
+
+test_FLCatch_catches <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatch_catches', PACKAGE = 'FLRcppAdolc', flc)
+}
+
+test_FLCatchAdolc_catches <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatchAdolc_catches', PACKAGE = 'FLRcppAdolc', flc)
+}
+
+test_FLCatch_discards_ratio <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatch_discards_ratio', PACKAGE = 'FLRcppAdolc', flc)
+}
+
+test_FLCatchAdolc_discards_ratio <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatchAdolc_discards_ratio', PACKAGE = 'FLRcppAdolc', flc)
 }
 
 test_FLQuantAdolc_as_wrap <- function(flq) {
@@ -529,10 +569,6 @@ test_FLQuant_FLQuantAdolc_match_dims <- function(flq1, flq2) {
     .Call('FLRcppAdolc_test_FLQuant_FLQuantAdolc_match_dims', PACKAGE = 'FLRcppAdolc', flq1, flq2)
 }
 
-test_FLQuantAdolc_quant_sum <- function(flq) {
-    .Call('FLRcppAdolc_test_FLQuantAdolc_quant_sum', PACKAGE = 'FLRcppAdolc', flq)
-}
-
 test_FLQuant_as_wrap <- function(flq) {
     .Call('FLRcppAdolc_test_FLQuant_as_wrap', PACKAGE = 'FLRcppAdolc', flq)
 }
@@ -651,10 +687,6 @@ test_FLQuant_set_units <- function(flq, new_units) {
 
 test_FLQuant_FLQuant_match_dims <- function(flq1, flq2) {
     .Call('FLRcppAdolc_test_FLQuant_FLQuant_match_dims', PACKAGE = 'FLRcppAdolc', flq1, flq2)
-}
-
-test_FLQuant_quant_sum <- function(flq) {
-    .Call('FLRcppAdolc_test_FLQuant_quant_sum', PACKAGE = 'FLRcppAdolc', flq)
 }
 
 test_FLQuant7_as_wrap <- function(flq7) {

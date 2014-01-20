@@ -211,8 +211,3 @@ int test_FLQuant_FLQuantAdolc_match_dims(FLQuant flq1, FLQuantAdolc flq2){
     return flq1.match_dims(flq2);
 }
 
-// [[Rcpp::export]]
-FLQuantAdolc test_FLQuantAdolc_quant_sum(FLQuantAdolc flq){
-    FLQuantAdolc flq_out = quant_sum(flq);
-    return flq_out;
-}

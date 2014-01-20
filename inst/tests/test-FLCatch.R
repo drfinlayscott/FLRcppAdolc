@@ -189,6 +189,33 @@ test_that("FLCatch methods", {
     #expect_that(cn_out, is_identicad_to(cn_in)) # units not dealt with correctly
     expect_that(dimnames(cn_out), is_identical_to(dimnames(cn_in))) # units not dealt with correctly
     expect_that(cn_out@.Data, equals(cn_in@.Data)) # quant sums causes numerical differences
+
+    # catches
+    c_in <- catch(flc_in)
+    c_out <- test_FLCatch_catches(flc_in)
+    expect_that(dimnames(c_out), is_identical_to(dimnames(c_in))) # units not dealt with correctly
+    expect_that(c_out@.Data, equals(c_in@.Data)) # quant sums causes numerical differences
+    c_out <- test_FLCatchAdolc_catches(flc_in)
+    expect_that(dimnames(c_out), is_identical_to(dimnames(c_in))) # units not dealt with correctly
+    expect_that(c_out@.Data, equals(c_in@.Data)) # quant sums causes numerical differences
+
+    # catch weight
+    cw_in <- catch.wt(flc_in)
+    cw_out <- test_FLCatch_catch_wt(flc_in)
+    expect_that(dimnames(cw_out), is_identical_to(dimnames(cw_in))) # units not dealt with correctly
+    expect_that(cw_out@.Data, equals(cw_in@.Data)) # quant sums causes numerical differences
+    cw_out <- test_FLCatchAdolc_catch_wt(flc_in)
+    expect_that(dimnames(cw_out), is_identical_to(dimnames(cw_in))) # units not dealt with correctly
+    expect_that(cw_out@.Data, equals(cw_in@.Data)) # quant sums causes numerical differences
+
+    # discards ratio
+    dr_in <- discards.ratio(flc_in)
+    dr_out <- test_FLCatch_discards_ratio(flc_in)
+    expect_that(dimnames(dr_out), is_identical_to(dimnames(dr_in))) # units not dealt with correctly
+    expect_that(dr_out@.Data, equals(dr_in@.Data)) # quant sums causes numerical differences
+    dr_out <- test_FLCatchAdolc_discards_ratio(flc_in)
+    expect_that(dimnames(dr_out), is_identical_to(dimnames(dr_in))) # units not dealt with correctly
+    expect_that(dr_out@.Data, equals(dr_in@.Data)) # quant sums causes numerical differences
 })
 
 

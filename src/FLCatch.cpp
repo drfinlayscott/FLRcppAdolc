@@ -183,6 +183,56 @@ FLQuant_base<T> FLCatch_base<T>::catch_n() const {
     return catch_n;
 }
 
+template <typename T>
+FLQuant_base<T> FLCatch_base<T>::catches() const {
+    FLQuant_base<T> catches = quant_sum((discards_n() * discards_wt())  + (landings_n() * landings_wt()));
+    return catches;
+}
+
+template <typename T>
+FLQuant_base<T> FLCatch_base<T>::catch_wt() const {
+    FLQuant_base<T> catch_wt = ((landings_wt() * landings_n()) + (discards_wt() * discards_n())) / (landings_n() * discards_n());
+    return catch_wt;
+}
+
+template <typename T>
+FLQuant_base<T> FLCatch_base<T>::discards_ratio() const {
+    FLQuant_base<T> discards_ratio = discards_n() / catch_n();
+    return discards_ratio;
+}
+
+
+//template <typename T>
+//FLQuant_base<T> FLCatch_base<T>::landings_sel() const {
+//    FLQuant_base<T> landings_sel = catch_sel() * (1.0 - discards_ratio());
+//    // Scaled by max
+//    return landings_sel;
+//}
+
+//# landings.sel, discards.sel {{{
+//setMethod("landings.sel", signature(object="FLCatch"),
+//	function(object) {
+//		res <- catch.sel(object) * (1 - discards.ratio(object))
+//		return(res %/% apply(res, 2:6, max))
+//	}
+//)
+//
+//setMethod("discards.sel", signature(object="FLCatch"),
+//	function(object) {
+//		res <- catch.sel(object) * discards.ratio(object)
+//		return(res %/% apply(res, 2:6, max))
+//	}
+//) # }}}
+//
+//# discards.ratio {{{
+//setMethod("discards.ratio", signature(object="FLCatch"),
+//	function(object) {
+//		return(discards.n(object) / catch.n(object))
+//	}
+//) # }}}
+
+
+
 
 // Explicit instantiation of class
 template class FLCatch_base<double>;

@@ -580,3 +580,34 @@ FLQuantAdolc test_composite_arithmetic_operators(FLQuantAdolc flqad, FLQuant flq
     flqad_out = ((((value * flq) + value) - flq) / flq) * ((value / flqad) - value);
     return flqad_out;
 }
+
+//------------- Other mathematical functions ------------------
+
+// quant_sum
+// [[Rcpp::export]]
+FLQuant test_FLQuant_quant_sum(FLQuant flq){
+    FLQuant flq_out = quant_sum(flq);
+    return flq_out;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_quant_sum(FLQuantAdolc flq){
+    FLQuantAdolc flq_out = quant_sum(flq);
+    return flq_out;
+}
+
+// max_quant
+// [[Rcpp::export]]
+FLQuant test_FLQuant_max_quant(FLQuant flq){
+    FLQuant flq_out = max_quant(flq);
+    return flq_out;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_max_quant(FLQuantAdolc flq){
+    FLQuantAdolc flq_out = max_quant(flq);
+    return flq_out;
+}
+
+
+

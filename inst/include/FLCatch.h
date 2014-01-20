@@ -50,12 +50,12 @@ class FLCatch_base {
         // Methods
         FLQuant_base<T> landings() const;
         FLQuant_base<T> discards() const;
-//        FLQuant_base<T> catches() const;
+        FLQuant_base<T> catches() const;
         FLQuant_base<T> catch_n() const;
-//        FLQuant_base<T> catch_wt() const;
-//        FLQuant_base<T> landings_sel() const;
-//        FLQuant_base<T> discards_sel() const;
-//        FLQuant_base<T> discards_ratio() const;
+        FLQuant_base<T> catch_wt() const;
+        FLQuant_base<T> landings_sel() const;
+        FLQuant_base<T> discards_sel() const;
+        FLQuant_base<T> discards_ratio() const;
 
 
         std::string get_name() const;

@@ -325,6 +325,14 @@ test_FLQuantAdolc_max_quant <- function(flq) {
     .Call('FLRcppAdolc_test_FLQuantAdolc_max_quant', PACKAGE = 'FLRcppAdolc', flq)
 }
 
+test_FLQuant_scale_by_max_quant <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuant_scale_by_max_quant', PACKAGE = 'FLRcppAdolc', flq)
+}
+
+test_FLQuantAdolc_scale_by_max_quant <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_scale_by_max_quant', PACKAGE = 'FLRcppAdolc', flq)
+}
+
 test_simple_FLCatch_sexp_constructor <- function(flc_sexp) {
     .Call('FLRcppAdolc_test_simple_FLCatch_sexp_constructor', PACKAGE = 'FLRcppAdolc', flc_sexp)
 }
@@ -615,6 +623,10 @@ test_FLQuant_get_dim <- function(flq) {
 
 test_FLQuant_get_dimnames <- function(flq) {
     .Call('FLRcppAdolc_test_FLQuant_get_dimnames', PACKAGE = 'FLRcppAdolc', flq)
+}
+
+test_FLQuant_get_dimnames2 <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuant_get_dimnames2', PACKAGE = 'FLRcppAdolc', flq)
 }
 
 test_FLQuant_get_size <- function(flq) {

@@ -609,5 +609,18 @@ FLQuantAdolc test_FLQuantAdolc_max_quant(FLQuantAdolc flq){
     return flq_out;
 }
 
+// max_quant
+// [[Rcpp::export]]
+FLQuant test_FLQuant_scale_by_max_quant(FLQuant flq){
+    FLQuant flq_out = scale_by_max_quant(flq);
+    return flq_out;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_scale_by_max_quant(FLQuantAdolc flq){
+    FLQuantAdolc flq_out = scale_by_max_quant(flq);
+    return flq_out;
+}
+
 
 

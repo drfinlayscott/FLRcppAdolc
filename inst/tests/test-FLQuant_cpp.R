@@ -44,6 +44,10 @@ test_that("get accessors",{
     expect_that(test_FLQuant_get_units(flq), is_identical_to(units(flq)))
     expect_that(test_FLQuant_get_dim(flq), is_identical_to(dim(flq)))
     expect_that(test_FLQuant_get_dimnames(flq), is_identical_to(dimnames(flq)))
+    # Test deep copy is returned with dimnames are got
+    dmns_out <- test_FLQuant_get_dimnames2(flq)
+    expect_that(dimnames(dmns_out[[1]]), is_identical_to(dimnames(flq)))
+    expect_that(dmns_out[[2]][[1]], is_identical_to("all"))
     expect_that(test_FLQuant_get_size(flq), is_identical_to(length(c(flq@.Data))))
     expect_that(test_FLQuant_get_nquant(flq), is_identical_to(dim(flq)[1]))
     expect_that(test_FLQuant_get_nyear(flq), is_identical_to(dim(flq)[2]))

@@ -84,6 +84,15 @@ Rcpp::List test_FLQuant_get_dimnames(FLQuant flq){
 }
 
 // [[Rcpp::export]]
+Rcpp::List test_FLQuant_get_dimnames2(FLQuant flq){
+    Rcpp::List dimnames = flq.get_dimnames();
+    dimnames[0] = Rcpp::CharacterVector::create("all");
+    return Rcpp::List::create(Rcpp::Named("flq", flq),
+            Rcpp::Named("dimnames", dimnames));
+}
+
+
+// [[Rcpp::export]]
 int test_FLQuant_get_size(FLQuant flq){
 	return flq.get_size();
 }

@@ -253,5 +253,7 @@ FLQuant_base<T> quant_sum(const FLQuant_base<T>& flq);
 template <typename T>
 FLQuant_base<T> max_quant(const FLQuant_base<T>& flq);
 
-
+// This only makes sense if all the values ae positive
+template <typename T>
+FLQuant_base<T> scale_by_max_quant(const FLQuant_base<T>& flq);
 

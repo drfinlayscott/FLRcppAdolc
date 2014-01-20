@@ -274,6 +274,15 @@ test_that("FLQuant and FLQuantAdolc summary functions", {
     max_flq_out <- test_FLQuantAdolc_max_quant(flq_in)
     expect_that(max_flq_in, is_identical_to(max_flq_out))
     
+    # scale_by_max_quant
+    flq_in <- abs(random_FLQuant_generator())
+    scaled_in <- flq_in %/% apply(flq_in, 2:6, max)
+    scaled_out <- test_FLQuant_scale_by_max_quant(flq_in)
+    expect_that(dimnames(scaled_in), is_identical_to(dimnames(scaled_out)))
+    expect_that(scaled_in@.Data, is_identical_to(scaled_out@.Data))
+    scaled_out <- test_FLQuantAdolc_scale_by_max_quant(flq_in)
+    expect_that(dimnames(scaled_in), is_identical_to(dimnames(scaled_out)))
+    expect_that(scaled_in@.Data, is_identical_to(scaled_out@.Data))
 })
 
 

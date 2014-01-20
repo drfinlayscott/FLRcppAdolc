@@ -167,12 +167,12 @@ std::string FLQuant_base<T>::get_units() const{
 
 template <typename T>
 Rcpp::IntegerVector FLQuant_base<T>::get_dim() const{
-	return dim;
+	return Rcpp::clone<Rcpp::IntegerVector>(dim);
 }
 
 template <typename T>
 Rcpp::List FLQuant_base<T>::get_dimnames() const{
-	return dimnames;
+	return Rcpp::clone<Rcpp::List>(dimnames);
 }
 
 template <typename T>
@@ -926,7 +926,7 @@ FLQuant_base<T> max_quant(const FLQuant_base<T>& flq){
     Rcpp::IntegerVector dim = flq.get_dim();
     // Make an empty FLQ with the right dim
     FLQuant_base<T> max_flq(1, dim[1], dim[2], dim[3], dim[4], dim[5]);
-    //// Set dimnames and units
+    // Set dimnames and units
     Rcpp::List dimnames = flq.get_dimnames();
     dimnames[0] = Rcpp::CharacterVector::create("all");
     max_flq.set_dimnames(dimnames);
@@ -948,6 +948,25 @@ FLQuant_base<T> max_quant(const FLQuant_base<T>& flq){
 }
 
 
+// This only makes sense if all the values ae positive
+template <typename T>
+FLQuant_base<T> scale_by_max_quant(const FLQuant_base<T>& flq){
+    FLQuant_base<T> max_quant_flq = max_quant(flq);
+    // Copy the original FLQ to get the right dim
+    FLQuant_base<T> scaled_flq = flq;
+    // max_flq.set_units(flq.get_units()); // units should be set to ""
+    for (int iters=1; iters <= flq.get_niter(); ++iters){
+        for (int areas=1; areas <= flq.get_narea(); ++areas){
+            for (int seasons=1; seasons <= flq.get_nseason(); ++seasons){
+                for (int units=1; units <= flq.get_nunit(); ++units){
+                    for (int years=1; years <= flq.get_nyear(); ++years){
+                        for (int quants=1; quants <= flq.get_nquant(); ++quants){
+                            scaled_flq(quants, years, units, seasons, areas, iters)  = flq(quants, years, units, seasons, areas, iters) / max_quant_flq(1, years, units, seasons, areas, iters);
+                            //scaled_flq(quants, years, units, seasons, areas, iters)  = flq(quants, years, units, seasons, areas, iters); 
+                        }
+    }}}}}
+    return scaled_flq;
+}
 
 /*----------------------------------------------------*/
 /* Explicit instantiations - alternatively put all the definitions into the header file
@@ -1019,4 +1038,6 @@ template FLQuant_base<adouble> quant_sum(const FLQuant_base<adouble>& flq);
 template FLQuant_base<double> max_quant(const FLQuant_base<double>& flq);
 template FLQuant_base<adouble> max_quant(const FLQuant_base<adouble>& flq);
 
+template FLQuant_base<double> scale_by_max_quant(const FLQuant_base<double>& flq);
+template FLQuant_base<adouble> scale_by_max_quant(const FLQuant_base<adouble>& flq);
 

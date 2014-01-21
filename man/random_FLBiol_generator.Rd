@@ -5,23 +5,14 @@
 random_FLBiol_generator(sd = 100, ...)
 }
 \arguments{
-  \item{max_age}{The maximum number of ages of the FLBiol.
-  Default is 10.}
+  \item{fixed_dims}{A vector of length 6 with the fixed
+  length of each of the FLQuant dimensions. If any value is
+  NA it is randomly set using the max_dims argument.
+  Default value is rep(NA,6).}
 
-  \item{max_year}{The maximum number of years of the
-  FLBiol. Default is 10.}
-
-  \item{max_unit}{The maximum number of units of the
-  FLBiol. Default is 5.}
-
-  \item{max_season}{The maximum number of seasons of the
-  FLBiol. Default is 4.}
-
-  \item{max_area}{The maximum number of areas of the
-  FLBiol. Default is 4.}
-
-  \item{max_iter}{The maximum number of iters of the
-  FLBiol. Default is 50.}
+  \item{max_dims}{A vector of length 6 with maximum size of
+  each of the FLQuant dimensions. Default value is
+  c(5,5,5,4,4,10).}
 
   \item{sd}{The standard deviation of the random numbers.
   Passed to rnorm() Default is 100.}

@@ -625,6 +625,10 @@ test_FLCatchesAdolc_set_single_index_default_accessor <- function(flcs, flc) {
     .Call('FLRcppAdolc_test_FLCatchesAdolc_set_single_index_default_accessor', PACKAGE = 'FLRcppAdolc', flcs, flc)
 }
 
+test_FLFishery_empty_constructor <- function() {
+    invisible(.Call('FLRcppAdolc_test_FLFishery_empty_constructor', PACKAGE = 'FLRcppAdolc'))
+}
+
 test_FLQuantAdolc_as_wrap <- function(flq) {
     .Call('FLRcppAdolc_test_FLQuantAdolc_as_wrap', PACKAGE = 'FLRcppAdolc', flq)
 }

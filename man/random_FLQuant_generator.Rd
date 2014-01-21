@@ -2,27 +2,18 @@
 \alias{random_FLQuant_generator}
 \title{Generate randomly sized and filled FLQuant objects}
 \usage{
-random_FLQuant_generator(max_age = 10, max_year = 10, max_unit = 5,
-  max_season = 4, max_area = 4, max_iter = 50, sd = 100)
+random_FLQuant_generator(fixed_dims = rep(NA, 6), max_dims = c(5, 10, 5, 4,
+  4, 5), sd = 100)
 }
 \arguments{
-  \item{max_age}{The maximum number of ages of the FLQuant.
-  Default is 10.}
+  \item{fixed_dims}{A vector of length 6 with the fixed
+  length of each of the FLQuant dimensions. If any value is
+  NA it is randomly set using the max_dims argument.
+  Default value is rep(NA,6).}
 
-  \item{max_year}{The maximum number of years of the
-  FLQuant. Default is 10.}
-
-  \item{max_unit}{The maximum number of units of the
-  FLQuant. Default is 5.}
-
-  \item{max_season}{The maximum number of seasons of the
-  FLQuant. Default is 4.}
-
-  \item{max_area}{The maximum number of areas of the
-  FLQuant. Default is 4.}
-
-  \item{max_iter}{The maximum number of iters of the
-  FLQuant. Default is 50.}
+  \item{max_dims}{A vector of length 6 with maximum size of
+  each of the FLQuant dimensions. Default value is
+  c(5,10,5,4,4,5).}
 
   \item{sd}{The standard deviation of the random numbers.
   Passed to rnorm() Default is 100.}
@@ -31,12 +22,15 @@ random_FLQuant_generator(max_age = 10, max_year = 10, max_unit = 5,
 An FLQuant
 }
 \description{
-Generate a randomly sized FLQuant filled with normally
-distributed random numbers with a mean of 0. Used for
-automatic testing.
+Generate a randomly or fixed sized FLQuant filled with
+normally distributed random numbers with a mean of 0. Used
+for automatic testing.
 }
 \examples{
 flq <- random_FLQuant_generator()
+dim(flq)
+summary(flq)
+flq <- random_FLQuant_generator(fixed_dims = c(NA,10,1,4,1,NA))
 dim(flq)
 summary(flq)
 }

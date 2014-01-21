@@ -1,0 +1,39 @@
+\name{random_FLFishery_generator}
+\alias{random_FLFishery_generator}
+\title{Generate a randomly filled and sized FLFishery object}
+\usage{
+random_FLFishery_generator(max_elements = 5, ...)
+}
+\arguments{
+  \item{max_elements}{The maximum number of elements in the
+  catches list. Default is 5.}
+
+  \item{fixed_dims}{A vector of length 6 with the fixed
+  length of each of the FLQuant dimensions. If any value is
+  NA it is randomly set using the max_dims argument.
+  Default value is rep(NA,6).}
+
+  \item{max_dims}{A vector of length 6 with maximum size of
+  each of the FLQuant dimensions. Default value is
+  c(5,5,5,4,4,10).}
+
+  \item{sd}{The standard deviation of the random numbers.
+  Passed to rnorm() Default is 100.}
+}
+\value{
+An FLFishery object
+}
+\description{
+Generate a randomly sized FLFishery object filled with
+normally distributed random numbers with a mean of 0. Used
+for automatic testing, particularly of the
+FLFishery_base<T> class in CPP.
+}
+\examples{
+flf <- random_FLFishery_list_generator()
+summary(flf)
+flf <- random_FLFishery_generator(fixed_dims = c(NA,10,1,1,1,1))
+lapply(flf, summary)
+flf <- random_FLFishery_generator(fixed_dims = c(NA,10,1,1,1,1), max_dims = c(100,NA,NA,NA,NA,NA))
+}
+

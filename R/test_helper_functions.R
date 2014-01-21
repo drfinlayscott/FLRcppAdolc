@@ -5,15 +5,11 @@
 
 #' Generate randomly sized and filled FLQuant objects
 #'
-#' Generate a randomly sized FLQuant filled with normally distributed random numbers with a mean of 0.
+#' Generate a randomly or fixed sized FLQuant filled with normally distributed random numbers with a mean of 0.
 #' Used for automatic testing.
 #' 
-#' @param max_age The maximum number of ages of the FLQuant. Default is 5. 
-#' @param max_year The maximum number of years of the FLQuant. Default is 5. 
-#' @param max_unit The maximum number of units of the FLQuant. Default is 5. 
-#' @param max_season The maximum number of seasons of the FLQuant. Default is 4. 
-#' @param max_area The maximum number of areas of the FLQuant. Default is 4. 
-#' @param max_iter The maximum number of iters of the FLQuant. Default is 10. 
+#' @param fixed_dims A vector of length 6 with the fixed length of each of the FLQuant dimensions. If any value is NA it is randomly set using the max_dims argument. Default value is rep(NA,6).
+#' @param max_dims A vector of length 6 with maximum size of each of the FLQuant dimensions. Default value is c(5,10,5,4,4,5).
 #' @param sd The standard deviation of the random numbers. Passed to rnorm() Default is 100.
 #' @export
 #' @return An FLQuant
@@ -21,13 +17,16 @@
 #' flq <- random_FLQuant_generator()
 #' dim(flq)
 #' summary(flq)
-random_FLQuant_generator <- function(max_age = 5, max_year = 5, max_unit = 5, max_season = 4, max_area = 4, max_iter = 10, sd = 100){
-    nage <- runif(1,min=1, max=max_age)
-    nyear <- runif(1,min=1, max=max_year)
-    nunit <- runif(1,min=1, max=max_unit)
-    nseason <- runif(1,min=1, max=max_season)
-    narea <- runif(1,min=1, max=max_area)
-    niter <- runif(1,min=1, max=max_iter)
+#' flq <- random_FLQuant_generator(fixed_dims = c(NA,10,1,4,1,NA))
+#' dim(flq)
+#' summary(flq)
+random_FLQuant_generator <- function(fixed_dims = rep(NA,6), max_dims = c(5,10,5,4,4,5), sd = 100){
+    nage <- ifelse(is.na(fixed_dims[1]),runif(1,min=1, max=max_dims[1]),fixed_dims[1])
+    nyear <- ifelse(is.na(fixed_dims[2]),runif(1,min=1, max=max_dims[2]),fixed_dims[2])
+    nunit <- ifelse(is.na(fixed_dims[3]),runif(1,min=1, max=max_dims[3]),fixed_dims[3])
+    nseason <- ifelse(is.na(fixed_dims[4]),runif(1,min=1, max=max_dims[4]),fixed_dims[4])
+    narea <- ifelse(is.na(fixed_dims[5]),runif(1,min=1, max=max_dims[5]),fixed_dims[5])
+    niter <- ifelse(is.na(fixed_dims[6]),runif(1,min=1, max=max_dims[6]),fixed_dims[6])
     values <- rnorm(nage*nyear*nunit*nseason*narea*niter, sd = sd)
     flq <- FLQuant(values, dimnames = list(age = 1:nage, year = 1:nyear, unit = 1:nunit, season = 1:nseason, area = 1:narea, iter = 1:niter))
     units(flq) <- as.character(signif(abs(rnorm(1)),3))
@@ -40,12 +39,8 @@ random_FLQuant_generator <- function(max_age = 5, max_year = 5, max_unit = 5, ma
 #' Used for automatic testing, particularly of the FLQuant7_base<T> class in CPP.
 #' 
 #' @param max_elements The maximum number of elements in the list. Default is 10. 
-#' @param max_age The maximum number of ages of the FLQuant. Default is 10. 
-#' @param max_year The maximum number of years of the FLQuant. Default is 10. 
-#' @param max_unit The maximum number of units of the FLQuant. Default is 5. 
-#' @param max_season The maximum number of seasons of the FLQuant. Default is 4. 
-#' @param max_area The maximum number of areas of the FLQuant. Default is 4. 
-#' @param max_iter The maximum number of iters of the FLQuant. Default is 50. 
+#' @param fixed_dims A vector of length 6 with the fixed length of each of the FLQuant dimensions. If any value is NA it is randomly set using the max_dims argument. Default value is rep(NA,6).
+#' @param max_dims A vector of length 6 with maximum size of each of the FLQuant dimensions. Default value is c(5,5,5,4,4,10).
 #' @param sd The standard deviation of the random numbers. Passed to rnorm() Default is 100.
 #' @export
 #' @return A list of FLQuant objects
@@ -68,12 +63,8 @@ random_FLQuant_list_generator <- function(max_elements = 10, ...){
 #' Generate an FLBiol of random size and filled with normally distributed random numbers with a mean of 0.
 #' Used for automatic testing, particularly of the fwdBiol class in CPP.
 #' 
-#' @param max_age The maximum number of ages of the FLBiol. Default is 10. 
-#' @param max_year The maximum number of years of the FLBiol. Default is 10. 
-#' @param max_unit The maximum number of units of the FLBiol. Default is 5. 
-#' @param max_season The maximum number of seasons of the FLBiol. Default is 4. 
-#' @param max_area The maximum number of areas of the FLBiol. Default is 4. 
-#' @param max_iter The maximum number of iters of the FLBiol. Default is 50. 
+#' @param fixed_dims A vector of length 6 with the fixed length of each of the FLQuant dimensions. If any value is NA it is randomly set using the max_dims argument. Default value is rep(NA,6).
+#' @param max_dims A vector of length 6 with maximum size of each of the FLQuant dimensions. Default value is c(5,5,5,4,4,10).
 #' @param sd The standard deviation of the random numbers. Passed to rnorm() Default is 100.
 #' @export
 #' @return An FLBiol
@@ -97,12 +88,8 @@ random_FLBiol_generator <- function(sd=100, ...){
 #' Generate an FLCatch of random size and filled with normally distributed random numbers with a mean of 0.
 #' Used for automatic testing, particularly of the FLCatch class in CPP.
 #' 
-#' @param max_age The maximum number of ages of the FLCatch. Default is 10. 
-#' @param max_year The maximum number of years of the FLCatch. Default is 10. 
-#' @param max_unit The maximum number of units of the FLCatch. Default is 5. 
-#' @param max_season The maximum number of seasons of the FLCatch. Default is 4. 
-#' @param max_area The maximum number of areas of the FLCatch. Default is 4. 
-#' @param max_iter The maximum number of iters of the FLCatch. Default is 50. 
+#' @param fixed_dims A vector of length 6 with the fixed length of each of the FLQuant dimensions. If any value is NA it is randomly set using the max_dims argument. Default value is rep(NA,6).
+#' @param max_dims A vector of length 6 with maximum size of each of the FLQuant dimensions. Default value is c(5,5,5,4,4,10).
 #' @param sd The standard deviation of the random numbers. Passed to rnorm() Default is 100.
 #' @export
 #' @return An FLCatch
@@ -134,26 +121,53 @@ random_FLCatch_generator <- function(sd=100, ...){
 #' Used for automatic testing, particularly of the FLCatches_base<T> class in CPP.
 #' 
 #' @param max_elements The maximum number of elements in the list. Default is 5. 
-#' @param max_age The maximum number of ages of the FLQuant. Default is 10. 
-#' @param max_year The maximum number of years of the FLQuant. Default is 10. 
-#' @param max_unit The maximum number of units of the FLQuant. Default is 5. 
-#' @param max_season The maximum number of seasons of the FLQuant. Default is 4. 
-#' @param max_area The maximum number of areas of the FLQuant. Default is 4. 
-#' @param max_iter The maximum number of iters of the FLQuant. Default is 50. 
+#' @param fixed_dims A vector of length 6 with the fixed length of each of the FLQuant dimensions. If any value is NA it is randomly set using the max_dims argument. Default value is rep(NA,6).
+#' @param max_dims A vector of length 6 with maximum size of each of the FLQuant dimensions. Default value is c(5,5,5,4,4,10).
 #' @param sd The standard deviation of the random numbers. Passed to rnorm() Default is 100.
 #' @export
-#' @return A list of FLQuant objects
+#' @return A list of FLCatch objects
 #' @examples
 #' flc_list <- random_FLCatch_list_generator()
 #' length(flc_list)
 #' summary(flc_list)
 #' lapply(flc_list, summary)
 random_FLCatch_list_generator <- function(max_elements = 5, ...){
+    args <- list(...)
     nelements <- runif(1,min=1, max=max_elements)
     op <- list()
+    flq <- random_FLQuant_generator(...)
+    # cat("dim flq: ", dim(flq), "\n")
+    fixed_dims <- dim(flq)
+    fixed_dims[1] <- NA
+    args[["fixed_dims"]] <- fixed_dims
     for (i in 1:nelements){
-        op[[i]] <- random_FLCatch_generator(...)
+        op[[i]] <- do.call(random_FLCatch_generator,args)    
     }
     return(op)
 }
+
+#' Generate a randomly filled and sized FLFishery object
+#'
+#' Generate a randomly sized FLFishery object filled with normally distributed random numbers with a mean of 0.
+#' Used for automatic testing, particularly of the FLFishery_base<T> class in CPP.
+#' 
+#' @param max_elements The maximum number of elements in the catches list. Default is 5. 
+#' @param fixed_dims A vector of length 6 with the fixed length of each of the FLQuant dimensions. If any value is NA it is randomly set using the max_dims argument. Default value is rep(NA,6).
+#' @param max_dims A vector of length 6 with maximum size of each of the FLQuant dimensions. Default value is c(5,5,5,4,4,10).
+#' @param sd The standard deviation of the random numbers. Passed to rnorm() Default is 100.
+#' @export
+#' @return An FLFishery object 
+#' @examples
+#' flf <- random_FLFishery_list_generator()
+#' summary(flf)
+#' flf <- random_FLFishery_generator(fixed_dims = c(NA,10,1,1,1,1))
+#' lapply(flf, summary)
+#' flf <- random_FLFishery_generator(fixed_dims = c(NA,10,1,1,1,1), max_dims = c(100,NA,NA,NA,NA,NA))
+random_FLFishery_generator <- function(max_elements = 5, ...){
+    catches <- random_FLCatch_list_generator(max_elements, ...)
+    fishery <- FLFishery(catches)
+    return(fishery)
+}
+
+
 

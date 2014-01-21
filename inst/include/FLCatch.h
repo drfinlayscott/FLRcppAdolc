@@ -23,7 +23,7 @@
 template <typename T>
 class FLCatch_base {
     public:
-        // /* Constructors */
+        /* Constructors */
 		FLCatch_base();
 		FLCatch_base(SEXP flc_sexp); // Used as intrusive 'as', takes an FLCatch
         operator SEXP() const; // Used as intrusive 'wrap' - returns an FLCatch
@@ -77,7 +77,34 @@ class FLCatch_base {
         //FLQuant catch_q_flq;
 };
 
-
 typedef FLCatch_base<double> FLCatch;
 typedef FLCatch_base<adouble> FLCatchAdolc;
 
+/*----------------------------------------------*/
+// FLCatches class - a vector of FLCatch objects
+
+template <typename T>
+class FLCatches_base {
+    public:
+        /* Constructors */
+		FLCatches_base();
+		FLCatches_base(SEXP flcs_sexp); // Used as intrusive 'as', takes a list of FLCatch objects
+		FLCatches_base(FLCatch_base<T> flc); // Constructor from an FLCatch
+        operator SEXP() const; // Used as intrusive 'wrap' - returns a list of FLCatch objects
+		FLCatches_base(const FLCatches_base& FLCatches_base_source); // copy constructor to ensure that copy is a deep copy - used when passing FLCs into functions
+		FLCatches_base& operator = (const FLCatches_base& FLCatches_base_source); // Assignment operator for a deep copy
+
+        // Accessors
+		FLCatch_base<T> operator () (const unsigned int element = 1) const; // Only gets an FLCatch so const reinforced. Default is the first element
+		FLCatch_base<T>& operator () (const unsigned int element = 1); // Gets and sets an FLCatch so const not reinforced
+
+        void operator() (const FLCatch_base<T> flc); // Add another FLQuant_base<T> to the data
+        unsigned int get_ncatches() const;
+
+    private:
+        std::vector<FLCatch_base<T> > catches;
+
+};
+
+typedef FLCatches_base<double> FLCatches;
+typedef FLCatches_base<adouble> FLCatchesAdolc;

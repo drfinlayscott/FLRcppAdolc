@@ -24,9 +24,7 @@ FLCatch_base<T>::FLCatch_base(){
     //catch_q_flq = FLQuant();
 }
 
-// Constructor from a SEXP S4 FLBiol
-// But this does not set the SRR!
-// Need another constructor for that
+// Constructor from a SEXP S4 FLCatch
 // Used as intrusive 'as'
 template <typename T>
 FLCatch_base<T>::FLCatch_base(SEXP flc_sexp){
@@ -214,7 +212,110 @@ FLQuant_base<T> FLCatch_base<T>::discards_sel() const {
     return scale_by_max_quant(discards_sel);
 }
 
-// Explicit instantiation of class
+/*------------------------------------------------------------*/
+// FLCatches class
+
+
+// Default constructor
+// Just an empty object
+template <typename T>
+FLCatches_base<T>::FLCatches_base(){
+    //catches
+}
+
+// Constructor from a list of SEXP S4 FLCatch objects
+// Used as intrusive 'as'
+template <typename T>
+FLCatches_base<T>::FLCatches_base(SEXP flcs_sexp){
+    Rcpp::List lst(flcs_sexp);
+    Rcpp::List::iterator lst_iterator;
+    for (lst_iterator = lst.begin(); lst_iterator != lst.end(); ++ lst_iterator){
+        catches.push_back(*lst_iterator);
+    }
+}
+
+template <typename T> 
+FLCatches_base<T>::FLCatches_base(FLCatch_base<T> flc){
+    catches.push_back(flc);
+}
+
+
+// Copy constructor - else 'data' can be pointed at by multiple instances
+template<typename T>
+FLCatches_base<T>::FLCatches_base(const FLCatches_base<T>& FLCatches_source){
+    //Rprintf("In FLCatches_base<T> copy constructor\n");
+	catches  = FLCatches_source.catches; // std::vector always does deep copy
+}
+
+// Assignment operator to ensure deep copy - else 'data' can be pointed at by multiple instances
+template<typename T>
+FLCatches_base<T>& FLCatches_base<T>::operator = (const FLCatches_base<T>& FLCatches_source){
+    //Rprintf("In FLCatches_base<T> assignment operator\n");
+	if (this != &FLCatches_source){
+        catches  = FLCatches_source.catches; // std::vector always does deep copy
+	}
+	return *this;
+}
+
+// Intrusive wrap
+// List is unamed
+template<typename T>
+FLCatches_base<T>::operator SEXP() const{
+    //Rprintf("Wrapping FLCatches_base<T>.\n");
+    Rcpp::List list_out;
+    for (unsigned int i = 0; i < get_ncatches(); i++){
+        list_out.push_back(catches[i]);
+    }
+    return list_out;
+}
+
+
+// Takes an FLCatch or FLCatchAdolc and adds it on the end
+//template <typename T> 
+//FLCatches_base<T>::FLCatches_base(const FLCatch_base<T> flc){
+//    //Rprintf("In FLCatches_base<T> FLCatch constructor\n");
+//    catches.push_back(flc);
+//}
+
+/*-------- Accessors -------------*/
+
+template<typename T>
+unsigned int FLCatches_base<T>::get_ncatches() const {
+    return catches.size();
+}
+
+// Add another FLCatch_base<T> to the data
+template <typename T>
+void FLCatches_base<T>::operator() (const FLCatch_base<T> flc){
+    catches.push_back(flc);
+}
+
+// Get only data accessor - single element - starts at 1
+template <typename T>
+FLCatch_base<T> FLCatches_base<T>::operator () (const unsigned int element) const{
+    if (element > get_ncatches()){
+        Rcpp::stop("FLCatches_base: Trying to access element larger than data size.");
+    }
+    return catches[element-1];
+}
+
+// Data accessor - single element - starts at 1
+template <typename T>
+FLCatch_base<T>& FLCatches_base<T>::operator () (const unsigned int element){
+    //Rprintf("In single element accessor\n");
+    if (element > get_ncatches()){
+        Rcpp::stop("FLCatches_base: Trying to access element larger than data size.");
+    }
+	return catches[element-1];
+}
+
+
+// Explicit instantiation of classes
 template class FLCatch_base<double>;
 template class FLCatch_base<adouble>;
+template class FLCatches_base<double>;
+template class FLCatches_base<adouble>;
+
+
+
 

@@ -9,7 +9,7 @@ test_that("FLCatch as and wrap",{
     expect_that(flc_in, is_identical_to(flc_out))
 })
 
-test_that("FLQuant7 constructors - double",{
+test_that("FLCatch constructors",{
     flc_in <- random_FLCatch_generator()
     # SEXP constructors
     flc_out <- test_FLCatch_sexp_constructor(flc_in)

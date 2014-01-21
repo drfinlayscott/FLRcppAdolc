@@ -255,5 +255,258 @@ FLQuantAdolc test_FLCatchAdolc_discards_sel(const FLCatchAdolc flc){
     return flc.discards_sel();
 }
 
+/*------------------------------------------------------------------------*/
+// FLCatches - double
 
+// [[Rcpp::export]]
+FLCatches test_FLCatches_as_wrap(FLCatches flcs){
+    return flcs;
+}
+
+// [[Rcpp::export]]
+FLCatches test_FLCatches_empty_wrap(){
+	FLCatches flcs;
+	return flcs;
+}
+
+// [[Rcpp::export]]
+FLCatches test_FLCatches_sexp_constructor(SEXP flcs_sexp1){
+	FLCatches flcs(flcs_sexp1);
+	return flcs;
+}
+
+// [[Rcpp::export]]
+FLCatches test_FLCatches_FLCatch_constructor(FLCatch flc){
+	FLCatches flcs(flc);
+	return flcs;
+}
+
+// [[Rcpp::export]]
+FLCatches test_FLCatches_copy_constructor(FLCatches flcs){
+    FLCatches out(flcs);
+    return out;
+}
+
+// Checking that a deep copy has been made
+// [[Rcpp::export]]
+Rcpp::List test_FLCatches_copy_constructor2(FLCatches flcs1, int catches, int quant, int year, int unit, int season, int area, int iter, double value){
+	FLCatches flcs2(flcs1); 
+	flcs2(catches).landings_n()(quant,year,unit,season,area,iter) = value;
+	return Rcpp::List::create(Rcpp::Named("flcs1", flcs1),
+                            Rcpp::Named("flcs2",flcs2));
+}
+
+// [[Rcpp::export]]
+FLCatches test_FLCatches_assignment_operator(FLCatches flcs){
+    FLCatches out;
+    out = flcs;
+    return out;
+}
+
+// Checking that a deep copy has been made
+// [[Rcpp::export]]
+Rcpp::List test_FLCatches_assignment_operator2(FLCatches flcs1, int catches, int quant, int year, int unit, int season, int area, int iter, double value){
+	FLCatches flcs2;
+    flcs2 = flcs1; 
+	flcs2(catches).landings_n()(quant,year,unit,season,area,iter) = value;
+	return Rcpp::List::create(Rcpp::Named("flcs1", flcs1),
+				Rcpp::Named("flcs2",flcs2));
+}
+
+// Testing adding another FLQ into FLQ7 - also tests wrap
+// [[Rcpp::export]]
+FLCatches test_FLCatches_function_operator(FLCatches flcs, FLCatch flc){
+    flcs(flc);
+	return flcs;
+}
+
+// [[Rcpp::export]]
+int test_FLCatches_get_ncatches(SEXP flc_sexp1){
+	FLCatches flcs(flc_sexp1);
+    int length = flcs.get_ncatches();
+	return length;
+}
+
+// [[Rcpp::export]]
+FLCatch test_FLCatches_const_get_single_index_accessor(const FLCatches flcs, const int element){
+    FLCatch flc = flcs(element);
+    return flc;
+}
+
+// [[Rcpp::export]]
+FLCatch test_FLCatches_get_single_index_accessor(FLCatches flcs, const int element){
+    FLCatch flc = flcs(element);
+    return flc;
+}
+ 
+// [[Rcpp::export]]
+double test_FLCatches_const_get_value_accessor(const FLCatches flcs, const int catches, int quant, int year, int unit, int season, int area, int iter){
+    double value_out = flcs(catches).landings_n()(quant,year,unit,season,area,iter);
+    return value_out;
+}
+
+// [[Rcpp::export]]
+double test_FLCatches_get_value_accessor(FLCatches flcs, const int catches, int quant, int year, int unit, int season, int area, int iter){
+    double value_out = flcs(catches).landings_n()(quant,year,unit,season,area,iter);
+    return value_out;
+}
+
+// [[Rcpp::export]]
+FLCatches test_FLCatches_set_single_index_accessor(FLCatches flcs, const int element, const FLCatch flc){
+    flcs(element) = flc;
+    return flcs;
+}
+
+// [[Rcpp::export]]
+FLCatches test_FLCatches_set_value_accessor(FLCatches flcs, const int element, int quant, int year, int unit, int season, int area, int iter, double value){
+    flcs(element).landings_n()(quant,year,unit,season,area,iter) = value;
+    return flcs;
+}
+
+// [[Rcpp::export]]
+FLCatch test_FLCatches_const_get_single_index_default_accessor(const FLCatches flcs){
+    FLCatch flc = flcs();
+    return flc;
+}
+
+// [[Rcpp::export]]
+FLCatch test_FLCatches_get_single_index_default_accessor(FLCatches flcs){
+    FLCatch flc = flcs();
+    return flc;
+}
+ 
+// [[Rcpp::export]]
+FLCatches test_FLCatches_set_single_index_default_accessor(FLCatches flcs, const FLCatch flc){
+    flcs() = flc;
+    return flcs;
+}
+
+/*------------------------------------------------------------------------*/
+// FLCatches - adouble
+
+// [[Rcpp::export]]
+FLCatchesAdolc test_FLCatchesAdolc_as_wrap(FLCatchesAdolc flcs){
+    return flcs;
+}
+
+// [[Rcpp::export]]
+FLCatchesAdolc test_FLCatchesAdolc_empty_wrap(){
+	FLCatchesAdolc flcs;
+	return flcs;
+}
+
+// [[Rcpp::export]]
+FLCatchesAdolc test_FLCatchesAdolc_sexp_constructor(SEXP flcs_sexp1){
+	FLCatchesAdolc flcs(flcs_sexp1);
+	return flcs;
+}
+
+// [[Rcpp::export]]
+FLCatchesAdolc test_FLCatchesAdolc_FLCatchAdolc_constructor(FLCatchAdolc flc){
+	FLCatchesAdolc flcs(flc);
+	return flcs;
+}
+
+// [[Rcpp::export]]
+FLCatchesAdolc test_FLCatchesAdolc_copy_constructor(FLCatchesAdolc flcs){
+    FLCatchesAdolc out(flcs);
+    return out;
+}
+
+// Checking that a deep copy has been made
+// [[Rcpp::export]]
+Rcpp::List test_FLCatchesAdolc_copy_constructor2(FLCatchesAdolc flcs1, int catches, int quant, int year, int unit, int season, int area, int iter, double value){
+    adouble ad_value = value;
+	FLCatchesAdolc flcs2(flcs1); 
+	flcs2(catches).landings_n()(quant,year,unit,season,area,iter) = ad_value;
+	return Rcpp::List::create(Rcpp::Named("flcs1", flcs1),
+                            Rcpp::Named("flcs2",flcs2));
+}
+
+// [[Rcpp::export]]
+FLCatchesAdolc test_FLCatchesAdolc_assignment_operator(FLCatchesAdolc flcs){
+    FLCatchesAdolc out;
+    out = flcs;
+    return out;
+}
+
+// Checking that a deep copy has been made
+// [[Rcpp::export]]
+Rcpp::List test_FLCatchesAdolc_assignment_operator2(FLCatchesAdolc flcs1, int catches, int quant, int year, int unit, int season, int area, int iter, double value){
+    adouble ad_value = value;
+	FLCatchesAdolc flcs2;
+    flcs2 = flcs1; 
+	flcs2(catches).landings_n()(quant,year,unit,season,area,iter) = ad_value;
+	return Rcpp::List::create(Rcpp::Named("flcs1", flcs1),
+				Rcpp::Named("flcs2",flcs2));
+}
+
+// Testing adding another FLQ into FLQ7 - also tests wrap
+// [[Rcpp::export]]
+FLCatchesAdolc test_FLCatchesAdolc_function_operator(FLCatchesAdolc flcs, FLCatchAdolc flc){
+    flcs(flc);
+	return flcs;
+}
+
+// [[Rcpp::export]]
+int test_FLCatchesAdolc_get_ncatches(SEXP flc_sexp1){
+	FLCatchesAdolc flcs(flc_sexp1);
+    int length = flcs.get_ncatches();
+	return length;
+}
+
+// [[Rcpp::export]]
+FLCatchAdolc test_FLCatchesAdolc_const_get_single_index_accessor(const FLCatchesAdolc flcs, const int element){
+    FLCatchAdolc flc = flcs(element);
+    return flc;
+}
+
+// [[Rcpp::export]]
+FLCatchAdolc test_FLCatchesAdolc_get_single_index_accessor(FLCatchesAdolc flcs, const int element){
+    FLCatchAdolc flc = flcs(element);
+    return flc;
+}
+ 
+// [[Rcpp::export]]
+double test_FLCatchesAdolc_const_get_value_accessor(const FLCatchesAdolc flcs, const int catches, int quant, int year, int unit, int season, int area, int iter){
+    adouble ad_value_out = flcs(catches).landings_n()(quant,year,unit,season,area,iter);
+    return ad_value_out.value();
+}
+
+// [[Rcpp::export]]
+double test_FLCatchesAdolc_get_value_accessor(FLCatchesAdolc flcs, const int catches, int quant, int year, int unit, int season, int area, int iter){
+    adouble ad_value_out = flcs(catches).landings_n()(quant,year,unit,season,area,iter);
+    return ad_value_out.value();
+}
+
+// [[Rcpp::export]]
+FLCatchesAdolc test_FLCatchesAdolc_set_single_index_accessor(FLCatchesAdolc flcs, const int element, const FLCatchAdolc flc){
+    flcs(element) = flc;
+    return flcs;
+}
+
+// [[Rcpp::export]]
+FLCatchesAdolc test_FLCatchesAdolc_set_value_accessor(FLCatchesAdolc flcs, const int element, int quant, int year, int unit, int season, int area, int iter, double value){
+    adouble ad_value = value;
+    flcs(element).landings_n()(quant,year,unit,season,area,iter) = ad_value;
+    return flcs;
+}
+
+// [[Rcpp::export]]
+FLCatchAdolc test_FLCatchesAdolc_const_get_single_index_default_accessor(const FLCatchesAdolc flcs){
+    FLCatchAdolc flc = flcs();
+    return flc;
+}
+
+// [[Rcpp::export]]
+FLCatchAdolc test_FLCatchesAdolc_get_single_index_default_accessor(FLCatchesAdolc flcs){
+    FLCatchAdolc flc = flcs();
+    return flc;
+}
+ 
+// [[Rcpp::export]]
+FLCatchesAdolc test_FLCatchesAdolc_set_single_index_default_accessor(FLCatchesAdolc flcs, const FLCatchAdolc flc){
+    flcs() = flc;
+    return flcs;
+}
 

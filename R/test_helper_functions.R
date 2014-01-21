@@ -8,12 +8,12 @@
 #' Generate a randomly sized FLQuant filled with normally distributed random numbers with a mean of 0.
 #' Used for automatic testing.
 #' 
-#' @param max_age The maximum number of ages of the FLQuant. Default is 10. 
-#' @param max_year The maximum number of years of the FLQuant. Default is 10. 
+#' @param max_age The maximum number of ages of the FLQuant. Default is 5. 
+#' @param max_year The maximum number of years of the FLQuant. Default is 5. 
 #' @param max_unit The maximum number of units of the FLQuant. Default is 5. 
 #' @param max_season The maximum number of seasons of the FLQuant. Default is 4. 
 #' @param max_area The maximum number of areas of the FLQuant. Default is 4. 
-#' @param max_iter The maximum number of iters of the FLQuant. Default is 50. 
+#' @param max_iter The maximum number of iters of the FLQuant. Default is 10. 
 #' @param sd The standard deviation of the random numbers. Passed to rnorm() Default is 100.
 #' @export
 #' @return An FLQuant
@@ -21,7 +21,7 @@
 #' flq <- random_FLQuant_generator()
 #' dim(flq)
 #' summary(flq)
-random_FLQuant_generator <- function(max_age = 10, max_year = 10, max_unit = 5, max_season = 4, max_area = 4, max_iter = 50, sd = 100){
+random_FLQuant_generator <- function(max_age = 5, max_year = 5, max_unit = 5, max_season = 4, max_area = 4, max_iter = 10, sd = 100){
     nage <- runif(1,min=1, max=max_age)
     nyear <- runif(1,min=1, max=max_year)
     nunit <- runif(1,min=1, max=max_unit)
@@ -87,8 +87,8 @@ random_FLBiol_generator <- function(sd=100, ...){
     wt(biol) <- abs(rnorm(prod(dim(flq)),sd=sd))
     fec(biol) <- abs(rnorm(prod(dim(flq)),sd=sd))
     spwn(biol) <- abs(rnorm(prod(dim(flq)),sd=sd))
-    name(biol) <- as.character(rnorm(1)*1000)
-    desc(biol) <- as.character(rnorm(1)*1000)
+    name(biol) <- as.character(signif(rnorm(1)*1000,3))
+    desc(biol) <- as.character(signif(rnorm(1)*1000,3))
     return(biol)
 }
 
@@ -123,8 +123,37 @@ random_FLCatch_generator <- function(sd=100, ...){
     catch.sel(catch)[] <- abs(rnorm(prod(dim(flq)),sd=sd))
     price(catch)[] <- abs(rnorm(prod(dim(flq)),sd=sd))
     # catch.q(catch) # undefined right now
-    name(catch) <- as.character(rnorm(1)*1000)
-    desc(catch) <- as.character(rnorm(1)*1000)
+    name(catch) <- as.character(signif(rnorm(1)*1000,3))
+    desc(catch) <- as.character(signif(rnorm(1)*1000,3))
     return(catch)
+}
+
+#' Generate lists of randomly sized and filled FLCatch objects
+#'
+#' Generate a list of randomly sized FLCatch objects filled with normally distributed random numbers with a mean of 0.
+#' Used for automatic testing, particularly of the FLCatches_base<T> class in CPP.
+#' 
+#' @param max_elements The maximum number of elements in the list. Default is 5. 
+#' @param max_age The maximum number of ages of the FLQuant. Default is 10. 
+#' @param max_year The maximum number of years of the FLQuant. Default is 10. 
+#' @param max_unit The maximum number of units of the FLQuant. Default is 5. 
+#' @param max_season The maximum number of seasons of the FLQuant. Default is 4. 
+#' @param max_area The maximum number of areas of the FLQuant. Default is 4. 
+#' @param max_iter The maximum number of iters of the FLQuant. Default is 50. 
+#' @param sd The standard deviation of the random numbers. Passed to rnorm() Default is 100.
+#' @export
+#' @return A list of FLQuant objects
+#' @examples
+#' flc_list <- random_FLCatch_list_generator()
+#' length(flc_list)
+#' summary(flc_list)
+#' lapply(flc_list, summary)
+random_FLCatch_list_generator <- function(max_elements = 5, ...){
+    nelements <- runif(1,min=1, max=max_elements)
+    op <- list()
+    for (i in 1:nelements){
+        op[[i]] <- random_FLCatch_generator(...)
+    }
+    return(op)
 }
 

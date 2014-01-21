@@ -24,7 +24,7 @@ FLQuant7_base<T>::FLQuant7_base(SEXP lst_sexp){
     }
 }
 
-// Takes an FLQuant or FLQuantAdolc and adds it on the end
+// Constructor from an FLQuant
 template <typename T> 
 FLQuant7_base<T>::FLQuant7_base(FLQuant_base<T> flq){
     //Rprintf("In FLQuant7_base<T> FLQuant constructor\n");

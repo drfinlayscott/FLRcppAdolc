@@ -937,6 +937,30 @@ test_FLQuant7_set_accessor <- function(flq7, dim7, quant, year, unit, season, ar
     .Call('FLRcppAdolc_test_FLQuant7_set_accessor', PACKAGE = 'FLRcppAdolc', flq7, dim7, quant, year, unit, season, area, iter, value)
 }
 
+test_FLQuant7_const_default_dim7_get_accessor <- function(flq7) {
+    .Call('FLRcppAdolc_test_FLQuant7_const_default_dim7_get_accessor', PACKAGE = 'FLRcppAdolc', flq7)
+}
+
+test_FLQuant7_default_dim7_get_accessor <- function(flq7) {
+    .Call('FLRcppAdolc_test_FLQuant7_default_dim7_get_accessor', PACKAGE = 'FLRcppAdolc', flq7)
+}
+
+test_FLQuant7_default_dim7_set_accessor <- function(flq7, flq) {
+    .Call('FLRcppAdolc_test_FLQuant7_default_dim7_set_accessor', PACKAGE = 'FLRcppAdolc', flq7, flq)
+}
+
+test_FLQuant7_const_default_dim7_get_accessor_multi <- function(flq7, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_FLQuant7_const_default_dim7_get_accessor_multi', PACKAGE = 'FLRcppAdolc', flq7, quant, year, unit, season, area, iter)
+}
+
+test_FLQuant7_default_dim7_get_accessor_multi <- function(flq7, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_FLQuant7_default_dim7_get_accessor_multi', PACKAGE = 'FLRcppAdolc', flq7, quant, year, unit, season, area, iter)
+}
+
+test_FLQuant7_default_dim7_set_accessor_multi <- function(flq7, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_FLQuant7_default_dim7_set_accessor_multi', PACKAGE = 'FLRcppAdolc', flq7, quant, year, unit, season, area, iter, value)
+}
+
 test_FLQuantAdolc7_as_wrap <- function(flq7) {
     .Call('FLRcppAdolc_test_FLQuantAdolc7_as_wrap', PACKAGE = 'FLRcppAdolc', flq7)
 }
@@ -1003,6 +1027,30 @@ test_FLQuantAdolc7_get_accessor <- function(flq7, dim7, quant, year, unit, seaso
 
 test_FLQuantAdolc7_set_accessor <- function(flq7, dim7, quant, year, unit, season, area, iter, value) {
     .Call('FLRcppAdolc_test_FLQuantAdolc7_set_accessor', PACKAGE = 'FLRcppAdolc', flq7, dim7, quant, year, unit, season, area, iter, value)
+}
+
+test_FLQuantAdolc7_const_default_dim7_get_accessor <- function(flq7) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc7_const_default_dim7_get_accessor', PACKAGE = 'FLRcppAdolc', flq7)
+}
+
+test_FLQuantAdolc7_default_dim7_get_accessor <- function(flq7) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc7_default_dim7_get_accessor', PACKAGE = 'FLRcppAdolc', flq7)
+}
+
+test_FLQuantAdolc7_default_dim7_set_accessor <- function(flq7, flq) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc7_default_dim7_set_accessor', PACKAGE = 'FLRcppAdolc', flq7, flq)
+}
+
+test_FLQuantAdolc7_const_default_dim7_get_accessor_multi <- function(flq7, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc7_const_default_dim7_get_accessor_multi', PACKAGE = 'FLRcppAdolc', flq7, quant, year, unit, season, area, iter)
+}
+
+test_FLQuantAdolc7_default_dim7_get_accessor_multi <- function(flq7, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc7_default_dim7_get_accessor_multi', PACKAGE = 'FLRcppAdolc', flq7, quant, year, unit, season, area, iter)
+}
+
+test_FLQuantAdolc7_default_dim7_set_accessor_multi <- function(flq7, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc7_default_dim7_set_accessor_multi', PACKAGE = 'FLRcppAdolc', flq7, quant, year, unit, season, area, iter, value)
 }
 
 test_FLQ_in_FLS <- function(flq) {

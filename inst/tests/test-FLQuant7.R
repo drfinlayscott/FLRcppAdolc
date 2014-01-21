@@ -78,6 +78,24 @@ test_that("FLQuant7 get and set data accessors - double", {
     expect_that(test_FLQuant7_const_get_accessor(flq7_in, length(flq7_in)+1, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]), throws_error())
     expect_that(test_FLQuant7_get_accessor(flq7_in, length(flq7_in)+1, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]), throws_error())
     expect_that(test_FLQuant7_set_accessor(flq7_in, length(flq7_in)+1, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6], value), throws_error())
+    # default dim7 is 1 single
+    flq_out <- test_FLQuant7_const_default_dim7_get_accessor(flq7_in)
+    expect_that(flq_out, is_identical_to(flq7_in[[1]]))
+    flq_out <- test_FLQuant7_default_dim7_get_accessor(flq7_in)
+    expect_that(flq_out, is_identical_to(flq7_in[[1]]))
+    flq7_out <- test_FLQuant7_default_dim7_set_accessor(flq7_in, flq_in)
+    expect_that(flq7_out[[1]], is_identical_to(flq_in))
+    expect_that(flq7_out[-1], is_identical_to(flq7_in[-1]))
+    # default dim7 is 1 multi
+    indices <- round(runif(6,min=1, max = dim(flq7_in[[1]])))
+    value_out <- test_FLQuant7_const_default_dim7_get_accessor_multi(flq7_in, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]) 
+    expect_that(value_out, is_identical_to(c(flq7_in[[1]][indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]])))
+    value_out <- test_FLQuant7_default_dim7_get_accessor_multi(flq7_in, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]) 
+    expect_that(value_out, is_identical_to(c(flq7_in[[1]][indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]])))
+    flq7_out <- test_FLQuant7_default_dim7_set_accessor_multi(flq7_in, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6], value) 
+    expect_that(c(flq7_out[[1]][indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]), is_identical_to(value))
+    expect_that(flq7_out[-1], is_identical_to(flq7_in[-1]))
+
 })
 
 test_that("FLQuantAdolc7 as and wrap - Adolc",{
@@ -158,5 +176,22 @@ test_that("FLQuantAdolc7 get and set data accessors - Adolc", {
     expect_that(test_FLQuantAdolc7_const_get_accessor(flq7_in, length(flq7_in)+1, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]), throws_error())
     expect_that(test_FLQuantAdolc7_get_accessor(flq7_in, length(flq7_in)+1, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]), throws_error())
     expect_that(test_FLQuantAdolc7_set_accessor(flq7_in, length(flq7_in)+1, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6], value), throws_error())
+    # default dim7 is 1 single
+    flq_out <- test_FLQuantAdolc7_const_default_dim7_get_accessor(flq7_in)
+    expect_that(flq_out, is_identical_to(flq7_in[[1]]))
+    flq_out <- test_FLQuantAdolc7_default_dim7_get_accessor(flq7_in)
+    expect_that(flq_out, is_identical_to(flq7_in[[1]]))
+    flq7_out <- test_FLQuantAdolc7_default_dim7_set_accessor(flq7_in, flq_in)
+    expect_that(flq7_out[[1]], is_identical_to(flq_in))
+    expect_that(flq7_out[-1], is_identical_to(flq7_in[-1]))
+    # default dim7 is 1 multi
+    indices <- round(runif(6,min=1, max = dim(flq7_in[[1]])))
+    value_out <- test_FLQuantAdolc7_const_default_dim7_get_accessor_multi(flq7_in, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]) 
+    expect_that(value_out, is_identical_to(c(flq7_in[[1]][indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]])))
+    value_out <- test_FLQuantAdolc7_default_dim7_get_accessor_multi(flq7_in, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]) 
+    expect_that(value_out, is_identical_to(c(flq7_in[[1]][indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]])))
+    flq7_out <- test_FLQuantAdolc7_default_dim7_set_accessor_multi(flq7_in, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6], value) 
+    expect_that(c(flq7_out[[1]][indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]), is_identical_to(value))
+    expect_that(flq7_out[-1], is_identical_to(flq7_in[-1]))
 })
 

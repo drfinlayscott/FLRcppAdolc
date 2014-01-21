@@ -3876,6 +3876,116 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// test_FLQuant7_const_default_dim7_get_accessor
+FLQuant test_FLQuant7_const_default_dim7_get_accessor(const FLQuant7 flq7);
+RcppExport SEXP FLRcppAdolc_test_FLQuant7_const_default_dim7_get_accessor(SEXP flq7SEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const FLQuant7 >::type flq7(flq7SEXP );
+        FLQuant __result = test_FLQuant7_const_default_dim7_get_accessor(flq7);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLQuant7_default_dim7_get_accessor
+FLQuant test_FLQuant7_default_dim7_get_accessor(FLQuant7 flq7);
+RcppExport SEXP FLRcppAdolc_test_FLQuant7_default_dim7_get_accessor(SEXP flq7SEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuant7 >::type flq7(flq7SEXP );
+        FLQuant __result = test_FLQuant7_default_dim7_get_accessor(flq7);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLQuant7_default_dim7_set_accessor
+FLQuant7 test_FLQuant7_default_dim7_set_accessor(FLQuant7 flq7, FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant7_default_dim7_set_accessor(SEXP flq7SEXP, SEXP flqSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuant7 >::type flq7(flq7SEXP );
+        Rcpp::traits::input_parameter< FLQuant >::type flq(flqSEXP );
+        FLQuant7 __result = test_FLQuant7_default_dim7_set_accessor(flq7, flq);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLQuant7_const_default_dim7_get_accessor_multi
+double test_FLQuant7_const_default_dim7_get_accessor_multi(const FLQuant7 flq7, const int quant, const int year, const int unit, const int season, const int area, const int iter);
+RcppExport SEXP FLRcppAdolc_test_FLQuant7_const_default_dim7_get_accessor_multi(SEXP flq7SEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const FLQuant7 >::type flq7(flq7SEXP );
+        Rcpp::traits::input_parameter< const int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< const int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< const int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< const int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< const int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< const int >::type iter(iterSEXP );
+        double __result = test_FLQuant7_const_default_dim7_get_accessor_multi(flq7, quant, year, unit, season, area, iter);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLQuant7_default_dim7_get_accessor_multi
+double test_FLQuant7_default_dim7_get_accessor_multi(FLQuant7 flq7, const int quant, const int year, const int unit, const int season, const int area, const int iter);
+RcppExport SEXP FLRcppAdolc_test_FLQuant7_default_dim7_get_accessor_multi(SEXP flq7SEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuant7 >::type flq7(flq7SEXP );
+        Rcpp::traits::input_parameter< const int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< const int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< const int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< const int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< const int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< const int >::type iter(iterSEXP );
+        double __result = test_FLQuant7_default_dim7_get_accessor_multi(flq7, quant, year, unit, season, area, iter);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLQuant7_default_dim7_set_accessor_multi
+FLQuant7 test_FLQuant7_default_dim7_set_accessor_multi(FLQuant7 flq7, const int quant, const int year, const int unit, const int season, const int area, const int iter, const double value);
+RcppExport SEXP FLRcppAdolc_test_FLQuant7_default_dim7_set_accessor_multi(SEXP flq7SEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuant7 >::type flq7(flq7SEXP );
+        Rcpp::traits::input_parameter< const int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< const int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< const int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< const int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< const int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< const int >::type iter(iterSEXP );
+        Rcpp::traits::input_parameter< const double >::type value(valueSEXP );
+        FLQuant7 __result = test_FLQuant7_default_dim7_set_accessor_multi(flq7, quant, year, unit, season, area, iter, value);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // test_FLQuantAdolc7_as_wrap
 FLQuantAdolc7 test_FLQuantAdolc7_as_wrap(FLQuantAdolc7 flq7);
 RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc7_as_wrap(SEXP flq7SEXP) {
@@ -4163,6 +4273,116 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< const int >::type iter(iterSEXP );
         Rcpp::traits::input_parameter< const double >::type value(valueSEXP );
         FLQuantAdolc7 __result = test_FLQuantAdolc7_set_accessor(flq7, dim7, quant, year, unit, season, area, iter, value);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLQuantAdolc7_const_default_dim7_get_accessor
+FLQuantAdolc test_FLQuantAdolc7_const_default_dim7_get_accessor(const FLQuantAdolc7 flq7);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc7_const_default_dim7_get_accessor(SEXP flq7SEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const FLQuantAdolc7 >::type flq7(flq7SEXP );
+        FLQuantAdolc __result = test_FLQuantAdolc7_const_default_dim7_get_accessor(flq7);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLQuantAdolc7_default_dim7_get_accessor
+FLQuantAdolc test_FLQuantAdolc7_default_dim7_get_accessor(FLQuantAdolc7 flq7);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc7_default_dim7_get_accessor(SEXP flq7SEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuantAdolc7 >::type flq7(flq7SEXP );
+        FLQuantAdolc __result = test_FLQuantAdolc7_default_dim7_get_accessor(flq7);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLQuantAdolc7_default_dim7_set_accessor
+FLQuantAdolc7 test_FLQuantAdolc7_default_dim7_set_accessor(FLQuantAdolc7 flq7, FLQuantAdolc flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc7_default_dim7_set_accessor(SEXP flq7SEXP, SEXP flqSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuantAdolc7 >::type flq7(flq7SEXP );
+        Rcpp::traits::input_parameter< FLQuantAdolc >::type flq(flqSEXP );
+        FLQuantAdolc7 __result = test_FLQuantAdolc7_default_dim7_set_accessor(flq7, flq);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLQuantAdolc7_const_default_dim7_get_accessor_multi
+double test_FLQuantAdolc7_const_default_dim7_get_accessor_multi(const FLQuantAdolc7 flq7, const int quant, const int year, const int unit, const int season, const int area, const int iter);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc7_const_default_dim7_get_accessor_multi(SEXP flq7SEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const FLQuantAdolc7 >::type flq7(flq7SEXP );
+        Rcpp::traits::input_parameter< const int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< const int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< const int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< const int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< const int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< const int >::type iter(iterSEXP );
+        double __result = test_FLQuantAdolc7_const_default_dim7_get_accessor_multi(flq7, quant, year, unit, season, area, iter);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLQuantAdolc7_default_dim7_get_accessor_multi
+double test_FLQuantAdolc7_default_dim7_get_accessor_multi(FLQuantAdolc7 flq7, const int quant, const int year, const int unit, const int season, const int area, const int iter);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc7_default_dim7_get_accessor_multi(SEXP flq7SEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuantAdolc7 >::type flq7(flq7SEXP );
+        Rcpp::traits::input_parameter< const int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< const int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< const int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< const int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< const int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< const int >::type iter(iterSEXP );
+        double __result = test_FLQuantAdolc7_default_dim7_get_accessor_multi(flq7, quant, year, unit, season, area, iter);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLQuantAdolc7_default_dim7_set_accessor_multi
+FLQuantAdolc7 test_FLQuantAdolc7_default_dim7_set_accessor_multi(FLQuantAdolc7 flq7, const int quant, const int year, const int unit, const int season, const int area, const int iter, const double value);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc7_default_dim7_set_accessor_multi(SEXP flq7SEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuantAdolc7 >::type flq7(flq7SEXP );
+        Rcpp::traits::input_parameter< const int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< const int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< const int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< const int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< const int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< const int >::type iter(iterSEXP );
+        Rcpp::traits::input_parameter< const double >::type value(valueSEXP );
+        FLQuantAdolc7 __result = test_FLQuantAdolc7_default_dim7_set_accessor_multi(flq7, quant, year, unit, season, area, iter, value);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

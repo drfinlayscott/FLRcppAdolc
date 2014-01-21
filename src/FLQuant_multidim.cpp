@@ -104,7 +104,7 @@ FLQuant_base<T>& FLQuant7_base<T>::operator () (const unsigned int element){
 
 // Get only data accessor - all dims
 template <typename T>
-T FLQuant7_base<T>::operator () (const unsigned int dim7, const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter) const{
+T FLQuant7_base<T>::operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter, const unsigned int dim7) const{
     //Rprintf("In const multiple element accessor\n");
     if (dim7 > get_ndim7()){
         Rcpp::stop("FLQuant7_base: Trying to access element larger than data size.");
@@ -114,7 +114,7 @@ T FLQuant7_base<T>::operator () (const unsigned int dim7, const unsigned int qua
 
 // Get and set data accessor - all dims
 template <typename T>
-T& FLQuant7_base<T>::operator () (const unsigned int dim7, const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter){
+T& FLQuant7_base<T>::operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter, const unsigned int dim7){
     //Rprintf("In multiple element accessor\n");
     if (dim7 > get_ndim7()){
         Rcpp::stop("FLQuant7_base: Trying to access element larger than data size.");

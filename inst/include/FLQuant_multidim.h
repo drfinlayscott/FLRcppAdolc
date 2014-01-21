@@ -33,10 +33,10 @@ class FLQuant7_base {
         /* () accessors */
         // If accessing by single element, returns the FLQuant_base<T>
         // If accessing by multiple elements, returns the T value
-		FLQuant_base<T> operator () (const unsigned int element) const; // only gets an FLQuant so const reinforced 
-		T operator () (const unsigned int dim7, const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter) const; // only gets an element so const reinforced 
-		FLQuant_base<T>& operator () (const unsigned int element); // gets and sets an FLQuant so const not reinforced
-		T& operator () (const unsigned int dim7,const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter); // gets and sets an element so const not reinforced
+		FLQuant_base<T> operator () (const unsigned int element=1) const; // only gets an FLQuant so const reinforced 
+		T operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter, const unsigned int dim7=1) const; // only gets an element so const reinforced 
+		FLQuant_base<T>& operator () (const unsigned int element=1); // gets and sets an FLQuant so const not reinforced
+		T& operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter, const unsigned int dim7=1); // gets and sets an element so const not reinforced
         void operator() (const FLQuant_base<T> flq); // Add another FLQuant_base<T> to the data
         unsigned int get_ndim7() const;
 

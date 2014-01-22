@@ -220,6 +220,7 @@ FLQuant_base<T> FLCatch_base<T>::discards_sel() const {
 // Just an empty object
 template <typename T>
 FLCatches_base<T>::FLCatches_base(){
+    //Rprintf("In FLCatches empty constructor\n");
     //catches
 }
 
@@ -227,6 +228,7 @@ FLCatches_base<T>::FLCatches_base(){
 // Used as intrusive 'as'
 template <typename T>
 FLCatches_base<T>::FLCatches_base(SEXP flcs_sexp){
+    //Rprintf("In FLCatches SEXP constructor\n");
     Rcpp::S4 flcs_s4 = Rcpp::as<Rcpp::S4>(flcs_sexp);
     desc = Rcpp::as<std::string>(flcs_s4.slot("desc"));
     names = flcs_s4.slot("names");
@@ -253,13 +255,11 @@ FLCatches_base<T>::operator SEXP() const{
     return flcs_s4;
 }
 
-
 // Constructor from an FLCatch
 template <typename T> 
 FLCatches_base<T>::FLCatches_base(FLCatch_base<T> flc){
     catches.push_back(flc);
 }
-
 
 // Copy constructor - else 'data' can be pointed at by multiple instances
 template<typename T>

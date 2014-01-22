@@ -102,7 +102,7 @@ class FLCatches_base {
         unsigned int get_ncatches() const;
         //Rcpp::CharacterVector get_names() const;
 
-    private:
+    protected:
         std::vector<FLCatch_base<T> > catches;
         Rcpp::CharacterVector names; // of the catches 
         std::string desc;

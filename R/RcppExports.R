@@ -629,24 +629,96 @@ test_FLFishery_sexp_constructor <- function(flf_sexp) {
     .Call('FLRcppAdolc_test_FLFishery_sexp_constructor', PACKAGE = 'FLRcppAdolc', flf_sexp)
 }
 
-test_FLFisheryAdolc_sexp_constructor <- function(flf_sexp) {
-    .Call('FLRcppAdolc_test_FLFisheryAdolc_sexp_constructor', PACKAGE = 'FLRcppAdolc', flf_sexp)
-}
-
 test_FLFishery_as_wrap <- function(flf) {
     .Call('FLRcppAdolc_test_FLFishery_as_wrap', PACKAGE = 'FLRcppAdolc', flf)
-}
-
-test_FLFisheryAdolc_as_wrap <- function(flf) {
-    .Call('FLRcppAdolc_test_FLFisheryAdolc_as_wrap', PACKAGE = 'FLRcppAdolc', flf)
 }
 
 test_FLFishery_copy_constructor <- function(flf1) {
     .Call('FLRcppAdolc_test_FLFishery_copy_constructor', PACKAGE = 'FLRcppAdolc', flf1)
 }
 
+test_FLFishery_assignment_operator <- function(flf1) {
+    .Call('FLRcppAdolc_test_FLFishery_assignment_operator', PACKAGE = 'FLRcppAdolc', flf1)
+}
+
+test_FLFishery_const_catches_get_accessors <- function(flf, catches, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_FLFishery_const_catches_get_accessors', PACKAGE = 'FLRcppAdolc', flf, catches, quant, year, unit, season, area, iter)
+}
+
+test_FLFishery_catches_get_accessors <- function(flf, catches, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_FLFishery_catches_get_accessors', PACKAGE = 'FLRcppAdolc', flf, catches, quant, year, unit, season, area, iter)
+}
+
+test_FLFishery_const_economics_get_accessors <- function(flf, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_FLFishery_const_economics_get_accessors', PACKAGE = 'FLRcppAdolc', flf, quant, year, unit, season, area, iter)
+}
+
+test_FLFishery_economics_get_accessors <- function(flf, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_FLFishery_economics_get_accessors', PACKAGE = 'FLRcppAdolc', flf, quant, year, unit, season, area, iter)
+}
+
+test_FLFishery_set_accessors <- function(flf, catches, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_FLFishery_set_accessors', PACKAGE = 'FLRcppAdolc', flf, catches, quant, year, unit, season, area, iter, value)
+}
+
+test_FLFishery_copy_constructor2 <- function(flf1, element, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_FLFishery_copy_constructor2', PACKAGE = 'FLRcppAdolc', flf1, element, quant, year, unit, season, area, iter, value)
+}
+
+test_FLFishery_assignment_operator2 <- function(flf1, element, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_FLFishery_assignment_operator2', PACKAGE = 'FLRcppAdolc', flf1, element, quant, year, unit, season, area, iter, value)
+}
+
+test_FLFisheryAdolc_empty_constructor <- function() {
+    invisible(.Call('FLRcppAdolc_test_FLFisheryAdolc_empty_constructor', PACKAGE = 'FLRcppAdolc'))
+}
+
+test_simple_FLFisheryAdolc_sexp_constructor <- function(flf_sexp) {
+    .Call('FLRcppAdolc_test_simple_FLFisheryAdolc_sexp_constructor', PACKAGE = 'FLRcppAdolc', flf_sexp)
+}
+
+test_FLFisheryAdolc_sexp_constructor <- function(flf_sexp) {
+    .Call('FLRcppAdolc_test_FLFisheryAdolc_sexp_constructor', PACKAGE = 'FLRcppAdolc', flf_sexp)
+}
+
+test_FLFisheryAdolc_as_wrap <- function(flf) {
+    .Call('FLRcppAdolc_test_FLFisheryAdolc_as_wrap', PACKAGE = 'FLRcppAdolc', flf)
+}
+
 test_FLFisheryAdolc_copy_constructor <- function(flf1) {
     .Call('FLRcppAdolc_test_FLFisheryAdolc_copy_constructor', PACKAGE = 'FLRcppAdolc', flf1)
+}
+
+test_FLFisheryAdolc_assignment_operator <- function(flf1) {
+    .Call('FLRcppAdolc_test_FLFisheryAdolc_assignment_operator', PACKAGE = 'FLRcppAdolc', flf1)
+}
+
+test_FLFisheryAdolc_const_catches_get_accessors <- function(flf, catches, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_FLFisheryAdolc_const_catches_get_accessors', PACKAGE = 'FLRcppAdolc', flf, catches, quant, year, unit, season, area, iter)
+}
+
+test_FLFisheryAdolc_catches_get_accessors <- function(flf, catches, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_FLFisheryAdolc_catches_get_accessors', PACKAGE = 'FLRcppAdolc', flf, catches, quant, year, unit, season, area, iter)
+}
+
+test_FLFisheryAdolc_const_economics_get_accessors <- function(flf, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_FLFisheryAdolc_const_economics_get_accessors', PACKAGE = 'FLRcppAdolc', flf, quant, year, unit, season, area, iter)
+}
+
+test_FLFisheryAdolc_economics_get_accessors <- function(flf, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_FLFisheryAdolc_economics_get_accessors', PACKAGE = 'FLRcppAdolc', flf, quant, year, unit, season, area, iter)
+}
+
+test_FLFisheryAdolc_set_accessors <- function(flf, catches, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_FLFisheryAdolc_set_accessors', PACKAGE = 'FLRcppAdolc', flf, catches, quant, year, unit, season, area, iter, value)
+}
+
+test_FLFisheryAdolc_copy_constructor2 <- function(flf1, element, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_FLFisheryAdolc_copy_constructor2', PACKAGE = 'FLRcppAdolc', flf1, element, quant, year, unit, season, area, iter, value)
+}
+
+test_FLFisheryAdolc_assignment_operator2 <- function(flf1, element, quant, year, unit, season, area, iter, value) {
+    .Call('FLRcppAdolc_test_FLFisheryAdolc_assignment_operator2', PACKAGE = 'FLRcppAdolc', flf1, element, quant, year, unit, season, area, iter, value)
 }
 
 test_FLQuantAdolc_as_wrap <- function(flq) {

@@ -2,7 +2,7 @@
 \alias{random_FLFishery_generator}
 \title{Generate a randomly filled and sized FLFishery object}
 \usage{
-random_FLFishery_generator(max_elements = 5, ...)
+random_FLFishery_generator(max_elements = 5, sd = 100, ...)
 }
 \arguments{
   \item{max_elements}{The maximum number of elements in the

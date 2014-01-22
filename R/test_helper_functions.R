@@ -99,11 +99,6 @@ random_FLBiol_generator <- function(sd=100, ...){
 random_FLCatch_generator <- function(sd=100, ...){
     flq <- abs(random_FLQuant_generator(sd=sd, ...))
     catch <- FLCatch(landings.n = flq)
-    #landings.wt(catch) <- rnorm(prod(dim(flq)),sd=sd)
-    #discards.n(catch) <- rnorm(prod(dim(flq)),sd=sd)
-    #discards.wt(catch) <- rnorm(prod(dim(flq)),sd=sd)
-    #catch.sel(catch) <- rnorm(prod(dim(flq)),sd=sd)
-    #price(catch) <- rnorm(prod(dim(flq)),sd=sd)
     landings.wt(catch)[] <- abs(rnorm(prod(dim(flq)),sd=sd))
     discards.n(catch)[] <- abs(rnorm(prod(dim(flq)),sd=sd))
     discards.wt(catch)[] <- abs(rnorm(prod(dim(flq)),sd=sd))
@@ -166,9 +161,15 @@ random_FLCatches_generator <- function(max_catches = 5, ...){
 #' flf <- random_FLFishery_generator(fixed_dims = c(NA,10,1,1,1,1))
 #' lapply(flf, summary)
 #' flf <- random_FLFishery_generator(fixed_dims = c(NA,10,1,1,1,1), max_dims = c(100,NA,NA,NA,NA,NA))
-random_FLFishery_generator <- function(max_elements = 5, ...){
+random_FLFishery_generator <- function(max_elements = 5, sd = 100,  ...){
     catches <- random_FLCatches_generator(max_elements, ...)
     fishery <- FLFishery(catches)
+    # fill up effort, vcost and fcost
+    effort(fishery)[] <- rnorm(prod(dim(effort(fishery))),sd=sd)
+    vcost(fishery)[] <- rnorm(prod(dim(vcost(fishery))),sd=sd)
+    fcost(fishery)[] <- rnorm(prod(dim(fcost(fishery))),sd=sd)
+    fishery@desc <- as.character(signif(rnorm(1)*1000,3))
+    fishery@name <- as.character(signif(rnorm(1)*1000,3))
     return(fishery)
 }
 

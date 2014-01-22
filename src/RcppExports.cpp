@@ -2585,21 +2585,6 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// test_FLFisheryAdolc_sexp_constructor
-FLFisheryAdolc test_FLFisheryAdolc_sexp_constructor(SEXP flf_sexp);
-RcppExport SEXP FLRcppAdolc_test_FLFisheryAdolc_sexp_constructor(SEXP flf_sexpSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< SEXP >::type flf_sexp(flf_sexpSEXP );
-        FLFisheryAdolc __result = test_FLFisheryAdolc_sexp_constructor(flf_sexp);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
 // test_FLFishery_as_wrap
 FLFishery test_FLFishery_as_wrap(FLFishery flf);
 RcppExport SEXP FLRcppAdolc_test_FLFishery_as_wrap(SEXP flfSEXP) {
@@ -2609,21 +2594,6 @@ BEGIN_RCPP
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< FLFishery >::type flf(flfSEXP );
         FLFishery __result = test_FLFishery_as_wrap(flf);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// test_FLFisheryAdolc_as_wrap
-FLFisheryAdolc test_FLFisheryAdolc_as_wrap(FLFisheryAdolc flf);
-RcppExport SEXP FLRcppAdolc_test_FLFisheryAdolc_as_wrap(SEXP flfSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< FLFisheryAdolc >::type flf(flfSEXP );
-        FLFisheryAdolc __result = test_FLFisheryAdolc_as_wrap(flf);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
@@ -2645,6 +2615,232 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// test_FLFishery_assignment_operator
+FLFishery test_FLFishery_assignment_operator(FLFishery flf1);
+RcppExport SEXP FLRcppAdolc_test_FLFishery_assignment_operator(SEXP flf1SEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFishery >::type flf1(flf1SEXP );
+        FLFishery __result = test_FLFishery_assignment_operator(flf1);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFishery_const_catches_get_accessors
+Rcpp::NumericVector test_FLFishery_const_catches_get_accessors(const FLFishery flf, int catches, int quant, int year, int unit, int season, int area, int iter);
+RcppExport SEXP FLRcppAdolc_test_FLFishery_const_catches_get_accessors(SEXP flfSEXP, SEXP catchesSEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const FLFishery >::type flf(flfSEXP );
+        Rcpp::traits::input_parameter< int >::type catches(catchesSEXP );
+        Rcpp::traits::input_parameter< int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< int >::type iter(iterSEXP );
+        Rcpp::NumericVector __result = test_FLFishery_const_catches_get_accessors(flf, catches, quant, year, unit, season, area, iter);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFishery_catches_get_accessors
+Rcpp::NumericVector test_FLFishery_catches_get_accessors(FLFishery flf, int catches, int quant, int year, int unit, int season, int area, int iter);
+RcppExport SEXP FLRcppAdolc_test_FLFishery_catches_get_accessors(SEXP flfSEXP, SEXP catchesSEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFishery >::type flf(flfSEXP );
+        Rcpp::traits::input_parameter< int >::type catches(catchesSEXP );
+        Rcpp::traits::input_parameter< int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< int >::type iter(iterSEXP );
+        Rcpp::NumericVector __result = test_FLFishery_catches_get_accessors(flf, catches, quant, year, unit, season, area, iter);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFishery_const_economics_get_accessors
+Rcpp::NumericVector test_FLFishery_const_economics_get_accessors(const FLFishery flf, int quant, int year, int unit, int season, int area, int iter);
+RcppExport SEXP FLRcppAdolc_test_FLFishery_const_economics_get_accessors(SEXP flfSEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const FLFishery >::type flf(flfSEXP );
+        Rcpp::traits::input_parameter< int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< int >::type iter(iterSEXP );
+        Rcpp::NumericVector __result = test_FLFishery_const_economics_get_accessors(flf, quant, year, unit, season, area, iter);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFishery_economics_get_accessors
+Rcpp::NumericVector test_FLFishery_economics_get_accessors(FLFishery flf, int quant, int year, int unit, int season, int area, int iter);
+RcppExport SEXP FLRcppAdolc_test_FLFishery_economics_get_accessors(SEXP flfSEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFishery >::type flf(flfSEXP );
+        Rcpp::traits::input_parameter< int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< int >::type iter(iterSEXP );
+        Rcpp::NumericVector __result = test_FLFishery_economics_get_accessors(flf, quant, year, unit, season, area, iter);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFishery_set_accessors
+FLFishery test_FLFishery_set_accessors(FLFishery flf, int catches, int quant, int year, int unit, int season, int area, int iter, double value);
+RcppExport SEXP FLRcppAdolc_test_FLFishery_set_accessors(SEXP flfSEXP, SEXP catchesSEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFishery >::type flf(flfSEXP );
+        Rcpp::traits::input_parameter< int >::type catches(catchesSEXP );
+        Rcpp::traits::input_parameter< int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< int >::type iter(iterSEXP );
+        Rcpp::traits::input_parameter< double >::type value(valueSEXP );
+        FLFishery __result = test_FLFishery_set_accessors(flf, catches, quant, year, unit, season, area, iter, value);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFishery_copy_constructor2
+Rcpp::List test_FLFishery_copy_constructor2(FLFishery flf1, int element, int quant, int year, int unit, int season, int area, int iter, double value);
+RcppExport SEXP FLRcppAdolc_test_FLFishery_copy_constructor2(SEXP flf1SEXP, SEXP elementSEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFishery >::type flf1(flf1SEXP );
+        Rcpp::traits::input_parameter< int >::type element(elementSEXP );
+        Rcpp::traits::input_parameter< int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< int >::type iter(iterSEXP );
+        Rcpp::traits::input_parameter< double >::type value(valueSEXP );
+        Rcpp::List __result = test_FLFishery_copy_constructor2(flf1, element, quant, year, unit, season, area, iter, value);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFishery_assignment_operator2
+Rcpp::List test_FLFishery_assignment_operator2(FLFishery flf1, int element, int quant, int year, int unit, int season, int area, int iter, double value);
+RcppExport SEXP FLRcppAdolc_test_FLFishery_assignment_operator2(SEXP flf1SEXP, SEXP elementSEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFishery >::type flf1(flf1SEXP );
+        Rcpp::traits::input_parameter< int >::type element(elementSEXP );
+        Rcpp::traits::input_parameter< int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< int >::type iter(iterSEXP );
+        Rcpp::traits::input_parameter< double >::type value(valueSEXP );
+        Rcpp::List __result = test_FLFishery_assignment_operator2(flf1, element, quant, year, unit, season, area, iter, value);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFisheryAdolc_empty_constructor
+void test_FLFisheryAdolc_empty_constructor();
+RcppExport SEXP FLRcppAdolc_test_FLFisheryAdolc_empty_constructor() {
+BEGIN_RCPP
+    {
+        Rcpp::RNGScope __rngScope;
+        test_FLFisheryAdolc_empty_constructor();
+    }
+    return R_NilValue;
+END_RCPP
+}
+// test_simple_FLFisheryAdolc_sexp_constructor
+int test_simple_FLFisheryAdolc_sexp_constructor(SEXP flf_sexp);
+RcppExport SEXP FLRcppAdolc_test_simple_FLFisheryAdolc_sexp_constructor(SEXP flf_sexpSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< SEXP >::type flf_sexp(flf_sexpSEXP );
+        int __result = test_simple_FLFisheryAdolc_sexp_constructor(flf_sexp);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFisheryAdolc_sexp_constructor
+FLFisheryAdolc test_FLFisheryAdolc_sexp_constructor(SEXP flf_sexp);
+RcppExport SEXP FLRcppAdolc_test_FLFisheryAdolc_sexp_constructor(SEXP flf_sexpSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< SEXP >::type flf_sexp(flf_sexpSEXP );
+        FLFisheryAdolc __result = test_FLFisheryAdolc_sexp_constructor(flf_sexp);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFisheryAdolc_as_wrap
+FLFisheryAdolc test_FLFisheryAdolc_as_wrap(FLFisheryAdolc flf);
+RcppExport SEXP FLRcppAdolc_test_FLFisheryAdolc_as_wrap(SEXP flfSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFisheryAdolc >::type flf(flfSEXP );
+        FLFisheryAdolc __result = test_FLFisheryAdolc_as_wrap(flf);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // test_FLFisheryAdolc_copy_constructor
 FLFisheryAdolc test_FLFisheryAdolc_copy_constructor(FLFisheryAdolc flf1);
 RcppExport SEXP FLRcppAdolc_test_FLFisheryAdolc_copy_constructor(SEXP flf1SEXP) {
@@ -2654,6 +2850,176 @@ BEGIN_RCPP
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< FLFisheryAdolc >::type flf1(flf1SEXP );
         FLFisheryAdolc __result = test_FLFisheryAdolc_copy_constructor(flf1);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFisheryAdolc_assignment_operator
+FLFisheryAdolc test_FLFisheryAdolc_assignment_operator(FLFisheryAdolc flf1);
+RcppExport SEXP FLRcppAdolc_test_FLFisheryAdolc_assignment_operator(SEXP flf1SEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFisheryAdolc >::type flf1(flf1SEXP );
+        FLFisheryAdolc __result = test_FLFisheryAdolc_assignment_operator(flf1);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFisheryAdolc_const_catches_get_accessors
+Rcpp::NumericVector test_FLFisheryAdolc_const_catches_get_accessors(const FLFisheryAdolc flf, int catches, int quant, int year, int unit, int season, int area, int iter);
+RcppExport SEXP FLRcppAdolc_test_FLFisheryAdolc_const_catches_get_accessors(SEXP flfSEXP, SEXP catchesSEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const FLFisheryAdolc >::type flf(flfSEXP );
+        Rcpp::traits::input_parameter< int >::type catches(catchesSEXP );
+        Rcpp::traits::input_parameter< int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< int >::type iter(iterSEXP );
+        Rcpp::NumericVector __result = test_FLFisheryAdolc_const_catches_get_accessors(flf, catches, quant, year, unit, season, area, iter);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFisheryAdolc_catches_get_accessors
+Rcpp::NumericVector test_FLFisheryAdolc_catches_get_accessors(FLFisheryAdolc flf, int catches, int quant, int year, int unit, int season, int area, int iter);
+RcppExport SEXP FLRcppAdolc_test_FLFisheryAdolc_catches_get_accessors(SEXP flfSEXP, SEXP catchesSEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFisheryAdolc >::type flf(flfSEXP );
+        Rcpp::traits::input_parameter< int >::type catches(catchesSEXP );
+        Rcpp::traits::input_parameter< int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< int >::type iter(iterSEXP );
+        Rcpp::NumericVector __result = test_FLFisheryAdolc_catches_get_accessors(flf, catches, quant, year, unit, season, area, iter);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFisheryAdolc_const_economics_get_accessors
+Rcpp::NumericVector test_FLFisheryAdolc_const_economics_get_accessors(const FLFisheryAdolc flf, int quant, int year, int unit, int season, int area, int iter);
+RcppExport SEXP FLRcppAdolc_test_FLFisheryAdolc_const_economics_get_accessors(SEXP flfSEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const FLFisheryAdolc >::type flf(flfSEXP );
+        Rcpp::traits::input_parameter< int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< int >::type iter(iterSEXP );
+        Rcpp::NumericVector __result = test_FLFisheryAdolc_const_economics_get_accessors(flf, quant, year, unit, season, area, iter);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFisheryAdolc_economics_get_accessors
+Rcpp::NumericVector test_FLFisheryAdolc_economics_get_accessors(FLFisheryAdolc flf, int quant, int year, int unit, int season, int area, int iter);
+RcppExport SEXP FLRcppAdolc_test_FLFisheryAdolc_economics_get_accessors(SEXP flfSEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFisheryAdolc >::type flf(flfSEXP );
+        Rcpp::traits::input_parameter< int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< int >::type iter(iterSEXP );
+        Rcpp::NumericVector __result = test_FLFisheryAdolc_economics_get_accessors(flf, quant, year, unit, season, area, iter);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFisheryAdolc_set_accessors
+FLFisheryAdolc test_FLFisheryAdolc_set_accessors(FLFisheryAdolc flf, int catches, int quant, int year, int unit, int season, int area, int iter, double value);
+RcppExport SEXP FLRcppAdolc_test_FLFisheryAdolc_set_accessors(SEXP flfSEXP, SEXP catchesSEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFisheryAdolc >::type flf(flfSEXP );
+        Rcpp::traits::input_parameter< int >::type catches(catchesSEXP );
+        Rcpp::traits::input_parameter< int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< int >::type iter(iterSEXP );
+        Rcpp::traits::input_parameter< double >::type value(valueSEXP );
+        FLFisheryAdolc __result = test_FLFisheryAdolc_set_accessors(flf, catches, quant, year, unit, season, area, iter, value);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFisheryAdolc_copy_constructor2
+Rcpp::List test_FLFisheryAdolc_copy_constructor2(FLFisheryAdolc flf1, int element, int quant, int year, int unit, int season, int area, int iter, double value);
+RcppExport SEXP FLRcppAdolc_test_FLFisheryAdolc_copy_constructor2(SEXP flf1SEXP, SEXP elementSEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFisheryAdolc >::type flf1(flf1SEXP );
+        Rcpp::traits::input_parameter< int >::type element(elementSEXP );
+        Rcpp::traits::input_parameter< int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< int >::type iter(iterSEXP );
+        Rcpp::traits::input_parameter< double >::type value(valueSEXP );
+        Rcpp::List __result = test_FLFisheryAdolc_copy_constructor2(flf1, element, quant, year, unit, season, area, iter, value);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFisheryAdolc_assignment_operator2
+Rcpp::List test_FLFisheryAdolc_assignment_operator2(FLFisheryAdolc flf1, int element, int quant, int year, int unit, int season, int area, int iter, double value);
+RcppExport SEXP FLRcppAdolc_test_FLFisheryAdolc_assignment_operator2(SEXP flf1SEXP, SEXP elementSEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP iterSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFisheryAdolc >::type flf1(flf1SEXP );
+        Rcpp::traits::input_parameter< int >::type element(elementSEXP );
+        Rcpp::traits::input_parameter< int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< int >::type iter(iterSEXP );
+        Rcpp::traits::input_parameter< double >::type value(valueSEXP );
+        Rcpp::List __result = test_FLFisheryAdolc_assignment_operator2(flf1, element, quant, year, unit, season, area, iter, value);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

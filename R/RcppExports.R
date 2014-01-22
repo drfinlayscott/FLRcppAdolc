@@ -477,10 +477,6 @@ test_FLCatches_as_wrap <- function(flcs) {
     .Call('FLRcppAdolc_test_FLCatches_as_wrap', PACKAGE = 'FLRcppAdolc', flcs)
 }
 
-test_FLCatches_empty_wrap <- function() {
-    .Call('FLRcppAdolc_test_FLCatches_empty_wrap', PACKAGE = 'FLRcppAdolc')
-}
-
 test_FLCatches_sexp_constructor <- function(flcs_sexp1) {
     .Call('FLRcppAdolc_test_FLCatches_sexp_constructor', PACKAGE = 'FLRcppAdolc', flcs_sexp1)
 }
@@ -553,10 +549,6 @@ test_FLCatchesAdolc_as_wrap <- function(flcs) {
     .Call('FLRcppAdolc_test_FLCatchesAdolc_as_wrap', PACKAGE = 'FLRcppAdolc', flcs)
 }
 
-test_FLCatchesAdolc_empty_wrap <- function() {
-    .Call('FLRcppAdolc_test_FLCatchesAdolc_empty_wrap', PACKAGE = 'FLRcppAdolc')
-}
-
 test_FLCatchesAdolc_sexp_constructor <- function(flcs_sexp1) {
     .Call('FLRcppAdolc_test_FLCatchesAdolc_sexp_constructor', PACKAGE = 'FLRcppAdolc', flcs_sexp1)
 }
@@ -627,6 +619,34 @@ test_FLCatchesAdolc_set_single_index_default_accessor <- function(flcs, flc) {
 
 test_FLFishery_empty_constructor <- function() {
     invisible(.Call('FLRcppAdolc_test_FLFishery_empty_constructor', PACKAGE = 'FLRcppAdolc'))
+}
+
+test_simple_FLFishery_sexp_constructor <- function(flf_sexp) {
+    .Call('FLRcppAdolc_test_simple_FLFishery_sexp_constructor', PACKAGE = 'FLRcppAdolc', flf_sexp)
+}
+
+test_FLFishery_sexp_constructor <- function(flf_sexp) {
+    .Call('FLRcppAdolc_test_FLFishery_sexp_constructor', PACKAGE = 'FLRcppAdolc', flf_sexp)
+}
+
+test_FLFisheryAdolc_sexp_constructor <- function(flf_sexp) {
+    .Call('FLRcppAdolc_test_FLFisheryAdolc_sexp_constructor', PACKAGE = 'FLRcppAdolc', flf_sexp)
+}
+
+test_FLFishery_as_wrap <- function(flf) {
+    .Call('FLRcppAdolc_test_FLFishery_as_wrap', PACKAGE = 'FLRcppAdolc', flf)
+}
+
+test_FLFisheryAdolc_as_wrap <- function(flf) {
+    .Call('FLRcppAdolc_test_FLFisheryAdolc_as_wrap', PACKAGE = 'FLRcppAdolc', flf)
+}
+
+test_FLFishery_copy_constructor <- function(flf1) {
+    .Call('FLRcppAdolc_test_FLFishery_copy_constructor', PACKAGE = 'FLRcppAdolc', flf1)
+}
+
+test_FLFisheryAdolc_copy_constructor <- function(flf1) {
+    .Call('FLRcppAdolc_test_FLFisheryAdolc_copy_constructor', PACKAGE = 'FLRcppAdolc', flf1)
 }
 
 test_FLQuantAdolc_as_wrap <- function(flq) {

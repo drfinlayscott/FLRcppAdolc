@@ -1931,20 +1931,6 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// test_FLCatches_empty_wrap
-FLCatches test_FLCatches_empty_wrap();
-RcppExport SEXP FLRcppAdolc_test_FLCatches_empty_wrap() {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        FLCatches __result = test_FLCatches_empty_wrap();
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
 // test_FLCatches_sexp_constructor
 FLCatches test_FLCatches_sexp_constructor(SEXP flcs_sexp1);
 RcppExport SEXP FLRcppAdolc_test_FLCatches_sexp_constructor(SEXP flcs_sexp1SEXP) {
@@ -2259,20 +2245,6 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// test_FLCatchesAdolc_empty_wrap
-FLCatchesAdolc test_FLCatchesAdolc_empty_wrap();
-RcppExport SEXP FLRcppAdolc_test_FLCatchesAdolc_empty_wrap() {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        FLCatchesAdolc __result = test_FLCatchesAdolc_empty_wrap();
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
 // test_FLCatchesAdolc_sexp_constructor
 FLCatchesAdolc test_FLCatchesAdolc_sexp_constructor(SEXP flcs_sexp1);
 RcppExport SEXP FLRcppAdolc_test_FLCatchesAdolc_sexp_constructor(SEXP flcs_sexp1SEXP) {
@@ -2566,6 +2538,122 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< FLCatchesAdolc >::type flcs(flcsSEXP );
         Rcpp::traits::input_parameter< const FLCatchAdolc >::type flc(flcSEXP );
         FLCatchesAdolc __result = test_FLCatchesAdolc_set_single_index_default_accessor(flcs, flc);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFishery_empty_constructor
+void test_FLFishery_empty_constructor();
+RcppExport SEXP FLRcppAdolc_test_FLFishery_empty_constructor() {
+BEGIN_RCPP
+    {
+        Rcpp::RNGScope __rngScope;
+        test_FLFishery_empty_constructor();
+    }
+    return R_NilValue;
+END_RCPP
+}
+// test_simple_FLFishery_sexp_constructor
+int test_simple_FLFishery_sexp_constructor(SEXP flf_sexp);
+RcppExport SEXP FLRcppAdolc_test_simple_FLFishery_sexp_constructor(SEXP flf_sexpSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< SEXP >::type flf_sexp(flf_sexpSEXP );
+        int __result = test_simple_FLFishery_sexp_constructor(flf_sexp);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFishery_sexp_constructor
+FLFishery test_FLFishery_sexp_constructor(SEXP flf_sexp);
+RcppExport SEXP FLRcppAdolc_test_FLFishery_sexp_constructor(SEXP flf_sexpSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< SEXP >::type flf_sexp(flf_sexpSEXP );
+        FLFishery __result = test_FLFishery_sexp_constructor(flf_sexp);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFisheryAdolc_sexp_constructor
+FLFisheryAdolc test_FLFisheryAdolc_sexp_constructor(SEXP flf_sexp);
+RcppExport SEXP FLRcppAdolc_test_FLFisheryAdolc_sexp_constructor(SEXP flf_sexpSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< SEXP >::type flf_sexp(flf_sexpSEXP );
+        FLFisheryAdolc __result = test_FLFisheryAdolc_sexp_constructor(flf_sexp);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFishery_as_wrap
+FLFishery test_FLFishery_as_wrap(FLFishery flf);
+RcppExport SEXP FLRcppAdolc_test_FLFishery_as_wrap(SEXP flfSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFishery >::type flf(flfSEXP );
+        FLFishery __result = test_FLFishery_as_wrap(flf);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFisheryAdolc_as_wrap
+FLFisheryAdolc test_FLFisheryAdolc_as_wrap(FLFisheryAdolc flf);
+RcppExport SEXP FLRcppAdolc_test_FLFisheryAdolc_as_wrap(SEXP flfSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFisheryAdolc >::type flf(flfSEXP );
+        FLFisheryAdolc __result = test_FLFisheryAdolc_as_wrap(flf);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFishery_copy_constructor
+FLFishery test_FLFishery_copy_constructor(FLFishery flf1);
+RcppExport SEXP FLRcppAdolc_test_FLFishery_copy_constructor(SEXP flf1SEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFishery >::type flf1(flf1SEXP );
+        FLFishery __result = test_FLFishery_copy_constructor(flf1);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLFisheryAdolc_copy_constructor
+FLFisheryAdolc test_FLFisheryAdolc_copy_constructor(FLFisheryAdolc flf1);
+RcppExport SEXP FLRcppAdolc_test_FLFisheryAdolc_copy_constructor(SEXP flf1SEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFisheryAdolc >::type flf1(flf1SEXP );
+        FLFisheryAdolc __result = test_FLFisheryAdolc_copy_constructor(flf1);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

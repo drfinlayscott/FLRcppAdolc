@@ -115,36 +115,39 @@ random_FLCatch_generator <- function(sd=100, ...){
     return(catch)
 }
 
-#' Generate lists of randomly sized and filled FLCatch objects
+#' Generates an FLCatches object - a list of randomly sized and filled FLCatch objects 
 #'
-#' Generate a list of randomly sized FLCatch objects filled with normally distributed random numbers with a mean of 0.
+#' Generates a list of randomly sized FLCatch objects filled with normally distributed random numbers with a mean of 0.
 #' Used for automatic testing, particularly of the FLCatches_base<T> class in CPP.
 #' 
-#' @param max_elements The maximum number of elements in the list. Default is 5. 
+#' @param max_catches The maximum number of catches. Default is 5. 
 #' @param fixed_dims A vector of length 6 with the fixed length of each of the FLQuant dimensions. If any value is NA it is randomly set using the max_dims argument. Default value is rep(NA,6).
 #' @param max_dims A vector of length 6 with maximum size of each of the FLQuant dimensions. Default value is c(5,5,5,4,4,10).
 #' @param sd The standard deviation of the random numbers. Passed to rnorm() Default is 100.
 #' @export
-#' @return A list of FLCatch objects
+#' @return An FLCatches objects
 #' @examples
-#' flc_list <- random_FLCatch_list_generator()
-#' length(flc_list)
-#' summary(flc_list)
-#' lapply(flc_list, summary)
-random_FLCatch_list_generator <- function(max_elements = 5, ...){
+#' flcs <- random_FLCatches_generator()
+#' length(flcs)
+#' summary(flcs)
+#' lapply(flcs, summary)
+random_FLCatches_generator <- function(max_catches = 5, ...){
     args <- list(...)
-    nelements <- runif(1,min=1, max=max_elements)
-    op <- list()
+    ncatches <- runif(1,min=2, max=max_catches)
+    op_list <- list()
     flq <- random_FLQuant_generator(...)
     # cat("dim flq: ", dim(flq), "\n")
     fixed_dims <- dim(flq)
     fixed_dims[1] <- NA
     args[["fixed_dims"]] <- fixed_dims
-    for (i in 1:nelements){
-        op[[i]] <- do.call(random_FLCatch_generator,args)    
+    for (i in 1:ncatches){
+        op_list[[as.character(i)]] <- do.call(random_FLCatch_generator,args)    
     }
+    op <- FLCatches(op_list)
+    op@desc <- as.character(signif(rnorm(1)*1000,3))
     return(op)
 }
+
 
 #' Generate a randomly filled and sized FLFishery object
 #'
@@ -164,7 +167,7 @@ random_FLCatch_list_generator <- function(max_elements = 5, ...){
 #' lapply(flf, summary)
 #' flf <- random_FLFishery_generator(fixed_dims = c(NA,10,1,1,1,1), max_dims = c(100,NA,NA,NA,NA,NA))
 random_FLFishery_generator <- function(max_elements = 5, ...){
-    catches <- random_FLCatch_list_generator(max_elements, ...)
+    catches <- random_FLCatches_generator(max_elements, ...)
     fishery <- FLFishery(catches)
     return(fishery)
 }

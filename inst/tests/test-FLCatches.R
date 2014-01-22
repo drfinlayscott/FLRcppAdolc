@@ -1,15 +1,13 @@
 context("Implementation of FLCatches - double and Adolc versions")
 
 test_that("FLCatches as and wrap - double",{
-    flcs_in <- random_FLCatch_list_generator() 
+    flcs_in <- random_FLCatches_generator() 
     flcs_out <- test_FLCatches_as_wrap(flcs_in)
     expect_that(flcs_in, is_identical_to(flcs_out))
-    flcs_out <- test_FLCatches_empty_wrap()
-    expect_that(list(), is_identical_to(flcs_out))
 })
 
 test_that("FLCatches constructors - double",{
-    flcs_in <- random_FLCatch_list_generator() 
+    flcs_in <- random_FLCatches_generator() 
     flc_in <- random_FLCatch_generator() 
     # SEXP constructor - used in as
     flcs_out <- test_FLCatches_sexp_constructor(flcs_in)
@@ -17,6 +15,7 @@ test_that("FLCatches constructors - double",{
     # FLCatch constructor
     flcs_out <- test_FLCatches_FLCatch_constructor(flc_in)
     expect_that(flc_in, is_identical_to(flcs_out[[1]]))
+    # flcs <- FLCatches(list(flc_in)) # names not set right - should be NA
     # Copy constructor
     flcs_out <- test_FLCatches_copy_constructor(flcs_in)
     expect_that(flcs_in, is_identical_to(flcs_out))
@@ -32,24 +31,29 @@ test_that("FLCatches constructors - double",{
     # Assignment operator
     flcs_out <- test_FLCatches_assignment_operator(flcs_in)
     expect_that(flcs_in, is_identical_to(flcs_out))
-#    # Assignment operator2
+    # Assignment operator2
     flcss <-  test_FLCatches_assignment_operator2(flcs_in, element, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6], value)
     expect_that(flcs_in, is_identical_to(flcss[["flcs1"]]))
     expect_that(c(landings.n(flcss[["flcs2"]][[element]])[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]), is_identical_to(value))
     # Testing function operator - adds another FLCatch in
     flcs_out <-  test_FLCatches_function_operator(flcs_in, flc_in)
     expect_that(length(flcs_in)+as.integer(1), is_identical_to(length(flcs_out)))
-    expect_that(flcs_in, is_identical_to(flcs_out[-length(flcs_out)]))
-    expect_that(flc_in, is_identical_to(flcs_out[[length(flcs_out)]]))
+    for (i in 1:(length(flcs_in)-1)){
+        expect_that(flcs_out[i], is_identical_to(flcs_in[i]))
+        expect_that(flcs_out[[i]], is_identical_to(flcs_in[[i]]))
+    }
+    expect_that(flc_in, is_identical_to(flcs_out[[length(flcs_in)+1]]))
+    expect_that(flcs_in@desc, is_identical_to(flcs_out@desc))
+    # not check names because we haven't given the new one a name
 })
 
 test_that("FLCatches get accessors - double",{
-    flcs_in <- random_FLCatch_list_generator()
+    flcs_in <- random_FLCatches_generator()
     expect_that(test_FLCatches_get_ncatches(flcs_in), is_identical_to(length(flcs_in)))
 })
 
 test_that("FLCatches get and set data accessors - double", {
-    flcs_in <- random_FLCatch_list_generator()
+    flcs_in <- random_FLCatches_generator()
     flc_in <- random_FLCatch_generator()
     element <- round(runif(1,min=1, max = length(flcs_in)))
     indices <- round(runif(6,min=1, max = dim(landings.n(flcs_in[[element]]))))
@@ -84,15 +88,13 @@ test_that("FLCatches get and set data accessors - double", {
 })
 #----------------------------------
 test_that("FLCatches as and wrap - adouble",{
-    flcs_in <- random_FLCatch_list_generator() 
+    flcs_in <- random_FLCatches_generator() 
     flcs_out <- test_FLCatchesAdolc_as_wrap(flcs_in)
     expect_that(flcs_in, is_identical_to(flcs_out))
-    flcs_out <- test_FLCatchesAdolc_empty_wrap()
-    expect_that(list(), is_identical_to(flcs_out))
 })
 
-test_that("FLCatchesAdolc constructors - double",{
-    flcs_in <- random_FLCatch_list_generator() 
+test_that("FLCatchesAdolc constructors - adouble",{
+    flcs_in <- random_FLCatches_generator() 
     flc_in <- random_FLCatch_generator() 
     # SEXP constructor - used in as
     flcs_out <- test_FLCatchesAdolc_sexp_constructor(flcs_in)
@@ -100,6 +102,7 @@ test_that("FLCatchesAdolc constructors - double",{
     # FLCatch constructor
     flcs_out <- test_FLCatchesAdolc_FLCatchAdolc_constructor(flc_in)
     expect_that(flc_in, is_identical_to(flcs_out[[1]]))
+    # flcs <- FLCatchesAdolc(list(flc_in)) # names not set right - should be NA
     # Copy constructor
     flcs_out <- test_FLCatchesAdolc_copy_constructor(flcs_in)
     expect_that(flcs_in, is_identical_to(flcs_out))
@@ -115,24 +118,29 @@ test_that("FLCatchesAdolc constructors - double",{
     # Assignment operator
     flcs_out <- test_FLCatchesAdolc_assignment_operator(flcs_in)
     expect_that(flcs_in, is_identical_to(flcs_out))
-#    # Assignment operator2
+    # Assignment operator2
     flcss <-  test_FLCatchesAdolc_assignment_operator2(flcs_in, element, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6], value)
     expect_that(flcs_in, is_identical_to(flcss[["flcs1"]]))
     expect_that(c(landings.n(flcss[["flcs2"]][[element]])[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]), is_identical_to(value))
     # Testing function operator - adds another FLCatch in
     flcs_out <-  test_FLCatchesAdolc_function_operator(flcs_in, flc_in)
     expect_that(length(flcs_in)+as.integer(1), is_identical_to(length(flcs_out)))
-    expect_that(flcs_in, is_identical_to(flcs_out[-length(flcs_out)]))
-    expect_that(flc_in, is_identical_to(flcs_out[[length(flcs_out)]]))
+    for (i in 1:(length(flcs_in)-1)){
+        expect_that(flcs_out[i], is_identical_to(flcs_in[i]))
+        expect_that(flcs_out[[i]], is_identical_to(flcs_in[[i]]))
+    }
+    expect_that(flc_in, is_identical_to(flcs_out[[length(flcs_in)+1]]))
+    expect_that(flcs_in@desc, is_identical_to(flcs_out@desc))
+    # not check names because we haven't given the new one a name
 })
 
 test_that("FLCatchesAdolc get accessors - double",{
-    flcs_in <- random_FLCatch_list_generator()
+    flcs_in <- random_FLCatches_generator()
     expect_that(test_FLCatchesAdolc_get_ncatches(flcs_in), is_identical_to(length(flcs_in)))
 })
 
 test_that("FLCatchesAdolc get and set data accessors - double", {
-    flcs_in <- random_FLCatch_list_generator()
+    flcs_in <- random_FLCatches_generator()
     flc_in <- random_FLCatch_generator()
     element <- round(runif(1,min=1, max = length(flcs_in)))
     indices <- round(runif(6,min=1, max = dim(landings.n(flcs_in[[element]]))))

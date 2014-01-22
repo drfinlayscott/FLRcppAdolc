@@ -264,12 +264,6 @@ FLCatches test_FLCatches_as_wrap(FLCatches flcs){
 }
 
 // [[Rcpp::export]]
-FLCatches test_FLCatches_empty_wrap(){
-	FLCatches flcs;
-	return flcs;
-}
-
-// [[Rcpp::export]]
 FLCatches test_FLCatches_sexp_constructor(SEXP flcs_sexp1){
 	FLCatches flcs(flcs_sexp1);
 	return flcs;
@@ -387,12 +381,6 @@ FLCatches test_FLCatches_set_single_index_default_accessor(FLCatches flcs, const
 // [[Rcpp::export]]
 FLCatchesAdolc test_FLCatchesAdolc_as_wrap(FLCatchesAdolc flcs){
     return flcs;
-}
-
-// [[Rcpp::export]]
-FLCatchesAdolc test_FLCatchesAdolc_empty_wrap(){
-	FLCatchesAdolc flcs;
-	return flcs;
 }
 
 // [[Rcpp::export]]

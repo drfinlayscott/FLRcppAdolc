@@ -1,0 +1,38 @@
+\name{random_FLCatches_generator}
+\alias{random_FLCatches_generator}
+\title{Generates an FLCatches object - a list of randomly sized and filled FLCatch objects}
+\usage{
+random_FLCatches_generator(max_catches = 5, ...)
+}
+\arguments{
+  \item{max_catches}{The maximum number of catches. Default
+  is 5.}
+
+  \item{fixed_dims}{A vector of length 6 with the fixed
+  length of each of the FLQuant dimensions. If any value is
+  NA it is randomly set using the max_dims argument.
+  Default value is rep(NA,6).}
+
+  \item{max_dims}{A vector of length 6 with maximum size of
+  each of the FLQuant dimensions. Default value is
+  c(5,5,5,4,4,10).}
+
+  \item{sd}{The standard deviation of the random numbers.
+  Passed to rnorm() Default is 100.}
+}
+\value{
+An FLCatches objects
+}
+\description{
+Generates a list of randomly sized FLCatch objects filled
+with normally distributed random numbers with a mean of 0.
+Used for automatic testing, particularly of the
+FLCatches_base<T> class in CPP.
+}
+\examples{
+flcs <- random_FLCatches_generator()
+length(flcs)
+summary(flcs)
+lapply(flcs, summary)
+}
+

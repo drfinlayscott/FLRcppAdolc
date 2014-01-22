@@ -10,4 +10,5 @@
 //#include "projection.h"
 #include "FLQuant_multidim.h"
 #include "FLCatch.h"
+#include "FLFishery.h"
 

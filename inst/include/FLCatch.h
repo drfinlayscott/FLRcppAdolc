@@ -100,10 +100,12 @@ class FLCatches_base {
 
         void operator() (const FLCatch_base<T> flc); // Add another FLQuant_base<T> to the data
         unsigned int get_ncatches() const;
+        //Rcpp::CharacterVector get_names() const;
 
     private:
         std::vector<FLCatch_base<T> > catches;
-
+        Rcpp::CharacterVector names; // of the catches 
+        std::string desc;
 };
 
 typedef FLCatches_base<double> FLCatches;

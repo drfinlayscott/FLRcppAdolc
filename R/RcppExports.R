@@ -773,6 +773,58 @@ test_FLFisheries_set_double <- function(flfs, fishery, catches, indices, value) 
     .Call('FLRcppAdolc_test_FLFisheries_set_double', PACKAGE = 'FLRcppAdolc', flfs, fishery, catches, indices, value)
 }
 
+test_FLFisheriesAdolc_sexp_constructor <- function(flfs_sexp1) {
+    .Call('FLRcppAdolc_test_FLFisheriesAdolc_sexp_constructor', PACKAGE = 'FLRcppAdolc', flfs_sexp1)
+}
+
+test_FLFisheriesAdolc_as_wrap <- function(flfs) {
+    .Call('FLRcppAdolc_test_FLFisheriesAdolc_as_wrap', PACKAGE = 'FLRcppAdolc', flfs)
+}
+
+test_FLFisheriesAdolc_get_nfisheries <- function(flfs) {
+    .Call('FLRcppAdolc_test_FLFisheriesAdolc_get_nfisheries', PACKAGE = 'FLRcppAdolc', flfs)
+}
+
+test_FLFisheriesAdolc_copy_constructor <- function(flfs) {
+    .Call('FLRcppAdolc_test_FLFisheriesAdolc_copy_constructor', PACKAGE = 'FLRcppAdolc', flfs)
+}
+
+test_FLFisheriesAdolc_copy_constructor2 <- function(flfs1, fishery, catches, indices, value) {
+    .Call('FLRcppAdolc_test_FLFisheriesAdolc_copy_constructor2', PACKAGE = 'FLRcppAdolc', flfs1, fishery, catches, indices, value)
+}
+
+test_FLFisheriesAdolc_assignment_operator <- function(flfs) {
+    .Call('FLRcppAdolc_test_FLFisheriesAdolc_assignment_operator', PACKAGE = 'FLRcppAdolc', flfs)
+}
+
+test_FLFisheriesAdolc_assignment_operator2 <- function(flfs1, fishery, catches, indices, value) {
+    .Call('FLRcppAdolc_test_FLFisheriesAdolc_assignment_operator2', PACKAGE = 'FLRcppAdolc', flfs1, fishery, catches, indices, value)
+}
+
+test_FLFisheriesAdolc_const_get_single <- function(flfs, fishery, catches, indices) {
+    .Call('FLRcppAdolc_test_FLFisheriesAdolc_const_get_single', PACKAGE = 'FLRcppAdolc', flfs, fishery, catches, indices)
+}
+
+test_FLFisheriesAdolc_get_single <- function(flfs, fishery, catches, indices) {
+    .Call('FLRcppAdolc_test_FLFisheriesAdolc_get_single', PACKAGE = 'FLRcppAdolc', flfs, fishery, catches, indices)
+}
+
+test_FLFisheriesAdolc_const_get_double <- function(flfs, fishery, catches, indices) {
+    .Call('FLRcppAdolc_test_FLFisheriesAdolc_const_get_double', PACKAGE = 'FLRcppAdolc', flfs, fishery, catches, indices)
+}
+
+test_FLFisheriesAdolc_get_double <- function(flfs, fishery, catches, indices) {
+    .Call('FLRcppAdolc_test_FLFisheriesAdolc_get_double', PACKAGE = 'FLRcppAdolc', flfs, fishery, catches, indices)
+}
+
+test_FLFisheriesAdolc_set_single <- function(flfs, fishery, catches, indices, value) {
+    .Call('FLRcppAdolc_test_FLFisheriesAdolc_set_single', PACKAGE = 'FLRcppAdolc', flfs, fishery, catches, indices, value)
+}
+
+test_FLFisheriesAdolc_set_double <- function(flfs, fishery, catches, indices, value) {
+    .Call('FLRcppAdolc_test_FLFisheriesAdolc_set_double', PACKAGE = 'FLRcppAdolc', flfs, fishery, catches, indices, value)
+}
+
 test_FLQuantAdolc_as_wrap <- function(flq) {
     .Call('FLRcppAdolc_test_FLQuantAdolc_as_wrap', PACKAGE = 'FLRcppAdolc', flq)
 }

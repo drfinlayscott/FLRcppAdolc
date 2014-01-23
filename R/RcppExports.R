@@ -721,6 +721,58 @@ test_FLFisheryAdolc_assignment_operator2 <- function(flf1, element, quant, year,
     .Call('FLRcppAdolc_test_FLFisheryAdolc_assignment_operator2', PACKAGE = 'FLRcppAdolc', flf1, element, quant, year, unit, season, area, iter, value)
 }
 
+test_FLFisheries_sexp_constructor <- function(flfs_sexp1) {
+    .Call('FLRcppAdolc_test_FLFisheries_sexp_constructor', PACKAGE = 'FLRcppAdolc', flfs_sexp1)
+}
+
+test_FLFisheries_as_wrap <- function(flfs) {
+    .Call('FLRcppAdolc_test_FLFisheries_as_wrap', PACKAGE = 'FLRcppAdolc', flfs)
+}
+
+test_FLFisheries_get_nfisheries <- function(flfs) {
+    .Call('FLRcppAdolc_test_FLFisheries_get_nfisheries', PACKAGE = 'FLRcppAdolc', flfs)
+}
+
+test_FLFisheries_copy_constructor <- function(flfs) {
+    .Call('FLRcppAdolc_test_FLFisheries_copy_constructor', PACKAGE = 'FLRcppAdolc', flfs)
+}
+
+test_FLFisheries_copy_constructor2 <- function(flfs1, fishery, catches, indices, value) {
+    .Call('FLRcppAdolc_test_FLFisheries_copy_constructor2', PACKAGE = 'FLRcppAdolc', flfs1, fishery, catches, indices, value)
+}
+
+test_FLFisheries_assignment_operator <- function(flfs) {
+    .Call('FLRcppAdolc_test_FLFisheries_assignment_operator', PACKAGE = 'FLRcppAdolc', flfs)
+}
+
+test_FLFisheries_assignment_operator2 <- function(flfs1, fishery, catches, indices, value) {
+    .Call('FLRcppAdolc_test_FLFisheries_assignment_operator2', PACKAGE = 'FLRcppAdolc', flfs1, fishery, catches, indices, value)
+}
+
+test_FLFisheries_const_get_single <- function(flfs, fishery, catches, indices) {
+    .Call('FLRcppAdolc_test_FLFisheries_const_get_single', PACKAGE = 'FLRcppAdolc', flfs, fishery, catches, indices)
+}
+
+test_FLFisheries_get_single <- function(flfs, fishery, catches, indices) {
+    .Call('FLRcppAdolc_test_FLFisheries_get_single', PACKAGE = 'FLRcppAdolc', flfs, fishery, catches, indices)
+}
+
+test_FLFisheries_const_get_double <- function(flfs, fishery, catches, indices) {
+    .Call('FLRcppAdolc_test_FLFisheries_const_get_double', PACKAGE = 'FLRcppAdolc', flfs, fishery, catches, indices)
+}
+
+test_FLFisheries_get_double <- function(flfs, fishery, catches, indices) {
+    .Call('FLRcppAdolc_test_FLFisheries_get_double', PACKAGE = 'FLRcppAdolc', flfs, fishery, catches, indices)
+}
+
+test_FLFisheries_set_single <- function(flfs, fishery, catches, indices, value) {
+    .Call('FLRcppAdolc_test_FLFisheries_set_single', PACKAGE = 'FLRcppAdolc', flfs, fishery, catches, indices, value)
+}
+
+test_FLFisheries_set_double <- function(flfs, fishery, catches, indices, value) {
+    .Call('FLRcppAdolc_test_FLFisheries_set_double', PACKAGE = 'FLRcppAdolc', flfs, fishery, catches, indices, value)
+}
+
 test_FLQuantAdolc_as_wrap <- function(flq) {
     .Call('FLRcppAdolc_test_FLQuantAdolc_as_wrap', PACKAGE = 'FLRcppAdolc', flq)
 }

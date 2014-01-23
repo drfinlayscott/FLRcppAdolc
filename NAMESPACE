@@ -1,6 +1,7 @@
 export(random_FLBiol_generator)
 export(random_FLCatch_generator)
 export(random_FLCatches_generator)
+export(random_FLFisheries_generator)
 export(random_FLFishery_generator)
 export(random_FLQuant_generator)
 export(random_FLQuant_list_generator)

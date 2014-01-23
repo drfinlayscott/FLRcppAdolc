@@ -276,3 +276,128 @@ Rcpp::List test_FLFisheryAdolc_assignment_operator2(FLFisheryAdolc flf1, int ele
 				Rcpp::Named("flf2",flf2));
 }
 
+//---------------------------------------------------------------------------------------
+// FLFisheries
+
+// [[Rcpp::export]]
+FLFisheries test_FLFisheries_sexp_constructor(SEXP flfs_sexp1){
+	FLFisheries flfs(flfs_sexp1);
+	return flfs;
+}
+
+// [[Rcpp::export]]
+FLFisheries test_FLFisheries_as_wrap(FLFisheries flfs){
+    return flfs;
+}
+
+// [[Rcpp::export]]
+int test_FLFisheries_get_nfisheries(FLFisheries flfs){
+    int length = flfs.get_nfisheries();
+	return length;
+}
+
+
+// [[Rcpp::export]]
+FLFisheries test_FLFisheries_copy_constructor(FLFisheries flfs){
+    FLFisheries out(flfs);
+    return out;
+}
+
+// Checking that a deep copy has been made
+// [[Rcpp::export]]
+Rcpp::List test_FLFisheries_copy_constructor2(FLFisheries flfs1, const int fishery, const int catches, const Rcpp::IntegerVector indices, double value){
+    std::vector<int> std_indices = Rcpp::as<std::vector<int> > (indices);
+    FLFisheries flfs2(flfs1); // Copy
+    flfs2(fishery)(catches).landings_n()(std_indices[0],std_indices[1],std_indices[2],std_indices[3],std_indices[4],std_indices[5]) = value;
+	return Rcpp::List::create(Rcpp::Named("flfs1", flfs1),
+                            Rcpp::Named("flfs2",flfs2));
+}
+
+
+// [[Rcpp::export]]
+FLFisheries test_FLFisheries_assignment_operator(FLFisheries flfs){
+    FLFisheries out;
+    out = flfs;
+    return out;
+}
+
+// Checking that a deep copy has been made
+// [[Rcpp::export]]
+Rcpp::List test_FLFisheries_assignment_operator2(FLFisheries flfs1, const int fishery, const int catches, const Rcpp::IntegerVector indices, double value){
+    std::vector<int> std_indices = Rcpp::as<std::vector<int> > (indices);
+    FLFisheries flfs2; 
+    flfs2 = flfs1;
+    flfs2(fishery)(catches).landings_n()(std_indices[0],std_indices[1],std_indices[2],std_indices[3],std_indices[4],std_indices[5]) = value;
+	return Rcpp::List::create(Rcpp::Named("flfs1", flfs1),
+                            Rcpp::Named("flfs2",flfs2));
+}
+
+// Const get everything
+// [[Rcpp::export]]
+Rcpp::List test_FLFisheries_const_get_single(const FLFisheries flfs, const int fishery, const int catches, const Rcpp::IntegerVector indices){
+    std::vector<int> std_indices = Rcpp::as<std::vector<int> > (indices);
+    FLFishery flf = flfs(fishery);
+    FLCatch flc = flfs(fishery)(catches);
+    FLQuant landings_n = flfs(fishery)(catches).landings_n();
+    double value = flfs(fishery)(catches).landings_n()(std_indices[0],std_indices[1],std_indices[2],std_indices[3],std_indices[4],std_indices[5]);
+    return Rcpp::List::create(Rcpp::Named("flf",flf),
+            Rcpp::Named("flc", flc),
+            Rcpp::Named("landings_n", landings_n),
+            Rcpp::Named("value", value));
+}
+
+// get everything
+// [[Rcpp::export]]
+Rcpp::List test_FLFisheries_get_single(FLFisheries flfs, const int fishery, const int catches, const Rcpp::IntegerVector indices){
+    std::vector<int> std_indices = Rcpp::as<std::vector<int> > (indices);
+    FLFishery flf = flfs(fishery);
+    FLCatch flc = flfs(fishery)(catches);
+    FLQuant landings_n = flfs(fishery)(catches).landings_n();
+    //double value = flfs(fishery)(catches).landings_n()(indices[0],indices[1],indices[2],indices[3],indices[4],indices[5]);
+    double value = flfs(fishery)(catches).landings_n()(std_indices[0],std_indices[1],std_indices[2],std_indices[3],std_indices[4],std_indices[5]);
+    return Rcpp::List::create(Rcpp::Named("flf",flf),
+            Rcpp::Named("flc", flc),
+            Rcpp::Named("landings_n", landings_n),
+            Rcpp::Named("value", value));
+}
+
+// [[Rcpp::export]]
+Rcpp::List test_FLFisheries_const_get_double(const FLFisheries flfs, const int fishery, const int catches, const Rcpp::IntegerVector indices){
+    std::vector<int> std_indices = Rcpp::as<std::vector<int> > (indices);
+    FLFishery flf = flfs(fishery);
+    FLCatch flc = flfs(fishery, catches);
+    FLQuant landings_n = flfs(fishery, catches).landings_n();
+    double value = flfs(fishery, catches).landings_n()(std_indices[0],std_indices[1],std_indices[2],std_indices[3],std_indices[4],std_indices[5]);
+    return Rcpp::List::create(Rcpp::Named("flf",flf),
+            Rcpp::Named("flc", flc),
+            Rcpp::Named("landings_n", landings_n),
+            Rcpp::Named("value", value));
+}
+
+// [[Rcpp::export]]
+Rcpp::List test_FLFisheries_get_double(FLFisheries flfs, const int fishery, const int catches, const Rcpp::IntegerVector indices){
+    std::vector<int> std_indices = Rcpp::as<std::vector<int> > (indices);
+    FLFishery flf = flfs(fishery);
+    FLCatch flc = flfs(fishery, catches);
+    FLQuant landings_n = flfs(fishery, catches).landings_n();
+    double value = flfs(fishery, catches).landings_n()(std_indices[0],std_indices[1],std_indices[2],std_indices[3],std_indices[4],std_indices[5]);
+    return Rcpp::List::create(Rcpp::Named("flf",flf),
+            Rcpp::Named("flc", flc),
+            Rcpp::Named("landings_n", landings_n),
+            Rcpp::Named("value", value));
+}
+
+// [[Rcpp::export]]
+FLFisheries test_FLFisheries_set_single(FLFisheries flfs, const int fishery, const int catches, const Rcpp::IntegerVector indices, double value){
+    std::vector<int> std_indices = Rcpp::as<std::vector<int> > (indices);
+    flfs(fishery)(catches).landings_n()(std_indices[0],std_indices[1],std_indices[2],std_indices[3],std_indices[4],std_indices[5]) = value;
+    return flfs;
+}
+
+// [[Rcpp::export]]
+FLFisheries test_FLFisheries_set_double(FLFisheries flfs, const int fishery, const int catches, const Rcpp::IntegerVector indices, double value){
+    std::vector<int> std_indices = Rcpp::as<std::vector<int> > (indices);
+    flfs(fishery, catches).landings_n()(std_indices[0],std_indices[1],std_indices[2],std_indices[3],std_indices[4],std_indices[5]) = value;
+    return flfs;
+}
+

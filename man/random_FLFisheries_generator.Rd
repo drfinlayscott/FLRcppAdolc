@@ -1,10 +1,13 @@
-\name{random_FLFishery_generator}
-\alias{random_FLFishery_generator}
-\title{Generate a randomly filled and sized FLFishery object}
+\name{random_FLFisheries_generator}
+\alias{random_FLFisheries_generator}
+\title{Generate a randomly filled and sized FLFisheries object}
 \usage{
-random_FLFishery_generator(max_catches = 5, sd = 100, ...)
+random_FLFisheries_generator(max_fisheries = 5, ...)
 }
 \arguments{
+  \item{max_fisheries}{The maximum number of FLFisheries in
+  the fisheries list. Default is 5.}
+
   \item{max_catches}{The maximum number of FLCatches in the
   catches list. Default is 5.}
 
@@ -24,10 +27,10 @@ random_FLFishery_generator(max_catches = 5, sd = 100, ...)
 An FLFishery object
 }
 \description{
-Generate a randomly sized FLFishery object filled with
+Generate a randomly sized FLFisheries object filled with
 normally distributed random numbers with a mean of 0. Used
 for automatic testing, particularly of the
-FLFishery_base<T> class in CPP.
+FLFisheries_base<T> class in CPP.
 }
 \examples{
 flf <- random_FLFishery_list_generator()

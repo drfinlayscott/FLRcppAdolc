@@ -33,6 +33,7 @@
  * 3. Make an FLFishery the same as current FLCatches, add more members, then delete FLCatches
  *
  * We'll start with Option 2. Then use Option 3 if it's too hard!
+ * Seems OK now...
  */
 
 /*-------------------------------------------------------------------*/
@@ -68,3 +69,33 @@ class FLFishery_base : public FLCatches_base<T> {
 typedef FLFishery_base<double> FLFishery;
 typedef FLFishery_base<adouble> FLFisheryAdolc;
 
+
+/*-------------------------------------------------------------------*/
+// The plural class
+template <typename T>
+class FLFisheries_base {
+    public:
+        /* Constructors */
+		FLFisheries_base();
+		FLFisheries_base(SEXP flf_sexp); // Used as intrusive 'as', takes an FLFisheries
+        operator SEXP() const; // Used as intrusive 'wrap' - returns an FLFisheries
+		FLFisheries_base(const FLFisheries_base& FLFisheries_base_source); // copy constructor to ensure that copy is a deep copy - used when passing FLSs into functions
+		FLFisheries_base& operator = (const FLFisheries_base& FLFisheries_base_source); // Assignment operator for a deep copy
+
+        // Accessors
+		FLFishery_base<T> operator () (const unsigned int  fishery) const; // Only gets an FLFishery so const reinforced. 
+		FLFishery_base<T>& operator () (const unsigned int fishery); // Gets and sets an FLFishery so const not reinforced. Default is the first element
+		FLCatch_base<T> operator () (const unsigned int fishery, const unsigned int catches) const; // Only gets an FLFishery so const reinforced. 
+		FLCatch_base<T>& operator () (const unsigned int fishery, const unsigned int catches); // Gets and sets an FLFishery so const not reinforced. 
+
+        unsigned int get_nfisheries() const;
+
+    private:
+
+        std::vector<FLFishery_base<T> > fisheries;
+        Rcpp::CharacterVector names; // of the fisheries
+        std::string desc;
+};
+
+typedef FLFisheries_base<double> FLFisheries;
+typedef FLFisheries_base<adouble> FLFisheriesAdolc;

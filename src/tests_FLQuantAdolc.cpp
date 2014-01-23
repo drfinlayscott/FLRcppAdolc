@@ -178,6 +178,23 @@ FLQuantAdolc test_FLQuantAdolc_set_accessor(FLQuantAdolc flq, int quant, int yea
 	flq(quant,year,unit,season,area,iter) = ad_value;
 	return flq;
 }
+
+// [[Rcpp::export]]
+double test_FLQuantAdolc_get_const_indices_accessor(const FLQuantAdolc flq, std::vector<unsigned int> indices){
+    return flq(indices).value();
+}
+
+// [[Rcpp::export]]
+double test_FLQuantAdolc_get_indices_accessor(FLQuantAdolc flq, std::vector<unsigned int> indices){
+    return flq(indices).value();
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_set_indices_accessor(FLQuantAdolc flq, std::vector<unsigned int> indices, double value){
+    adouble ad_value = value;
+    flq(indices) = ad_value;
+    return flq;
+}
 //------------ Set methods -------------------------
 
 /*

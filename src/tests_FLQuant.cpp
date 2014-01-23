@@ -175,6 +175,22 @@ FLQuant test_FLQuant_set_accessor(FLQuant flq, int quant, int year, int unit, in
 	flq(quant,year,unit,season,area,iter) = value;
 	return flq;
 }
+
+// [[Rcpp::export]]
+double test_FLQuant_get_const_indices_accessor(const FLQuant flq, std::vector<unsigned int> indices){
+    return flq(indices);
+}
+
+// [[Rcpp::export]]
+double test_FLQuant_get_indices_accessor(FLQuant flq, std::vector<unsigned int> indices){
+    return flq(indices);
+}
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_set_indices_accessor(FLQuant flq, std::vector<unsigned int> indices, double value){
+    flq(indices) = value;
+    return flq;
+}
 //------------ Set methods -------------------------
 
 // [[Rcpp::export]]
@@ -203,6 +219,35 @@ FLQuant test_FLQuant_set_units(FLQuant flq, std::string new_units){
 int test_FLQuant_FLQuant_match_dims(FLQuant flq1, FLQuant flq2){
     return flq1.match_dims(flq2);
 }
+
+// Do not run! - explodes R
+//// [[Rcpp::export]]
+//std::vector<int> test_int_vec(){
+//    std::vector<int> vec(6);
+//    vec[0] = 1;
+//    vec[1] = 1;
+//    vec[2] = 1;
+//    vec[3] = 1;
+//    vec[4] = 1;
+//    vec[5] = 1;
+//    vec[6] = 666; // Do not run!
+//    return vec;
+//
+//}
+
+// Do not run! - explodes R
+//// [[Rcpp::export]]
+//int test_int_vec2(){
+//    std::vector<int> vec(6);
+//    vec[0] = 1;
+//    vec[1] = 1;
+//    vec[2] = 1;
+//    vec[3] = 1;
+//    vec[4] = 1;
+//    vec[5] = 1;
+//     vec[6] = 666; // Do not run!
+//    return vec[6];
+//}
 
 //--------- Shortcuts ----------------------
 /*

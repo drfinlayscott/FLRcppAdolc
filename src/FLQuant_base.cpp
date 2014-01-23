@@ -268,6 +268,31 @@ T& FLQuant_base<T>::operator () (const unsigned int quant, const unsigned int ye
 	return data[element];
 }
 
+// Get data accessor - all dims with an integer vector
+template <typename T>
+T FLQuant_base<T>::operator () (const std::vector<unsigned int> indices) const {
+    if (indices.size() > 6){
+        Rcpp::stop("FLQuant indices accessor - indices longer than 6.");
+    }
+    if (indices.size() < 6){
+        Rcpp::stop("FLQuant indices accessor - indices shorter than 6.");
+    }
+	unsigned int element = get_data_element(indices[0],indices[1],indices[2],indices[3],indices[4],indices[5]);
+	return data[element];
+}
+
+// Data accessor - all dims with an integer vector
+template <typename T>
+T& FLQuant_base<T>::operator () (const std::vector<unsigned int> indices) {
+    if (indices.size() > 6){
+        Rcpp::stop("FLQuant indices accessor - indices longer than 6.");
+    }
+    if (indices.size() < 6){
+        Rcpp::stop("FLQuant indices accessor - indices shorter than 6.");
+    }
+	unsigned int element = get_data_element(indices[0],indices[1],indices[2],indices[3],indices[4],indices[5]);
+	return data[element];
+}
 //------------- Setting methods ----------------
 
 template <typename T>

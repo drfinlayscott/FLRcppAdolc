@@ -59,6 +59,7 @@ test_that("get accessors",{
     value <- rnorm(1)
     element <- test_FLQuant_get_data_element(flq, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6])
     expect_that(c(flq[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]), is_identical_to(c(flq)[element+1]))
+
 })
 
 test_that("set",{
@@ -132,6 +133,16 @@ test_that("FLQuant get and set data accessors", {
     expect_that(test_FLQuant_set_accessor(flq, big_indices4[1], big_indices4[2], big_indices4[3], big_indices4[4], big_indices4[5], big_indices4[6], value), throws_error())
     expect_that(test_FLQuant_set_accessor(flq, big_indices5[1], big_indices5[2], big_indices5[3], big_indices5[4], big_indices5[5], big_indices5[6], value), throws_error())
     expect_that(test_FLQuant_set_accessor(flq, big_indices6[1], big_indices6[2], big_indices6[3], big_indices6[4], big_indices6[5], big_indices6[6], value), throws_error())
+    # indices accessor
+    expect_that(test_FLQuant_get_const_indices_accessor(flq, indices), is_identical_to(c(flq[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]])))
+    expect_that(test_FLQuant_get_const_indices_accessor(flq, c(indices,1)), throws_error())
+    expect_that(test_FLQuant_get_const_indices_accessor(flq, indices[-1]), throws_error())
+    expect_that(test_FLQuant_get_indices_accessor(flq, indices), is_identical_to(c(flq[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]])))
+    expect_that(test_FLQuant_get_indices_accessor(flq, c(indices,1)), throws_error())
+    expect_that(test_FLQuant_get_indices_accessor(flq, indices[-1]), throws_error())
+    value <- rnorm(1)
+    flq_out <- test_FLQuant_set_indices_accessor(flq, indices, value)
+    expect_that(c(flq_out[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]), is_identical_to(value))
 })
 
 test_that("FLQuant match_dims method works", {

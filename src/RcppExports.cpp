@@ -3906,6 +3906,55 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// test_FLQuantAdolc_get_const_indices_accessor
+double test_FLQuantAdolc_get_const_indices_accessor(const FLQuantAdolc flq, std::vector<unsigned int> indices);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_get_const_indices_accessor(SEXP flqSEXP, SEXP indicesSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const FLQuantAdolc >::type flq(flqSEXP );
+        Rcpp::traits::input_parameter< std::vector<unsigned int> >::type indices(indicesSEXP );
+        double __result = test_FLQuantAdolc_get_const_indices_accessor(flq, indices);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLQuantAdolc_get_indices_accessor
+double test_FLQuantAdolc_get_indices_accessor(FLQuantAdolc flq, std::vector<unsigned int> indices);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_get_indices_accessor(SEXP flqSEXP, SEXP indicesSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuantAdolc >::type flq(flqSEXP );
+        Rcpp::traits::input_parameter< std::vector<unsigned int> >::type indices(indicesSEXP );
+        double __result = test_FLQuantAdolc_get_indices_accessor(flq, indices);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLQuantAdolc_set_indices_accessor
+FLQuantAdolc test_FLQuantAdolc_set_indices_accessor(FLQuantAdolc flq, std::vector<unsigned int> indices, double value);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_set_indices_accessor(SEXP flqSEXP, SEXP indicesSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuantAdolc >::type flq(flqSEXP );
+        Rcpp::traits::input_parameter< std::vector<unsigned int> >::type indices(indicesSEXP );
+        Rcpp::traits::input_parameter< double >::type value(valueSEXP );
+        FLQuantAdolc __result = test_FLQuantAdolc_set_indices_accessor(flq, indices, value);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // test_FLQuantAdolc_set_dimnames
 FLQuantAdolc test_FLQuantAdolc_set_dimnames(FLQuantAdolc flq, Rcpp::List new_dimnames);
 RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_set_dimnames(SEXP flqSEXP, SEXP new_dimnamesSEXP) {
@@ -4413,6 +4462,55 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< int >::type iter(iterSEXP );
         Rcpp::traits::input_parameter< double >::type value(valueSEXP );
         FLQuant __result = test_FLQuant_set_accessor(flq, quant, year, unit, season, area, iter, value);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLQuant_get_const_indices_accessor
+double test_FLQuant_get_const_indices_accessor(const FLQuant flq, std::vector<unsigned int> indices);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_get_const_indices_accessor(SEXP flqSEXP, SEXP indicesSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const FLQuant >::type flq(flqSEXP );
+        Rcpp::traits::input_parameter< std::vector<unsigned int> >::type indices(indicesSEXP );
+        double __result = test_FLQuant_get_const_indices_accessor(flq, indices);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLQuant_get_indices_accessor
+double test_FLQuant_get_indices_accessor(FLQuant flq, std::vector<unsigned int> indices);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_get_indices_accessor(SEXP flqSEXP, SEXP indicesSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuant >::type flq(flqSEXP );
+        Rcpp::traits::input_parameter< std::vector<unsigned int> >::type indices(indicesSEXP );
+        double __result = test_FLQuant_get_indices_accessor(flq, indices);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLQuant_set_indices_accessor
+FLQuant test_FLQuant_set_indices_accessor(FLQuant flq, std::vector<unsigned int> indices, double value);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_set_indices_accessor(SEXP flqSEXP, SEXP indicesSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuant >::type flq(flqSEXP );
+        Rcpp::traits::input_parameter< std::vector<unsigned int> >::type indices(indicesSEXP );
+        Rcpp::traits::input_parameter< double >::type value(valueSEXP );
+        FLQuant __result = test_FLQuant_set_indices_accessor(flq, indices, value);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

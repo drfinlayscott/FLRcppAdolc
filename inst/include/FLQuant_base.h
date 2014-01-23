@@ -61,10 +61,12 @@ class FLQuant_base {
         void set_units(const std::string& units_in);
 
         /* () accessors */
-		T operator () (const unsigned int element) const; // only gets an element so const reinforced - - however cannot return reference due to NumericVector() operator
-		T operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter) const; // only gets an element so const reinforced - however cannot return reference due to NumericVector() operator
+		T operator () (const unsigned int element) const; // only gets an element so const reinforced - 
+		T operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter) const; // only gets an element so const reinforced 
+		T operator () (const std::vector<unsigned int> indices) const; // For all the elements - must be of length 6 
 		T& operator () (const unsigned int element); // gets and sets an element so const not reinforced
 		T& operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter); // gets and sets an element so const not reinforced
+		T& operator () (const std::vector<unsigned int> indices); // For all the elements - must be of length 6 
 
         /* Mathematical operators */
 

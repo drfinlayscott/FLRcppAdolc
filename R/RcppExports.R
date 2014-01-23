@@ -929,6 +929,18 @@ test_FLQuantAdolc_set_accessor <- function(flq, quant, year, unit, season, area,
     .Call('FLRcppAdolc_test_FLQuantAdolc_set_accessor', PACKAGE = 'FLRcppAdolc', flq, quant, year, unit, season, area, iter, value)
 }
 
+test_FLQuantAdolc_get_const_indices_accessor <- function(flq, indices) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_get_const_indices_accessor', PACKAGE = 'FLRcppAdolc', flq, indices)
+}
+
+test_FLQuantAdolc_get_indices_accessor <- function(flq, indices) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_get_indices_accessor', PACKAGE = 'FLRcppAdolc', flq, indices)
+}
+
+test_FLQuantAdolc_set_indices_accessor <- function(flq, indices, value) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_set_indices_accessor', PACKAGE = 'FLRcppAdolc', flq, indices, value)
+}
+
 test_FLQuantAdolc_set_dimnames <- function(flq, new_dimnames) {
     .Call('FLRcppAdolc_test_FLQuantAdolc_set_dimnames', PACKAGE = 'FLRcppAdolc', flq, new_dimnames)
 }
@@ -1051,6 +1063,18 @@ test_FLQuant_get_accessor <- function(flq, quant, year, unit, season, area, iter
 
 test_FLQuant_set_accessor <- function(flq, quant, year, unit, season, area, iter, value) {
     .Call('FLRcppAdolc_test_FLQuant_set_accessor', PACKAGE = 'FLRcppAdolc', flq, quant, year, unit, season, area, iter, value)
+}
+
+test_FLQuant_get_const_indices_accessor <- function(flq, indices) {
+    .Call('FLRcppAdolc_test_FLQuant_get_const_indices_accessor', PACKAGE = 'FLRcppAdolc', flq, indices)
+}
+
+test_FLQuant_get_indices_accessor <- function(flq, indices) {
+    .Call('FLRcppAdolc_test_FLQuant_get_indices_accessor', PACKAGE = 'FLRcppAdolc', flq, indices)
+}
+
+test_FLQuant_set_indices_accessor <- function(flq, indices, value) {
+    .Call('FLRcppAdolc_test_FLQuant_set_indices_accessor', PACKAGE = 'FLRcppAdolc', flq, indices, value)
 }
 
 test_FLQuant_set_data <- function(flq, data_in) {

@@ -24,7 +24,8 @@ An FLQuant
 \description{
 Generate a randomly or fixed sized FLQuant filled with
 normally distributed random numbers with a mean of 0. Used
-for automatic testing.
+for automatic testing. All dimensions have at least length
+2.
 }
 \examples{
 flq <- random_FLQuant_generator()

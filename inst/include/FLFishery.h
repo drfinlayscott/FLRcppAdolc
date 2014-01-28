@@ -90,6 +90,10 @@ class FLFisheries_base {
 
         unsigned int get_nfisheries() const;
 
+        // Catch FLQ accessors
+//        T landings_n(std::vector<int>) const;
+//        T& landings_n(std::vector<int>);
+
     private:
 
         std::vector<FLFishery_base<T> > fisheries;

@@ -3,6 +3,8 @@
  * Maintainer: Finlay Scott, JRC
  */
 
+//// [[ Rcpp::interfaces(r, cpp) ]]
+
 #include "../inst/include/FLQuant_base.h"
 
 // Default constructor

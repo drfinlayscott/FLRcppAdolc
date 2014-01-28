@@ -1377,3 +1377,23 @@ test_fwdBiolAdolc_set_accessors <- function(fwdb, quant, year, unit, season, are
     .Call('FLRcppAdolc_test_fwdBiolAdolc_set_accessors', PACKAGE = 'FLRcppAdolc', fwdb, quant, year, unit, season, area, iter, values)
 }
 
+test_fwdSR_empty_constructor <- function() {
+    invisible(.Call('FLRcppAdolc_test_fwdSR_empty_constructor', PACKAGE = 'FLRcppAdolc'))
+}
+
+test_fwdSR_constructor <- function(model_name, params, residuals, residuals_mult) {
+    invisible(.Call('FLRcppAdolc_test_fwdSR_constructor', PACKAGE = 'FLRcppAdolc', model_name, params, residuals, residuals_mult))
+}
+
+test_fwdSR_constructor_wrap <- function(model_name, params, residuals, residuals_mult) {
+    .Call('FLRcppAdolc_test_fwdSR_constructor_wrap', PACKAGE = 'FLRcppAdolc', model_name, params, residuals, residuals_mult)
+}
+
+test_fwdSR_constructor_value <- function(model_name, params, residuals, residuals_mult) {
+    .Call('FLRcppAdolc_test_fwdSR_constructor_value', PACKAGE = 'FLRcppAdolc', model_name, params, residuals, residuals_mult)
+}
+
+test_fwdSR_get_nparams <- function(model_name, params, residuals, residuals_mult) {
+    .Call('FLRcppAdolc_test_fwdSR_get_nparams', PACKAGE = 'FLRcppAdolc', model_name, params, residuals, residuals_mult)
+}
+

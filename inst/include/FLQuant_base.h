@@ -6,7 +6,8 @@
 
 #include <RcppCommon.h>
 #include <Rcpp.h>
-#include <adolc.h>
+//#include <adolc.h>
+#include "adolc/adolc.h"
 
 #define _FLQuant_base_
 /*

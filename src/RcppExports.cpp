@@ -5842,3 +5842,83 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// test_fwdSR_empty_constructor
+void test_fwdSR_empty_constructor();
+RcppExport SEXP FLRcppAdolc_test_fwdSR_empty_constructor() {
+BEGIN_RCPP
+    {
+        Rcpp::RNGScope __rngScope;
+        test_fwdSR_empty_constructor();
+    }
+    return R_NilValue;
+END_RCPP
+}
+// test_fwdSR_constructor
+void test_fwdSR_constructor(std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult);
+RcppExport SEXP FLRcppAdolc_test_fwdSR_constructor(SEXP model_nameSEXP, SEXP paramsSEXP, SEXP residualsSEXP, SEXP residuals_multSEXP) {
+BEGIN_RCPP
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< std::string >::type model_name(model_nameSEXP );
+        Rcpp::traits::input_parameter< const FLQuant >::type params(paramsSEXP );
+        Rcpp::traits::input_parameter< const FLQuant >::type residuals(residualsSEXP );
+        Rcpp::traits::input_parameter< const bool >::type residuals_mult(residuals_multSEXP );
+        test_fwdSR_constructor(model_name, params, residuals, residuals_mult);
+    }
+    return R_NilValue;
+END_RCPP
+}
+// test_fwdSR_constructor_wrap
+fwdSR test_fwdSR_constructor_wrap(std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult);
+RcppExport SEXP FLRcppAdolc_test_fwdSR_constructor_wrap(SEXP model_nameSEXP, SEXP paramsSEXP, SEXP residualsSEXP, SEXP residuals_multSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< std::string >::type model_name(model_nameSEXP );
+        Rcpp::traits::input_parameter< const FLQuant >::type params(paramsSEXP );
+        Rcpp::traits::input_parameter< const FLQuant >::type residuals(residualsSEXP );
+        Rcpp::traits::input_parameter< const bool >::type residuals_mult(residuals_multSEXP );
+        fwdSR __result = test_fwdSR_constructor_wrap(model_name, params, residuals, residuals_mult);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_fwdSR_constructor_value
+double test_fwdSR_constructor_value(std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult);
+RcppExport SEXP FLRcppAdolc_test_fwdSR_constructor_value(SEXP model_nameSEXP, SEXP paramsSEXP, SEXP residualsSEXP, SEXP residuals_multSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< std::string >::type model_name(model_nameSEXP );
+        Rcpp::traits::input_parameter< const FLQuant >::type params(paramsSEXP );
+        Rcpp::traits::input_parameter< const FLQuant >::type residuals(residualsSEXP );
+        Rcpp::traits::input_parameter< const bool >::type residuals_mult(residuals_multSEXP );
+        double __result = test_fwdSR_constructor_value(model_name, params, residuals, residuals_mult);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_fwdSR_get_nparams
+int test_fwdSR_get_nparams(std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult);
+RcppExport SEXP FLRcppAdolc_test_fwdSR_get_nparams(SEXP model_nameSEXP, SEXP paramsSEXP, SEXP residualsSEXP, SEXP residuals_multSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< std::string >::type model_name(model_nameSEXP );
+        Rcpp::traits::input_parameter< const FLQuant >::type params(paramsSEXP );
+        Rcpp::traits::input_parameter< const FLQuant >::type residuals(residualsSEXP );
+        Rcpp::traits::input_parameter< const bool >::type residuals_mult(residuals_multSEXP );
+        int __result = test_fwdSR_get_nparams(model_name, params, residuals, residuals_mult);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}

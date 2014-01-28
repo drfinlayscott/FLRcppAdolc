@@ -6,6 +6,7 @@
 // Don't include FLQuant.h here as it is already included through FLStock.h 
 #include "FLQuant_base.h"
 #include "FLStock.h"
+#include "fwdSR.h"
 #include "fwdBiol.h"
 //#include "projection.h"
 #include "FLQuant_multidim.h"

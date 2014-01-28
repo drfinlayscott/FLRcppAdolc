@@ -225,6 +225,8 @@ FLCatch_base<T>& FLFisheries_base<T>::operator () (const unsigned int fishery, c
     return (*this)(fishery)(catches);
 }
 
+// FLCatch slot accessors
+//T landings_n(std::vector<int>) const;
 
 // Explicit instantiation of classes
 template class FLFishery_base<double>;

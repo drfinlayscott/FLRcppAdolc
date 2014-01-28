@@ -13,7 +13,7 @@
 /*
  * fwdSR class
  * Contains data and methods for stock-recruitment relationships
- * It's very similar to the fwdSR class in R
+ * It's very similar to the FLSR class in R
  */
 
 /*-------------------------------------------------------------------*/
@@ -28,14 +28,14 @@ class fwdSR_base {
 		fwdSR_base();
 		//fwdSR_base(SEXP fls_sexp); // Used as intrusive 'as', takes an fwdSR
 		fwdSR_base(const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult = TRUE); // Main constructor method
-        operator SEXP() const; // Used as intrusive 'wrap' - returns what...? Not an fwdSR. Something to be used for testing. A List to start with
+        operator SEXP() const; // Used as intrusive 'wrap' - returns a list
 		fwdSR_base(const fwdSR_base& fwdSR_base_source); // copy constructor to ensure that copy is a deep copy - used when passing FLSs into functions
 		fwdSR_base& operator = (const fwdSR_base& fwdSR_base_source); // Assignment operator for a deep copy
 
         // Get accessors with const reinforced
-        FLQuant_base<T> n() const;
+        //FLQuant_base<T> n() const;
         // Accessor methods for the slots
-        FLQuant_base<T>& n();
+        //FLQuant_base<T>& n();
 
         // Different ways of evaluating the model
         T eval_model(const T ssb, const int year, const int unit, const int season, const int area, const int iter);
@@ -53,16 +53,12 @@ class fwdSR_base {
 
         int get_nparams(); // No of params in a time step - the length of the first dimension
 
-
-
     private:
         T (*model) (const T, const std::vector<double>); // Pointer to SRR function
         FLQuant_base<double> params;
         FLQuant_base<double> residuals;
         bool residuals_mult;
-        // Map for the SRR models
-        //std::map<std::string, srr_model_ptr> map_model_name_to_function;
-        model_map_type map_model_name_to_function;
+        model_map_type map_model_name_to_function; // Map for the SRR models
 };
 
 
@@ -74,6 +70,9 @@ typedef fwdSR_base<adouble> fwdSRAdolc;
 
 template <typename T>
 T ricker(const T ssb, const std::vector<double> params);
+
+template <typename T>
+T bevholt(const T ssb, const std::vector<double> params);
 
 // std::vec<T> ricker(const std::vec<T> ssb, const FLQuant params);
 // FLQuant_base<T> ricker(const FLQuant<T> ssb, const FLQuant params);

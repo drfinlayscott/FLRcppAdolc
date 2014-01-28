@@ -1381,10 +1381,6 @@ test_fwdSR_empty_constructor <- function() {
     invisible(.Call('FLRcppAdolc_test_fwdSR_empty_constructor', PACKAGE = 'FLRcppAdolc'))
 }
 
-test_fwdSR_constructor <- function(model_name, params, residuals, residuals_mult) {
-    invisible(.Call('FLRcppAdolc_test_fwdSR_constructor', PACKAGE = 'FLRcppAdolc', model_name, params, residuals, residuals_mult))
-}
-
 test_fwdSR_constructor_wrap <- function(model_name, params, residuals, residuals_mult) {
     .Call('FLRcppAdolc_test_fwdSR_constructor_wrap', PACKAGE = 'FLRcppAdolc', model_name, params, residuals, residuals_mult)
 }
@@ -1395,5 +1391,17 @@ test_fwdSR_constructor_value <- function(model_name, params, residuals, residual
 
 test_fwdSR_get_nparams <- function(model_name, params, residuals, residuals_mult) {
     .Call('FLRcppAdolc_test_fwdSR_get_nparams', PACKAGE = 'FLRcppAdolc', model_name, params, residuals, residuals_mult)
+}
+
+test_fwdSR_eval_simple <- function(model_name, params, residuals, residuals_mult, ssb) {
+    .Call('FLRcppAdolc_test_fwdSR_eval_simple', PACKAGE = 'FLRcppAdolc', model_name, params, residuals, residuals_mult, ssb)
+}
+
+test_fwdSR_copy_constructor <- function(model_name, params, residuals, residuals_mult, ssb) {
+    .Call('FLRcppAdolc_test_fwdSR_copy_constructor', PACKAGE = 'FLRcppAdolc', model_name, params, residuals, residuals_mult, ssb)
+}
+
+test_fwdSR_assignment_operator <- function(model_name, params, residuals, residuals_mult, ssb) {
+    .Call('FLRcppAdolc_test_fwdSR_assignment_operator', PACKAGE = 'FLRcppAdolc', model_name, params, residuals, residuals_mult, ssb)
 }
 

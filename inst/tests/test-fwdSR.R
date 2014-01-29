@@ -13,7 +13,7 @@ test_that("fwdSR constructors",{
     test_fwdSR_empty_constructor()
     # Wrap
     sr_op <- test_fwdSR_constructor_wrap("ricker", params.ricker, residuals.ricker, residuals_mult)
-    expect_that(sr_op[["params"]], is_identical_to(params))
+    expect_that(sr_op[["params"]], is_identical_to(params.ricker))
     expect_that(sr_op[["residuals"]], is_identical_to(residuals.ricker))
     expect_that(sr_op[["residuals_mult"]], is_identical_to(residuals_mult))
     # eval
@@ -26,19 +26,14 @@ test_that("fwdSR constructors",{
     rec <- test_fwdSR_eval_simple("Bevholt", params.bevholt, residuals.bevholt, residuals_mult, c(ssb(ple4.sr.bevholt)[1,1,]))
     expect_that(rec, is_identical_to(c(predict(ple4.sr.bevholt)[1,1,])))
     # test get_nparams
-    expect_that(dim(params)[1], is_identical_to(test_fwdSR_get_nparams("ricker", params, residuals, residuals_mult)))
-
+    expect_that(dim(params.ricker)[1], is_identical_to(test_fwdSR_get_nparams("ricker", params.ricker, residuals.ricker, residuals_mult)))
     # Copy constructor
     srs <- test_fwdSR_copy_constructor("ricker", params.ricker, residuals.ricker, residuals_mult, c(ssb(ple4.sr.bevholt)[1,1,]))
     expect_that(srs[[1]], is_identical_to(srs[[2]]))
     expect_that(srs[[3]], is_identical_to(srs[[4]]))
-
     # Assignment operator
     srs <- test_fwdSR_assignment_operator("ricker", params.ricker, residuals.ricker, residuals_mult, c(ssb(ple4.sr.bevholt)[1,1,]))
     expect_that(srs[[1]], is_identical_to(srs[[2]]))
     expect_that(srs[[3]], is_identical_to(srs[[4]]))
-
-
-
 })
 

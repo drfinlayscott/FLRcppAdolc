@@ -16,18 +16,15 @@ void test_fwdSR_empty_constructor(){
 
 // [[Rcpp::export]]
 fwdSR test_fwdSR_constructor_wrap(std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult){
-
     fwdSR fwdsr(model_name, params, residuals, residuals_mult);
     return fwdsr;
 }
 
 // [[Rcpp::export]]
 double test_fwdSR_constructor_value(std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult){
-
     fwdSR fwdsr(model_name, params, residuals, residuals_mult);
     double out = fwdsr.eval_model(288540,1,1,1,1,1);
     return out;
-
 }
 
 // [[Rcpp::export]]

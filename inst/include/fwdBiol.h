@@ -10,6 +10,7 @@
 #include "FLQuant_base.h"
 
 #endif
+#define _fwdBiol_
 /*
  * fwdBiol class
  * Contains biological information (incuding abundance) by age for making projections

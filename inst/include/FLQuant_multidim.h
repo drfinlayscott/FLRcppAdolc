@@ -18,6 +18,8 @@
 
 #endif
 
+#define _FLQuant_multidim_
+
 template <typename T>
 class FLQuant7_base {
 	public:

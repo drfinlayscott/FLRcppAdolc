@@ -10,6 +10,7 @@
 #include "FLQuant_base.h"
 
 #endif
+#define _FLCatch_base_
 /*
  * FLCatch class
  * Contains catch information (including abundances and selectivity) for making projections

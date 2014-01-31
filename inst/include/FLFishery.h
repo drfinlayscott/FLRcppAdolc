@@ -4,10 +4,6 @@
  */
 
 // Necessary check to avoid the redefinition of FLQuant_base in the RcppExports.cpp
-#ifndef _FLQuant_base_
-#define _FLQuant_base_
-
-#include "FLQuant_base.h"
 
 #ifndef _FLCatch_base_
 #define _FLCatch_base_
@@ -15,7 +11,10 @@
 #include "FLCatch.h"
 
 #endif // end of FLC define
-#endif // end of FLQ define
+
+#define _FLFishery_
+
+
 
 /*
  * FLFishery class

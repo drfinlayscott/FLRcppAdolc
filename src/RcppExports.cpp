@@ -6,6 +6,64 @@
 
 using namespace Rcpp;
 
+// run
+std::vector<double> run(FLFisheriesAdolc fisheries, fwdBiolAdolc biol, std::string srr_model_name, FLQuant srr_params, FLQuant srr_residuals, bool srr_residuals_mult, FLQuantAdolc7 f);
+RcppExport SEXP FLRcppAdolc_run(SEXP fisheriesSEXP, SEXP biolSEXP, SEXP srr_model_nameSEXP, SEXP srr_paramsSEXP, SEXP srr_residualsSEXP, SEXP srr_residuals_multSEXP, SEXP fSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFisheriesAdolc >::type fisheries(fisheriesSEXP );
+        Rcpp::traits::input_parameter< fwdBiolAdolc >::type biol(biolSEXP );
+        Rcpp::traits::input_parameter< std::string >::type srr_model_name(srr_model_nameSEXP );
+        Rcpp::traits::input_parameter< FLQuant >::type srr_params(srr_paramsSEXP );
+        Rcpp::traits::input_parameter< FLQuant >::type srr_residuals(srr_residualsSEXP );
+        Rcpp::traits::input_parameter< bool >::type srr_residuals_mult(srr_residuals_multSEXP );
+        Rcpp::traits::input_parameter< FLQuantAdolc7 >::type f(fSEXP );
+        std::vector<double> __result = run(fisheries, biol, srr_model_name, srr_params, srr_residuals, srr_residuals_mult, f);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_project_timestep
+Rcpp::List test_project_timestep(FLFisheriesAdolc fisheries, fwdBiolAdolc biol, std::string srr_model_name, FLQuant params, FLQuant residuals, bool residuals_mult, FLQuantAdolc7 f, const int timestep);
+RcppExport SEXP FLRcppAdolc_test_project_timestep(SEXP fisheriesSEXP, SEXP biolSEXP, SEXP srr_model_nameSEXP, SEXP paramsSEXP, SEXP residualsSEXP, SEXP residuals_multSEXP, SEXP fSEXP, SEXP timestepSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFisheriesAdolc >::type fisheries(fisheriesSEXP );
+        Rcpp::traits::input_parameter< fwdBiolAdolc >::type biol(biolSEXP );
+        Rcpp::traits::input_parameter< std::string >::type srr_model_name(srr_model_nameSEXP );
+        Rcpp::traits::input_parameter< FLQuant >::type params(paramsSEXP );
+        Rcpp::traits::input_parameter< FLQuant >::type residuals(residualsSEXP );
+        Rcpp::traits::input_parameter< bool >::type residuals_mult(residuals_multSEXP );
+        Rcpp::traits::input_parameter< FLQuantAdolc7 >::type f(fSEXP );
+        Rcpp::traits::input_parameter< const int >::type timestep(timestepSEXP );
+        Rcpp::List __result = test_project_timestep(fisheries, biol, srr_model_name, params, residuals, residuals_mult, f, timestep);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_adolc_stl
+std::vector<double> test_adolc_stl(double input);
+RcppExport SEXP FLRcppAdolc_test_adolc_stl(SEXP inputSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< double >::type input(inputSEXP );
+        std::vector<double> __result = test_adolc_stl(input);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // test_FLQuant_FLQuant_multiplier_assignment_operator
 FLQuant test_FLQuant_FLQuant_multiplier_assignment_operator(FLQuant flq1, FLQuant flq2);
 RcppExport SEXP FLRcppAdolc_test_FLQuant_FLQuant_multiplier_assignment_operator(SEXP flq1SEXP, SEXP flq2SEXP) {
@@ -5958,6 +6016,123 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< const bool >::type residuals_mult(residuals_multSEXP );
         Rcpp::traits::input_parameter< const double >::type ssb(ssbSEXP );
         Rcpp::List __result = test_fwdSR_assignment_operator(model_name, params, residuals, residuals_mult, ssb);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_year_season_to_timestep_FLQuant_double
+int test_year_season_to_timestep_FLQuant_double(FLQuant flq, const int year, const int season);
+RcppExport SEXP FLRcppAdolc_test_year_season_to_timestep_FLQuant_double(SEXP flqSEXP, SEXP yearSEXP, SEXP seasonSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuant >::type flq(flqSEXP );
+        Rcpp::traits::input_parameter< const int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< const int >::type season(seasonSEXP );
+        int __result = test_year_season_to_timestep_FLQuant_double(flq, year, season);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_year_season_to_timestep_FLQuant_adouble
+int test_year_season_to_timestep_FLQuant_adouble(FLQuantAdolc flqad, const int year, const int season);
+RcppExport SEXP FLRcppAdolc_test_year_season_to_timestep_FLQuant_adouble(SEXP flqadSEXP, SEXP yearSEXP, SEXP seasonSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuantAdolc >::type flqad(flqadSEXP );
+        Rcpp::traits::input_parameter< const int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< const int >::type season(seasonSEXP );
+        int __result = test_year_season_to_timestep_FLQuant_adouble(flqad, year, season);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_timestep_to_year_season_FLQuant_double
+Rcpp::IntegerVector test_timestep_to_year_season_FLQuant_double(FLQuant flq, const int timestep);
+RcppExport SEXP FLRcppAdolc_test_timestep_to_year_season_FLQuant_double(SEXP flqSEXP, SEXP timestepSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuant >::type flq(flqSEXP );
+        Rcpp::traits::input_parameter< const int >::type timestep(timestepSEXP );
+        Rcpp::IntegerVector __result = test_timestep_to_year_season_FLQuant_double(flq, timestep);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_timestep_to_year_season_FLQuant_adouble
+Rcpp::IntegerVector test_timestep_to_year_season_FLQuant_adouble(FLQuantAdolc flqad, const int timestep);
+RcppExport SEXP FLRcppAdolc_test_timestep_to_year_season_FLQuant_adouble(SEXP flqadSEXP, SEXP timestepSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuantAdolc >::type flqad(flqadSEXP );
+        Rcpp::traits::input_parameter< const int >::type timestep(timestepSEXP );
+        Rcpp::IntegerVector __result = test_timestep_to_year_season_FLQuant_adouble(flqad, timestep);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_euclid_norm
+double test_euclid_norm(std::vector<double> xvec);
+RcppExport SEXP FLRcppAdolc_test_euclid_norm(SEXP xvecSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< std::vector<double> >::type xvec(xvecSEXP );
+        double __result = test_euclid_norm(xvec);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_NR1
+Rcpp::List test_NR1(const double initial_value, const int max_iters, const double max_limit, const double tolerance);
+RcppExport SEXP FLRcppAdolc_test_NR1(SEXP initial_valueSEXP, SEXP max_itersSEXP, SEXP max_limitSEXP, SEXP toleranceSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const double >::type initial_value(initial_valueSEXP );
+        Rcpp::traits::input_parameter< const int >::type max_iters(max_itersSEXP );
+        Rcpp::traits::input_parameter< const double >::type max_limit(max_limitSEXP );
+        Rcpp::traits::input_parameter< const double >::type tolerance(toleranceSEXP );
+        Rcpp::List __result = test_NR1(initial_value, max_iters, max_limit, tolerance);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_NR2
+Rcpp::List test_NR2(std::vector<double> initial_value, const int max_iters, const double max_limit, const double tolerance);
+RcppExport SEXP FLRcppAdolc_test_NR2(SEXP initial_valueSEXP, SEXP max_itersSEXP, SEXP max_limitSEXP, SEXP toleranceSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< std::vector<double> >::type initial_value(initial_valueSEXP );
+        Rcpp::traits::input_parameter< const int >::type max_iters(max_itersSEXP );
+        Rcpp::traits::input_parameter< const double >::type max_limit(max_limitSEXP );
+        Rcpp::traits::input_parameter< const double >::type tolerance(toleranceSEXP );
+        Rcpp::List __result = test_NR2(initial_value, max_iters, max_limit, tolerance);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

@@ -10,6 +10,7 @@
 #include "FLQuant_base.h"
 
 #endif
+#define _fwdSR_
 /*
  * fwdSR class
  * Contains data and methods for stock-recruitment relationships

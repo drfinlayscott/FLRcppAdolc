@@ -32,6 +32,43 @@ fwdBiolAdolc test_fwdBiolAdolc_as_wrap(fwdBiolAdolc fwdb){
 }
 
 // [[Rcpp::export]]
+Rcpp::List test_fwdBiol_fwdSR_constructor(SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult){
+    fwdSR fwsr(model_name, params, residuals, residuals_mult);
+    fwdBiol fwb(flb_sexp, fwsr);
+	return Rcpp::List::create(Rcpp::Named("fwb", fwb),
+				Rcpp::Named("srr",fwb.get_srr()));
+}
+
+// [[Rcpp::export]]
+Rcpp::List test_fwdBiol_FLSR_bits_constructor(SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult){
+    fwdBiol fwb(flb_sexp, model_name, params, residuals, residuals_mult);
+	return Rcpp::List::create(Rcpp::Named("fwb", fwb),
+				Rcpp::Named("srr",fwb.get_srr()));
+}
+
+// [[Rcpp::export]]
+Rcpp::List test_fwdBiolAdolc_fwdSRAdolc_constructor(SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult){
+    fwdSRAdolc fwsr(model_name, params, residuals, residuals_mult);
+    fwdBiolAdolc fwb(flb_sexp, fwsr);
+	return Rcpp::List::create(Rcpp::Named("fwb", fwb),
+				Rcpp::Named("srr",fwb.get_srr()));
+}
+
+// [[Rcpp::export]]
+Rcpp::List test_fwdBiolAdolc_FLSR_bits_constructor(SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult){
+    fwdBiolAdolc fwb(flb_sexp, model_name, params, residuals, residuals_mult);
+	return Rcpp::List::create(Rcpp::Named("fwb", fwb),
+				Rcpp::Named("srr",fwb.get_srr()));
+}
+
+
+
+
+
+
+
+
+// [[Rcpp::export]]
 fwdBiol test_fwdBiol_copy_constructor(fwdBiol fwdb1){
 	fwdBiol fwdb2(fwdb1); // uses copy constructor
     return fwdb2;

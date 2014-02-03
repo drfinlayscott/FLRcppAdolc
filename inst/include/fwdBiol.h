@@ -10,6 +10,16 @@
 #include "FLQuant_base.h"
 
 #endif
+
+
+#ifndef _fwdSR_
+#define _fwdSR_
+
+#include "fwdSR.h"
+
+#endif
+
+
 #define _fwdBiol_
 /*
  * fwdBiol class
@@ -27,8 +37,11 @@ class fwdBiol_base {
     public:
         // /* Constructors */
 		fwdBiol_base();
-		fwdBiol_base(SEXP fls_sexp); // Used as intrusive 'as', takes an FLBiol but with no SRR
+		fwdBiol_base(SEXP flb_sexp); // Used as intrusive 'as', takes an FLBiol but with no SRR
         operator SEXP() const; // Used as intrusive 'wrap' - returns an FLBiol
+        fwdBiol_base(const SEXP flb_sexp, const fwdSR_base<T> srr_in); // Pass in FLBiol and fwdSR
+        fwdBiol_base(const SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult = TRUE); // Pass in FLBiol and bits of fwdSR
+
 		fwdBiol_base(const fwdBiol_base& fwdBiol_base_source); // copy constructor to ensure that copy is a deep copy - used when passing FLSs into functions
 		fwdBiol_base& operator = (const fwdBiol_base& fwdBiol_base_source); // Assignment operator for a deep copy
 
@@ -45,6 +58,7 @@ class fwdBiol_base {
         FLQuant& spwn();
         FLQuant& fec();
 
+        fwdSR_base<T> get_srr() const;
         std::string get_name() const;
         std::string get_desc() const;
         Rcpp::NumericVector get_range() const;
@@ -62,7 +76,9 @@ class fwdBiol_base {
         FLQuant m_flq;
         FLQuant spwn_flq;
         FLQuant fec_flq;
-        // SRR srr;
+        fwdSR_base<T> srr;
+        // Annoying init because you can't delegate constructors until C++11
+        void init(const SEXP flb_sexp, const fwdSR_base<T> srr_in);
 };
 
 

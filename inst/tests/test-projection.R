@@ -11,12 +11,14 @@ test_that("Newton-Raphson tests",{
     max_iters <- 50
     max_limit <- 100
     tolerance <- 1e-12
-    initial <- rnorm(1, sd=10)
+    initial <- rnorm(1, sd=1)
     fit <- test_NR1(initial, max_iters, max_limit, tolerance)
     expect_that(((fit$x - 2) < tolerance) | ((fit$x - (-2/3)) < tolerance), is_true())
     expect_that(fit$out, is_identical_to(0L))
+    # Check max iters
     fit <- test_NR1(-10, 2, max_limit, tolerance)
     expect_that(fit$out, is_identical_to(1L))
+    # Check max limit
     fit <- test_NR1(200, max_iters, max_limit, tolerance)
     expect_that(fit$out, is_identical_to(2L))
     tolerance2 <- 1
@@ -26,7 +28,7 @@ test_that("Newton-Raphson tests",{
     max_iters <- 50
     max_limit <- 1e9 # Crank up the limit - it's OK for this example
     tolerance <- 1e-12
-    initial <- rnorm(2, sd=10)
+    initial <- abs(rnorm(2, sd=2))
     fit <- test_NR2(initial, max_iters, max_limit, tolerance)
     y1 <- fit$x[1]^2 + fit$x[2]^2 - 4
     y2 <- fit$x[1]^2 - fit$x[2] + 1
@@ -38,4 +40,4 @@ test_that("Project", {
           # Check time of biol is not exceeded
           # biol update is timestep+1
 
-}
+})

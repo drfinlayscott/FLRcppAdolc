@@ -20,15 +20,13 @@ fwdBiol_base<T>::fwdBiol_base(){
     m_flq = FLQuant();
     spwn_flq = FLQuant();
     fec_flq = FLQuant();
-    // SRR
+    srr = fwdSR_base<T>();
 }
 
-// Constructor from a SEXP S4 FLBiol
-// But this does not set the SRR!
-// Need another constructor for that
-// Used as intrusive 'as'
+// Annoying init because you can't delegate constructors until C++11
 template <typename T>
-fwdBiol_base<T>::fwdBiol_base(SEXP flb_sexp){
+void fwdBiol_base<T>::init(const SEXP flb_sexp, const fwdSR_base<T> srr_in){
+    Rprintf("In fwdBiol init\n");
     Rcpp::S4 fwdb_s4 = Rcpp::as<Rcpp::S4>(flb_sexp);
     name = Rcpp::as<std::string>(fwdb_s4.slot("name"));
     desc = Rcpp::as<std::string>(fwdb_s4.slot("desc"));
@@ -38,7 +36,33 @@ fwdBiol_base<T>::fwdBiol_base(SEXP flb_sexp){
     m_flq = fwdb_s4.slot("m");
     spwn_flq = fwdb_s4.slot("spwn");
     fec_flq = fwdb_s4.slot("fec");
-    // SRR
+    srr = srr_in;
+}
+
+// Constructor from a SEXP S4 FLBiol
+// But this does not set the SRR!
+// Need another constructor for that
+// Used as intrusive 'as'
+template <typename T>
+fwdBiol_base<T>::fwdBiol_base(SEXP flb_sexp){
+    Rprintf("In fwdBiol as\n");
+    // Empty fwdSR
+    fwdSR_base<T> srr;
+    init(flb_sexp, srr);
+}
+
+// Constructor from FLBiol and fwdSR
+template <typename T>
+fwdBiol_base<T>::fwdBiol_base(const SEXP flb_sexp, const fwdSR_base<T> srr_in){
+    init(flb_sexp, srr_in);
+} 
+
+// Constructor from FLBiol and fwdSR bits
+template <typename T>
+fwdBiol_base<T>::fwdBiol_base(const SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult){
+    Rprintf("In FLBiol and FLSR bits constructor.\n");
+    fwdSR_base<T> srr(model_name, params, residuals, residuals_mult);
+    init(flb_sexp, srr);
 }
 
 // Copy constructor - else members can be pointed at by multiple instances
@@ -52,7 +76,7 @@ fwdBiol_base<T>::fwdBiol_base(const fwdBiol_base<T>& fwdBiol_source){
     m_flq = fwdBiol_source.m_flq;
     spwn_flq = fwdBiol_source.spwn_flq;
     fec_flq = fwdBiol_source.fec_flq;
-    // SRR
+    srr = fwdBiol_source.srr;
 }
 
 // Assignment operator to ensure deep copy - else 'data' can be pointed at by multiple instances
@@ -67,7 +91,7 @@ fwdBiol_base<T>& fwdBiol_base<T>::operator = (const fwdBiol_base<T>& fwdBiol_sou
         m_flq = fwdBiol_source.m_flq;
         spwn_flq = fwdBiol_source.spwn_flq;
         fec_flq = fwdBiol_source.fec_flq;
-        // SRR
+        srr = fwdBiol_source.srr;
 	}
 	return *this;
 }
@@ -138,6 +162,10 @@ FLQuant& fwdBiol_base<T>::fec() {
 }
 
 
+template <typename T>
+fwdSR_base<T> fwdBiol_base<T>::get_srr() const{
+    return srr;
+}
 
 
 // Explicit instantiation of class

@@ -1333,6 +1333,22 @@ test_fwdBiolAdolc_as_wrap <- function(fwdb) {
     .Call('FLRcppAdolc_test_fwdBiolAdolc_as_wrap', PACKAGE = 'FLRcppAdolc', fwdb)
 }
 
+test_fwdBiol_fwdSR_constructor <- function(flb_sexp, model_name, params, residuals, residuals_mult) {
+    .Call('FLRcppAdolc_test_fwdBiol_fwdSR_constructor', PACKAGE = 'FLRcppAdolc', flb_sexp, model_name, params, residuals, residuals_mult)
+}
+
+test_fwdBiol_FLSR_bits_constructor <- function(flb_sexp, model_name, params, residuals, residuals_mult) {
+    .Call('FLRcppAdolc_test_fwdBiol_FLSR_bits_constructor', PACKAGE = 'FLRcppAdolc', flb_sexp, model_name, params, residuals, residuals_mult)
+}
+
+test_fwdBiolAdolc_fwdSRAdolc_constructor <- function(flb_sexp, model_name, params, residuals, residuals_mult) {
+    .Call('FLRcppAdolc_test_fwdBiolAdolc_fwdSRAdolc_constructor', PACKAGE = 'FLRcppAdolc', flb_sexp, model_name, params, residuals, residuals_mult)
+}
+
+test_fwdBiolAdolc_FLSR_bits_constructor <- function(flb_sexp, model_name, params, residuals, residuals_mult) {
+    .Call('FLRcppAdolc_test_fwdBiolAdolc_FLSR_bits_constructor', PACKAGE = 'FLRcppAdolc', flb_sexp, model_name, params, residuals, residuals_mult)
+}
+
 test_fwdBiol_copy_constructor <- function(fwdb1) {
     .Call('FLRcppAdolc_test_fwdBiol_copy_constructor', PACKAGE = 'FLRcppAdolc', fwdb1)
 }

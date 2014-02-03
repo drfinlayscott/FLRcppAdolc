@@ -2,10 +2,10 @@ context("Implementation of FLSR - double and Adolc versions")
 
 test_that("fwdSR constructors",{
     data(ple4)
-    ple4.sr.ricker <- fmle(as.FLSR(ple4,model="ricker"))
+    ple4.sr.ricker <- fmle(as.FLSR(ple4,model="ricker"), control  = list(trace=0))
     params.ricker <- as.FLQuant(params(ple4.sr.ricker))
     residuals.ricker <- FLQuant(rnorm(100), dimnames = list(year = 1:10, iter = 1:10))
-    ple4.sr.bevholt <- fmle(as.FLSR(ple4,model="bevholt"))
+    ple4.sr.bevholt <- fmle(as.FLSR(ple4,model="bevholt"), control  = list(trace=0))
     params.bevholt <- as.FLQuant(params(ple4.sr.bevholt))
     residuals.bevholt <- FLQuant(rnorm(100), dimnames = list(year = 1:10, iter = 1:10))
     residuals_mult <- TRUE
@@ -36,4 +36,5 @@ test_that("fwdSR constructors",{
     expect_that(srs[[1]], is_identical_to(srs[[2]]))
     expect_that(srs[[3]], is_identical_to(srs[[4]]))
 })
+
 

@@ -51,6 +51,12 @@ class fwdBiol_base {
         FLQuant m() const;
         FLQuant spwn() const;
         FLQuant fec() const;
+
+        // SSB calculations not implemented here - need harvest.spwn information
+        //FLQuant_base<T> ssb() const;
+        //std::vector<T> ssb(const int timestep) const;
+        //T ssb(const int timestep, const int iter) const;
+
         // Accessor methods for the slots
         FLQuant_base<T>& n();
         FLQuant& wt();

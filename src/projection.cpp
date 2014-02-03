@@ -212,40 +212,72 @@ Rcpp::List test_project_timestep(FLFisheriesAdolc fisheries, fwdBiolAdolc biol, 
                             Rcpp::Named("biol",biol));
 }
 
-// Can adoubles be used with std::vector - fecking hope so!
-std::vector<adouble> stupid(std::vector<adouble> indep){
-    std::vector<adouble> dep(1);
-    dep[0] = 2 * pow(indep[0],3);
-    return dep;
+/*------------------------------------------------------------*/
+// operatingModel class
+
+// Empty constructor
+template <typename T>
+operatingModel_base<T>::operatingModel_base(){
+    biol = fwdBiol_base<T>();
+    fisheries = FLFisheries_base<T>();
+    f = FLQuant7_base<T>();
+    f_spwn = FLQuant7_base<T>();
 }
 
-// [[Rcpp::export]]
-std::vector<double> test_adolc_stl(double input){
-    std::vector<adouble> indep(1);
-    std::vector<adouble> dep(1);
-    std::vector<double> depout(1);
-    double output = 0.0;
+// Main constructor
+template <typename T>
+operatingModel_base<T>::operatingModel_base(const FLFisheries_base<T> fisheries_in, const fwdBiol_base<T> biol_in, const FLQuant7_base<T> f_in, const FLQuant7_base<T> f_spwn_in){
+    // Check dims!!
+    biol = biol_in;
+    fisheries = fisheries_in;
+    f = f_in;
+    f_spwn = f_spwn_in;
+}
 
-    trace_on(1);
-    indep[0] <<= input;
+// Copy constructor - else members can be pointed at by multiple instances
+template <typename T>
+operatingModel_base<T>::operatingModel_base(const operatingModel_base<T>& operatingModel_source){
+    biol = operatingModel_source.biol;
+    fisheries = operatingModel_source.fisheries;
+    f = operatingModel_source.f;
+    f_spwn = operatingModel_source.f_spwn;
+}
 
-    //dep[0] = 2 * pow(indep[0],3);
-    dep = stupid(indep);
-    dep[0] >>= output;
-    trace_off();
+// Assignment operator to ensure deep copy - else 'data' can be pointed at by multiple instances
+template <typename T>
+operatingModel_base<T>& operatingModel_base<T>::operator = (const operatingModel_base<T>& operatingModel_source){
+	if (this != &operatingModel_source){
+        biol = operatingModel_source.biol;
+        fisheries = operatingModel_source.fisheries;
+        f = operatingModel_source.f;
+        f_spwn = operatingModel_source.f_spwn;
+	}
+	return *this;
+}
 
-    // do something with the tape
-    double *x = new double[1];
-    double *y = new double[1];
-    x[0] = input;
-    function(1,1,1,x,y);
-    jac_solv(1,1,x,y,2);
-    depout[0] = y[0];
-
-
-    delete [] x;
-    delete [] y;
-return depout;
+/* Intrusive 'wrap' */
+// Returns a list of stuff
+template <typename T>
+operatingModel_base<T>::operator SEXP() const{
+    Rprintf("Wrapping operatingModel_base<T>.\n");
+    return Rcpp::List::create(Rcpp::Named("biol", biol),
+                            Rcpp::Named("fisheries",fisheries),
+                            Rcpp::Named("f",f),
+                            Rcpp::Named("f_spwn",f_spwn));
 }
 
 
+template <typename T>
+FLQuant_base<T> operatingModel_base<T>::ssb() const {
+    FLQuant_base<T> ssb = biol.n() * biol.wt() * biol.fec(); //* exp((biol.m() * biol.spwn()))// + f() * f_spwn()));
+    biol.m() * biol.spwn();
+    FLQuantAdolc m = biol.m();
+    exp(m);
+    exp(biol.m());
+    return ssb;
+}
+
+
+// Explicit instantiation of class
+template class operatingModel_base<double>;
+template class operatingModel_base<adouble>;

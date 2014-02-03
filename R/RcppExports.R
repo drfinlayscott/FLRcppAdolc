@@ -9,10 +9,6 @@ test_project_timestep <- function(fisheries, biol, srr_model_name, params, resid
     .Call('FLRcppAdolc_test_project_timestep', PACKAGE = 'FLRcppAdolc', fisheries, biol, srr_model_name, params, residuals, residuals_mult, f, timestep)
 }
 
-test_adolc_stl <- function(input) {
-    .Call('FLRcppAdolc_test_adolc_stl', PACKAGE = 'FLRcppAdolc', input)
-}
-
 test_FLQuant_FLQuant_multiplier_assignment_operator <- function(flq1, flq2) {
     .Call('FLRcppAdolc_test_FLQuant_FLQuant_multiplier_assignment_operator', PACKAGE = 'FLRcppAdolc', flq1, flq2)
 }
@@ -1431,6 +1427,18 @@ test_fwdSR_copy_constructor <- function(model_name, params, residuals, residuals
 
 test_fwdSR_assignment_operator <- function(model_name, params, residuals, residuals_mult, ssb) {
     .Call('FLRcppAdolc_test_fwdSR_assignment_operator', PACKAGE = 'FLRcppAdolc', model_name, params, residuals, residuals_mult, ssb)
+}
+
+test_operatingModel_empty_constructor <- function() {
+    invisible(.Call('FLRcppAdolc_test_operatingModel_empty_constructor', PACKAGE = 'FLRcppAdolc'))
+}
+
+test_operatingModelAdolc_empty_constructor <- function() {
+    invisible(.Call('FLRcppAdolc_test_operatingModelAdolc_empty_constructor', PACKAGE = 'FLRcppAdolc'))
+}
+
+test_operatingModel_full_constructor <- function(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn) {
+    .Call('FLRcppAdolc_test_operatingModel_full_constructor', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn)
 }
 
 test_year_season_to_timestep_FLQuant_double <- function(flq, year, season) {

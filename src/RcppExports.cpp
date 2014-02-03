@@ -49,21 +49,6 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// test_adolc_stl
-std::vector<double> test_adolc_stl(double input);
-RcppExport SEXP FLRcppAdolc_test_adolc_stl(SEXP inputSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< double >::type input(inputSEXP );
-        std::vector<double> __result = test_adolc_stl(input);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
 // test_FLQuant_FLQuant_multiplier_assignment_operator
 FLQuant test_FLQuant_FLQuant_multiplier_assignment_operator(FLQuant flq1, FLQuant flq2);
 RcppExport SEXP FLRcppAdolc_test_FLQuant_FLQuant_multiplier_assignment_operator(SEXP flq1SEXP, SEXP flq2SEXP) {
@@ -6092,6 +6077,50 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< const bool >::type residuals_mult(residuals_multSEXP );
         Rcpp::traits::input_parameter< const double >::type ssb(ssbSEXP );
         Rcpp::List __result = test_fwdSR_assignment_operator(model_name, params, residuals, residuals_mult, ssb);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_operatingModel_empty_constructor
+void test_operatingModel_empty_constructor();
+RcppExport SEXP FLRcppAdolc_test_operatingModel_empty_constructor() {
+BEGIN_RCPP
+    {
+        Rcpp::RNGScope __rngScope;
+        test_operatingModel_empty_constructor();
+    }
+    return R_NilValue;
+END_RCPP
+}
+// test_operatingModelAdolc_empty_constructor
+void test_operatingModelAdolc_empty_constructor();
+RcppExport SEXP FLRcppAdolc_test_operatingModelAdolc_empty_constructor() {
+BEGIN_RCPP
+    {
+        Rcpp::RNGScope __rngScope;
+        test_operatingModelAdolc_empty_constructor();
+    }
+    return R_NilValue;
+END_RCPP
+}
+// test_operatingModel_full_constructor
+operatingModelAdolc test_operatingModel_full_constructor(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult, const FLQuantAdolc7 f, const FLQuantAdolc7 f_spwn);
+RcppExport SEXP FLRcppAdolc_test_operatingModel_full_constructor(SEXP flfsSEXP, SEXP flb_sexpSEXP, SEXP model_nameSEXP, SEXP paramsSEXP, SEXP residualsSEXP, SEXP residuals_multSEXP, SEXP fSEXP, SEXP f_spwnSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFisheriesAdolc >::type flfs(flfsSEXP );
+        Rcpp::traits::input_parameter< SEXP >::type flb_sexp(flb_sexpSEXP );
+        Rcpp::traits::input_parameter< const std::string >::type model_name(model_nameSEXP );
+        Rcpp::traits::input_parameter< const FLQuant >::type params(paramsSEXP );
+        Rcpp::traits::input_parameter< const FLQuant >::type residuals(residualsSEXP );
+        Rcpp::traits::input_parameter< const bool >::type residuals_mult(residuals_multSEXP );
+        Rcpp::traits::input_parameter< const FLQuantAdolc7 >::type f(fSEXP );
+        Rcpp::traits::input_parameter< const FLQuantAdolc7 >::type f_spwn(f_spwnSEXP );
+        operatingModelAdolc __result = test_operatingModel_full_constructor(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

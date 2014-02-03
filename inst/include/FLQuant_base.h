@@ -242,9 +242,9 @@ FLQuant_base<T> operator + (const T& lhs, const FLQuant_base<double>& rhs);
 
 // Other arithmetic operations
 template <typename T>
-FLQuant_base<T> log(FLQuant_base<T>& flq);
+FLQuant_base<T> log(const FLQuant_base<T>& flq);
 template <typename T>
-FLQuant_base<T> exp(FLQuant_base<T>& flq);
+FLQuant_base<T> exp(const FLQuant_base<T>& flq);
 
 // Shortcut methods
 template <typename T>

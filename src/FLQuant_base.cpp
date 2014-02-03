@@ -863,23 +863,25 @@ int FLQuant_base<T>::match_dims(const FLQuant_base<T2>& b) const{
 //FLQuant_base<T> exp(const FLQuant_base<T>& flq);
 
 template <typename T>
-FLQuant_base<T> log(FLQuant_base<T>& flq){
-    std::vector<T> data = flq.get_data();
+FLQuant_base<T> log(const FLQuant_base<T>& flq){
+    FLQuant_base<T> flq_out = flq;
+    std::vector<T> data = flq_out.get_data();
     for (typename std::vector<T>::iterator data_iterator = data.begin(); data_iterator != data.end(); ++data_iterator){
         (*data_iterator) = log(*data_iterator);
     }
-    flq.set_data(data);
-    return flq;
+    flq_out.set_data(data);
+    return flq_out;
 }
 
 template <typename T>
-FLQuant_base<T> exp(FLQuant_base<T>& flq){
-    std::vector<T> data = flq.get_data();
+FLQuant_base<T> exp(const FLQuant_base<T>& flq){
+    FLQuant_base<T> flq_out = flq;
+    std::vector<T> data = flq_out.get_data();
     for (typename std::vector<T>::iterator data_iterator = data.begin(); data_iterator != data.end(); ++data_iterator){
         (*data_iterator) = exp(*data_iterator);
     }
-    flq.set_data(data);
-    return flq;
+    flq_out.set_data(data);
+    return flq_out;
 }
 
 int dim_matcher(const Rcpp::IntegerVector dims_a, const Rcpp::IntegerVector dims_b){
@@ -1052,10 +1054,10 @@ template FLQuant_base<adouble> operator + (const FLQuant_base<double>& lhs, cons
 template FLQuant_base<adouble> operator + (const adouble& lhs, const FLQuant_base<double>& rhs);
 
 // Explicit instantiation of other functions
-template FLQuant_base<double> log(FLQuant_base<double>& flq);
-template FLQuant_base<adouble> log(FLQuant_base<adouble>& flq);
-template FLQuant_base<double> exp(FLQuant_base<double>& flq);
-template FLQuant_base<adouble> exp(FLQuant_base<adouble>& flq);
+template FLQuant_base<double> log(const FLQuant_base<double>& flq);
+template FLQuant_base<adouble> log(const FLQuant_base<adouble>& flq);
+template FLQuant_base<double> exp(const FLQuant_base<double>& flq);
+template FLQuant_base<adouble> exp(const FLQuant_base<adouble>& flq);
 template FLQuant_base<double> year_sum(const FLQuant_base<double>& flq);
 template FLQuant_base<adouble> year_sum(const FLQuant_base<adouble>& flq);
 

@@ -164,5 +164,20 @@ test_that("FLQuant match_dims method works", {
     expect_that(test_FLQuant_FLQuant_match_dims(flq, flq6), is_identical_to(-6L))
 })
 
+test_that("FLQuant subsetter works",{
+    fixed_dims <- round(runif(6, min=5, max = 10))
+    flq <- random_FLQuant_generator(fixed_dims = fixed_dims)
+    sub_dims_start <- round(runif(6, min=1, max = 2))
+    sub_dims_end <- fixed_dims - round(runif(6, min=1, max = 2))
+    sub_flq_out <-  test_FLQuant_subset(flq, sub_dims_start[1], sub_dims_end[1], sub_dims_start[2], sub_dims_end[2], sub_dims_start[3], sub_dims_end[3], sub_dims_start[4], sub_dims_end[4], sub_dims_start[5], sub_dims_end[5], sub_dims_start[6], sub_dims_end[6])
+    sub_flq_in <- flq[sub_dims_start[1]:sub_dims_end[1], sub_dims_start[2]:sub_dims_end[2], sub_dims_start[3]:sub_dims_end[3], sub_dims_start[4]:sub_dims_end[4], sub_dims_start[5]:sub_dims_end[5], sub_dims_start[6]:sub_dims_end[6]]
+    expect_that(c(sub_flq_in@.Data), is_identical_to(c(sub_flq_out@.Data)))
+    expect_that(sub_flq_in@.Data, is_identical_to(sub_flq_out@.Data))
 
+
+    # min < max check
+    sub_dims_wrong <- sub_dims_end
+    expect_that(test_FLQuant_subset(flq, sub_dims_wrong[1], sub_dims_start[1], sub_dims_wrong[2], sub_dims_start[2], sub_dims_wrong[3], sub_dims_start[3], sub_dims_wrong[4], sub_dims_start[4], sub_dims_wrong[5], sub_dims_start[5], sub_dims_wrong[6], sub_dims_start[6]), throws_error())
+
+})
 

@@ -61,10 +61,12 @@ class FLQuant_base {
         void set_dimnames(const Rcpp::List& dimnames_in);
         void set_units(const std::string& units_in);
 
-        /* () accessors */
+        /* () get accessors */
 		T operator () (const unsigned int element) const; // only gets an element so const reinforced - 
 		T operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter) const; // only gets an element so const reinforced 
 		T operator () (const std::vector<unsigned int> indices) const; // For all the elements - must be of length 6 
+		FLQuant_base<T> operator () (const int quant_min, const int quant_max, const int year_min, const int year_max, const int unit_min, const int unit_max, const int season_min, const int season_max, const int area_min, const int area_max, const int iter_min, const int iter_max) const; // Subsetting
+        /* () get and set accessors */
 		T& operator () (const unsigned int element); // gets and sets an element so const not reinforced
 		T& operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area, const unsigned int iter); // gets and sets an element so const not reinforced
 		T& operator () (const std::vector<unsigned int> indices); // For all the elements - must be of length 6 

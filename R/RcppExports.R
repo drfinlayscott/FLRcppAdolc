@@ -1097,6 +1097,10 @@ test_FLQuant_set_units <- function(flq, new_units) {
     .Call('FLRcppAdolc_test_FLQuant_set_units', PACKAGE = 'FLRcppAdolc', flq, new_units)
 }
 
+test_FLQuant_subset <- function(flq, quant_min, quant_max, year_min, year_max, unit_min, unit_max, season_min, season_max, area_min, area_max, iter_min, iter_max) {
+    .Call('FLRcppAdolc_test_FLQuant_subset', PACKAGE = 'FLRcppAdolc', flq, quant_min, quant_max, year_min, year_max, unit_min, unit_max, season_min, season_max, area_min, area_max, iter_min, iter_max)
+}
+
 test_FLQuant_FLQuant_match_dims <- function(flq1, flq2) {
     .Call('FLRcppAdolc_test_FLQuant_FLQuant_match_dims', PACKAGE = 'FLRcppAdolc', flq1, flq2)
 }
@@ -1439,6 +1443,18 @@ test_operatingModelAdolc_empty_constructor <- function() {
 
 test_operatingModel_full_constructor <- function(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn) {
     .Call('FLRcppAdolc_test_operatingModel_full_constructor', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn)
+}
+
+test_operatingModel_SSB_FLQ <- function(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn) {
+    .Call('FLRcppAdolc_test_operatingModel_SSB_FLQ', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn)
+}
+
+test_operatingModelAdolc_SSB_FLQ <- function(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn) {
+    .Call('FLRcppAdolc_test_operatingModelAdolc_SSB_FLQ', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn)
+}
+
+test_operatingModel_SSB <- function(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn) {
+    invisible(.Call('FLRcppAdolc_test_operatingModel_SSB', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn))
 }
 
 test_year_season_to_timestep_FLQuant_double <- function(flq, year, season) {

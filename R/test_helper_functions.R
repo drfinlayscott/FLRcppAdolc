@@ -22,12 +22,12 @@
 #' dim(flq)
 #' summary(flq)
 random_FLQuant_generator <- function(fixed_dims = rep(NA,6), max_dims = c(5,10,5,4,4,5), sd = 100){
-    nage <- ifelse(is.na(fixed_dims[1]),runif(1,min=2, max=max_dims[1]),fixed_dims[1])
-    nyear <- ifelse(is.na(fixed_dims[2]),runif(1,min=2, max=max_dims[2]),fixed_dims[2])
-    nunit <- ifelse(is.na(fixed_dims[3]),runif(1,min=2, max=max_dims[3]),fixed_dims[3])
-    nseason <- ifelse(is.na(fixed_dims[4]),runif(1,min=2, max=max_dims[4]),fixed_dims[4])
-    narea <- ifelse(is.na(fixed_dims[5]),runif(1,min=2, max=max_dims[5]),fixed_dims[5])
-    niter <- ifelse(is.na(fixed_dims[6]),runif(1,min=2, max=max_dims[6]),fixed_dims[6])
+    nage <- ifelse(is.na(fixed_dims[1]),round(runif(1,min=2, max=max_dims[1])),fixed_dims[1])
+    nyear <- ifelse(is.na(fixed_dims[2]),round(runif(1,min=2, max=max_dims[2])),fixed_dims[2])
+    nunit <- ifelse(is.na(fixed_dims[3]),round(runif(1,min=2, max=max_dims[3])),fixed_dims[3])
+    nseason <- ifelse(is.na(fixed_dims[4]),round(runif(1,min=2, max=max_dims[4])),fixed_dims[4])
+    narea <- ifelse(is.na(fixed_dims[5]),round(runif(1,min=2, max=max_dims[5])),fixed_dims[5])
+    niter <- ifelse(is.na(fixed_dims[6]),round(runif(1,min=2, max=max_dims[6])),fixed_dims[6])
     values <- rnorm(nage*nyear*nunit*nseason*narea*niter, sd = sd)
     flq <- FLQuant(values, dimnames = list(age = 1:nage, year = 1:nyear, unit = 1:nunit, season = 1:nseason, area = 1:narea, iter = 1:niter))
     units(flq) <- as.character(signif(abs(rnorm(1)),3))
@@ -51,7 +51,7 @@ random_FLQuant_generator <- function(fixed_dims = rep(NA,6), max_dims = c(5,10,5
 #' summary(flq_list)
 #' lapply(flq_list, summary)
 random_FLQuant_list_generator <- function(max_elements = 10, ...){
-    nelements <- runif(1,min=1, max=max_elements)
+    nelements <- round(runif(1,min=1, max=max_elements))
     op <- list()
     for (i in 1:nelements){
         op[[i]] <- random_FLQuant_generator(...)
@@ -129,7 +129,7 @@ random_FLCatch_generator <- function(sd=100, ...){
 #' lapply(flcs, summary)
 random_FLCatches_generator <- function(max_catches = 5, ...){
     args <- list(...)
-    ncatches <- runif(1,min=2, max=max_catches)
+    ncatches <- round(runif(1,min=2, max=max_catches))
     op_list <- list()
     flq <- random_FLQuant_generator(...)
     # cat("dim flq: ", dim(flq), "\n")
@@ -197,7 +197,7 @@ random_FLFishery_generator <- function(max_catches = 5, sd = 100,  ...){
 #' flf <- random_FLFishery_generator(fixed_dims = c(NA,10,1,1,1,1), max_dims = c(100,NA,NA,NA,NA,NA))
 random_FLFisheries_generator <- function(min_fisheries = 2, max_fisheries = 5, ...){
     fisheries_list <- list()
-    nfisheries <- runif(1,min=min_fisheries, max=max_fisheries)
+    nfisheries <- round(runif(1,min=min_fisheries, max=max_fisheries))
     for (i in 1:nfisheries){
         fisheries_list[[i]] <- random_FLFishery_generator(...)
     }

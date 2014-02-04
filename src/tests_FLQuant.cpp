@@ -213,6 +213,10 @@ FLQuant test_FLQuant_set_units(FLQuant flq, std::string new_units){
 
 }
 
+// [[Rcpp::export]]
+FLQuant test_FLQuant_subset(FLQuant flq, const int quant_min, const int quant_max, const int year_min, const int year_max, const int unit_min, const int unit_max, const int season_min, const int season_max, const int area_min, const int area_max, const int iter_min, const int iter_max){
+  return flq(quant_min, quant_max, year_min, year_max, unit_min, unit_max, season_min, season_max, area_min, area_max, iter_min, iter_max);
+}
 
 //------------------ Others --------------------------------------
 // [[Rcpp::export]]

@@ -56,9 +56,10 @@ class operatingModel_base {
         void run(); // Need to specialise for AD and non-AD version
         void project_timestep();
 
+        // Various ways of calculating reproductive potential
         FLQuant_base<T> ssb() const;
-        std::vector<T> ssb(const int timestep) const; // all iters
-        T ssb(const int timestep, const int iter) const; 
+        FLQuant_base<T> ssb(const int timestep, const int unit, const int area) const; // all iters 
+        T ssb(const int timestep, const int unit, const int area, const int iter) const; 
 
 
     private:

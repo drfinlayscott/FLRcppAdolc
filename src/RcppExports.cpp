@@ -6198,10 +6198,11 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// test_operatingModel_SSB
-void test_operatingModel_SSB(FLFisheries flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult, const FLQuant7 f, const FLQuant7 f_spwn);
-RcppExport SEXP FLRcppAdolc_test_operatingModel_SSB(SEXP flfsSEXP, SEXP flb_sexpSEXP, SEXP model_nameSEXP, SEXP paramsSEXP, SEXP residualsSEXP, SEXP residuals_multSEXP, SEXP fSEXP, SEXP f_spwnSEXP) {
+// test_operatingModel_SSB_iters
+FLQuant test_operatingModel_SSB_iters(FLFisheries flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult, const FLQuant7 f, const FLQuant7 f_spwn, const int timestep, const int unit, const int area);
+RcppExport SEXP FLRcppAdolc_test_operatingModel_SSB_iters(SEXP flfsSEXP, SEXP flb_sexpSEXP, SEXP model_nameSEXP, SEXP paramsSEXP, SEXP residualsSEXP, SEXP residuals_multSEXP, SEXP fSEXP, SEXP f_spwnSEXP, SEXP timestepSEXP, SEXP unitSEXP, SEXP areaSEXP) {
 BEGIN_RCPP
+    SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< FLFisheries >::type flfs(flfsSEXP );
@@ -6212,9 +6213,40 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< const bool >::type residuals_mult(residuals_multSEXP );
         Rcpp::traits::input_parameter< const FLQuant7 >::type f(fSEXP );
         Rcpp::traits::input_parameter< const FLQuant7 >::type f_spwn(f_spwnSEXP );
-        test_operatingModel_SSB(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn);
+        Rcpp::traits::input_parameter< const int >::type timestep(timestepSEXP );
+        Rcpp::traits::input_parameter< const int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< const int >::type area(areaSEXP );
+        FLQuant __result = test_operatingModel_SSB_iters(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn, timestep, unit, area);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
-    return R_NilValue;
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_operatingModel_SSB_single_iter
+double test_operatingModel_SSB_single_iter(FLFisheries flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult, const FLQuant7 f, const FLQuant7 f_spwn, const int timestep, const int unit, const int area, const int iter);
+RcppExport SEXP FLRcppAdolc_test_operatingModel_SSB_single_iter(SEXP flfsSEXP, SEXP flb_sexpSEXP, SEXP model_nameSEXP, SEXP paramsSEXP, SEXP residualsSEXP, SEXP residuals_multSEXP, SEXP fSEXP, SEXP f_spwnSEXP, SEXP timestepSEXP, SEXP unitSEXP, SEXP areaSEXP, SEXP iterSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFisheries >::type flfs(flfsSEXP );
+        Rcpp::traits::input_parameter< SEXP >::type flb_sexp(flb_sexpSEXP );
+        Rcpp::traits::input_parameter< const std::string >::type model_name(model_nameSEXP );
+        Rcpp::traits::input_parameter< const FLQuant >::type params(paramsSEXP );
+        Rcpp::traits::input_parameter< const FLQuant >::type residuals(residualsSEXP );
+        Rcpp::traits::input_parameter< const bool >::type residuals_mult(residuals_multSEXP );
+        Rcpp::traits::input_parameter< const FLQuant7 >::type f(fSEXP );
+        Rcpp::traits::input_parameter< const FLQuant7 >::type f_spwn(f_spwnSEXP );
+        Rcpp::traits::input_parameter< const int >::type timestep(timestepSEXP );
+        Rcpp::traits::input_parameter< const int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< const int >::type area(areaSEXP );
+        Rcpp::traits::input_parameter< const int >::type iter(iterSEXP );
+        double __result = test_operatingModel_SSB_single_iter(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn, timestep, unit, area, iter);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
 END_RCPP
 }
 // test_year_season_to_timestep_FLQuant_double

@@ -1453,8 +1453,12 @@ test_operatingModelAdolc_SSB_FLQ <- function(flfs, flb_sexp, model_name, params,
     .Call('FLRcppAdolc_test_operatingModelAdolc_SSB_FLQ', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn)
 }
 
-test_operatingModel_SSB <- function(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn) {
-    invisible(.Call('FLRcppAdolc_test_operatingModel_SSB', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn))
+test_operatingModel_SSB_iters <- function(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn, timestep, unit, area) {
+    .Call('FLRcppAdolc_test_operatingModel_SSB_iters', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn, timestep, unit, area)
+}
+
+test_operatingModel_SSB_single_iter <- function(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn, timestep, unit, area, iter) {
+    .Call('FLRcppAdolc_test_operatingModel_SSB_single_iter', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn, timestep, unit, area, iter)
 }
 
 test_year_season_to_timestep_FLQuant_double <- function(flq, year, season) {

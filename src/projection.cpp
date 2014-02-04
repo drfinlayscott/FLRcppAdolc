@@ -14,7 +14,7 @@ void year_season_to_timestep(const int year, const int season, const FLQuant_bas
 
 template <typename T>
 void timestep_to_year_season(const int timestep, const FLQuant_base<T>& flq, int& year, int& season){
-    year =  (timestep-1) / flq.get_nseason() + 1;
+    year =  (timestep-1) / flq.get_nseason() + 1; // integer divide - takes the floor
     season = (timestep-1) % flq.get_nseason() + 1;
 }
 
@@ -267,16 +267,35 @@ operatingModel_base<T>::operator SEXP() const{
 }
 
 
+// SSB calculations
 template <typename T>
 FLQuant_base<T> operatingModel_base<T>::ssb() const {
-    FLQuant_base<T> ssb = biol.n() * biol.wt() * biol.fec(); //* exp((biol.m() * biol.spwn()))// + f() * f_spwn()));
-    biol.m() * biol.spwn();
-    FLQuantAdolc m = biol.m();
-    exp(m);
-    exp(biol.m());
+    FLQuant_base<T> ssb = quant_sum(biol.n() * biol.wt() * biol.fec() * exp(-1.0*(biol.m() * biol.spwn() + f() * f_spwn())));
     return ssb;
 }
 
+
+template <typename T>
+FLQuant_base<T> operatingModel_base<T>::ssb(const int timestep, const int unit, const int area) const {
+    Rprintf("In vector op\n");
+    FLQuant_base<T> full_ssb = ssb();
+    int year = 0;
+    int season = 0;
+    timestep_to_year_season(timestep, full_ssb, year, season);
+    FLQuant_base<T> out = full_ssb(1,1,year,year,unit,unit,season,season,area,area,1,full_ssb.get_niter());
+    return out;
+}
+
+template <typename T>
+T operatingModel_base<T>::ssb(const int timestep, const int unit, const int area, const int iter) const {
+    Rprintf("In T op\n");
+    FLQuant_base<T> full_ssb = ssb();
+    int year = 0;
+    int season = 0;
+    timestep_to_year_season(timestep, full_ssb, year, season);
+    T out = full_ssb(1,year,unit,season,area,iter);
+    return out;
+}
 
 // Explicit instantiation of class
 template class operatingModel_base<double>;

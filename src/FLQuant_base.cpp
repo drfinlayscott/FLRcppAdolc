@@ -308,74 +308,48 @@ FLQuant_base<T> FLQuant_base<T>::operator () (const int quant_min, const int qua
         Rcpp::stop("In FLQuant subsetter: min dim > max\n");
     }
 
-    const int new_quant_dim = quant_max - quant_min + 1;
-    const int new_year_dim = year_max - year_min + 1;
-    const int new_unit_dim = unit_max - unit_min + 1;
-    const int new_season_dim = season_max - season_min + 1;
-    const int new_area_dim = area_max - area_min + 1;
-    const int new_iter_dim = iter_max - iter_min + 1;
-    FLQuant_base<T> out(new_quant_dim, new_year_dim, new_unit_dim, new_season_dim, new_area_dim, new_iter_dim);
-    for (int quant_count = 1; quant_count <= new_quant_dim; ++quant_count){
-        for (int year_count = 1; year_count <= new_year_dim; ++year_count){
-            for (int unit_count = 1; unit_count <= new_unit_dim; ++unit_count){
-                for (int season_count = 1; season_count <= new_season_dim; ++season_count){
-                    for (int area_count = 1; area_count <= new_area_dim; ++area_count){
-                        for (int iter_count = 1; iter_count <= new_iter_dim; ++iter_count){
+    std::vector<int> new_dim(6);
+    new_dim[0] = quant_max - quant_min + 1;
+    new_dim[1] = year_max - year_min + 1;
+    new_dim[2] = unit_max - unit_min + 1;
+    new_dim[3] = season_max - season_min + 1;
+    new_dim[4] = area_max - area_min + 1;
+    new_dim[5] = iter_max - iter_min + 1;
+    // Having to to this is unfortunate - with C++11 it could be cleaner
+    std::vector<int> min_dim(6);
+    min_dim[0] = quant_min;
+    min_dim[1] = year_min;
+    min_dim[2] = unit_min;
+    min_dim[3] = season_min;
+    min_dim[4] = area_min;
+    min_dim[5] = iter_min;
+
+    FLQuant_base<T> out(new_dim[0], new_dim[1], new_dim[2], new_dim[3], new_dim[4], new_dim[5]);
+    for (int quant_count = 1; quant_count <= new_dim[0]; ++quant_count){
+        for (int year_count = 1; year_count <= new_dim[1]; ++year_count){
+            for (int unit_count = 1; unit_count <= new_dim[2]; ++unit_count){
+                for (int season_count = 1; season_count <= new_dim[3]; ++season_count){
+                    for (int area_count = 1; area_count <= new_dim[4]; ++area_count){
+                        for (int iter_count = 1; iter_count <= new_dim[5]; ++iter_count){
                             unsigned int element = get_data_element(quant_count + quant_min - 1, year_count + year_min - 1, unit_count + unit_min - 1, season_count + season_min - 1, area_count + area_min - 1, iter_count + iter_min - 1);
                             out(quant_count, year_count, unit_count, season_count, area_count, iter_count) = data[element];
     }}}}}}
 
-    // Fix dimnames too - this is horrible
     Rcpp::List old_dimnames = get_dimnames();
     Rcpp::List new_dimnames = get_dimnames();
-    Rcpp::CharacterVector old_quant_dimname = Rcpp::as<Rcpp::CharacterVector>(old_dimnames[0]);
-    Rcpp::CharacterVector new_quant_dimname(new_quant_dim);
-    for (int quant_count = 0; quant_count < new_quant_dim; ++quant_count){
-        new_quant_dimname[quant_count] = old_quant_dimname[quant_count + quant_min - 1];
-    }
-    new_dimnames[0] = new_quant_dimname;
+    std::vector<std::string> temp_old_dimname;
+    std::vector<std::string> temp_new_dimname;
 
-    Rcpp::CharacterVector old_year_dimname = Rcpp::as<Rcpp::CharacterVector>(old_dimnames[1]);
-    Rcpp::CharacterVector new_year_dimname(new_year_dim);
-    for (int year_count = 0; year_count < new_year_dim; ++year_count){
-        new_year_dimname[year_count] = old_year_dimname[year_count + year_min - 1];
+    for (int dim_counter = 0; dim_counter < 6; ++dim_counter){ // counts over dims
+        temp_old_dimname = Rcpp::as<std::vector<std::string> >(old_dimnames[dim_counter]);
+        temp_new_dimname.resize(new_dim[dim_counter]); 
+        for (int counter = 0; counter < new_dim[dim_counter]; ++counter){ // counts along dims
+            temp_new_dimname[counter] = temp_old_dimname[counter + min_dim[dim_counter] - 1];
+        }
+        new_dimnames[dim_counter] = temp_new_dimname;
     }
-    new_dimnames[1] = new_year_dimname;
-
-    Rcpp::CharacterVector old_unit_dimname = Rcpp::as<Rcpp::CharacterVector>(old_dimnames[2]);
-    Rcpp::CharacterVector new_unit_dimname(new_unit_dim);
-    for (int unit_count = 0; unit_count < new_unit_dim; ++unit_count){
-        new_unit_dimname[unit_count] = old_unit_dimname[unit_count + unit_min - 1];
-    }
-    new_dimnames[2] = new_unit_dimname;
-
-    Rcpp::CharacterVector old_season_dimname = Rcpp::as<Rcpp::CharacterVector>(old_dimnames[3]);
-    Rcpp::CharacterVector new_season_dimname(new_season_dim);
-    for (int season_count = 0; season_count < new_season_dim; ++season_count){
-        new_season_dimname[season_count] = old_season_dimname[season_count + season_min - 1];
-    }
-    new_dimnames[3] = new_season_dimname;
-
-    Rcpp::CharacterVector old_area_dimname = Rcpp::as<Rcpp::CharacterVector>(old_dimnames[4]);
-    Rcpp::CharacterVector new_area_dimname(new_area_dim);
-    for (int area_count = 0; area_count < new_area_dim; ++area_count){
-        new_area_dimname[area_count] = old_area_dimname[area_count + area_min - 1];
-    }
-    new_dimnames[4] = new_area_dimname;
-
-    Rcpp::CharacterVector old_iter_dimname = Rcpp::as<Rcpp::CharacterVector>(old_dimnames[5]);
-    Rcpp::CharacterVector new_iter_dimname(new_iter_dim);
-    for (int iter_count = 0; iter_count < new_iter_dim; ++iter_count){
-        new_iter_dimname[iter_count] = old_iter_dimname[iter_count + iter_min - 1];
-    }
-    new_dimnames[5] = new_iter_dimname;
-
     out.set_dimnames(new_dimnames);
-
-
-
     return out;
-
 }
 
 //------------- Setting methods ----------------

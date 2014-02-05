@@ -54,7 +54,7 @@ class FLQuant_base {
 		int get_nseason() const;
 		int get_narea() const;
 		int get_niter() const;
-		int get_data_element(const int quant, const int year, const int unit, const int season, const int area, const int iter) const;
+		int get_data_element(const int quant, const int year, const int unit, const int season, const int area, int iter) const;
 
 		/* Set accessors */
 		void set_data(const std::vector<T>& data_in);

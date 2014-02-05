@@ -41,6 +41,8 @@ test_that("operatingModel constructors",{
 
 test_that("operatingModel SRR methods", {
     # Bits
+    ple4_sr_ricker <- fmle(as.FLSR(ple4,model="ricker"), control  = list(trace=0))
+
     flq <- random_FLQuant_generator(sd=1)
     flb <- random_FLBiol_generator(fixed_dims = dim(flq), sd = 1 )
     flfs <- random_FLFisheries_generator(fixed_dims = dim(flq), min_fisheries=1, max_fisheries=1, sd=1)
@@ -48,15 +50,18 @@ test_that("operatingModel SRR methods", {
     summary(flb)
     summary(flfs[[1]][[1]])
     data(ple4)
-    ple4_sr_ricker <- fmle(as.FLSR(ple4,model="ricker"), control  = list(trace=0))
     params_ricker <- as.FLQuant(params(ple4_sr_ricker))
-    residuals_ricker <- FLQuant(rnorm(100), dimnames = list(year = 1:10, iter = 1:10))
+    residuals_ricker <- FLQuant(rnorm(dim(flq)[2] * dim(flq)[6]), dimnames = list(year = 1:dim(flq)[2], iter = 1:dim(flq)[6]))
     residuals_mult <- TRUE
     f <- random_FLQuant_list_generator(max_elements=1, fixed_dims = dim(flq), sd=1)
     f <- lapply(f,abs)
     f_spwn <- random_FLQuant_list_generator(max_elements=1, fixed_dims = dim(flq), sd=1)
     f_spwn <- lapply(f_spwn,abs)
 
+})
+
+
+test_that("operatingModel SSB methods", {
     # SSB
     ssb_in <- quantSums(n(flb) * wt(flb) * fec(flb) * exp(-f[[1]]*f_spwn[[1]] - m(flb) * spwn(flb)))
     ssb_out <- test_operatingModel_SSB_FLQ(flfs, flb, 'ricker', params_ricker, residuals_ricker, residuals_mult, f, f_spwn)
@@ -67,13 +72,13 @@ test_that("operatingModel SRR methods", {
     timestep <- floor(runif(1, min=1, max = dim(flq)[2] * dim(flq)[4]))
     unit <- floor(runif(1, min=1, max = dim(flq)[3]))
     area <- floor(runif(1, min=1, max = dim(flq)[5]))
-    ssb_out <- test_operatingModel_SSB_iters(flfs, flb, 'ricker', params_ricker, residuals_ricker, residuals_mult, f, f_spwn, timestep, area, unit)
+    ssb_out <- test_operatingModel_SSB_iters(flfs, flb, 'ricker', params_ricker, residuals_ricker, residuals_mult, f, f_spwn, timestep, unit, area)
     year <-  floor((timestep-1) / dim(flq)[4] + 1)
     season <- (timestep-1) %% dim(flq)[4] + 1;
     expect_that((ssb_in[,year,unit,season,area])@.Data, equals(ssb_out@.Data))
     # SSB single iter
     iter <- floor(runif(1, min=1, max = dim(flq)[6]))
-    ssb_out <- test_operatingModel_SSB_single_iter(flfs, flb, 'ricker', params_ricker, residuals_ricker, residuals_mult, f, f_spwn, timestep, area, unit, iter)
+    ssb_out <- test_operatingModel_SSB_single_iter(flfs, flb, 'ricker', params_ricker, residuals_ricker, residuals_mult, f, f_spwn, timestep, unit, area, iter)
     expect_that(c(ssb_in[,year,unit,season,area,iter]), equals(c(ssb_out)))
 
 

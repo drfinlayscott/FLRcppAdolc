@@ -173,11 +173,26 @@ test_that("FLQuant subsetter works",{
     sub_flq_in <- flq[sub_dims_start[1]:sub_dims_end[1], sub_dims_start[2]:sub_dims_end[2], sub_dims_start[3]:sub_dims_end[3], sub_dims_start[4]:sub_dims_end[4], sub_dims_start[5]:sub_dims_end[5], sub_dims_start[6]:sub_dims_end[6]]
     expect_that(c(sub_flq_in@.Data), is_identical_to(c(sub_flq_out@.Data)))
     expect_that(sub_flq_in@.Data, is_identical_to(sub_flq_out@.Data))
-
-
     # min < max check
     sub_dims_wrong <- sub_dims_end
     expect_that(test_FLQuant_subset(flq, sub_dims_wrong[1], sub_dims_start[1], sub_dims_wrong[2], sub_dims_start[2], sub_dims_wrong[3], sub_dims_start[3], sub_dims_wrong[4], sub_dims_start[4], sub_dims_wrong[5], sub_dims_start[5], sub_dims_wrong[6], sub_dims_start[6]), throws_error())
 
 })
 
+test_that("Accessing FLQuant iter = 1 or n works",{
+    niters <- round(runif(1,min=5,max=10))
+    flq <- random_FLQuant_generator(fixed_dim=c(NA,NA,NA,NA,NA,niters))
+    dim_flq <- dim(flq)
+    dim_flq[6] <- 1
+    single_iter_flq <- random_FLQuant_generator(fixed_dim = dim_flq)
+    indices <- round(runif(6,min=1, max = dim(flq)))
+    index <- round(runif(1,min=1,max = prod(dim(flq))))
+    value <- rnorm(1)
+    # multiple indices
+    value_out <- test_FLQuant_const_get_accessor(single_iter_flq, indices[1], indices[2], indices[3], indices[4], indices[5], 1)
+    expect_that(c(single_iter_flq[indices[1], indices[2], indices[3], indices[4], indices[5], 1]), is_identical_to(value_out))
+    # Accessing more iters than you can
+    value_out2 <- test_FLQuant_const_get_accessor(single_iter_flq, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6])
+    expect_that(c(single_iter_flq[indices[1], indices[2], indices[3], indices[4], indices[5], 1]), is_identical_to(value_out))
+    expect_that(test_FLQuant_const_get_accessor(flq, indices[1], indices[2], indices[3], indices[4], indices[5], dim(flq)[6]+1), throws_error())
+})

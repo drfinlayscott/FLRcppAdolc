@@ -220,11 +220,19 @@ int FLQuant_base<T>::get_niter() const{
 
 // Note that elements start at 1 NOT 0!
 template <typename T>
-int FLQuant_base<T>::get_data_element(const int quant, const int year, const int unit, const int season, const int area, const int iter) const{
+int FLQuant_base<T>::get_data_element(const int quant, const int year, const int unit, const int season, const int area, int iter) const{
     Rcpp::IntegerVector dim = get_dim();
-    if ((quant > dim(0)) || (year > dim(1)) || (unit > dim(2)) || (season > dim(3)) || (area > dim(4)) || (iter > dim(5))){
-            Rcpp::stop("Trying to access element outside of dim range.");
+    if ((quant > dim(0)) || (year > dim(1)) || (unit > dim(2)) || (season > dim(3)) || (area > dim(4))){
+            Rcpp::stop("Trying to access element outside of quant, year, unit, season or area dim range.");
     }
+    // If only 1 iter and trying to get n iter, set iter to 1
+    if ((iter > 1) && (dim(5) == 1)){
+        //get_data_element(quant, year, unit, season, area, 1);
+        iter = 1;
+    }
+    if ((iter > dim(5)) && (dim(5) > 1)){
+        Rcpp::stop("In get_data_element: trying to access iter > niter\n");
+    } 
 	unsigned int element = (get_narea() * get_nseason() * get_nunit() * get_nyear() * get_nquant() * (iter - 1)) +
 			(get_nseason() * get_nunit() * get_nyear() * get_nquant() * (area - 1)) +
 			(get_nunit() * get_nyear() * get_nquant() * (season - 1)) +

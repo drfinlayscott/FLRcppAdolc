@@ -25,9 +25,18 @@ test_that("operatingModel constructors",{
     expect_that(out[["fisheries"]], is_identical_to(flfs))
     expect_that(out[["f"]], is_identical_to(f))
     expect_that(out[["f_spwn"]], is_identical_to(f_spwn))
-
-
-
+    # Change dim of f, f_spwn and biol - dimension check
+    new_dim <- dim(flq) + round(runif(6,min=1,max=3))
+    new_flb <- random_FLBiol_generator(fixed_dims = new_dim)
+    new_flfs <- random_FLFisheries_generator(fixed_dims = new_dim, min_fisheries=1, max_fisheries=1)
+    new_f <- random_FLQuant_list_generator(max_elements=1, fixed_dims = new_dim)
+    new_f <- lapply(new_f,abs)
+    new_f_spwn <- random_FLQuant_list_generator(max_elements=1, fixed_dims = new_dim)
+    new_f_spwn <- lapply(new_f_spwn,abs)
+    expect_that(test_operatingModel_full_constructor(flfs, new_flb, "ricker", params.ricker, residuals.ricker, residuals_mult, f, f_spwn), throws_error()) 
+    expect_that(test_operatingModel_full_constructor(new_flfs, flb, "ricker", params.ricker, residuals.ricker, residuals_mult, f, f_spwn), throws_error())
+    expect_that(test_operatingModel_full_constructor(flfs, flb, "ricker", params.ricker, residuals.ricker, residuals_mult, new_f, f_spwn), throws_error())
+    expect_that(test_operatingModel_full_constructor(flfs, flb, "ricker", params.ricker, residuals.ricker, residuals_mult, f, new_f_spwn), throws_error())
 })
 
 test_that("operatingModel SRR methods", {

@@ -54,12 +54,12 @@ class operatingModel_base {
 		operatingModel_base& operator = (const operatingModel_base& operatingModel_base_source); // Assignment operator for a deep copy
 
         void run(); // Need to specialise for AD and non-AD version
-        void project_timestep();
+        void project_timestep(const int timestep);
 
         // Various ways of calculating reproductive potential
         FLQuant_base<T> ssb() const;
-        FLQuant_base<T> ssb(const int timestep, const int unit, const int area) const; // all iters 
-        T ssb(const int timestep, const int unit, const int area, const int iter) const; 
+        FLQuant_base<T> ssb(const int timestep, const int unit, const int area) const; // all iters in a timestep, unit and area
+        T ssb(const int timestep, const int unit, const int area, const int iter) const; // single iter in a timestep, unit and area
 
 
     private:

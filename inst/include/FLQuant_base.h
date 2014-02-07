@@ -129,6 +129,7 @@ class FLQuant_base {
         int match_dims(const FLQuant_base<T>& flq) const;
         template <typename T2>
         int match_dims(const FLQuant_base<T2>& flq) const;
+        FLQuant_base<T> propagate_iters(const int iters) const;
 
     protected:
         std::vector<T> data;
@@ -143,6 +144,10 @@ typedef FLQuant_base<adouble> FLQuantAdolc;
 //---------- Other useful functions ------------------------
 
 int dim_matcher(const Rcpp::IntegerVector a, const Rcpp::IntegerVector b);
+
+
+template <typename T>
+string number_to_string (T number);
 
 //------------ Non-member arithmetic methods with mixed types --------------
 

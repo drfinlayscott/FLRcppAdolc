@@ -196,3 +196,13 @@ test_that("Accessing FLQuant iter = 1 or n works",{
     expect_that(c(single_iter_flq[indices[1], indices[2], indices[3], indices[4], indices[5], 1]), is_identical_to(value_out))
     expect_that(test_FLQuant_const_get_accessor(flq, indices[1], indices[2], indices[3], indices[4], indices[5], dim(flq)[6]+1), throws_error())
 })
+
+test_that("Propagating FLQuant iters", {
+    flq <- random_FLQuant_generator(fixed_dim=c(NA,NA,NA,NA,NA,1))
+    niters <- round(runif(1, min = 5, max = 10))
+    flq_out <- test_FLQuant_propagate_iters(flq, niters)
+    flq_prop <- propagate(flq,niters)
+    # Check original is unchanged
+    expect_that(flq, is_identical_to(flq_out[["flq"]]))
+    expect_that(flq_prop, is_identical_to(flq_out[["flq2"]]))
+})

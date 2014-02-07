@@ -395,6 +395,29 @@ void FLQuant_base<T>::set_units(const std::string& units_in){
     units = units_in;
 }
 
+template <typename T>
+FLQuant_base<T> FLQuant_base<T>::propagate_iters(const int iters) const{
+    if (get_niter() > 1){
+        Rcpp::stop("In FLQuant_base.extend_iters: only works if original data has 1 iter.\n");
+    }
+    const int new_size = data.size() * iters; 
+    std::vector<T> new_data(new_size);
+    std::vector<std::string> iter_dimnames(iters);
+    // Copy data
+    for (int iter_counter = 0; iter_counter < iters; ++iter_counter){
+        iter_dimnames[iter_counter] = number_to_string(iter_counter+1);
+        for (int size_counter = 0; size_counter < data.size(); ++size_counter){
+            new_data[size_counter+(iter_counter*data.size())] = data[size_counter];
+        }
+    }
+    // Make new object and return
+    FLQuant_base<T> out = *this;
+    out.data = new_data;
+    out.dim[5] = iters;
+    out.dimnames[5] = iter_dimnames;
+    return out;
+}
+
 //------------------ Multiplication operators -------------------
 /*  * Need to consider what happens with the combinations FLQuant<T1> * / + - FLQuant<T2>, i.e. what is the output type?
  *  adouble *  double = adouble
@@ -1064,6 +1087,14 @@ FLQuant_base<T> scale_by_max_quant(const FLQuant_base<T>& flq){
     }}}}}
     return scaled_flq;
 }
+
+template <typename T>
+string number_to_string (T number)
+  {
+     ostringstream ss;
+     ss << number;
+     return ss.str();
+  }
 
 /*----------------------------------------------------*/
 /* Explicit instantiations - alternatively put all the definitions into the header file

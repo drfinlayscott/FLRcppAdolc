@@ -1101,6 +1101,10 @@ test_FLQuant_subset <- function(flq, quant_min, quant_max, year_min, year_max, u
     .Call('FLRcppAdolc_test_FLQuant_subset', PACKAGE = 'FLRcppAdolc', flq, quant_min, quant_max, year_min, year_max, unit_min, unit_max, season_min, season_max, area_min, area_max, iter_min, iter_max)
 }
 
+test_FLQuant_propagate_iters <- function(flq, iters) {
+    .Call('FLRcppAdolc_test_FLQuant_propagate_iters', PACKAGE = 'FLRcppAdolc', flq, iters)
+}
+
 test_FLQuant_FLQuant_match_dims <- function(flq1, flq2) {
     .Call('FLRcppAdolc_test_FLQuant_FLQuant_match_dims', PACKAGE = 'FLRcppAdolc', flq1, flq2)
 }

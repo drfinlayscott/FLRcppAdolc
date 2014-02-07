@@ -4635,6 +4635,22 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// test_FLQuant_propagate_iters
+Rcpp::List test_FLQuant_propagate_iters(FLQuant flq, const int iters);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_propagate_iters(SEXP flqSEXP, SEXP itersSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuant >::type flq(flqSEXP );
+        Rcpp::traits::input_parameter< const int >::type iters(itersSEXP );
+        Rcpp::List __result = test_FLQuant_propagate_iters(flq, iters);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // test_FLQuant_FLQuant_match_dims
 int test_FLQuant_FLQuant_match_dims(FLQuant flq1, FLQuant flq2);
 RcppExport SEXP FLRcppAdolc_test_FLQuant_FLQuant_match_dims(SEXP flq1SEXP, SEXP flq2SEXP) {

@@ -430,10 +430,22 @@ FLQuant_base<T> FLQuant_base<T>::propagate_iters(const int iters) const{
 template<typename T>
 FLQuant_base<T>& FLQuant_base<T>::operator *= (const FLQuant_base<T>& rhs){
     //Rprintf("In self multiplication assignment\n");
-    if (match_dims(rhs) != 1){
-        Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
+//    if (match_dims(rhs) != 1){
+//        Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
+//    }
+    if (dim5_matcher(get_dim(), rhs.get_dim()) != 1){
+        Rcpp::stop("You cannot multiply FLQuants as dimensions 1-5 do not match.");
     }
-    std::transform((*this).data.begin(), (*this).data.end(), rhs.data.begin(), (*this).data.begin(), std::multiplies<T>());
+    FLQuant_base<T> new_rhs = rhs;
+    if (get_niter() > rhs.get_niter()){
+        // Blow up rhs 
+        new_rhs = rhs.propagate_iters(get_niter() - rhs.get_niter() + 1);
+    }
+    if (rhs.get_niter() > get_niter()){
+        // Blow up this
+        *this = (*this).propagate_iters(rhs.get_niter() - get_niter() + 1);
+    }
+    std::transform((*this).data.begin(), (*this).data.end(), new_rhs.data.begin(), (*this).data.begin(), std::multiplies<T>());
     return *this;
 }
 // Special case of multiplication assignment 
@@ -444,11 +456,23 @@ template <typename T>
 template <typename T2>
 FLQuant_base<T>& FLQuant_base<T>::operator *= (const FLQuant_base<T2>& rhs){
     //Rprintf("In T1*=T2 multiplication assignment\n");
-    if (match_dims(rhs) != 1){
-        Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
+    //if (match_dims(rhs) != 1){
+    //    Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
+    //}
+    if (dim5_matcher(get_dim(), rhs.get_dim()) != 1){
+        Rcpp::stop("You cannot multiply FLQuants as dimensions 1-5 do not match.");
     }
-    std::vector<T2> rhs_data = rhs.get_data();
-    std::transform((*this).data.begin(), (*this).data.end(), rhs_data.begin(), (*this).data.begin(), std::multiplies<T>());
+    FLQuant_base<T2> new_rhs = rhs;
+    if (get_niter() > rhs.get_niter()){
+        // Blow up rhs 
+        new_rhs = rhs.propagate_iters(get_niter() - rhs.get_niter() + 1);
+    }
+    if (rhs.get_niter() > get_niter()){
+        // Blow up this
+        *this = (*this).propagate_iters(rhs.get_niter() - get_niter() + 1);
+    }
+    std::vector<T2> new_rhs_data = new_rhs.get_data();
+    std::transform((*this).data.begin(), (*this).data.end(), new_rhs_data.begin(), (*this).data.begin(), std::multiplies<T>());
     return *this;
 }
 
@@ -477,9 +501,9 @@ FLQuant_base<T>& FLQuant_base<T>::operator *= (const T2& rhs){
 template <typename T>
 FLQuant_base<T> FLQuant_base<T>::operator * (const FLQuant_base<T>& rhs) const{
     //Rprintf("In self multiplication\n");
-    if (match_dims(rhs) != 1){
-        Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
-    }
+    //if (match_dims(rhs) != 1){
+    //    Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
+    //}
     FLQuant_base<T> out = *this; // Copy myself
     out *= rhs;
     return out;
@@ -497,9 +521,9 @@ FLQuant_base<T> FLQuant_base<T>::operator * (const T& rhs) const{
 template <typename T>
 FLQuant_base<T> operator * (const FLQuant_base<double>& lhs, const FLQuant_base<T>& rhs){
     //Rprintf("FLQuant_base<double> * FLQuant_base<T>\n");
-    if (lhs.match_dims(rhs) != 1){
-        Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
-    }
+    //if (lhs.match_dims(rhs) != 1){
+    //    Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
+    //}
     FLQuant_base<T> out = rhs;
     out *= lhs;
     return out;
@@ -509,9 +533,9 @@ FLQuant_base<T> operator * (const FLQuant_base<double>& lhs, const FLQuant_base<
 template <typename T>
 FLQuant_base<T> operator * (const FLQuant_base<T>& lhs, const FLQuant_base<double>& rhs){
     //Rprintf("FLQuant_base<T> * FLQuant_base<double>\n");
-    if (lhs.match_dims(rhs) != 1){
-        Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
-    }
+    //if (lhs.match_dims(rhs) != 1){
+    //    Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
+    //}
     FLQuant_base<T> out = lhs;
     out *= rhs;
     return out;
@@ -977,6 +1001,16 @@ FLQuant_base<T> exp(const FLQuant_base<T>& flq){
 
 int dim_matcher(const Rcpp::IntegerVector dims_a, const Rcpp::IntegerVector dims_b){
     for (int i=0; i<6; ++i){
+        if (dims_a(i) != dims_b(i)){
+            return -1 * (i+1); // Return negative of what dim does not match
+        }
+    }
+    return 1; // Else all is good
+}
+
+// Only checks dim 1 - 5 - not iter
+int dim5_matcher(const Rcpp::IntegerVector dims_a, const Rcpp::IntegerVector dims_b){
+    for (int i=0; i<5; ++i){
         if (dims_a(i) != dims_b(i)){
             return -1 * (i+1); // Return negative of what dim does not match
         }

@@ -144,6 +144,7 @@ typedef FLQuant_base<adouble> FLQuantAdolc;
 //---------- Other useful functions ------------------------
 
 int dim_matcher(const Rcpp::IntegerVector a, const Rcpp::IntegerVector b);
+int dim5_matcher(const Rcpp::IntegerVector a, const Rcpp::IntegerVector b);
 
 
 template <typename T>

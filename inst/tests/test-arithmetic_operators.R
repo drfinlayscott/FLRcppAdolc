@@ -285,6 +285,48 @@ test_that("FLQuant and FLQuantAdolc summary functions", {
     expect_that(scaled_in@.Data, is_identical_to(scaled_out@.Data))
 })
 
-
+test_that("Multiplication: iter = 1 or n", {
+    flq1 <- random_FLQuant_generator()
+    fixed_dims <- dim(flq1)
+    fixed_dims[6] <- 1
+    flq2 <- random_FLQuant_generator(fixed_dim=fixed_dims)
+    # FLQ *= FLQ
+    # niter * = 1iter
+    flq_out <- test_FLQuant_FLQuant_multiplier_assignment_operator(flq1, flq2)
+    expect_that(flq_out@.Data, is_identical_to((flq1 * flq2)@.Data))
+    # 1iter * = niter
+    flq_out <- test_FLQuant_FLQuant_multiplier_assignment_operator(flq2, flq1)
+    expect_that(flq_out@.Data, is_identical_to((flq2 * flq1)@.Data))
+    # FLQAD *= FLQAD
+    flq_out <- test_FLQuantAdolc_FLQuantAdolc_multiplier_assignment_operator(flq1, flq2)
+    expect_that(flq_out@.Data, is_identical_to((flq1 * flq2)@.Data))
+    flq_out <- test_FLQuantAdolc_FLQuantAdolc_multiplier_assignment_operator(flq2, flq1)
+    expect_that(flq_out@.Data, is_identical_to((flq2 * flq1)@.Data))
+    # FLQAD *= FLQ
+    flq_out <- test_FLQuantAdolc_FLQuant_multiplier_assignment_operator(flq1, flq2)
+    expect_that(flq_out@.Data, is_identical_to((flq1 * flq2)@.Data))
+    flq_out <- test_FLQuantAdolc_FLQuant_multiplier_assignment_operator(flq2, flq1)
+    expect_that(flq_out@.Data, is_identical_to((flq1 * flq2)@.Data))
+    # FLQ * FLQ
+    flq_out <- test_FLQuant_FLQuant_multiplier_operator(flq1, flq2)
+    expect_that(flq_out@.Data, is_identical_to((flq1 * flq2)@.Data))
+    flq_out <- test_FLQuant_FLQuant_multiplier_operator(flq2, flq1)
+    expect_that(flq_out@.Data, is_identical_to((flq2 * flq1)@.Data))
+    # FLQAdolc * FLQ
+    flq_out <- test_FLQuantAdolc_FLQuant_multiplier_operator(flq1, flq2)
+    expect_that(flq_out@.Data, is_identical_to((flq1 * flq2)@.Data))
+    flq_out <- test_FLQuantAdolc_FLQuant_multiplier_operator(flq2, flq1)
+    expect_that(flq_out@.Data, is_identical_to((flq2 * flq1)@.Data))
+    # FLQAD * FLQAD
+    flq_out <- test_FLQuantAdolc_FLQuantAdolc_multiplier_operator(flq1, flq2)
+    expect_that(flq_out@.Data, is_identical_to((flq1 * flq2)@.Data))
+    flq_out <- test_FLQuantAdolc_FLQuantAdolc_multiplier_operator(flq2, flq1)
+    expect_that(flq_out@.Data, is_identical_to((flq2 * flq1)@.Data))
+    # FLQ * FLQAD
+    flq_out <- test_FLQuant_FLQuantAdolc_multiplier_operator(flq1, flq2)
+    expect_that(flq_out@.Data, is_identical_to((flq1 * flq2)@.Data))
+    flq_out <- test_FLQuant_FLQuantAdolc_multiplier_operator(flq2, flq1)
+    expect_that(flq_out@.Data, is_identical_to((flq2 * flq1)@.Data))
+})
 
 

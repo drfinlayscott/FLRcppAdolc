@@ -41,7 +41,11 @@ test_that("operatingModel constructors",{
 
 test_that("operatingModel SRR methods", {
     # Bits
+    data(ple4)
     ple4_sr_ricker <- fmle(as.FLSR(ple4,model="ricker"), control  = list(trace=0))
+    params_ricker <- as.FLQuant(params(ple4_sr_ricker))
+    residuals_ricker <- FLQuant(rnorm(dim(flq)[2] * dim(flq)[6]), dimnames = list(year = 1:dim(flq)[2], iter = 1:dim(flq)[6]))
+    residuals_mult <- TRUE
 
     flq <- random_FLQuant_generator(sd=1)
     flb <- random_FLBiol_generator(fixed_dims = dim(flq), sd = 1 )
@@ -49,10 +53,6 @@ test_that("operatingModel SRR methods", {
     dim(flq)
     summary(flb)
     summary(flfs[[1]][[1]])
-    data(ple4)
-    params_ricker <- as.FLQuant(params(ple4_sr_ricker))
-    residuals_ricker <- FLQuant(rnorm(dim(flq)[2] * dim(flq)[6]), dimnames = list(year = 1:dim(flq)[2], iter = 1:dim(flq)[6]))
-    residuals_mult <- TRUE
     f <- random_FLQuant_list_generator(max_elements=1, fixed_dims = dim(flq), sd=1)
     f <- lapply(f,abs)
     f_spwn <- random_FLQuant_list_generator(max_elements=1, fixed_dims = dim(flq), sd=1)
@@ -62,6 +62,20 @@ test_that("operatingModel SRR methods", {
 
 
 test_that("operatingModel SSB methods", {
+    data(ple4)
+    ple4_sr_ricker <- fmle(as.FLSR(ple4,model="ricker"), control  = list(trace=0))
+    params_ricker <- as.FLQuant(params(ple4_sr_ricker))
+
+    flq <- random_FLQuant_generator(sd=1)
+    flb <- random_FLBiol_generator(fixed_dims = dim(flq), sd = 1 )
+    flfs <- random_FLFisheries_generator(fixed_dims = dim(flq), min_fisheries=1, max_fisheries=1, sd=1)
+    f <- random_FLQuant_list_generator(max_elements=1, fixed_dims = dim(flq), sd=1)
+    f <- lapply(f,abs)
+    f_spwn <- random_FLQuant_list_generator(max_elements=1, fixed_dims = dim(flq), sd=1)
+    f_spwn <- lapply(f_spwn,abs)
+    residuals_ricker <- FLQuant(rnorm(dim(flq)[2] * dim(flq)[6]), dimnames = list(year = 1:dim(flq)[2], iter = 1:dim(flq)[6]))
+    residuals_mult <- TRUE
+
     # SSB
     ssb_in <- quantSums(n(flb) * wt(flb) * fec(flb) * exp(-f[[1]]*f_spwn[[1]] - m(flb) * spwn(flb)))
     ssb_out <- test_operatingModel_SSB_FLQ(flfs, flb, 'ricker', params_ricker, residuals_ricker, residuals_mult, f, f_spwn)

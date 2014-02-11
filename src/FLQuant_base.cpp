@@ -3,8 +3,6 @@
  * Maintainer: Finlay Scott, JRC
  */
 
-//// [[ Rcpp::interfaces(r, cpp) ]]
-
 #include "../inst/include/FLQuant_base.h"
 
 // Default constructor
@@ -429,10 +427,6 @@ FLQuant_base<T> FLQuant_base<T>::propagate_iters(const int iters) const{
 // Multiplication self assignment
 template<typename T>
 FLQuant_base<T>& FLQuant_base<T>::operator *= (const FLQuant_base<T>& rhs){
-    //Rprintf("In self multiplication assignment\n");
-//    if (match_dims(rhs) != 1){
-//        Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
-//    }
     if (dim5_matcher(get_dim(), rhs.get_dim()) != 1){
         Rcpp::stop("You cannot multiply FLQuants as dimensions 1-5 do not match.");
     }
@@ -455,10 +449,6 @@ FLQuant_base<T>& FLQuant_base<T>::operator *= (const FLQuant_base<T>& rhs){
 template <typename T>
 template <typename T2>
 FLQuant_base<T>& FLQuant_base<T>::operator *= (const FLQuant_base<T2>& rhs){
-    //Rprintf("In T1*=T2 multiplication assignment\n");
-    //if (match_dims(rhs) != 1){
-    //    Rcpp::stop("You cannot multiply FLQuants as your dimensions do not match.");
-    //}
     if (dim5_matcher(get_dim(), rhs.get_dim()) != 1){
         Rcpp::stop("You cannot multiply FLQuants as dimensions 1-5 do not match.");
     }
@@ -587,10 +577,19 @@ FLQuant_base<T> operator * (const T& lhs, const FLQuant_base<double>& rhs){
 // Division self assignment
 template<typename T>
 FLQuant_base<T>& FLQuant_base<T>::operator /= (const FLQuant_base<T>& rhs){
-    if (match_dims(rhs) != 1){
-        Rcpp::stop("You cannot divide FLQuants as your dimensions do not match.");
+    if (dim5_matcher(get_dim(), rhs.get_dim()) != 1){
+        Rcpp::stop("You cannot divide FLQuants as dimensions 1-5 do not match.");
     }
-    std::transform((*this).data.begin(), (*this).data.end(), rhs.data.begin(), (*this).data.begin(), std::divides<T>());
+    FLQuant_base<T> new_rhs = rhs;
+    if (get_niter() > rhs.get_niter()){
+        // Blow up rhs 
+        new_rhs = rhs.propagate_iters(get_niter() - rhs.get_niter() + 1);
+    }
+    if (rhs.get_niter() > get_niter()){
+        // Blow up this
+        *this = (*this).propagate_iters(rhs.get_niter() - get_niter() + 1);
+    }
+    std::transform((*this).data.begin(), (*this).data.end(), new_rhs.data.begin(), (*this).data.begin(), std::divides<T>());
     return *this;
 }
 // Special case of division assignment 
@@ -598,11 +597,20 @@ FLQuant_base<T>& FLQuant_base<T>::operator /= (const FLQuant_base<T>& rhs){
 template <typename T>
 template <typename T2>
 FLQuant_base<T>& FLQuant_base<T>::operator /= (const FLQuant_base<T2>& rhs){
-    if (match_dims(rhs) != 1){
-        Rcpp::stop("You cannot divide FLQuants as your dimensions do not match.");
+    if (dim5_matcher(get_dim(), rhs.get_dim()) != 1){
+        Rcpp::stop("You cannot divide FLQuants as dimensions 1-5 do not match.");
     }
-    std::vector<T2> rhs_data = rhs.get_data();
-    std::transform((*this).data.begin(), (*this).data.end(), rhs_data.begin(), (*this).data.begin(), std::divides<T>());
+    FLQuant_base<T2> new_rhs = rhs;
+    if (get_niter() > rhs.get_niter()){
+        // Blow up rhs 
+        new_rhs = rhs.propagate_iters(get_niter() - rhs.get_niter() + 1);
+    }
+    if (rhs.get_niter() > get_niter()){
+        // Blow up this
+        *this = (*this).propagate_iters(rhs.get_niter() - get_niter() + 1);
+    }
+    std::vector<T2> new_rhs_data = new_rhs.get_data();
+    std::transform((*this).data.begin(), (*this).data.end(), new_rhs_data.begin(), (*this).data.begin(), std::divides<T>());
     return *this;
 }
 
@@ -628,9 +636,6 @@ FLQuant_base<T>& FLQuant_base<T>::operator /= (const T2& rhs){
 // FLQuant_base<T> / FLQuant_base<T>
 template <typename T>
 FLQuant_base<T> FLQuant_base<T>::operator / (const FLQuant_base<T>& rhs) const{
-    if (match_dims(rhs) != 1){
-        Rcpp::stop("You cannot divide FLQuants as your dimensions do not match.");
-    }
     FLQuant_base<T> out = *this; // Copy myself
     out /= rhs;
     return out;
@@ -647,9 +652,6 @@ FLQuant_base<T> FLQuant_base<T>::operator / (const T& rhs) const{
 // Declared outside of class
 template <typename T>
 FLQuant_base<T> operator / (const FLQuant_base<double>& lhs, const FLQuant_base<T>& rhs){
-    if (lhs.match_dims(rhs) != 1){
-        Rcpp::stop("You cannot divide FLQuants as your dimensions do not match.");
-    }
     FLQuant_base<T> out(lhs);
     out /= rhs;
     return out;
@@ -657,9 +659,6 @@ FLQuant_base<T> operator / (const FLQuant_base<double>& lhs, const FLQuant_base<
 
 template <typename T>
 FLQuant_base<T> operator / (const FLQuant_base<T>& lhs, const FLQuant_base<double>& rhs){
-    if (lhs.match_dims(rhs) != 1){
-        Rcpp::stop("You cannot divide FLQuants as your dimensions do not match.");
-    }
     FLQuant_base<T> out = lhs;
     out /= rhs;
     return out;
@@ -719,10 +718,19 @@ FLQuant_base<T> operator / (const T& lhs, const FLQuant_base<double>& rhs){
 // Subtraction self assignment
 template<typename T>
 FLQuant_base<T>& FLQuant_base<T>::operator -= (const FLQuant_base<T>& rhs){
-    if (match_dims(rhs) != 1){
-        Rcpp::stop("You cannot subtract FLQuants as your dimensions do not match.");
+    if (dim5_matcher(get_dim(), rhs.get_dim()) != 1){
+        Rcpp::stop("You cannot subtract FLQuants as dimensions 1-5 do not match.");
     }
-    std::transform((*this).data.begin(), (*this).data.end(), rhs.data.begin(), (*this).data.begin(), std::minus<T>());
+    FLQuant_base<T> new_rhs = rhs;
+    if (get_niter() > rhs.get_niter()){
+        // Blow up rhs 
+        new_rhs = rhs.propagate_iters(get_niter() - rhs.get_niter() + 1);
+    }
+    if (rhs.get_niter() > get_niter()){
+        // Blow up this
+        *this = (*this).propagate_iters(rhs.get_niter() - get_niter() + 1);
+    }
+    std::transform((*this).data.begin(), (*this).data.end(), new_rhs.data.begin(), (*this).data.begin(), std::minus<T>());
     return *this;
 }
 // Special case of subtraction assignment 
@@ -730,11 +738,20 @@ FLQuant_base<T>& FLQuant_base<T>::operator -= (const FLQuant_base<T>& rhs){
 template <typename T>
 template <typename T2>
 FLQuant_base<T>& FLQuant_base<T>::operator -= (const FLQuant_base<T2>& rhs){
-    if (match_dims(rhs) != 1){
-        Rcpp::stop("You cannot subtract FLQuants as your dimensions do not match.");
+    if (dim5_matcher(get_dim(), rhs.get_dim()) != 1){
+        Rcpp::stop("You cannot subtract FLQuants as dimensions 1-5 do not match.");
     }
-    std::vector<T2> rhs_data = rhs.get_data();
-    std::transform((*this).data.begin(), (*this).data.end(), rhs_data.begin(), (*this).data.begin(), std::minus<T>());
+    FLQuant_base<T2> new_rhs = rhs;
+    if (get_niter() > rhs.get_niter()){
+        // Blow up rhs 
+        new_rhs = rhs.propagate_iters(get_niter() - rhs.get_niter() + 1);
+    }
+    if (rhs.get_niter() > get_niter()){
+        // Blow up this
+        *this = (*this).propagate_iters(rhs.get_niter() - get_niter() + 1);
+    }
+    std::vector<T2> new_rhs_data = new_rhs.get_data();
+    std::transform((*this).data.begin(), (*this).data.end(), new_rhs_data.begin(), (*this).data.begin(), std::minus<T>());
     return *this;
 }
 
@@ -746,7 +763,7 @@ FLQuant_base<T>& FLQuant_base<T>::operator -= (const T& rhs){
     return *this;
 }
 
-// Special case of division assignment 
+// Special case
 // Used for FLQuantAdolc -= double
 // Needs to be instanitated due to extra template class, T2
 template <typename T>
@@ -756,7 +773,7 @@ FLQuant_base<T>& FLQuant_base<T>::operator -= (const T2& rhs){
     return *this;
 }
 
-// General division 
+// General 
 // FLQuant_base<T> - FLQuant_base<T>
 template <typename T>
 FLQuant_base<T> FLQuant_base<T>::operator - (const FLQuant_base<T>& rhs) const{
@@ -842,10 +859,19 @@ FLQuant_base<T> operator - (const T& lhs, const FLQuant_base<double>& rhs){
 // Addition self assignment
 template<typename T>
 FLQuant_base<T>& FLQuant_base<T>::operator += (const FLQuant_base<T>& rhs){
-    if (match_dims(rhs) != 1){
-        Rcpp::stop("You cannot add FLQuants as your dimensions do not match.");
+    if (dim5_matcher(get_dim(), rhs.get_dim()) != 1){
+        Rcpp::stop("You cannot add FLQuants as dimensions 1-5 do not match.");
     }
-    std::transform((*this).data.begin(), (*this).data.end(), rhs.data.begin(), (*this).data.begin(), std::plus<T>());
+    FLQuant_base<T> new_rhs = rhs;
+    if (get_niter() > rhs.get_niter()){
+        // Blow up rhs 
+        new_rhs = rhs.propagate_iters(get_niter() - rhs.get_niter() + 1);
+    }
+    if (rhs.get_niter() > get_niter()){
+        // Blow up this
+        *this = (*this).propagate_iters(rhs.get_niter() - get_niter() + 1);
+    }
+    std::transform((*this).data.begin(), (*this).data.end(), new_rhs.data.begin(), (*this).data.begin(), std::plus<T>());
     return *this;
 }
 // Special case of addition assignment 
@@ -855,11 +881,20 @@ FLQuant_base<T>& FLQuant_base<T>::operator += (const FLQuant_base<T>& rhs){
 template <typename T>
 template <typename T2>
 FLQuant_base<T>& FLQuant_base<T>::operator += (const FLQuant_base<T2>& rhs){
-    if (match_dims(rhs) != 1){
-        Rcpp::stop("You cannot add FLQuants as your dimensions do not match.");
+    if (dim5_matcher(get_dim(), rhs.get_dim()) != 1){
+        Rcpp::stop("You cannot add FLQuants as dimensions 1-5 do not match.");
     }
-    std::vector<T2> rhs_data = rhs.get_data();
-    std::transform((*this).data.begin(), (*this).data.end(), rhs_data.begin(), (*this).data.begin(), std::plus<T>());
+    FLQuant_base<T2> new_rhs = rhs;
+    if (get_niter() > rhs.get_niter()){
+        // Blow up rhs 
+        new_rhs = rhs.propagate_iters(get_niter() - rhs.get_niter() + 1);
+    }
+    if (rhs.get_niter() > get_niter()){
+        // Blow up this
+        *this = (*this).propagate_iters(rhs.get_niter() - get_niter() + 1);
+    }
+    std::vector<T2> new_rhs_data = new_rhs.get_data();
+    std::transform((*this).data.begin(), (*this).data.end(), new_rhs_data.begin(), (*this).data.begin(), std::plus<T>());
     return *this;
 }
 

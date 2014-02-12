@@ -334,6 +334,7 @@ FLQuant_base<T> FLQuant_base<T>::operator () (const int quant_min, const int qua
     min_dim[5] = iter_min;
 
     FLQuant_base<T> out(new_dim[0], new_dim[1], new_dim[2], new_dim[3], new_dim[4], new_dim[5]);
+    out.set_units(get_units());
     for (int quant_count = 1; quant_count <= new_dim[0]; ++quant_count){
         for (int year_count = 1; year_count <= new_dim[1]; ++year_count){
             for (int unit_count = 1; unit_count <= new_dim[2]; ++unit_count){
@@ -360,6 +361,17 @@ FLQuant_base<T> FLQuant_base<T>::operator () (const int quant_min, const int qua
     out.set_dimnames(new_dimnames);
     return out;
 }
+
+
+template <typename T>
+FLQuant_base<T> FLQuant_base<T>::operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area) const {
+}
+
+//template <typename T>
+//FLQuant_base<T>& FLQuant_base<T>::operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area) {
+//    FLQuant_base<T> out = (*this)(quant, quant, year, year, unit, unit, season, season, area, area, 1, get_niter());
+//    return out;
+//}
 
 //------------- Setting methods ----------------
 

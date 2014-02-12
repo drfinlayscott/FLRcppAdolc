@@ -191,6 +191,19 @@ FLQuant test_FLQuant_set_indices_accessor(FLQuant flq, std::vector<unsigned int>
     flq(indices) = value;
     return flq;
 }
+
+// [[Rcpp::export]]
+FLQuant test_FLQuant_get_all_iters(FLQuant flq, int quant, int year, int unit, int season, int area){
+    return flq(quant,year,unit,season,area);
+}
+
+//// [[Rcpp::export]]
+//FLQuant test_FLQuant_set_all_iters(FLQuant flq1, FLQuant flq2, int quant, int year, int unit, int season, int area){
+//    FLQuant flq3 = flq2(quant,year,unit,season,area);
+//    flq1(quant,year,unit,season,area) = flq3;
+//    return flq1;
+//}
+
 //------------ Set methods -------------------------
 
 // [[Rcpp::export]]

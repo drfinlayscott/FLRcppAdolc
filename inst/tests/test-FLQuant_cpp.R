@@ -59,6 +59,10 @@ test_that("get accessors",{
     value <- rnorm(1)
     element <- test_FLQuant_get_data_element(flq, indices[1], indices[2], indices[3], indices[4], indices[5], indices[6])
     expect_that(c(flq[indices[1], indices[2], indices[3], indices[4], indices[5], indices[6]]), is_identical_to(c(flq)[element+1]))
+    flq <- random_FLQuant_generator()
+    indices <- round(runif(6,min=1, max = dim(flq)))
+    out <- test_FLQuant_get_all_iters(flq, indices[1], indices[2], indices[3], indices[4], indices[5])
+    expect_that(out, is_identical_to(flq[indices[1], indices[2], indices[3], indices[4], indices[5],]))
 
 })
 
@@ -85,6 +89,13 @@ test_that("set",{
     new_units <- as.character(rnorm(1))
     flq_out <- test_FLQuant_set_units(flq_in, new_units)
     expect_that(units(flq_out), is_identical_to(new_units))
+
+    flq1 <- random_FLQuant_generator()
+    flq2 <- random_FLQuant_generator(fixed_dim = dim(flq1))
+    indices <- round(runif(6,min=1, max = dim(flq1)))
+
+    #flq3 <- test_FLQuant_set_all_iters(flq1, flq2, indices[1], indices[2], indices[3], indices[4], indices[5])
+
 })
 
 test_that("FLQuant get and set data accessors", {

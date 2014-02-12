@@ -330,8 +330,10 @@ T operatingModel_base<T>::ssb(const int timestep, const int unit, const int area
 template <typename T>
 void operatingModel_base<T>::project_timestep(const int timestep){
     Rprintf("In operatingModel project_timestep.\n");
+    // In preparation for multiple fisheries and catches!
     int fishery_count = 1;
     int catches_count = 1;
+    // Time placeholders
     int year = 0;
     int season = 0;
     int next_year = 0;
@@ -345,8 +347,9 @@ void operatingModel_base<T>::project_timestep(const int timestep){
 
     T rec_temp = 0;
     T catch_temp = 0;
-
     T z = 0;
+
+
     const int max_quant = f(1).get_nquant();
 
     // Loop over iters

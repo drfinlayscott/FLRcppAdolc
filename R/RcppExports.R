@@ -1085,6 +1085,10 @@ test_FLQuant_set_indices_accessor <- function(flq, indices, value) {
     .Call('FLRcppAdolc_test_FLQuant_set_indices_accessor', PACKAGE = 'FLRcppAdolc', flq, indices, value)
 }
 
+test_FLQuant_get_all_iters <- function(flq, quant, year, unit, season, area) {
+    .Call('FLRcppAdolc_test_FLQuant_get_all_iters', PACKAGE = 'FLRcppAdolc', flq, quant, year, unit, season, area)
+}
+
 test_FLQuant_set_data <- function(flq, data_in) {
     .Call('FLRcppAdolc_test_FLQuant_set_data', PACKAGE = 'FLRcppAdolc', flq, data_in)
 }

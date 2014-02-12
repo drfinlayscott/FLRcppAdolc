@@ -4560,6 +4560,26 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// test_FLQuant_get_all_iters
+FLQuant test_FLQuant_get_all_iters(FLQuant flq, int quant, int year, int unit, int season, int area);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_get_all_iters(SEXP flqSEXP, SEXP quantSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuant >::type flq(flqSEXP );
+        Rcpp::traits::input_parameter< int >::type quant(quantSEXP );
+        Rcpp::traits::input_parameter< int >::type year(yearSEXP );
+        Rcpp::traits::input_parameter< int >::type unit(unitSEXP );
+        Rcpp::traits::input_parameter< int >::type season(seasonSEXP );
+        Rcpp::traits::input_parameter< int >::type area(areaSEXP );
+        FLQuant __result = test_FLQuant_get_all_iters(flq, quant, year, unit, season, area);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // test_FLQuant_set_data
 FLQuant test_FLQuant_set_data(FLQuant flq, std::vector<double> data_in);
 RcppExport SEXP FLRcppAdolc_test_FLQuant_set_data(SEXP flqSEXP, SEXP data_inSEXP) {

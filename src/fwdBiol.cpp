@@ -26,7 +26,7 @@ fwdBiol_base<T>::fwdBiol_base(){
 // Annoying init because you can't delegate constructors until C++11
 template <typename T>
 void fwdBiol_base<T>::init(const SEXP flb_sexp, const fwdSR_base<T> srr_in){
-    Rprintf("In fwdBiol init\n");
+    //Rprintf("In fwdBiol init\n");
     Rcpp::S4 fwdb_s4 = Rcpp::as<Rcpp::S4>(flb_sexp);
     name = Rcpp::as<std::string>(fwdb_s4.slot("name"));
     desc = Rcpp::as<std::string>(fwdb_s4.slot("desc"));
@@ -45,7 +45,7 @@ void fwdBiol_base<T>::init(const SEXP flb_sexp, const fwdSR_base<T> srr_in){
 // Used as intrusive 'as'
 template <typename T>
 fwdBiol_base<T>::fwdBiol_base(SEXP flb_sexp){
-    Rprintf("In fwdBiol as\n");
+    //Rprintf("In fwdBiol as\n");
     // Empty fwdSR
     fwdSR_base<T> srr;
     init(flb_sexp, srr);
@@ -60,7 +60,7 @@ fwdBiol_base<T>::fwdBiol_base(const SEXP flb_sexp, const fwdSR_base<T> srr_in){
 // Constructor from FLBiol and fwdSR bits
 template <typename T>
 fwdBiol_base<T>::fwdBiol_base(const SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult){
-    Rprintf("In FLBiol and FLSR bits constructor.\n");
+    //Rprintf("In FLBiol and FLSR bits constructor.\n");
     fwdSR_base<T> srr(model_name, params, residuals, residuals_mult);
     init(flb_sexp, srr);
 }

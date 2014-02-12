@@ -81,6 +81,12 @@ random_FLBiol_generator <- function(sd=100, ...){
     spwn(biol) <- abs(rnorm(prod(dim(flq)),sd=sd))
     name(biol) <- as.character(signif(rnorm(1)*1000,3))
     desc(biol) <- as.character(signif(rnorm(1)*1000,3))
+    # set the units to something sensible
+    units(m(biol)) <- "m"
+    units(wt(biol)) <- "kg"
+    units(fec(biol)) <- "prop"
+    units(spwn(biol)) <- "prop"
+    units(n(biol)) <- "10^3"
     return(biol)
 }
 
@@ -108,6 +114,12 @@ random_FLCatch_generator <- function(sd=100, ...){
     # catch.q(catch) # undefined right now
     name(catch) <- as.character(signif(rnorm(1)*1000,3))
     desc(catch) <- as.character(signif(rnorm(1)*1000,3))
+    # set the units to something sensible
+    units(landings.wt(catch)) <- "kg"
+    units(discards.wt(catch)) <- "kg"
+    units(landings.n(catch)) <- "10^3"
+    units(discards.n(catch)) <- "10^3"
+    units(catch.sel(catch)) <- "prop"
     return(catch)
 }
 
@@ -205,6 +217,68 @@ random_FLFisheries_generator <- function(min_fisheries = 2, max_fisheries = 5, .
     fisheries <- FLFisheries(fisheries_list)
     fisheries@desc <- as.character(signif(rnorm(1)*1000,3))
     return(fisheries)
+}
+
+#' Simple projection with minimal checks
+#'
+#' Given FLFisheries, FLBiol, FLSR, F and f.spwn, project over timesteps
+#' No dimension checks are made!
+#' FLSR not used. Recruitment fixed in each timestep as 1000
+#' 
+#' @param flfs FLFisheries (with a single FLFishery with a single FLCatch)
+#' @param flb FLBiol
+#' @param f List of fishing mortality FLQuant objects (only a list of length 1 to start with)
+#' @param f_spwn List of fishing timing FLQuant objects (only a list of length 1 to start with) - not used at the moment - part of the SSB calculation
+#' @param timesteps Continuous sequence of integers (years and seasons)
+#simple_fisheries_project <- function(flfs, flb, flsr, f, f_spwn, years, srr_residuals, srr_residuals_mult=TRUE){
+simple_fisheries_project <- function(flfs, flb, f, f_spwn, timesteps){
+    nseason <- dim(n(flb))[4]
+    nages <- 1:dim(n(flb))[1]
+    last_age <- nages[length(nages)]
+    #timesteps <- ((years[1] - 1) * nseason + 1):(years[length(years)] * nseason)
+    nfishery <- 1
+    ncatch <- 1
+    #recruitment_timelag <- 
+    z <- f[[nfishery]] + m(flb)
+    for (timestep in timesteps){
+        cat("timestep: ", timestep, "\n")
+        year <- (timestep - 1) / nseason + 1
+        season <- (timestep - 1) %% nseason + 1
+        next_year <- ((timestep+1) - 1) / nseason + 1
+        next_season <- ((timestep+1) - 1) %% nseason + 1
+        # Update fishery
+        catch <- (f[[nfishery]] / z) * (1 - exp(-z)) * n(flb)
+        # Must calculate ln and dn before loading, OR, make a copy of discards.ratio
+        # else discards.ratio is affected by ln and dn
+        ln <- catch * (1 - discards.ratio(flfs[[nfishery]][[ncatch]]))
+        dn <- catch * (discards.ratio(flfs[[nfishery]][[ncatch]]))
+        landings.n(flfs[[nfishery]]@.Data[[ncatch]]) <- ln
+        discards.n(flfs[[nfishery]]@.Data[[ncatch]]) <- dn 
+        # Update Biol
+        # Recruitment
+        #ssb(flb)[
+        n(flb)[1,next_year,1,next_season,1,] <- 1000
+        # Abundances
+        n(flb)[nages[-1],next_year,1,next_season,1,] <- n(flb)[-last_age,year,1,season,1,] * exp(-z[-last_age,year,1,season,1,])
+        # plusgroup
+        n(flb)[last_age,next_year,1,next_season,1,] <- n(flb)[last_age,next_year,1,next_season,1,] + n(flb)[last_age,year,1,season,1,] * exp(-z[last_age,year,1,season,1,])
+    }
+    return(list(flfs = flfs, flb = flb))
+}
+
+
+
+f1 <- function(flfs){
+    for (i in 1:50){
+        cat("i: ", i, "\n")
+        cat(system.time(discards.n <- catch * (discards.ratio(flfs[[1]][[1]]))), "\n")
+        #units(discards.n) <- "hjj"
+        flfs[[1]]@.Data[[1]]@discards.n <- discards.n 
+        landings.n <- catch * (1-discards.ratio(flfs[[1]][[1]]))
+        #units(landings.n) <- "hjj"
+        flfs[[1]]@.Data[[1]]@landings.n <- landings.n 
+    }
+    return(0)
 }
 
 

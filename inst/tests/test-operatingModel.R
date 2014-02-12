@@ -44,15 +44,12 @@ test_that("operatingModel SRR methods", {
     data(ple4)
     ple4_sr_ricker <- fmle(as.FLSR(ple4,model="ricker"), control  = list(trace=0))
     params_ricker <- as.FLQuant(params(ple4_sr_ricker))
-    residuals_ricker <- FLQuant(rnorm(dim(flq)[2] * dim(flq)[6]), dimnames = list(year = 1:dim(flq)[2], iter = 1:dim(flq)[6]))
-    residuals_mult <- TRUE
 
     flq <- random_FLQuant_generator(sd=1)
     flb <- random_FLBiol_generator(fixed_dims = dim(flq), sd = 1 )
     flfs <- random_FLFisheries_generator(fixed_dims = dim(flq), min_fisheries=1, max_fisheries=1, sd=1)
-    dim(flq)
-    summary(flb)
-    summary(flfs[[1]][[1]])
+    residuals_ricker <- FLQuant(rnorm(dim(flq)[2] * dim(flq)[6]), dimnames = list(year = 1:dim(flq)[2], iter = 1:dim(flq)[6]))
+    residuals_mult <- TRUE
     f <- random_FLQuant_list_generator(max_elements=1, fixed_dims = dim(flq), sd=1)
     f <- lapply(f,abs)
     f_spwn <- random_FLQuant_list_generator(max_elements=1, fixed_dims = dim(flq), sd=1)
@@ -94,6 +91,42 @@ test_that("operatingModel SSB methods", {
     iter <- floor(runif(1, min=1, max = dim(flq)[6]))
     ssb_out <- test_operatingModel_SSB_single_iter(flfs, flb, 'ricker', params_ricker, residuals_ricker, residuals_mult, f, f_spwn, timestep, unit, area, iter)
     expect_that(c(ssb_in[,year,unit,season,area,iter]), equals(c(ssb_out)))
+
+
+})
+
+
+test_that("operatingModel project_timestep", {
+    data(ple4)
+    srr_model_name <- "ricker"
+    ple4_sr <- fmle(as.FLSR(ple4,model=srr_model_name), control  = list(trace=0))
+    params_sr <- as.FLQuant(params(ple4_sr))
+
+    flq <- random_FLQuant_generator(sd=1)
+    flb <- random_FLBiol_generator(fixed_dims = dim(flq), sd = 1 )
+    flfs <- random_FLFisheries_generator(fixed_dims = dim(flq), min_fisheries=1, max_fisheries=1, sd=1)
+    f <- random_FLQuant_list_generator(max_elements=1, fixed_dims = dim(flq), sd=1)
+    f <- lapply(f,abs)
+    f_spwn <- random_FLQuant_list_generator(max_elements=1, fixed_dims = dim(flq), sd=1)
+    f_spwn <- lapply(f_spwn,abs)
+    residuals_sr <- FLQuant(rnorm(dim(flq)[2] * dim(flq)[6]), dimnames = list(year = 1:dim(flq)[2], iter = 1:dim(flq)[6]))
+    residuals_mult <- TRUE
+
+    #timestep <- 1
+    nseason <- dim(flq)[4]
+    timestep <- round(runif(1, min=1,max=(nseason * dim(flq)[2])-1))
+    om_out <- test_operating_model_project(flfs, flb, srr_model_name, params_sr, residuals_sr, residuals_mult, f, f_spwn, timestep)
+    om_R <- simple_fisheries_project(flfs, flb, f, f_spwn, timestep)
+    year =  (timestep-1) / nseason + 1; 
+    season = (timestep-1) %% nseason + 1;
+    next_year =  (timestep+1-1) / nseason + 1; 
+    next_season = (timestep+1-1) %% nseason + 1;
+    # check the catches etc
+    expect_that(catch.n(om_out[["fisheries"]][[1]][[1]])[,year,1,season,1,1]@.Data, is_identical_to(catch.n(om_R[["flfs"]][[1]][[1]])[,year,1,season,1,1]@.Data))
+    expect_that(landings.n(om_out[["fisheries"]][[1]][[1]])[,year,1,season,1,1]@.Data, is_identical_to(landings.n(om_R[["flfs"]][[1]][[1]])[,year,1,season,1,1]@.Data))
+    expect_that(discards.n(om_out[["fisheries"]][[1]][[1]])[,year,1,season,1,1]@.Data, is_identical_to( discards.n(om_R[["flfs"]][[1]][[1]])[,year,1,season,1,1]@.Data))
+    # Check n
+    expect_that(om_out[["biol"]]@n[,next_year,1,next_season,1,1]@.Data, is_identical_to( om_R[["flb"]]@n[,next_year,1,next_season,1,1]@.Data))
 
 
 })

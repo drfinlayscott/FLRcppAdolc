@@ -330,6 +330,8 @@ T operatingModel_base<T>::ssb(const int timestep, const int unit, const int area
 template <typename T>
 void operatingModel_base<T>::project_timestep(const int timestep){
     Rprintf("In operatingModel project_timestep.\n");
+    int fishery_count = 1;
+    int catches_count = 1;
     int year = 0;
     int season = 0;
     int next_year = 0;
@@ -348,16 +350,16 @@ void operatingModel_base<T>::project_timestep(const int timestep){
     const int max_quant = f(1).get_nquant();
 
     // Loop over iters
-    int iter_count = 1;
-
-    // Calculate the landings and discards
-    FLQuant_base<T> discards_ratio_temp = fisheries(1)(1).discards_ratio();
-    for (int quant_count = 1; quant_count <= max_quant; ++quant_count){
-        z =  f(quant_count, year, 1, season, 1, iter_count, 1) + biol.m()(quant_count, year, 1, season, 1, iter_count);
-        catch_temp = (f(quant_count, year, 1, season, 1, iter_count, 1) / z) * (1 - exp(-z)) * biol.n()(quant_count, year, 1, season, 1, iter_count);
-        fisheries(1)(1).landings_n()(quant_count, year, 1, season, 1, iter_count) = (1 - discards_ratio_temp(quant_count, year, 1, season, 1, iter_count)) * catch_temp;
-        fisheries(1)(1).discards_n()(quant_count, year, 1, season, 1, iter_count) = discards_ratio_temp(quant_count, year, 1, season, 1, iter_count) * catch_temp;
-    }
+    //int iter_count = 1;
+    FLQuant_base<T> discards_ratio_temp = fisheries(fishery_count)(catches_count).discards_ratio();
+    for (int iter_count = 1; iter_count <= biol.n().get_niter(); ++iter_count){
+        // Calculate the landings and discards
+        for (int quant_count = 1; quant_count <= max_quant; ++quant_count){
+            z =  f(quant_count, year, 1, season, 1, iter_count, catches_count) + biol.m()(quant_count, year, 1, season, 1, iter_count);
+            catch_temp = (f(quant_count, year, 1, season, 1, iter_count, 1) / z) * (1 - exp(-z)) * biol.n()(quant_count, year, 1, season, 1, iter_count);
+            fisheries(fishery_count)(catches_count).landings_n()(quant_count, year, 1, season, 1, iter_count) = (1 - discards_ratio_temp(quant_count, year, 1, season, 1, iter_count)) * catch_temp;
+            fisheries(fishery_count)(catches_count).discards_n()(quant_count, year, 1, season, 1, iter_count) = discards_ratio_temp(quant_count, year, 1, season, 1, iter_count) * catch_temp;
+        }
 
     // Update population
     // Get the recruitment
@@ -371,6 +373,7 @@ void operatingModel_base<T>::project_timestep(const int timestep){
     // Assume the last age is a plus group
     z =  f(max_quant, year, 1, season, 1, iter_count, 1) + biol.m()(max_quant, year, 1, season, 1, iter_count);
     biol.n()(max_quant, next_year, 1, next_season, 1, iter_count) = biol.n()(max_quant, next_year, 1, next_season, 1, iter_count) + (biol.n()(max_quant, year, 1, season, 1, iter_count) * exp(-z));
+    }
 
 }
 

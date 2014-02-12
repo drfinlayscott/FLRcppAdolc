@@ -55,5 +55,12 @@ double test_operatingModel_SSB_single_iter(FLFisheries flfs, SEXP flb_sexp, cons
     return out;
 }
 
+// [[Rcpp::export]]
+operatingModelAdolc test_operating_model_project(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult, const FLQuantAdolc7 f, const FLQuantAdolc7 f_spwn, const int timestep){
 
+    fwdBiolAdolc biol(flb_sexp, model_name, params, residuals, residuals_mult);
+    operatingModelAdolc om(flfs, biol, f, f_spwn);
+    om.project_timestep(timestep);
+    return om;
+}
 

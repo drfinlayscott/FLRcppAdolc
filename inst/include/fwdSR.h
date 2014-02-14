@@ -63,6 +63,8 @@ class fwdSR_base {
 
         int get_nparams() const; // No of params in a time step - the length of the first dimension
         int get_timelag() const;
+        FLQuant_base<double> get_residuals() const;
+        bool get_residuals_mult() const;
 
     private:
         int timelag; // Number of timesteps (years and seasons) between spawning and recruitment

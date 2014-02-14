@@ -127,14 +127,14 @@ test_that("operatingModel project_timestep", {
     f <- lapply(f,abs)
     f_spwn <- random_FLQuant_list_generator(max_elements=1, fixed_dims = dim(flq), sd=1)
     f_spwn <- lapply(f_spwn,abs)
-    residuals_sr <- FLQuant(rnorm(dim(flq)[2] * dim(flq)[6]), dimnames = list(year = 1:dim(flq)[2], iter = 1:dim(flq)[6]))
+    residuals_sr <- abs(FLQuant(rnorm(prod(dim(flq)[-1])), dimnames = list(year = 1:dim(flq)[2], unit = 1:dim(flq)[3], season = 1:dim(flq)[4], area = 1:dim(flq)[5], iter = 1:dim(flq)[6])))
     residuals_mult <- TRUE
     timelag <- 1
     # Test seasonal projection - ignore SRR
     nseason <- dim(flq)[4]
     timestep <- round(runif(1, min=1,max=(nseason * dim(flq)[2])-1))
     om_out <- test_operating_model_project(flfs, flb, srr_model_name, params_sr, timelag, residuals_sr, residuals_mult, f, f_spwn, timestep)
-    om_R <- simple_fisheries_project(flfs, flb, ple4_sr, f, f_spwn, timestep)
+    om_R <- simple_fisheries_project(flfs, flb, ple4_sr, f, f_spwn, residuals_sr, residuals_mult, timestep)
     year =  (timestep-1) / nseason + 1; 
     season = (timestep-1) %% nseason + 1;
     next_year =  (timestep+1-1) / nseason + 1; 
@@ -146,7 +146,7 @@ test_that("operatingModel project_timestep", {
     # Check n (not recs)
     expect_that(om_out[["biol"]]@n[-1,next_year,1,next_season,1,]@.Data, is_identical_to( om_R[["flb"]]@n[-1,next_year,1,next_season,1,]@.Data))
 
-    # Check with a annual SRR
+    # Check with annual SRR
     # Test annual model to start with
     flq <- random_FLQuant_generator(fixed_dim=c(NA,NA,1,1,1,NA),sd=1)
     flb <- random_FLBiol_generator(fixed_dims = dim(flq), sd = 1 )
@@ -157,25 +157,24 @@ test_that("operatingModel project_timestep", {
     f_spwn <- random_FLQuant_list_generator(max_elements=1, fixed_dims = dim(flq), sd=1)
     units(f_spwn[[1]]) <- "prop"
     f_spwn <- lapply(f_spwn,abs)
-    residuals_ricker <- FLQuant(rnorm(dim(flq)[2] * dim(flq)[6]), dimnames = list(year = 1:dim(flq)[2], iter = 1:dim(flq)[6]))
+    residuals_sr <- abs(FLQuant(rnorm(prod(dim(flq)[-1])), dimnames = list(year = 1:dim(flq)[2], unit = 1:dim(flq)[3], season = 1:dim(flq)[4], area = 1:dim(flq)[5], iter = 1:dim(flq)[6])))
+    #residuals_sr <- abs(FLQuant(1, dimnames = list(year = 1:dim(flq)[2], unit = 1:dim(flq)[3], season = 1:dim(flq)[4], area = 1:dim(flq)[5], iter = 1:dim(flq)[6])))
     residuals_mult <- TRUE
 
     timesteps <- 1:(dim(flq)[2]-1)
     project_r <- list(flfs = flfs, flb=flb)
     for (timestep in timesteps){
-        project_r <- simple_fisheries_project(project_r[["flfs"]], project_r[["flb"]], ple4_sr, f, f_spwn, timestep)
+        project_r <- simple_fisheries_project(project_r[["flfs"]], project_r[["flb"]], ple4_sr, f, f_spwn, residuals_sr, residuals_mult, timestep)
     }
     # Check recruitment in R method
-    ssb_all <- quantSums(n(project_r[["flb"]]) * exp(-(f[[1]] * f_spwn[[1]] + m(project_r[["flb"]]) * spwn(project_r[["flb"]]))) * wt(project_r[["flb"]]) * fec(project_r[["flb"]]))
-    rec_all <- predict(ple4_sr_ricker, ssb=ssb_all)
-    rec_out <- n(project_r[["flb"]])[1,]
-    expect_that(c(rec_out[,2:dim(flq)[2],]), is_identical_to(c(rec_all[,1:(dim(flq)[2]-1),])))
     project_c <- list(fisheries = flfs, biol=flb)
     for (timestep in timesteps){
         project_c <- test_operating_model_project(project_c[["fisheries"]], project_c[["biol"]], "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, timestep)
     }
     # Check biol timestep up to max timesteps + 1
     expect_that((project_c[["biol"]]), equals((project_r[["flb"]])))
+
+
     # Check fisheries catch timestep up to max timesteps
     flfs_c <- window(project_c[["fisheries"]][[1]][[1]], start=timesteps[1], end=max(timesteps))
     flfs_r <- window(project_r[["flfs"]][[1]][[1]], start=timesteps[1], end=max(timesteps))

@@ -229,10 +229,12 @@ random_FLFisheries_generator <- function(min_fisheries = 2, max_fisheries = 5, .
 #' @param flb FLBiol
 #' @param f List of fishing mortality FLQuant objects (only a list of length 1 to start with)
 #' @param f_spwn List of fishing timing FLQuant objects (only a list of length 1 to start with) - not used at the moment - part of the SSB calculation
+#' @param sr_residuals FLQuant of residuals for the recruitment
+#' @param sr_residuals_mult Are the residuals multiplicative (TRUE)  or additive (FALSE)?
 #' @param timesteps Continuous sequence of integers (years and seasons)
 #' @export
 #' @return A list of FLFisheries and FLBiol objects
-simple_fisheries_project <- function(flfs, flb, flsr, f, f_spwn, timesteps){
+simple_fisheries_project <- function(flfs, flb, flsr, f, f_spwn, sr_residuals, sr_residuals_mult, timesteps){
     nseason <- dim(n(flb))[4]
     nages <- 1:dim(n(flb))[1]
     last_age <- nages[length(nages)]
@@ -243,10 +245,9 @@ simple_fisheries_project <- function(flfs, flb, flsr, f, f_spwn, timesteps){
     z <- f[[nfishery]] + m(flb)
     rec_age <- as.numeric(dimnames(rec(flsr))$age) # recruitment age in years
     for (timestep in timesteps){
-        #cat("timestep: ", timestep, "\n")
-        year <- (timestep - 1) / nseason + 1
+        year <- floor((timestep - 1) / nseason + 1)
         season <- (timestep - 1) %% nseason + 1
-        next_year <- ((timestep+1) - 1) / nseason + 1
+        next_year <- floor(((timestep+1) - 1) / nseason + 1)
         next_season <- ((timestep+1) - 1) %% nseason + 1
         # Update fishery
         catch <- (f[[nfishery]] / z) * (1 - exp(-z)) * n(flb)
@@ -263,6 +264,12 @@ simple_fisheries_project <- function(flfs, flb, flsr, f, f_spwn, timesteps){
             ssb_all <- quantSums(n(flb) * exp(-(f[[nfishery]] * f_spwn[[nfishery]] + m(flb) * spwn(flb))) * wt(flb) * fec(flb))
             ssb_for_rec <- ssb_all[1,year-rec_age+1,1,season,1,] # SSB for rec in next year
             rec <- predict(flsr,ssb=FLQuant(ssb_for_rec))
+            if (sr_residuals_mult==TRUE){
+                rec <- rec * sr_residuals[1,next_year,1,next_season,1,]
+            }
+            else{
+                rec <- rec + sr_residuals[1,next_year,1,next_season,1,]
+            }
         }
         #ssb(flb)[
         n(flb)[1,next_year,1,next_season,1,] <- rec

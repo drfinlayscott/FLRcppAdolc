@@ -371,6 +371,15 @@ void operatingModel_base<T>::project_timestep(const int timestep){
         ssb_temp = ssb(timestep - biol.srr.get_timelag() + 1, 1, 1, iter_count);  
         // Get the recruitment
         rec_temp = biol.srr.eval_model(ssb_temp, next_year, 1, next_season, 1, iter_count);
+        // Apply the residuals
+        // Use of if statement is OK because for each taping it will only branch the same way (depending on residuals_mult)
+
+        if (biol.srr.get_residuals_mult()){
+            rec_temp = rec_temp * biol.srr.get_residuals()(1,next_year,1,next_season,1,iter_count);
+        }
+        else{
+            rec_temp = rec_temp + biol.srr.get_residuals()(1,next_year,1,next_season,1,iter_count);
+        }
         // rec_temp = 1000;
         biol.n()(1, next_year, 1, next_season, 1, iter_count) = rec_temp;
         for (int quant_count = 1; quant_count < max_quant; ++quant_count){

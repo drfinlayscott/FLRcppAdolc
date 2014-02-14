@@ -120,6 +120,16 @@ int fwdSR_base<T>::get_timelag() const{
     return timelag;
 }
 
+template <typename T>
+FLQuant_base<double> fwdSR_base<T>::get_residuals() const{
+    return residuals;
+}
+
+template <typename T>
+bool fwdSR_base<T>::get_residuals_mult() const{
+    return residuals_mult;
+}
+
 
 // Explicit instantiation of class
 template class fwdSR_base<double>;

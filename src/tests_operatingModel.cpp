@@ -19,46 +19,55 @@ void test_operatingModelAdolc_empty_constructor(){
 }
 
 // [[Rcpp::export]]
-operatingModelAdolc test_operatingModel_full_constructor(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult, const FLQuantAdolc7 f, const FLQuantAdolc7 f_spwn){
-    fwdBiolAdolc biol(flb_sexp, model_name, params, residuals, residuals_mult);
+operatingModelAdolc test_operatingModel_full_constructor(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuantAdolc7 f, const FLQuantAdolc7 f_spwn){
+    fwdBiolAdolc biol(flb_sexp, model_name, params, timelag, residuals, residuals_mult);
     operatingModelAdolc om(flfs, biol, f, f_spwn);
     return om;
 }
 
 // [[Rcpp::export]]
-FLQuant test_operatingModel_SSB_FLQ(FLFisheries flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult, const FLQuant7 f, const FLQuant7 f_spwn){
-    fwdBiol biol(flb_sexp, model_name, params, residuals, residuals_mult);
+FLQuant test_operatingModel_SSB_FLQ(FLFisheries flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7 f, const FLQuant7 f_spwn){
+    fwdBiol biol(flb_sexp, model_name, params, timelag, residuals, residuals_mult);
     operatingModel om(flfs, biol, f, f_spwn);
     return om.ssb();
 }
 
 // [[Rcpp::export]]
-FLQuantAdolc test_operatingModelAdolc_SSB_FLQ(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult, const FLQuantAdolc7 f, const FLQuantAdolc7 f_spwn){
-    fwdBiolAdolc biol(flb_sexp, model_name, params, residuals, residuals_mult);
+FLQuantAdolc test_operatingModelAdolc_SSB_FLQ(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuantAdolc7 f, const FLQuantAdolc7 f_spwn){
+    fwdBiolAdolc biol(flb_sexp, model_name, params, timelag, residuals, residuals_mult);
     operatingModelAdolc om(flfs, biol, f, f_spwn);
     return om.ssb();
 }
 
 // [[Rcpp::export]]
-FLQuant test_operatingModel_SSB_iters(FLFisheries flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult, const FLQuant7 f, const FLQuant7 f_spwn, const int timestep, const int unit, const int area){
-    fwdBiol biol(flb_sexp, model_name, params, residuals, residuals_mult);
+FLQuant test_operatingModel_SSB_iters(FLFisheries flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7 f, const FLQuant7 f_spwn, const int timestep, const int unit, const int area){
+    fwdBiol biol(flb_sexp, model_name, params, timelag, residuals, residuals_mult);
     operatingModel om(flfs, biol, f, f_spwn);
     FLQuant out = om.ssb(timestep, unit, area);
     return out;
 }
 
 // [[Rcpp::export]]
-double test_operatingModel_SSB_single_iter(FLFisheries flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult, const FLQuant7 f, const FLQuant7 f_spwn, const int timestep, const int unit, const int area, const int iter){
-    fwdBiol biol(flb_sexp, model_name, params, residuals, residuals_mult);
+double test_operatingModel_SSB_single_iter(FLFisheries flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7 f, const FLQuant7 f_spwn, const int timestep, const int unit, const int area, const int iter){
+    fwdBiol biol(flb_sexp, model_name, params, timelag, residuals, residuals_mult);
     operatingModel om(flfs, biol, f, f_spwn);
     double out = om.ssb(timestep, unit, area, iter);
     return out;
 }
 
 // [[Rcpp::export]]
-operatingModelAdolc test_operating_model_project(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult, const FLQuantAdolc7 f, const FLQuantAdolc7 f_spwn, const int timestep){
+double test_operatingModel_SSB_single_iter_year_season(FLFisheries flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7 f, const FLQuant7 f_spwn, const int year, const int unit, const int season, const int area, const int iter){
+    fwdBiol biol(flb_sexp, model_name, params, timelag, residuals, residuals_mult);
+    operatingModel om(flfs, biol, f, f_spwn);
+    double out = om.ssb(year, unit, season, area, iter);
+    return out;
+}
 
-    fwdBiolAdolc biol(flb_sexp, model_name, params, residuals, residuals_mult);
+
+// [[Rcpp::export]]
+operatingModelAdolc test_operating_model_project(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuantAdolc7 f, const FLQuantAdolc7 f_spwn, const int timestep){
+
+    fwdBiolAdolc biol(flb_sexp, model_name, params, timelag, residuals, residuals_mult);
     operatingModelAdolc om(flfs, biol, f, f_spwn);
     om.project_timestep(timestep);
     return om;

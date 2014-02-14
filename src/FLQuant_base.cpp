@@ -365,7 +365,10 @@ FLQuant_base<T> FLQuant_base<T>::operator () (const int quant_min, const int qua
 
 template <typename T>
 FLQuant_base<T> FLQuant_base<T>::operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area) const {
+    FLQuant_base<T> out = (*this)(quant, quant, year, year, unit, unit, season, season, area, area, 1, get_niter());
+    return out;
 }
+
 
 //template <typename T>
 //FLQuant_base<T>& FLQuant_base<T>::operator () (const unsigned int quant, const unsigned int year, const unsigned int unit, const unsigned int season, const unsigned int area) {
@@ -416,7 +419,7 @@ FLQuant_base<T> FLQuant_base<T>::propagate_iters(const int iters) const{
     // Copy data
     for (int iter_counter = 0; iter_counter < iters; ++iter_counter){
         iter_dimnames[iter_counter] = number_to_string(iter_counter+1);
-        for (int size_counter = 0; size_counter < data.size(); ++size_counter){
+        for (unsigned int size_counter = 0; size_counter < data.size(); ++size_counter){
             new_data[size_counter+(iter_counter*data.size())] = data[size_counter];
         }
     }

@@ -60,13 +60,15 @@ class operatingModel_base {
         FLQuant_base<T> ssb() const;
         FLQuant_base<T> ssb(const int timestep, const int unit, const int area) const; // all iters in a timestep, unit and area
         T ssb(const int timestep, const int unit, const int area, const int iter) const; // single iter in a timestep, unit and area
+        T ssb(const int year, const int unit, const int season, const int area, const int iter) const; // single iter in a timestep, unit and area
 
 
     private:
-        fwdBiol_base<T> biol;
         FLFisheries_base<T> fisheries;
         FLQuant7_base<T> f;
         FLQuant7_base<T> f_spwn;
+    protected:
+        fwdBiol_base<T> biol;
 };
 
 

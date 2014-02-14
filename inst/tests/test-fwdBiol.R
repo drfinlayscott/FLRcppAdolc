@@ -8,7 +8,7 @@ test_that("fwdBiol as and wrap",{
     expect_that(flb_in, is_identical_to(flb_out))
 })
 
-test_that("FLQuant7 constructors - double",{
+test_that("fwdBiol constructors - double",{
     flb_in <- random_FLBiol_generator()
     # SEXP constructors
     flb_out <- test_fwdBiol_sexp_constructor(flb_in)
@@ -143,23 +143,24 @@ test_that("fwdBiol with fwdSR", {
     params.ricker <- as.FLQuant(params(ple4.sr.ricker))
     residuals.ricker <- FLQuant(rnorm(100), dimnames = list(year = 1:10, iter = 1:10))
     residuals_mult <- TRUE
+    timelag <- 0
     flb_in <- random_FLBiol_generator()
-    out <- test_fwdBiol_fwdSR_constructor(flb_in, "ricker", params.ricker, residuals.ricker, residuals_mult)
+    out <- test_fwdBiol_fwdSR_constructor(flb_in, "ricker", params.ricker, timelag, residuals.ricker, residuals_mult)
     expect_that(out[["fwb"]], is_identical_to(flb_in))
     expect_that(out[["srr"]][["params"]], is_identical_to(params.ricker))
     expect_that(out[["srr"]][["residuals"]], is_identical_to(residuals.ricker))
     expect_that(out[["srr"]][["residuals_mult"]], is_identical_to(residuals_mult))
-    out <- test_fwdBiolAdolc_fwdSRAdolc_constructor(flb_in, "ricker", params.ricker, residuals.ricker, residuals_mult)
+    out <- test_fwdBiolAdolc_fwdSRAdolc_constructor(flb_in, "ricker", params.ricker, timelag, residuals.ricker, residuals_mult)
     expect_that(out[["fwb"]], is_identical_to(flb_in))
     expect_that(out[["srr"]][["params"]], is_identical_to(params.ricker))
     expect_that(out[["srr"]][["residuals"]], is_identical_to(residuals.ricker))
     expect_that(out[["srr"]][["residuals_mult"]], is_identical_to(residuals_mult))
-    out <- test_fwdBiol_FLSR_bits_constructor(flb_in, "ricker", params.ricker, residuals.ricker, residuals_mult)
+    out <- test_fwdBiol_FLSR_bits_constructor(flb_in, "ricker", params.ricker, timelag, residuals.ricker, residuals_mult)
     expect_that(out[["fwb"]], is_identical_to(flb_in))
     expect_that(out[["srr"]][["params"]], is_identical_to(params.ricker))
     expect_that(out[["srr"]][["residuals"]], is_identical_to(residuals.ricker))
     expect_that(out[["srr"]][["residuals_mult"]], is_identical_to(residuals_mult))
-    out <- test_fwdBiolAdolc_FLSR_bits_constructor(flb_in, "ricker", params.ricker, residuals.ricker, residuals_mult)
+    out <- test_fwdBiolAdolc_FLSR_bits_constructor(flb_in, "ricker", params.ricker, timelag, residuals.ricker, residuals_mult)
     expect_that(out[["fwb"]], is_identical_to(flb_in))
     expect_that(out[["srr"]][["params"]], is_identical_to(params.ricker))
     expect_that(out[["srr"]][["residuals"]], is_identical_to(residuals.ricker))

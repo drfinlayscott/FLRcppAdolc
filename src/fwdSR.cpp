@@ -29,8 +29,9 @@ fwdSR_base<T>::fwdSR_base(){
 // Main constructor method
 // Assumes all dims have been checked in R before calling
 template <typename T>
-fwdSR_base<T>::fwdSR_base(const std::string model_name, const FLQuant params_ip, const FLQuant residuals_ip, const bool residuals_mult_ip) {
+fwdSR_base<T>::fwdSR_base(const std::string model_name, const FLQuant params_ip, const int timelag_ip, const FLQuant residuals_ip, const bool residuals_mult_ip) {
     //Rprintf("In main fwdSR constructor\n");
+    timelag = timelag_ip;
     params = params_ip;
     residuals = residuals_ip;
     residuals_mult = residuals_mult_ip;
@@ -62,6 +63,7 @@ template <typename T>
 fwdSR_base<T>::fwdSR_base(const fwdSR_base<T>& fwdSR_source){
     model = fwdSR_source.model; // Copy the pointer - we want it point to the same place so copying should be fine.
     params = fwdSR_source.params;
+    timelag = fwdSR_source.timelag;
     residuals = fwdSR_source.residuals;
     residuals_mult = fwdSR_source.residuals_mult;
 }
@@ -71,6 +73,7 @@ template <typename T>
 fwdSR_base<T>& fwdSR_base<T>::operator = (const fwdSR_base<T>& fwdSR_source){
 	if (this != &fwdSR_source){
         model = fwdSR_source.model; // Copy the pointer - we want it point to the same place so copying should be fine.
+        timelag = fwdSR_source.timelag;
         params = fwdSR_source.params;
         residuals = fwdSR_source.residuals;
         residuals_mult = fwdSR_source.residuals_mult;
@@ -80,21 +83,43 @@ fwdSR_base<T>& fwdSR_base<T>::operator = (const fwdSR_base<T>& fwdSR_source){
 
 // Model evaluation
 template <typename T>
-T fwdSR_base<T>::eval_model(const T ssb, const int year, const int unit, const int season, const int area, const int iter){
+T fwdSR_base<T>::eval_model(const T ssb, int year, int unit, int season, int area, int iter) {
     const int nparams = get_nparams();
     std::vector<double> model_params(nparams);
+    // Sort out params - if years > no years in the params object, just pick the first one
+    // The real checking should be done in the R side
+    if (year > params.get_nyear()){
+        year = 1;
+    }
+    if (unit > params.get_nunit()){
+        unit = 1;
+    }
+    if (season > params.get_nseason()){
+        season = 1;
+    }
+    if (area > params.get_narea()){
+        area = 1;
+    }
+    // iters already cared for in generic FLQuant_base<> accessor
     for (int i = 1; i <= nparams; ++i){
         model_params[i-1] = params(i,year,unit,season,area,iter);
     }
+
     T rec = model(ssb, model_params);
     return rec;
 }
 
 // No of params in a time step - the length of the first dimension
 template <typename T>
-int fwdSR_base<T>::get_nparams(){
+int fwdSR_base<T>::get_nparams() const{
     return params.get_nquant();
 }
+
+template <typename T>
+int fwdSR_base<T>::get_timelag() const{
+    return timelag;
+}
+
 
 // Explicit instantiation of class
 template class fwdSR_base<double>;

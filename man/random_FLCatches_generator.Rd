@@ -10,8 +10,7 @@ random_FLCatches_generator(max_catches = 5, ...)
 
   \item{fixed_dims}{A vector of length 6 with the fixed
   length of each of the FLQuant dimensions. If any value is
-  NA it is randomly set using the max_dims argument.
-  Default value is rep(NA,6).}
+  NA it is randomly set using the max_dims argument.}
 
   \item{max_dims}{A vector of length 6 with maximum size of
   each of the FLQuant dimensions. Default value is

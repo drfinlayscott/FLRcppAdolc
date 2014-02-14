@@ -1341,20 +1341,20 @@ test_fwdBiolAdolc_as_wrap <- function(fwdb) {
     .Call('FLRcppAdolc_test_fwdBiolAdolc_as_wrap', PACKAGE = 'FLRcppAdolc', fwdb)
 }
 
-test_fwdBiol_fwdSR_constructor <- function(flb_sexp, model_name, params, residuals, residuals_mult) {
-    .Call('FLRcppAdolc_test_fwdBiol_fwdSR_constructor', PACKAGE = 'FLRcppAdolc', flb_sexp, model_name, params, residuals, residuals_mult)
+test_fwdBiol_fwdSR_constructor <- function(flb_sexp, model_name, params, timelag, residuals, residuals_mult) {
+    .Call('FLRcppAdolc_test_fwdBiol_fwdSR_constructor', PACKAGE = 'FLRcppAdolc', flb_sexp, model_name, params, timelag, residuals, residuals_mult)
 }
 
-test_fwdBiol_FLSR_bits_constructor <- function(flb_sexp, model_name, params, residuals, residuals_mult) {
-    .Call('FLRcppAdolc_test_fwdBiol_FLSR_bits_constructor', PACKAGE = 'FLRcppAdolc', flb_sexp, model_name, params, residuals, residuals_mult)
+test_fwdBiol_FLSR_bits_constructor <- function(flb_sexp, model_name, params, timelag, residuals, residuals_mult) {
+    .Call('FLRcppAdolc_test_fwdBiol_FLSR_bits_constructor', PACKAGE = 'FLRcppAdolc', flb_sexp, model_name, params, timelag, residuals, residuals_mult)
 }
 
-test_fwdBiolAdolc_fwdSRAdolc_constructor <- function(flb_sexp, model_name, params, residuals, residuals_mult) {
-    .Call('FLRcppAdolc_test_fwdBiolAdolc_fwdSRAdolc_constructor', PACKAGE = 'FLRcppAdolc', flb_sexp, model_name, params, residuals, residuals_mult)
+test_fwdBiolAdolc_fwdSRAdolc_constructor <- function(flb_sexp, model_name, params, timelag, residuals, residuals_mult) {
+    .Call('FLRcppAdolc_test_fwdBiolAdolc_fwdSRAdolc_constructor', PACKAGE = 'FLRcppAdolc', flb_sexp, model_name, params, timelag, residuals, residuals_mult)
 }
 
-test_fwdBiolAdolc_FLSR_bits_constructor <- function(flb_sexp, model_name, params, residuals, residuals_mult) {
-    .Call('FLRcppAdolc_test_fwdBiolAdolc_FLSR_bits_constructor', PACKAGE = 'FLRcppAdolc', flb_sexp, model_name, params, residuals, residuals_mult)
+test_fwdBiolAdolc_FLSR_bits_constructor <- function(flb_sexp, model_name, params, timelag, residuals, residuals_mult) {
+    .Call('FLRcppAdolc_test_fwdBiolAdolc_FLSR_bits_constructor', PACKAGE = 'FLRcppAdolc', flb_sexp, model_name, params, timelag, residuals, residuals_mult)
 }
 
 test_fwdBiol_copy_constructor <- function(fwdb1) {
@@ -1417,28 +1417,36 @@ test_fwdSR_empty_constructor <- function() {
     invisible(.Call('FLRcppAdolc_test_fwdSR_empty_constructor', PACKAGE = 'FLRcppAdolc'))
 }
 
-test_fwdSR_constructor_wrap <- function(model_name, params, residuals, residuals_mult) {
-    .Call('FLRcppAdolc_test_fwdSR_constructor_wrap', PACKAGE = 'FLRcppAdolc', model_name, params, residuals, residuals_mult)
+test_fwdSR_constructor_wrap <- function(model_name, params, timelag, residuals, residuals_mult) {
+    .Call('FLRcppAdolc_test_fwdSR_constructor_wrap', PACKAGE = 'FLRcppAdolc', model_name, params, timelag, residuals, residuals_mult)
 }
 
-test_fwdSR_constructor_value <- function(model_name, params, residuals, residuals_mult) {
-    .Call('FLRcppAdolc_test_fwdSR_constructor_value', PACKAGE = 'FLRcppAdolc', model_name, params, residuals, residuals_mult)
+test_fwdSR_constructor_value <- function(model_name, params, timelag, residuals, residuals_mult, ssb) {
+    .Call('FLRcppAdolc_test_fwdSR_constructor_value', PACKAGE = 'FLRcppAdolc', model_name, params, timelag, residuals, residuals_mult, ssb)
 }
 
-test_fwdSR_get_nparams <- function(model_name, params, residuals, residuals_mult) {
-    .Call('FLRcppAdolc_test_fwdSR_get_nparams', PACKAGE = 'FLRcppAdolc', model_name, params, residuals, residuals_mult)
+test_fwdSR_get_nparams <- function(model_name, params, timelag, residuals, residuals_mult) {
+    .Call('FLRcppAdolc_test_fwdSR_get_nparams', PACKAGE = 'FLRcppAdolc', model_name, params, timelag, residuals, residuals_mult)
 }
 
-test_fwdSR_eval_simple <- function(model_name, params, residuals, residuals_mult, ssb) {
-    .Call('FLRcppAdolc_test_fwdSR_eval_simple', PACKAGE = 'FLRcppAdolc', model_name, params, residuals, residuals_mult, ssb)
+test_fwdSR_eval_simple <- function(model_name, params, timelag, residuals, residuals_mult, ssb) {
+    .Call('FLRcppAdolc_test_fwdSR_eval_simple', PACKAGE = 'FLRcppAdolc', model_name, params, timelag, residuals, residuals_mult, ssb)
 }
 
-test_fwdSR_copy_constructor <- function(model_name, params, residuals, residuals_mult, ssb) {
-    .Call('FLRcppAdolc_test_fwdSR_copy_constructor', PACKAGE = 'FLRcppAdolc', model_name, params, residuals, residuals_mult, ssb)
+test_fwdSR_eval_full <- function(model_name, params, timelag, residuals, residuals_mult, ssb, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_fwdSR_eval_full', PACKAGE = 'FLRcppAdolc', model_name, params, timelag, residuals, residuals_mult, ssb, year, unit, season, area, iter)
 }
 
-test_fwdSR_assignment_operator <- function(model_name, params, residuals, residuals_mult, ssb) {
-    .Call('FLRcppAdolc_test_fwdSR_assignment_operator', PACKAGE = 'FLRcppAdolc', model_name, params, residuals, residuals_mult, ssb)
+test_fwdSR_copy_constructor <- function(model_name, params, timelag, residuals, residuals_mult, ssb) {
+    .Call('FLRcppAdolc_test_fwdSR_copy_constructor', PACKAGE = 'FLRcppAdolc', model_name, params, timelag, residuals, residuals_mult, ssb)
+}
+
+test_fwdSR_assignment_operator <- function(model_name, params, timelag, residuals, residuals_mult, ssb) {
+    .Call('FLRcppAdolc_test_fwdSR_assignment_operator', PACKAGE = 'FLRcppAdolc', model_name, params, timelag, residuals, residuals_mult, ssb)
+}
+
+test_fwdSR_get_timelag <- function(model_name, params, timelag, residuals, residuals_mult) {
+    .Call('FLRcppAdolc_test_fwdSR_get_timelag', PACKAGE = 'FLRcppAdolc', model_name, params, timelag, residuals, residuals_mult)
 }
 
 test_operatingModel_empty_constructor <- function() {
@@ -1449,28 +1457,32 @@ test_operatingModelAdolc_empty_constructor <- function() {
     invisible(.Call('FLRcppAdolc_test_operatingModelAdolc_empty_constructor', PACKAGE = 'FLRcppAdolc'))
 }
 
-test_operatingModel_full_constructor <- function(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn) {
-    .Call('FLRcppAdolc_test_operatingModel_full_constructor', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn)
+test_operatingModel_full_constructor <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn) {
+    .Call('FLRcppAdolc_test_operatingModel_full_constructor', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn)
 }
 
-test_operatingModel_SSB_FLQ <- function(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn) {
-    .Call('FLRcppAdolc_test_operatingModel_SSB_FLQ', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn)
+test_operatingModel_SSB_FLQ <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn) {
+    .Call('FLRcppAdolc_test_operatingModel_SSB_FLQ', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn)
 }
 
-test_operatingModelAdolc_SSB_FLQ <- function(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn) {
-    .Call('FLRcppAdolc_test_operatingModelAdolc_SSB_FLQ', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn)
+test_operatingModelAdolc_SSB_FLQ <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn) {
+    .Call('FLRcppAdolc_test_operatingModelAdolc_SSB_FLQ', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn)
 }
 
-test_operatingModel_SSB_iters <- function(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn, timestep, unit, area) {
-    .Call('FLRcppAdolc_test_operatingModel_SSB_iters', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn, timestep, unit, area)
+test_operatingModel_SSB_iters <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, timestep, unit, area) {
+    .Call('FLRcppAdolc_test_operatingModel_SSB_iters', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, timestep, unit, area)
 }
 
-test_operatingModel_SSB_single_iter <- function(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn, timestep, unit, area, iter) {
-    .Call('FLRcppAdolc_test_operatingModel_SSB_single_iter', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn, timestep, unit, area, iter)
+test_operatingModel_SSB_single_iter <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, timestep, unit, area, iter) {
+    .Call('FLRcppAdolc_test_operatingModel_SSB_single_iter', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, timestep, unit, area, iter)
 }
 
-test_operating_model_project <- function(flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn, timestep) {
-    .Call('FLRcppAdolc_test_operating_model_project', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, residuals, residuals_mult, f, f_spwn, timestep)
+test_operatingModel_SSB_single_iter_year_season <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_test_operatingModel_SSB_single_iter_year_season', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, year, unit, season, area, iter)
+}
+
+test_operating_model_project <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, timestep) {
+    .Call('FLRcppAdolc_test_operating_model_project', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, timestep)
 }
 
 test_year_season_to_timestep_FLQuant_double <- function(flq, year, season) {

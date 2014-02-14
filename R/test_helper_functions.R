@@ -223,15 +223,14 @@ random_FLFisheries_generator <- function(min_fisheries = 2, max_fisheries = 5, .
 #'
 #' Given FLFisheries, FLBiol, FLSR, F and f.spwn, project over timesteps
 #' No dimension checks are made!
-#' FLSR not used. Recruitment fixed in each timestep as 1000
+#' Recruitment is annual only. Happens at start of the year. SSB is calculated in previous year (or years depending on recruitment age).
 #' 
 #' @param flfs FLFisheries (with a single FLFishery with a single FLCatch)
 #' @param flb FLBiol
 #' @param f List of fishing mortality FLQuant objects (only a list of length 1 to start with)
 #' @param f_spwn List of fishing timing FLQuant objects (only a list of length 1 to start with) - not used at the moment - part of the SSB calculation
 #' @param timesteps Continuous sequence of integers (years and seasons)
-#simple_fisheries_project <- function(flfs, flb, flsr, f, f_spwn, years, srr_residuals, srr_residuals_mult=TRUE){
-simple_fisheries_project <- function(flfs, flb, f, f_spwn, timesteps){
+simple_fisheries_project <- function(flfs, flb, flsr, f, f_spwn, timesteps){
     nseason <- dim(n(flb))[4]
     nages <- 1:dim(n(flb))[1]
     last_age <- nages[length(nages)]
@@ -240,8 +239,9 @@ simple_fisheries_project <- function(flfs, flb, f, f_spwn, timesteps){
     ncatch <- 1
     #recruitment_timelag <- 
     z <- f[[nfishery]] + m(flb)
+    rec_age <- as.numeric(dimnames(rec(flsr))$age) # recruitment age in years
     for (timestep in timesteps){
-        cat("timestep: ", timestep, "\n")
+        #cat("timestep: ", timestep, "\n")
         year <- (timestep - 1) / nseason + 1
         season <- (timestep - 1) %% nseason + 1
         next_year <- ((timestep+1) - 1) / nseason + 1
@@ -256,8 +256,15 @@ simple_fisheries_project <- function(flfs, flb, f, f_spwn, timesteps){
         discards.n(flfs[[nfishery]]@.Data[[ncatch]]) <- dn 
         # Update Biol
         # Recruitment
+        rec <- 0
+        if (season == 1){ # Recruitment happens
+            ssb_all <- quantSums(n(flb) * exp(-(f[[nfishery]] * f_spwn[[nfishery]] + m(flb) * spwn(flb))) * wt(flb) * fec(flb))
+            ssb_for_rec <- ssb_all[1,year-rec_age+1,1,season,1,] # SSB for rec in next year
+            rec <- predict(flsr,ssb=FLQuant(ssb_for_rec))
+        }
         #ssb(flb)[
-        n(flb)[1,next_year,1,next_season,1,] <- 1000
+        n(flb)[1,next_year,1,next_season,1,] <- rec
+
         # Abundances
         n(flb)[nages[-1],next_year,1,next_season,1,] <- n(flb)[-last_age,year,1,season,1,] * exp(-z[-last_age,year,1,season,1,])
         # plusgroup

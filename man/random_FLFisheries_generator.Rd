@@ -2,11 +2,14 @@
 \alias{random_FLFisheries_generator}
 \title{Generate a randomly filled and sized FLFisheries object}
 \usage{
-random_FLFisheries_generator(max_fisheries = 5, ...)
+random_FLFisheries_generator(min_fisheries = 2, max_fisheries = 5, ...)
 }
 \arguments{
   \item{max_fisheries}{The maximum number of FLFisheries in
   the fisheries list. Default is 5.}
+
+  \item{min_fisheries}{The minimum number of FLFisheries in
+  the fisheries list. Default is 2.}
 
   \item{max_catches}{The maximum number of FLCatches in the
   catches list. Default is 5.}

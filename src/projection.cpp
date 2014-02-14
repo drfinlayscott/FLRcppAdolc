@@ -36,7 +36,7 @@ double euclid_norm(double* x, const int size_x){
 
 int newton_raphson(std::vector<double>& indep, const int adolc_tape, const int max_iters, const double max_limit, const double tolerance){
     const int nindep = indep.size();
-    Rprintf("nindep: %i\n", nindep);
+    //Rprintf("nindep: %i\n", nindep);
     //double* x, w, y;
     double *x = new double[nindep];
     double *w = new double[nindep];
@@ -69,7 +69,7 @@ int newton_raphson(std::vector<double>& indep, const int adolc_tape, const int m
         for (int i=0; i<nindep; ++i){
             x[i] -= w[i];	   
         }
-        Rprintf("x0 %f\n", x[0]);
+        //Rprintf("x0 %f\n", x[0]);
         //Rprintf("x1 %f\n\n", x[1]);
     }
     // load final values
@@ -87,7 +87,7 @@ int newton_raphson(std::vector<double>& indep, const int adolc_tape, const int m
 // Stuff to migrate
 // [[Rcpp::export]]
 std::vector<double> run(FLFisheriesAdolc fisheries, fwdBiolAdolc biol, std::string srr_model_name, FLQuant srr_params, FLQuant srr_residuals, bool srr_residuals_mult, FLQuantAdolc7 f){
-    Rprintf("In run\n");
+    //Rprintf("In run\n");
 
     FLQuantAdolc7 f_tape = f; // Make a copy to be used in the tape loop
     // Where does the iter loop go? Here or in project_timestep?
@@ -233,7 +233,7 @@ operatingModel_base<T>::operatingModel_base(const FLFisheries_base<T> fisheries_
     // Here we assume that each Fishery has one Catch that fishes that Biol - this assumption will break with multiple Biols
     // Biol dims (1 - 5) must therefore match the Catch dims (Fishery[[1]]) and all FLQuants in f and f_spwn
     // Dim 6 must be 1 or n
-    const int nfisheries = fisheries_in.get_nfisheries();
+    const unsigned int nfisheries = fisheries_in.get_nfisheries();
     // nfisheries must equal length of f and f_spwn
     if (nfisheries != f_in.get_ndim7()){
         Rcpp::stop("operatingModel constructor: Number of fisheries must equal number F FLQuants\n");
@@ -245,7 +245,7 @@ operatingModel_base<T>::operatingModel_base(const FLFisheries_base<T> fisheries_
     Rcpp::IntegerVector f_dim;
     Rcpp::IntegerVector f_spwn_dim;
     Rcpp::IntegerVector biol_dim = biol_in.n().get_dim();
-    for (int fishery_counter = 1; fishery_counter <= nfisheries; ++fishery_counter){
+    for (int unsigned fishery_counter = 1; fishery_counter <= nfisheries; ++fishery_counter){
         catch_dim = fisheries_in(fishery_counter)(1).landings_n().get_dim(); // First catch of the fishery
         f_dim = f_in(fishery_counter).get_dim();
         f_spwn_dim = f_spwn_in(fishery_counter).get_dim();
@@ -287,7 +287,7 @@ operatingModel_base<T>& operatingModel_base<T>::operator = (const operatingModel
 // Returns a list of stuff
 template <typename T>
 operatingModel_base<T>::operator SEXP() const{
-    Rprintf("Wrapping operatingModel_base<T>.\n");
+    //Rprintf("Wrapping operatingModel_base<T>.\n");
     return Rcpp::List::create(Rcpp::Named("biol", biol),
                             Rcpp::Named("fisheries",fisheries),
                             Rcpp::Named("f",f),
@@ -305,7 +305,6 @@ FLQuant_base<T> operatingModel_base<T>::ssb() const {
 
 template <typename T>
 FLQuant_base<T> operatingModel_base<T>::ssb(const int timestep, const int unit, const int area) const {
-    Rprintf("In vector op\n");
     FLQuant_base<T> full_ssb = ssb();
     int year = 0;
     int season = 0;
@@ -316,7 +315,6 @@ FLQuant_base<T> operatingModel_base<T>::ssb(const int timestep, const int unit, 
 
 template <typename T>
 T operatingModel_base<T>::ssb(const int timestep, const int unit, const int area, const int iter) const {
-    Rprintf("In T op\n");
     FLQuant_base<T> full_ssb = ssb();
     int year = 0;
     int season = 0;
@@ -325,11 +323,17 @@ T operatingModel_base<T>::ssb(const int timestep, const int unit, const int area
     return out;
 }
 
+template <typename T>
+T operatingModel_base<T>::ssb(const int year, const int unit, const int season, const int area, const int iter) const {
+    FLQuant_base<T> full_ssb = ssb();
+    T out = full_ssb(1,year,unit,season,area,iter);
+    return out;
+}
+
 // Currently only for a single biol and a single catch
 // Updates catch in timestep and biol in timestep+1
 template <typename T>
 void operatingModel_base<T>::project_timestep(const int timestep){
-    Rprintf("In operatingModel project_timestep.\n");
     // In preparation for multiple fisheries and catches!
     int fishery_count = 1;
     int catches_count = 1;
@@ -344,16 +348,13 @@ void operatingModel_base<T>::project_timestep(const int timestep){
     if (next_year > biol.n().get_nyear()){
         Rcpp::stop("In project_timestep. Trying to access year larger than biol years.\n");
     }
-
-    T rec_temp = 0;
-    T catch_temp = 0;
-    T z = 0;
-
-
+    T rec_temp = 0.0;
+    T catch_temp = 0.0;
+    T z = 0.0;
+    T ssb_temp = 0.0;
     const int max_quant = f(1).get_nquant();
 
     // Loop over iters
-    //int iter_count = 1;
     FLQuant_base<T> discards_ratio_temp = fisheries(fishery_count)(catches_count).discards_ratio();
     for (int iter_count = 1; iter_count <= biol.n().get_niter(); ++iter_count){
         // Calculate the landings and discards
@@ -364,20 +365,23 @@ void operatingModel_base<T>::project_timestep(const int timestep){
             fisheries(fishery_count)(catches_count).discards_n()(quant_count, year, 1, season, 1, iter_count) = discards_ratio_temp(quant_count, year, 1, season, 1, iter_count) * catch_temp;
         }
 
-    // Update population
-    // Get the recruitment
-    // ssb = ssb in timestep = current
-    rec_temp = 1000;
-    biol.n()(1, next_year, 1, next_season, 1, iter_count) = rec_temp;
-    for (int quant_count = 1; quant_count < max_quant; ++quant_count){
-        z =  f(quant_count, year, 1, season, 1, iter_count,1) + biol.m()(quant_count, year, 1, season, 1, iter_count);
-        biol.n()(quant_count+1, next_year, 1, next_season, 1, iter_count) = biol.n()(quant_count, year, 1, season, 1, iter_count) * exp(-z);
+        // Update population
+        // Calculate the SSB that will lead to the recruitment in the NEXT TIME STEP, e.g. SSB one year ago or whenever 
+        // Add one to timestep because we are getting the recruitment in timestep+1
+        ssb_temp = ssb(timestep - biol.srr.get_timelag() + 1, 1, 1, iter_count);  
+        // Get the recruitment
+        rec_temp = biol.srr.eval_model(ssb_temp, next_year, 1, next_season, 1, iter_count);
+        // rec_temp = 1000;
+        biol.n()(1, next_year, 1, next_season, 1, iter_count) = rec_temp;
+        for (int quant_count = 1; quant_count < max_quant; ++quant_count){
+            z =  f(quant_count, year, 1, season, 1, iter_count,1) + biol.m()(quant_count, year, 1, season, 1, iter_count);
+            biol.n()(quant_count+1, next_year, 1, next_season, 1, iter_count) = biol.n()(quant_count, year, 1, season, 1, iter_count) * exp(-z);
+        }
+        // Assume the last age is a plus group
+        z =  f(max_quant, year, 1, season, 1, iter_count, 1) + biol.m()(max_quant, year, 1, season, 1, iter_count);
+        biol.n()(max_quant, next_year, 1, next_season, 1, iter_count) = biol.n()(max_quant, next_year, 1, next_season, 1, iter_count) + (biol.n()(max_quant, year, 1, season, 1, iter_count) * exp(-z));
     }
-    // Assume the last age is a plus group
-    z =  f(max_quant, year, 1, season, 1, iter_count, 1) + biol.m()(max_quant, year, 1, season, 1, iter_count);
-    biol.n()(max_quant, next_year, 1, next_season, 1, iter_count) = biol.n()(max_quant, next_year, 1, next_season, 1, iter_count) + (biol.n()(max_quant, year, 1, season, 1, iter_count) * exp(-z));
-    }
-
+    return;
 }
 
 // Explicit instantiation of class

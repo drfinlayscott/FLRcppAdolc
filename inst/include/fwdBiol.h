@@ -28,6 +28,9 @@
  */
 
 /*-------------------------------------------------------------------*/
+// Necessary to declare this here so that operatingModel class can have access to fwdSR as a friend
+template <typename T>
+class operatingModel_base;
 /* Making a templated equivalent */
 // Only n is templated and can be ADOLC
 // The other slots are fixed because they are never dependent
@@ -40,7 +43,7 @@ class fwdBiol_base {
 		fwdBiol_base(SEXP flb_sexp); // Used as intrusive 'as', takes an FLBiol but with no SRR
         operator SEXP() const; // Used as intrusive 'wrap' - returns an FLBiol
         fwdBiol_base(const SEXP flb_sexp, const fwdSR_base<T> srr_in); // Pass in FLBiol and fwdSR
-        fwdBiol_base(const SEXP flb_sexp, const std::string model_name, const FLQuant params, const FLQuant residuals, const bool residuals_mult = TRUE); // Pass in FLBiol and bits of fwdSR
+        fwdBiol_base(const SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult = TRUE); // Pass in FLBiol and bits of fwdSR
 
 		fwdBiol_base(const fwdBiol_base& fwdBiol_base_source); // copy constructor to ensure that copy is a deep copy - used when passing FLSs into functions
 		fwdBiol_base& operator = (const fwdBiol_base& fwdBiol_base_source); // Assignment operator for a deep copy
@@ -69,9 +72,7 @@ class fwdBiol_base {
         std::string get_desc() const;
         Rcpp::NumericVector get_range() const;
 
-        // methods
-        // getRecruitment(const int timestep);
-        // getN(const int timestep, const FLQuant total_f); // What class is total_f and where does it come from? Is this really a function rather than a method?
+        friend class operatingModel_base<T>;
 
     private:
         std::string name;
@@ -82,9 +83,9 @@ class fwdBiol_base {
         FLQuant m_flq;
         FLQuant spwn_flq;
         FLQuant fec_flq;
-        fwdSR_base<T> srr;
         // Annoying init because you can't delegate constructors until C++11
         void init(const SEXP flb_sexp, const fwdSR_base<T> srr_in);
+        fwdSR_base<T> srr;
 };
 
 

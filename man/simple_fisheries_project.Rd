@@ -20,6 +20,9 @@ simple_fisheries_project(flfs, flb, flsr, f, f_spwn, timesteps)
   \item{timesteps}{Continuous sequence of integers (years
   and seasons)}
 }
+\value{
+A list of FLFisheries and FLBiol objects
+}
 \description{
 Given FLFisheries, FLBiol, FLSR, F and f.spwn, project over
 timesteps No dimension checks are made! Recruitment is

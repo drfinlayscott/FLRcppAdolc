@@ -230,6 +230,8 @@ random_FLFisheries_generator <- function(min_fisheries = 2, max_fisheries = 5, .
 #' @param f List of fishing mortality FLQuant objects (only a list of length 1 to start with)
 #' @param f_spwn List of fishing timing FLQuant objects (only a list of length 1 to start with) - not used at the moment - part of the SSB calculation
 #' @param timesteps Continuous sequence of integers (years and seasons)
+#' @export
+#' @return A list of FLFisheries and FLBiol objects
 simple_fisheries_project <- function(flfs, flb, flsr, f, f_spwn, timesteps){
     nseason <- dim(n(flb))[4]
     nages <- 1:dim(n(flb))[1]

@@ -1,5 +1,19 @@
 context("Test projection functions")
 
+test_that("timestep_to_year_season_conversion",{
+    flq_in <- random_FLQuant_generator()
+    year <- round(runif(1,min=1,max=dim(flq_in)[2]))
+    season <- round(runif(1,min=1,max=dim(flq_in)[4]))
+    expect_that(test_year_season_to_timestep_FLQuant_double(flq_in, year, season), equals((year-1)*dim(flq_in)[4] + season))
+    expect_that(test_year_season_to_timestep_FLQuant_adouble(flq_in, year, season), equals((year-1)*dim(flq_in)[4] + season))
+    expect_that(test_year_season_to_timestep(flq_in, year, season), equals((year-1)*dim(flq_in)[4] + season))
+    # And the other way
+    timestep <- test_year_season_to_timestep(flq_in, year, season)
+    expect_that(test_timestep_to_year_season_FLQuant_double(flq_in, timestep), equals(c(year,season)))
+    expect_that(test_timestep_to_year_season_FLQuant_adouble(flq_in, timestep), equals(c(year,season)))
+    expect_that(test_timestep_to_year_season(flq_in, timestep), equals(c(year,season)))
+})
+
 test_that("euclid_norm",{
     size_x <- runif(1, min=5, max = 100) 
     x <- rnorm(size_x)

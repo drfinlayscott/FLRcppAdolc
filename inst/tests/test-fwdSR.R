@@ -49,6 +49,7 @@ test_that("fwdSR eval_model",{
     params.bevholt <- as.FLQuant(params(ple4.sr.bevholt))
     residuals.bevholt <- FLQuant(rnorm(100), dimnames = list(year = 1:10, iter = 1:10))
     residuals_mult <- TRUE
+    timelag <- 0
     # simple eval
     rec <- test_fwdSR_eval_simple("ricker", params.ricker, timelag, residuals.ricker, residuals_mult, c(ssb(ple4.sr.ricker)[1,1,]))
     expect_that(rec, is_identical_to(c(predict(ple4.sr.ricker)[1,1,])))

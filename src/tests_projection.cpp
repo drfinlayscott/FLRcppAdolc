@@ -20,6 +20,13 @@ int test_year_season_to_timestep_FLQuant_adouble(FLQuantAdolc flqad, const int y
 }
 
 // [[Rcpp::export]]
+int test_year_season_to_timestep(FLQuant flq, const int year, const int season){
+    int timestep = 0;
+    year_season_to_timestep(year, season, flq.get_nseason(), timestep);
+    return timestep;
+}
+
+// [[Rcpp::export]]
 Rcpp::IntegerVector test_timestep_to_year_season_FLQuant_double(FLQuant flq, const int timestep){
     int year = 0;
     int season = 0;
@@ -40,6 +47,18 @@ Rcpp::IntegerVector test_timestep_to_year_season_FLQuant_adouble(FLQuantAdolc fl
     out[1] = season;
     return out;
 }
+
+// [[Rcpp::export]]
+Rcpp::IntegerVector test_timestep_to_year_season(FLQuant flq, const int timestep){
+    int year = 0;
+    int season = 0;
+    timestep_to_year_season(timestep, flq.get_nseason(), year, season);
+    Rcpp::IntegerVector out(2);
+    out[0] = year;
+    out[1] = season;
+    return out;
+}
+
 
 // [[Rcpp::export]]
 double test_euclid_norm(std::vector<double> xvec){

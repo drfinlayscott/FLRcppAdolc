@@ -23,17 +23,24 @@
 #include "FLQuant_multidim.h"
 #endif
 
+// Converting timestep to year and season and vice versa
+// Several options
 template <typename T>
 void year_season_to_timestep(const int year, const int season, const FLQuant_base<T>& flq, int& timestep);
 
 template <typename T>
 void timestep_to_year_season(const int timestep, const FLQuant_base<T>& flq, int& year, int& season);
 
+void year_season_to_timestep(const int year, const int season, const int nseason, int& timestep);
+void timestep_to_year_season(const int timestep, const int nseason, int& year, int& season);
+
 double euclid_norm(double* x, const int size_x);
 
+// A Newton Raphson solver for a function that has already been taped.
+// Pass in the independent variables, tape no. and control parameters
 int newton_raphson(std::vector<double>& indep, const int adolc_tape, const int max_iters= 50, const double max_limit = 100, const double tolerance = 1e-12);
 
-void project_timestep(FLFisheriesAdolc& fisheries, fwdBiolAdolc& biol, std::string srr_model_name, FLQuant params, FLQuant residuals, bool residuals_mult, FLQuantAdolc7& f, const int timestep);
+//void project_timestep(FLFisheriesAdolc& fisheries, fwdBiolAdolc& biol, std::string srr_model_name, FLQuant params, FLQuant residuals, bool residuals_mult, FLQuantAdolc7& f, const int timestep);
 
 
 /* Everything Louder Than Everything Else 
@@ -68,7 +75,7 @@ class operatingModel_base {
         FLQuant7_base<T> f;
         FLQuant7_base<T> f_spwn;
     protected:
-        fwdBiol_base<T> biol;
+        fwdBiol_base<T> biol; // Why is this protected instead of private?
 };
 
 

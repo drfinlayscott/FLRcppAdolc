@@ -3,13 +3,14 @@
  * Maintainer: Finlay Scott, JRC
  */
 
-// Don't include FLQuant.h here as it is already included through FLStock.h 
 #include "FLQuant_base.h"
 #include "FLStock.h"
-//#include "fwdSR.h"
+//#include "fwdSR.h" // Why is this not in the list?
 #include "fwdBiol.h"
 #include "FLQuant_multidim.h"
 #include "FLCatch.h"
 #include "FLFishery.h"
 #include "projection.h"
+//#include "control.h"
+
 

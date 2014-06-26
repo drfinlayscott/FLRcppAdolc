@@ -86,7 +86,7 @@ template <typename T>
 T fwdSR_base<T>::eval_model(const T ssb, int year, int unit, int season, int area, int iter) {
     const int nparams = get_nparams();
     std::vector<double> model_params(nparams);
-    // Sort out params - if years > no years in the params object, just pick the first one
+    // Sort out params - if years > no years in the params object (i.e. params are not disaggregated by time etc.) just pick the first one
     // The real checking should be done in the R side
     if (year > params.get_nyear()){
         year = 1;
@@ -137,6 +137,10 @@ template class fwdSR_base<adouble>;
 
 //--------------------------------------------------------------------
 // SRR functions
+// The params in these functions do not have any disaggregation (e.g. by time or area)
+// They are only the params required to evaluate the SRR function
+// The disaggregated parameter values are stored in the fwdSR_base class as an FLQuant_base object
+// The fwdSR.eval_model method sorts out time step of params etc and passes the correct set of params to these functions
 template <typename T>
 T ricker(const T ssb, const std::vector<double> params){
     T rec;

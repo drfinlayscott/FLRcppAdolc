@@ -1,3 +1,8 @@
+# 
+# Copyright 2014 FLR Team. Distributed under the GPL 2 or later
+# Maintainer: Finlay Scott, JRC
+#
+
 context("Implementation of FLCatch - double and Adolc versions")
 
 test_that("FLCatch as and wrap",{

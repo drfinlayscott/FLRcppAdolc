@@ -48,7 +48,7 @@ SOURCES_C = FLQuant_base.cpp FLStock.cpp fwdBiol.cpp FLQuant_multidim.cpp FLCatc
     projection.cpp tests_projection.cpp \
     tests_FLQuant.cpp tests_FLQuantAdolc.cpp tests_arithmetic_operators.cpp tests_FLStock.cpp tests_fwdBiol.cpp \
     tests_FLQuant_multidim.cpp tests_FLCatch.cpp tests_FLFishery.cpp tests_fwdSR.cpp tests_operatingModel.cpp\
-    control.cpp\
+    control.cpp tests_fwdControl.cpp\
     RcppExports.cpp 
 OBJECTS = $(SOURCES_C:.cpp=.o)
 

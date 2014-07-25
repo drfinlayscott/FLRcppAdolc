@@ -7,6 +7,13 @@
 
 # Write a validity function
 
+# Some thoughts
+# The value column of target is not actually used in the C code.
+# Users can enter it in when passing the DF to the constructor
+# But in the C++ code, the values are really taken from target_iters
+
+# Season cannot be NA when it get's dispatched to C++ - force it to be 1
+
 # Soundtrack: Electric Wizard - Let Us Prey
 #' fwdControl
 #'
@@ -16,7 +23,7 @@
 #' @section Slots:
 #' \describe{
 #'    \item{\code{target}:}{A \code{data.frame}. See details below.}
-#'    \item{\code{target_iters}:}{An array with the values of the targets (\code{min_value}, \code{value} and \code{max_value} by iteration.)
+#'    \item{\code{target_iters}:}{An array with the values of the targets (\code{min_value}, \code{value} and \code{max_value} by iteration.}
 #'     }
 #' @details 
 #' Something about the columns and checks

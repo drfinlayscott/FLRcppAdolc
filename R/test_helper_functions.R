@@ -283,18 +283,40 @@ simple_fisheries_project <- function(flfs, flb, flsr, f, f_spwn, sr_residuals, s
 }
 
 
+# This should use the fwdControl constructor (when we have one)
+#' Dummy fwdControl object creator
+#'
+#' Creates a dummy fwdControl object for testing purposes
+#'
+#' @param years numeric vector of years in the control object. Default value is 1:random interger (max = 10).
+#' @param niters the number of iterations. Default number is random integer (max = 10).
+#' 
+#' @export
+#' @return A fwdControl object
+dummy_fwdControl_generator <- function(years = 1:round(runif(1, min=1,max=10)), niters = round(runif(1,min=1,max=10))){
+    # We need to have a proper R version of the class
+    # And an automatic generator
+    ctrl_df <- data.frame(
+                       year = years,
+                       season = 1L, # Cannot be NA in C++ code
+                       quantity = "f", # the target type
+                       value =  0.2,
+                       min_value = NA,
+                       max_value = NA,
+                       rel_year = NA,
+                       rel_season = NA,
+                       flcatch = NA, # what is this? a number or name? Some way of referring 
+                       rel_flcatch = NA # as above
+                       )
 
-f1 <- function(flfs){
-    for (i in 1:50){
-        cat("i: ", i, "\n")
-        cat(system.time(discards.n <- catch * (discards.ratio(flfs[[1]][[1]]))), "\n")
-        #units(discards.n) <- "hjj"
-        flfs[[1]]@.Data[[1]]@discards.n <- discards.n 
-        landings.n <- catch * (1-discards.ratio(flfs[[1]][[1]]))
-        #units(landings.n) <- "hjj"
-        flfs[[1]]@.Data[[1]]@landings.n <- landings.n 
-    }
-    return(0)
+    target_iters <- array(NA, dim=c(nrow(ctrl_df),3,niters), dimnames=list(target_no=1:nrow(ctrl_df), c("min","value","max"), iter=1:niters))
+    #target_iters[,"value",] <- 0.2
+    target_iters[,"min",] <- runif(dim(target_iters)[1] * dim(target_iters)[3], min=0.1, max=0.2)
+    target_iters[,"value",] <- runif(dim(target_iters)[1] * dim(target_iters)[3], min=0.3, max=0.4)
+    target_iters[,"max",] <- runif(dim(target_iters)[1] * dim(target_iters)[3], min=0.5, max=0.6)
+
+    fc <- new("fwdControl",
+        target = ctrl_df,
+        target_iters = target_iters)
+    return(fc)
 }
-
-

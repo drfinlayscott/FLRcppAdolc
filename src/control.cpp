@@ -35,6 +35,7 @@ fwdControl::fwdControl(SEXP fwd_control_sexp){
 
 // intrinsic 'wrap' 
 fwdControl::operator SEXP() const{
+    Rprintf("In fwdControl wrap\n");
     Rcpp::S4 fwd_control_s4("fwdControl");
     fwd_control_s4.slot("target") = target;
     fwd_control_s4.slot("target_iters") = target_iters;
@@ -56,13 +57,43 @@ fwdControl& fwdControl::operator = (const fwdControl& fwdControl_source){
 	return *this;
 }
 
-
-
 Rcpp::DataFrame fwdControl::get_target() const{
     Rprintf("In fwdControl get_target\n");
     return target;
 }
 
+// Returns the number of targets in the control object
+int fwdControl::get_ntarget() const{
+     return target.nrows();
+}
+
+// Returns the number of iterations in the target_iters member object
+int fwdControl::get_niter() const{
+    Rcpp::IntegerVector dim = target_iters.attr("dim");
+     return dim[2];
+}
+
+// Returns the year and season of the target - used to calculate the timestep in the projection loop
+int fwdControl::get_target_year(const int target_no) const {
+    Rcpp::IntegerVector year = target["year"];
+    return year[target_no-1];
+}
+
+int fwdControl::get_target_season(const int target_no) const {
+    Rcpp::IntegerVector year = target["season"];
+    return year[target_no-1];
+}
+
+
+// It's a 3D array and we want the 2nd column of the 2nd dimension
+// Indexing starts at 1
+double fwdControl::get_target_value(const int target_no, const int col, const int iter) const{
+    Rcpp::IntegerVector dim = target_iters.attr("dim");
+    unsigned int element = (dim[1] * dim[0] * (iter - 1)) + (dim[0] * (col - 1)) + (target_no - 1); 
+    return target_iters(element);
+}
+
+/*------------------------------------------------------------------*/
 
 /* Just some tests to operate on data.frames */
 // [[Rcpp::export]]

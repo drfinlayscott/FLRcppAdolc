@@ -23,6 +23,8 @@
 #include "FLQuant_multidim.h"
 #endif
 
+#include "control.h"
+
 // Converting timestep to year and season and vice versa
 // Several options
 template <typename T>
@@ -55,13 +57,13 @@ class operatingModel_base {
 		operatingModel_base();
 		//operatingModel_base(SEXP flb_sexp); // No as because what would it take. An FLStock?
         operator SEXP() const; // Used as intrusive 'wrap' - returns a list of stuff
-        operatingModel_base(const FLFisheries_base<T> fisheries_in, const fwdBiol_base<T> biol_in, const FLQuant7_base<T> f_in, const FLQuant7_base<T> f_spwn_in);
+        operatingModel_base(const FLFisheries_base<T> fisheries_in, const fwdBiol_base<T> biol_in, const FLQuant7_base<T> f_in, const FLQuant7_base<T> f_spwn_in, const fwdControl ctrl_in);
 
 		operatingModel_base(const operatingModel_base& operatingModel_base_source); // copy constructor to ensure that copy is a deep copy - used when passing FLSs into functions
 		operatingModel_base& operator = (const operatingModel_base& operatingModel_base_source); // Assignment operator for a deep copy
 
-        void run(); // Need to specialise for AD and non-AD version
-        void project_timestep(const int timestep);
+        void run(); // Need to specialise for AD and non-AD version?
+        void project_timestep(const int timestep, const int min_iter=1, const int max_iter=1);
 
         // Various ways of calculating reproductive potential
         FLQuant_base<T> ssb() const;
@@ -74,6 +76,7 @@ class operatingModel_base {
         FLFisheries_base<T> fisheries;
         FLQuant7_base<T> f;
         FLQuant7_base<T> f_spwn;
+        fwdControl ctrl;
     protected:
         fwdBiol_base<T> biol; // Why is this protected instead of private?
 };

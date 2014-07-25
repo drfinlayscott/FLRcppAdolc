@@ -4,6 +4,22 @@ test_that("FLCatches as and wrap - double",{
     flcs_in <- random_FLCatches_generator() 
     flcs_out <- test_FLCatches_as_wrap(flcs_in)
     expect_that(flcs_in, is_identical_to(flcs_out))
+
+    flcs_in[["Catch 1"]]
+    slotNames(flcs_in[["Catch 1"]])
+    flcs_in[["Catch 1"]]@catch.q
+    flcs_out[["Catch 1"]]@catch.q
+
+
+
+    # What is up with catch.q?
+    expect_that(flcs_in[["Catch 1"]]@catch.q, is_identical_to(flcs_out[["Catch 1"]]@catch.q))
+    expect_that(flcs_in[["Catch 1"]]@catch.q@.Data, is_identical_to(flcs_out[["Catch 1"]]@catch.q@.Data))
+    expect_that(c(flcs_in[["Catch 1"]]@catch.q@.Data), is_identical_to(c(flcs_out[["Catch 1"]]@catch.q@.Data)))
+                c(flcs_in[["Catch 1"]]@catch.q@.Data)
+                c(flcs_out[["Catch 1"]]@catch.q@.Data)
+    expect_that(flcs_in[["Catch 1"]]@landings.wt, is_identical_to(flcs_out[["Catch 1"]]@landings.wt))
+
 })
 
 test_that("FLCatches constructors - double",{

@@ -7,9 +7,8 @@ Author: Finlay Scott
 Maintainer: Finlay Scott <yourfault@somewhere.net>
 Description: More about what it does (maybe more than one line)
 License: GPL2 or later
-Depends:
-    Rcpp (>= 0.10.6)
 Imports:
+    Rcpp (>= 0.11.2),
     FLCore,
     FLFishery
 LinkingTo: Rcpp

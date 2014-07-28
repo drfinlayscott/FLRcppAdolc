@@ -72,7 +72,8 @@ class fwdBiol_base {
         std::string get_desc() const;
         Rcpp::NumericVector get_range() const;
 
-        friend class operatingModel_base<T>;
+        // Added a friend so that operating model can access the SRR
+        friend class operatingModel;
 
     private:
         std::string name;

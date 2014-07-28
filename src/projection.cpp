@@ -95,17 +95,15 @@ int newton_raphson(std::vector<double>& indep, const int adolc_tape, const int m
 // operatingModel class
 
 // Empty constructor
-template <typename T>
-operatingModel_base<T>::operatingModel_base(){
-    biol = fwdBiol_base<T>();
-    fisheries = FLFisheries_base<T>();
-    f = FLQuant7_base<T>();
-    f_spwn = FLQuant7_base<T>();
+operatingModel::operatingModel(){
+    biol = fwdBiolAdolc();
+    fisheries = FLFisheriesAdolc();
+    f = FLQuant7Adolc();
+    f_spwn = FLQuant7();
 }
 
 // Main constructor
-template <typename T>
-operatingModel_base<T>::operatingModel_base(const FLFisheries_base<T> fisheries_in, const fwdBiol_base<T> biol_in, const FLQuant7_base<T> f_in, const FLQuant7_base<T> f_spwn_in, const fwdControl ctrl_in){
+operatingModel::operatingModel(const FLFisheriesAdolc fisheries_in, const fwdBiolAdolc biol_in, const FLQuant7Adolc f_in, const FLQuant7 f_spwn_in, const fwdControl ctrl_in){
     // Check dims!!
     // Check dims (1 - 5) of landings slots, F and biol are the same
     // Single Biol at the moment.
@@ -144,8 +142,7 @@ operatingModel_base<T>::operatingModel_base(const FLFisheries_base<T> fisheries_
 }
 
 // Copy constructor - else members can be pointed at by multiple instances
-template <typename T>
-operatingModel_base<T>::operatingModel_base(const operatingModel_base<T>& operatingModel_source){
+operatingModel::operatingModel(const operatingModel& operatingModel_source){
     biol = operatingModel_source.biol;
     fisheries = operatingModel_source.fisheries;
     f = operatingModel_source.f;
@@ -154,8 +151,7 @@ operatingModel_base<T>::operatingModel_base(const operatingModel_base<T>& operat
 }
 
 // Assignment operator to ensure deep copy - else 'data' can be pointed at by multiple instances
-template <typename T>
-operatingModel_base<T>& operatingModel_base<T>::operator = (const operatingModel_base<T>& operatingModel_source){
+operatingModel& operatingModel::operator = (const operatingModel& operatingModel_source){
 	if (this != &operatingModel_source){
         biol = operatingModel_source.biol;
         fisheries = operatingModel_source.fisheries;
@@ -168,8 +164,7 @@ operatingModel_base<T>& operatingModel_base<T>::operator = (const operatingModel
 
 /* Intrusive 'wrap' */
 // Returns a list of stuff
-template <typename T>
-operatingModel_base<T>::operator SEXP() const{
+operatingModel::operator SEXP() const{
     //Rprintf("Wrapping operatingModel_base<T>.\n");
     return Rcpp::List::create(Rcpp::Named("biol", biol),
                             Rcpp::Named("fisheries", fisheries),
@@ -181,39 +176,35 @@ operatingModel_base<T>::operator SEXP() const{
 
 // SSB calculations
 // Return an FLQuant
-template <typename T>
-FLQuant_base<T> operatingModel_base<T>::ssb() const {
-    FLQuant_base<T> ssb = quant_sum(biol.n() * biol.wt() * biol.fec() * exp(-1.0*(biol.m() * biol.spwn() + f() * f_spwn())));
+FLQuantAdolc operatingModel::ssb() const {
+    FLQuantAdolc ssb = quant_sum(biol.n() * biol.wt() * biol.fec() * exp(-1.0*(biol.m() * biol.spwn() + f() * f_spwn())));
     return ssb;
 }
 
 // Return all iterations but single timestep as an FLQuant
-template <typename T>
-FLQuant_base<T> operatingModel_base<T>::ssb(const int timestep, const int unit, const int area) const {
-    FLQuant_base<T> full_ssb = ssb();
+FLQuantAdolc operatingModel::ssb(const int timestep, const int unit, const int area) const {
+    FLQuantAdolc full_ssb = ssb();
     int year = 0;
     int season = 0;
     timestep_to_year_season(timestep, full_ssb, year, season);
-    FLQuant_base<T> out = full_ssb(1,1,year,year,unit,unit,season,season,area,area,1,full_ssb.get_niter());
+    FLQuantAdolc out = full_ssb(1,1,year,year,unit,unit,season,season,area,area,1,full_ssb.get_niter());
     return out;
 }
 
 // Return a single value given timestep, unit, area and iter
-template <typename T>
-T operatingModel_base<T>::ssb(const int timestep, const int unit, const int area, const int iter) const {
-    FLQuant_base<T> full_ssb = ssb();
+adouble operatingModel::ssb(const int timestep, const int unit, const int area, const int iter) const {
+    FLQuantAdolc full_ssb = ssb();
     int year = 0;
     int season = 0;
     timestep_to_year_season(timestep, full_ssb, year, season);
-    T out = full_ssb(1,year,unit,season,area,iter);
+    adouble out = full_ssb(1,year,unit,season,area,iter);
     return out;
 }
 
 // Return a single value given year, season, unit, area and iter
-template <typename T>
-T operatingModel_base<T>::ssb(const int year, const int unit, const int season, const int area, const int iter) const {
-    FLQuant_base<T> full_ssb = ssb();
-    T out = full_ssb(1,year,unit,season,area,iter);
+adouble operatingModel::ssb(const int year, const int unit, const int season, const int area, const int iter) const {
+    FLQuantAdolc full_ssb = ssb();
+    adouble out = full_ssb(1,year,unit,season,area,iter);
     return out;
 }
 
@@ -221,8 +212,7 @@ T operatingModel_base<T>::ssb(const int year, const int unit, const int season, 
 // Updates catch in timestep and biol in timestep+1
 // Timestep is based on year / season
 // The components of an operatingNodel (Biol and Fisheries) should all have the same time dims
-template <typename T>
-void operatingModel_base<T>::project_timestep(const int timestep, const int min_iter, const int max_iter){
+void operatingModel::project_timestep(const int timestep, const int min_iter, const int max_iter){
     // Check iters
     if (min_iter < 1){
         Rcpp::stop("project_timestep: min_iter is less than 1\n");
@@ -244,14 +234,14 @@ void operatingModel_base<T>::project_timestep(const int timestep, const int min_
     if (next_year > biol.n().get_nyear()){
         Rcpp::stop("In project_timestep. Trying to access year larger than biol years.\n");
     }
-    T rec_temp = 0.0;
-    T catch_temp = 0.0;
-    T z = 0.0;
-    T ssb_temp = 0.0;
+    adouble rec_temp = 0.0;
+    adouble catch_temp = 0.0;
+    adouble z = 0.0;
+    adouble ssb_temp = 0.0;
     const int max_quant = f(1).get_nquant();
 
     // Loop over iters - or should we do iter in Run loop?
-    FLQuant_base<T> discards_ratio_temp = fisheries(fishery_count)(catches_count).discards_ratio();
+    FLQuantAdolc discards_ratio_temp = fisheries(fishery_count)(catches_count).discards_ratio();
 
     for (int iter_count = min_iter; iter_count <= max_iter; ++iter_count){
         // Calculate the landings and discards
@@ -292,8 +282,7 @@ void operatingModel_base<T>::project_timestep(const int timestep, const int min_
     return;
 }
 
-template <typename T>
-void operatingModel_base<T>::run(){
+void operatingModel::run(){
 
     const int ntarget = ctrl.get_ntarget();
     const int niter = ctrl.get_niter(); // number of iters taken from control object - not from Biol or Fisheries
@@ -387,21 +376,17 @@ adouble test;
 
 }
 
-// Explicit instantiation of class
-template class operatingModel_base<double>;
-template class operatingModel_base<adouble>;
-
 /*----------------------------------------------------------------------------------*/
 
 // Assumes the targets are already ordered by time
 
 // [[Rcpp::export]]
-operatingModelAdolc test_run (const FLFisheriesAdolc fisheries, SEXP FLBiolSEXP, const std::string srr_model_name, const FLQuant srr_params, const FLQuant srr_residuals, const bool srr_residuals_mult, const int srr_timelag, FLQuantAdolc7 f, FLQuantAdolc7 f_spwn, fwdControl ctrl){
+operatingModel test_run (const FLFisheriesAdolc fisheries, SEXP FLBiolSEXP, const std::string srr_model_name, const FLQuant srr_params, const FLQuant srr_residuals, const bool srr_residuals_mult, const int srr_timelag, FLQuant7Adolc f, FLQuant7 f_spwn, fwdControl ctrl){
 
     // Make the fwdBiol from the FLBiol and SRR bits
     fwdBiolAdolc biol(FLBiolSEXP, srr_model_name, srr_params, srr_timelag, srr_residuals, TRUE); 
     // Make the OM
-    operatingModelAdolc om(fisheries, biol, f, f_spwn, ctrl);
+    operatingModel om(fisheries, biol, f, f_spwn, ctrl);
 
     om.run();
 
@@ -418,10 +403,10 @@ operatingModelAdolc test_run (const FLFisheriesAdolc fisheries, SEXP FLBiolSEXP,
 // Stuff to migrate
 // Need to figure out how this is going to work...
 //// [[Rcpp::export]]
-//std::vector<double> run(FLFisheriesAdolc fisheries, fwdBiolAdolc biol, std::string srr_model_name, FLQuant srr_params, FLQuant srr_residuals, bool srr_residuals_mult, FLQuantAdolc7 f){
+//std::vector<double> run(FLFisheriesAdolc fisheries, fwdBiolAdolc biol, std::string srr_model_name, FLQuant srr_params, FLQuant srr_residuals, bool srr_residuals_mult, FLQuant7Adolc f){
 //    //Rprintf("In run\n");
 //
-//    FLQuantAdolc7 f_tape = f; // Make a copy to be used in the tape loop
+//    FLQuant7Adolc f_tape = f; // Make a copy to be used in the tape loop
 //    // Where does the iter loop go? Here or in project_timestep?
 //    int iter_count = 1;
 //    int max_timestep = 3;
@@ -492,7 +477,7 @@ operatingModelAdolc test_run (const FLFisheriesAdolc fisheries, SEXP FLBiolSEXP,
 // Currently only for a single biol and a single catch
 // Updates catch in timestep and biol in timestep+1
 /*
-void project_timestep(FLFisheriesAdolc& fisheries, fwdBiolAdolc& biol, std::string srr_model_name, FLQuant params, FLQuant residuals, bool residuals_mult, FLQuantAdolc7& f, const int timestep){
+void project_timestep(FLFisheriesAdolc& fisheries, fwdBiolAdolc& biol, std::string srr_model_name, FLQuant params, FLQuant residuals, bool residuals_mult, FLQuant7Adolc& f, const int timestep){
     Rprintf("In project_timestep.\n");
     // Check dims of landings slots, F and biol are the same
     int year = 0;
@@ -538,7 +523,7 @@ void project_timestep(FLFisheriesAdolc& fisheries, fwdBiolAdolc& biol, std::stri
 }
 
 // [[Rcpp::export]]
-Rcpp::List test_project_timestep(FLFisheriesAdolc fisheries, fwdBiolAdolc biol, std::string srr_model_name, FLQuant params, FLQuant residuals, bool residuals_mult, FLQuantAdolc7 f, const int timestep){
+Rcpp::List test_project_timestep(FLFisheriesAdolc fisheries, fwdBiolAdolc biol, std::string srr_model_name, FLQuant params, FLQuant residuals, bool residuals_mult, FLQuant7Adolc f, const int timestep){
     project_timestep(fisheries, biol, srr_model_name, params, residuals, residuals_mult, f, timestep);
 	return Rcpp::List::create(Rcpp::Named("fisheries", fisheries),
                             Rcpp::Named("biol",biol));

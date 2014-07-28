@@ -42,46 +42,39 @@ double euclid_norm(double* x, const int size_x);
 // Pass in the independent variables, tape no. and control parameters
 int newton_raphson(std::vector<double>& indep, const int adolc_tape, const int max_iters= 50, const double max_limit = 100, const double tolerance = 1e-12);
 
-//void project_timestep(FLFisheriesAdolc& fisheries, fwdBiolAdolc& biol, std::string srr_model_name, FLQuant params, FLQuant residuals, bool residuals_mult, FLQuantAdolc7& f, const int timestep);
-
-
 /* Everything Louder Than Everything Else 
  * The Operating Model Class
  */
 
-// Template it because we may want a pure double one
-template <typename T>
-class operatingModel_base {
+// Not templated as this class for projecting with the control object - must have AD for solving
+
+class operatingModel {
     public:
         // /* Constructors */
-		operatingModel_base();
-		//operatingModel_base(SEXP flb_sexp); // No as because what would it take. An FLStock?
+		operatingModel();
+		//operatingModel(SEXP flb_sexp); // No as because what would it take. An FLStock?
         operator SEXP() const; // Used as intrusive 'wrap' - returns a list of stuff
-        operatingModel_base(const FLFisheries_base<T> fisheries_in, const fwdBiol_base<T> biol_in, const FLQuant7_base<T> f_in, const FLQuant7_base<T> f_spwn_in, const fwdControl ctrl_in);
+        operatingModel(const FLFisheriesAdolc fisheries_in, const fwdBiolAdolc biol_in, const FLQuant7Adolc f_in, const FLQuant7 f_spwn_in, const fwdControl ctrl_in);
+		operatingModel(const operatingModel& operatingModel_source); // copy constructor to ensure that copy is a deep copy - used when passing FLSs into functions
+		operatingModel& operator = (const operatingModel& operatingModel_source); // Assignment operator for a deep copy
 
-		operatingModel_base(const operatingModel_base& operatingModel_base_source); // copy constructor to ensure that copy is a deep copy - used when passing FLSs into functions
-		operatingModel_base& operator = (const operatingModel_base& operatingModel_base_source); // Assignment operator for a deep copy
-
-        void run(); // Need to specialise for AD and non-AD version?
+        void run(); 
         void project_timestep(const int timestep, const int min_iter=1, const int max_iter=1);
 
         // Various ways of calculating reproductive potential
-        FLQuant_base<T> ssb() const;
-        FLQuant_base<T> ssb(const int timestep, const int unit, const int area) const; // all iters in a timestep, unit and area
-        T ssb(const int timestep, const int unit, const int area, const int iter) const; // single iter in a timestep, unit and area
-        T ssb(const int year, const int unit, const int season, const int area, const int iter) const; // single iter in a timestep, unit and area
-
+        FLQuantAdolc ssb() const;
+        FLQuantAdolc ssb(const int timestep, const int unit, const int area) const; // all iters in a timestep, unit and area
+        adouble ssb(const int timestep, const int unit, const int area, const int iter) const; // single iter in a timestep, unit and area
+        adouble ssb(const int year, const int unit, const int season, const int area, const int iter) const; // single iter in a timestep, unit and area
 
     private:
-        FLFisheries_base<T> fisheries;
-        FLQuant7_base<T> f;
-        FLQuant7_base<T> f_spwn;
+        FLFisheriesAdolc fisheries;
+        FLQuant7Adolc f;
+        FLQuant7 f_spwn;
         fwdControl ctrl;
     protected:
-        fwdBiol_base<T> biol; // Why is this protected instead of private?
+        fwdBiolAdolc biol; // This is protected because operatingModel is a friend of fwdBiol so we can access the SRR
 };
 
 
-typedef operatingModel_base<double> operatingModel;
-typedef operatingModel_base<adouble> operatingModelAdolc;
 

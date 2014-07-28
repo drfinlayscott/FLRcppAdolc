@@ -48,7 +48,7 @@ class FLQuant7_base {
 };
 
 typedef FLQuant7_base<double> FLQuant7;
-typedef FLQuant7_base<adouble> FLQuantAdolc7;
+typedef FLQuant7_base<adouble> FLQuant7Adolc;
 
 /*----------------------------------------*/
 /*

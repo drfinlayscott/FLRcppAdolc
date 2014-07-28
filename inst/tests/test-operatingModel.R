@@ -1,9 +1,8 @@
-context("Implementation of operatingModel- double and Adolc versions")
+context("Implementation of operatingModel")
 
 test_that("operatingModel constructors",{
     # Empty constructor - jusy check they don't fail
     test_operatingModel_empty_constructor()
-    test_operatingModelAdolc_empty_constructor()
     # Set up parameters for full test
     flq <- random_FLQuant_generator()
     flb <- random_FLBiol_generator(fixed_dims = dim(flq))
@@ -23,7 +22,8 @@ test_that("operatingModel constructors",{
     f_spwn <- lapply(f_spwn,abs)
     # At last, a test
     # Full constructor with wrap
-    out <- test_operatingModel_full_constructor(flfs, flb, "ricker", params.ricker, timelag, residuals.ricker, residuals_mult, f, f_spwn)
+    fc <- dummy_fwdControl_generator(years = 1, niters = dim(n(flb))[6])
+    out <- test_operatingModel_full_constructor(flfs, flb, "ricker", params.ricker, timelag, residuals.ricker, residuals_mult, f, f_spwn, fc)
     expect_that(out[["biol"]], is_identical_to(flb))
     expect_that(out[["fisheries"]], is_identical_to(flfs))
     expect_that(out[["f"]], is_identical_to(f))
@@ -77,23 +77,24 @@ test_that("operatingModel SSB methods", {
     residuals_mult <- TRUE
     timelag <- 0
 
+    fc <- dummy_fwdControl_generator(years = 1, niters = dim(n(flb))[6])
     # SSB
     ssb_in <- quantSums(n(flb) * wt(flb) * fec(flb) * exp(-f[[1]]*f_spwn[[1]] - m(flb) * spwn(flb)))
-    ssb_out <- test_operatingModel_SSB_FLQ(flfs, flb, 'ricker', params_ricker, timelag, residuals_ricker, residuals_mult, f, f_spwn)
+    ssb_out <- test_operatingModel_SSB_FLQ(flfs, flb, 'ricker', params_ricker, timelag, residuals_ricker, residuals_mult, f, f_spwn, fc)
     expect_that(ssb_in@.Data, equals(ssb_out@.Data))
-    ssb_out <- test_operatingModelAdolc_SSB_FLQ(flfs, flb, 'ricker', params_ricker, timelag, residuals_ricker, residuals_mult, f, f_spwn)
+    ssb_out <- test_operatingModel_SSB_FLQ(flfs, flb, 'ricker', params_ricker, timelag, residuals_ricker, residuals_mult, f, f_spwn, fc)
     expect_that(ssb_in@.Data, equals(ssb_out@.Data))
     # SSB all iters
     timestep <- floor(runif(1, min=1, max = dim(flq)[2] * dim(flq)[4]))
     unit <- floor(runif(1, min=1, max = dim(flq)[3]))
     area <- floor(runif(1, min=1, max = dim(flq)[5]))
-    ssb_out <- test_operatingModel_SSB_iters(flfs, flb, 'ricker', params_ricker, timelag, residuals_ricker, residuals_mult, f, f_spwn, timestep, unit, area)
+    ssb_out <- test_operatingModel_SSB_iters(flfs, flb, 'ricker', params_ricker, timelag, residuals_ricker, residuals_mult, f, f_spwn, timestep, unit, area, fc)
     year <-  floor((timestep-1) / dim(flq)[4] + 1)
     season <- (timestep-1) %% dim(flq)[4] + 1;
     expect_that((ssb_in[,year,unit,season,area])@.Data, equals(ssb_out@.Data))
     # SSB single iter
     iter <- floor(runif(1, min=1, max = dim(flq)[6]))
-    ssb_out <- test_operatingModel_SSB_single_iter(flfs, flb, 'ricker', params_ricker, timelag, residuals_ricker, residuals_mult, f, f_spwn, timestep, unit, area, iter)
+    ssb_out <- test_operatingModel_SSB_single_iter(flfs, flb, 'ricker', params_ricker, timelag, residuals_ricker, residuals_mult, f, f_spwn, timestep, unit, area, iter, fc)
     expect_that(c(ssb_in[,year,unit,season,area,iter]), equals(c(ssb_out)))
     # SSB non-conformable FLQuant iters, e.g. wt has only 1 iter, but n has many
     single_iter <- round(runif(1,min=1,max=dim(flq)[6]))
@@ -101,11 +102,11 @@ test_that("operatingModel SSB methods", {
     wt(flb2) <- iter(wt(flb2),single_iter)
     fec(flb2) <- iter(fec(flb2),single_iter)
     m(flb2) <- iter(m(flb2),single_iter)
-    ssb_out <- test_operatingModel_SSB_single_iter(flfs, flb2, 'ricker', params_ricker, timelag, residuals_ricker, residuals_mult, f, f_spwn, timestep, unit, area, iter)
+    ssb_out <- test_operatingModel_SSB_single_iter(flfs, flb2, 'ricker', params_ricker, timelag, residuals_ricker, residuals_mult, f, f_spwn, timestep, unit, area, iter, fc)
     ssb_in <- quantSums(n(flb2) * wt(flb2) * fec(flb2) * exp(-f[[1]]*f_spwn[[1]] - m(flb2) * spwn(flb2)))
     expect_that(c(ssb_in[,year,unit,season,area,iter]), equals(c(ssb_out)))
     # SSB with year and season
-    ssb_out <- test_operatingModel_SSB_single_iter_year_season(flfs, flb2, 'ricker', params_ricker, timelag, residuals_ricker, residuals_mult, f, f_spwn, year, unit, season, area, iter)
+    ssb_out <- test_operatingModel_SSB_single_iter_year_season(flfs, flb2, 'ricker', params_ricker, timelag, residuals_ricker, residuals_mult, f, f_spwn, year, unit, season, area, iter, fc)
     expect_that(c(ssb_in[,year,unit,season,area,iter]), equals(c(ssb_out)))
 
 
@@ -132,10 +133,12 @@ test_that("operatingModel project_timestep", {
     residuals_sr <- abs(FLQuant(rnorm(prod(dim(flq)[-1])), dimnames = list(year = 1:dim(flq)[2], unit = 1:dim(flq)[3], season = 1:dim(flq)[4], area = 1:dim(flq)[5], iter = 1:dim(flq)[6])))
     residuals_mult <- TRUE
     timelag <- 1
+
+    fc <- dummy_fwdControl_generator(years = 1, niters = dim(n(flb))[6])
     # Test seasonal projection - ignore SRR
     nseason <- dim(flq)[4]
     timestep <- round(runif(1, min=1,max=(nseason * dim(flq)[2])-1))
-    om_out <- test_operating_model_project(flfs, flb, srr_model_name, params_sr, timelag, residuals_sr, residuals_mult, f, f_spwn, timestep)
+    om_out <- test_operating_model_project(flfs, flb, srr_model_name, params_sr, timelag, residuals_sr, residuals_mult, f, f_spwn, timestep, fc)
     om_R <- simple_fisheries_project(flfs, flb, ple4_sr, f, f_spwn, residuals_sr, residuals_mult, timestep)
     year =  (timestep-1) / nseason + 1; 
     season = (timestep-1) %% nseason + 1;
@@ -171,7 +174,7 @@ test_that("operatingModel project_timestep", {
     # Check recruitment in R method
     project_c <- list(fisheries = flfs, biol=flb)
     for (timestep in timesteps){
-        project_c <- test_operating_model_project(project_c[["fisheries"]], project_c[["biol"]], "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, timestep)
+        project_c <- test_operating_model_project(project_c[["fisheries"]], project_c[["biol"]], "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, timestep, fc)
     }
     # Check biol timestep up to max timesteps + 1
     expect_that((project_c[["biol"]]), equals((project_r[["flb"]])))

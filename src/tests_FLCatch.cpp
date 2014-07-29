@@ -255,6 +255,16 @@ FLQuantAdolc test_FLCatchAdolc_discards_sel(const FLCatchAdolc flc){
     return flc.discards_sel();
 }
 
+// [[Rcpp::export]]
+Rcpp::IntegerVector test_FLCatch_get_fbar_range(const FLCatch flc){
+    return flc.get_fbar_range();
+}
+
+// [[Rcpp::export]]
+Rcpp::IntegerVector test_FLCatch_get_fbar_range_indices(const FLCatch flc){
+    return flc.get_fbar_range_indices();
+}
+
 /*------------------------------------------------------------------------*/
 // FLCatches - double
 

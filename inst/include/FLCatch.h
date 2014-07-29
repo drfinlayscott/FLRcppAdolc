@@ -58,10 +58,12 @@ class FLCatch_base {
         FLQuant_base<T> discards_sel() const;
         FLQuant_base<T> discards_ratio() const;
 
-
         std::string get_name() const;
         std::string get_desc() const;
         Rcpp::NumericVector get_range() const;
+        Rcpp::IntegerVector get_fbar_range() const; // Returns the age range
+        Rcpp::IntegerVector get_fbar_range_indices() const; // Returns the indices of the age range - starting at 0
+
 
 
     private:

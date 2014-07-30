@@ -58,3 +58,8 @@ double test_fwdControl_get_target_value(const fwdControl control, const int targ
     return control.get_target_value(target_no, col, iter);
 }
 
+// [[Rcpp::export]]
+std::string test_fwdControl_get_target_quantity(const fwdControl control, const int target_no){
+    return control.get_target_quantity(target_no);
+}
+

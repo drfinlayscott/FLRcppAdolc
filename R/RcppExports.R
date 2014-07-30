@@ -489,6 +489,14 @@ test_FLCatchAdolc_discards_sel <- function(flc) {
     .Call('FLRcppAdolc_test_FLCatchAdolc_discards_sel', PACKAGE = 'FLRcppAdolc', flc)
 }
 
+test_FLCatch_get_fbar_range <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatch_get_fbar_range', PACKAGE = 'FLRcppAdolc', flc)
+}
+
+test_FLCatch_get_fbar_range_indices <- function(flc) {
+    .Call('FLRcppAdolc_test_FLCatch_get_fbar_range_indices', PACKAGE = 'FLRcppAdolc', flc)
+}
+
 test_FLCatches_as_wrap <- function(flcs) {
     .Call('FLRcppAdolc_test_FLCatches_as_wrap', PACKAGE = 'FLRcppAdolc', flcs)
 }
@@ -1457,6 +1465,10 @@ test_fwdControl_get_target_value <- function(control, target_no, col, iter) {
     .Call('FLRcppAdolc_test_fwdControl_get_target_value', PACKAGE = 'FLRcppAdolc', control, target_no, col, iter)
 }
 
+test_fwdControl_get_target_quantity <- function(control, target_no) {
+    .Call('FLRcppAdolc_test_fwdControl_get_target_quantity', PACKAGE = 'FLRcppAdolc', control, target_no)
+}
+
 test_fwdSR_empty_constructor <- function() {
     invisible(.Call('FLRcppAdolc_test_fwdSR_empty_constructor', PACKAGE = 'FLRcppAdolc'))
 }
@@ -1519,6 +1531,10 @@ test_operatingModel_SSB_single_iter_year_season <- function(flfs, flb_sexp, mode
 
 test_operating_model_project <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, timestep, ctrl) {
     .Call('FLRcppAdolc_test_operating_model_project', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, timestep, ctrl)
+}
+
+test_operating_model_fbar <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, year, unit, season, area, min_iter, max_iter, fishery_no, catch_no) {
+    .Call('FLRcppAdolc_test_operating_model_fbar', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, year, unit, season, area, min_iter, max_iter, fishery_no, catch_no)
 }
 
 test_year_season_to_timestep_FLQuant_double <- function(flq, year, season) {

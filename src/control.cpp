@@ -17,7 +17,14 @@
 //Rcpp::Named("b")=s);
 
 
-//Rcpp::NumericVector vec3 = Rcpp::NumericVector( Rcpp::Dimension(4, 5, 6));
+
+void fwdControl::init_target_map(){
+    // Fill up the map
+    target_map["f"] = target_f;
+    target_map["catch"] = target_catch;
+    return;
+}
+
 
 // Empty constructor
 fwdControl::fwdControl(){
@@ -31,6 +38,7 @@ fwdControl::fwdControl(SEXP fwd_control_sexp){
 	Rcpp::S4 fwd_control_s4 = Rcpp::as<Rcpp::S4>(fwd_control_sexp);
     target_iters = fwd_control_s4.slot("target_iters");
     target = fwd_control_s4.slot("target");
+    init_target_map();
 }
 
 // intrinsic 'wrap' 
@@ -46,6 +54,7 @@ fwdControl::operator SEXP() const{
 fwdControl::fwdControl(const fwdControl& fwdControl_source){
     target = Rcpp::clone<Rcpp::DataFrame>(fwdControl_source.target); // Need to clone for a deep copy
     target_iters = Rcpp::clone<Rcpp::NumericVector>(fwdControl_source.target_iters); // Need to clone 
+    target_map = fwdControl_source.target_map;
 }
 
 // Assignment operator to ensure deep copy - else 'data' can be pointed at by multiple instances
@@ -53,6 +62,7 @@ fwdControl& fwdControl::operator = (const fwdControl& fwdControl_source){
 	if (this != &fwdControl_source){
         target = Rcpp::clone<Rcpp::DataFrame>(fwdControl_source.target); // Need to clone for a deep copy
         target_iters = Rcpp::clone<Rcpp::NumericVector>(fwdControl_source.target_iters); // Need to clone 
+        target_map = fwdControl_source.target_map;
 	}
 	return *this;
 }
@@ -76,12 +86,18 @@ int fwdControl::get_niter() const{
 // Returns the year and season of the target - used to calculate the timestep in the projection loop
 int fwdControl::get_target_year(const int target_no) const {
     Rcpp::IntegerVector year = target["year"];
+    if (target_no > year.size()){
+        Rcpp::stop("In fwdControl::get_target_year. target_no > number of targets\n");
+    }
     return year[target_no-1];
 }
 
 int fwdControl::get_target_season(const int target_no) const {
-    Rcpp::IntegerVector year = target["season"];
-    return year[target_no-1];
+    Rcpp::IntegerVector season = target["season"];
+    if (target_no > season.size()){
+        Rcpp::stop("In fwdControl::get_target_season. target_no > number of targets\n");
+    }
+    return season[target_no-1];
 }
 
 
@@ -91,6 +107,25 @@ double fwdControl::get_target_value(const int target_no, const int col, const in
     Rcpp::IntegerVector dim = target_iters.attr("dim");
     unsigned int element = (dim[1] * dim[0] * (iter - 1)) + (dim[0] * (col - 1)) + (target_no - 1); 
     return target_iters(element);
+}
+
+// target_no starts at 1
+std::string fwdControl::get_target_quantity(const int target_no) const{
+    Rcpp::CharacterVector quantities = target["quantity"];
+    if (target_no > quantities.size()){
+        Rcpp::stop("In fwdControl::get_target_type. target_no > number of targets\n");
+    }
+    return Rcpp::as<std::string>(quantities[target_no - 1]);
+}
+
+// target_no starts at 1
+fwdControlTargetType fwdControl::get_target_type(const int target_no) const{
+    std::string quantity = get_target_quantity(target_no);
+    target_map_type::const_iterator type_pair_found = target_map.find(quantity);
+    if (type_pair_found == target_map.end()){
+        Rcpp::stop("Unable to find target quantity in fwdControl target_map\n");
+    }
+    return type_pair_found->second;
 }
 
 /*------------------------------------------------------------------*/

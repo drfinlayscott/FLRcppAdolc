@@ -25,6 +25,7 @@
 
 #include "control.h"
 
+
 // Converting timestep to year and season and vice versa
 // Several options
 template <typename T>
@@ -66,6 +67,14 @@ class operatingModel {
         FLQuantAdolc ssb(const int timestep, const int unit, const int area) const; // all iters in a timestep, unit and area
         adouble ssb(const int timestep, const int unit, const int area, const int iter) const; // single iter in a timestep, unit and area
         adouble ssb(const int year, const int unit, const int season, const int area, const int iter) const; // single iter in a timestep, unit and area
+
+        void eval_target(const int target_no) const;
+
+        // The target value calculations
+        // fbar by catch and fishery - i.e. partial F - will need to adapt this to include multiple biols in the future
+        std::vector<adouble> fbar(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int fishery_no, const int catch_no, const int biol_no = 1) const;
+        // Total fbar on a Biol - sum of Fbars from the catches and fisheries
+        std::vector<adouble> fbar(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int biol_no = 1) const;
 
     private:
         FLFisheriesAdolc fisheries;

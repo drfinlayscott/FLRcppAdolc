@@ -125,7 +125,6 @@ FLFisheries_base<T>::FLFisheries_base(){
 // Used as intrusive 'as'
 template <typename T>
 FLFisheries_base<T>::FLFisheries_base(SEXP flfs_sexp) { 
-    //Rprintf("In FLFisheries SEXP constructor\n");
     Rcpp::S4 flfs_s4 = Rcpp::as<Rcpp::S4>(flfs_sexp);
     desc = Rcpp::as<std::string>(flfs_s4.slot("desc"));
     names = flfs_s4.slot("names");

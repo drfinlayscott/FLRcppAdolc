@@ -8,11 +8,25 @@
 # Write a validity function
 
 # Some thoughts
+
 # The value column of target is not actually used in the C code.
 # Users can enter it in when passing the DF to the constructor
 # But in the C++ code, the values are really taken from target_iters
 
 # Season cannot be NA when it get's dispatched to C++ - force it to be 1
+
+# Season and Year are NOT the names of the season or years (even if numeric). They are the indices.
+# e.g. ple4, year = 2006, year is actually 50
+
+# Before calling project, SRR residuals must have same time dimensions as fisheries and biol
+# Window everything beforehand
+# Check for NA values in target timesteps (watch the lag for SSB target)
+# NAs are OK after windowing, IF that timestep is not being used in the projection
+
+# What kind of 'quantity' are we allowed?
+# f
+# catch
+
 
 # Soundtrack: Electric Wizard - Let Us Prey
 #' fwdControl

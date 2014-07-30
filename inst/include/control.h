@@ -20,6 +20,17 @@
 // The target_iters is a 3D array with fixed size of second dimension (3)
 
 
+// Enumerated type for the target types
+enum fwdControlTargetType {
+    target_f,
+    target_catch
+};
+
+// Map the target type as string to the enumerated type - typedef so we can make iterators to it later
+typedef std::map<std::string, fwdControlTargetType> target_map_type;
+
+
+
 class fwdControl {
 	public:
 		fwdControl();
@@ -34,9 +45,14 @@ class fwdControl {
         int get_target_year(const int target_no) const;
         int get_target_season(const int target_no) const;
         double get_target_value(const int target_no, const int col, const int iter) const;
+        std::string get_target_quantity(const int target_no) const;
+        fwdControlTargetType get_target_type(const int target_no) const;
+        void init_target_map();
     private:
         Rcpp::DataFrame target;
         Rcpp::NumericVector target_iters; 
+        //std::map<std::string, fwdControlTargetType> target_map;
+        target_map_type target_map;
 };
 
 

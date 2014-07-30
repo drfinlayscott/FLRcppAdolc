@@ -17,15 +17,9 @@
 /*
  * fwdSR class
  * Contains data and methods for stock-recruitment relationships
- * It's very similar to the FLSR class in R
  */
 
 /*-------------------------------------------------------------------*/
-/* Making a templated equivalent */
-// Only n is templated and can be ADOLC
-// The other slots are fixed because they are never dependent
-// T is double or adouble
-
 
 
 template <typename T>
@@ -39,22 +33,11 @@ class fwdSR_base {
 		fwdSR_base(const fwdSR_base& fwdSR_base_source); // copy constructor to ensure that copy is a deep copy - used when passing FLSs into functions
 		fwdSR_base& operator = (const fwdSR_base& fwdSR_base_source); // Assignment operator for a deep copy
 
-        // Get accessors with const reinforced
-        //FLQuant_base<T> n() const;
-        // Accessor methods for the slots
-        //FLQuant_base<T>& n();
-
         // Different ways of evaluating the model
         // Timing is when the recruitment happens - not when SSB happens
         T eval_model(const T ssb, int year, int unit, int season, int area, int iter);
         //FLQuant_base<T> eval_model(const FLQuant_base<T> ssb);
         //std::vector<T> eval_model(const std::vector<T> ssb);
-
-        // methods
-        // getRecruitment(const int timestep);
-        // getN(const int timestep, const FLQuant total_f); // What class is total_f and where does it come from? Is this really a function rather than a method?
-        //T getRecruitment(const int ssb, const int timestep, const int unit, const int area, const int iter) const;
-        //T getRecruitment(const int ssb, const int year, const int unit, const int season, const int area, const int iter) const;
 
         // Typedef for the SRR model functions
         typedef T (*srr_model_ptr)(const T, const std::vector<double>);

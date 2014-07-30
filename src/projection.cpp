@@ -44,8 +44,6 @@ double euclid_norm(double* x, const int size_x){
 
 int newton_raphson(std::vector<double>& indep, const int adolc_tape, const int max_iters, const double max_limit, const double tolerance){
     const int nindep = indep.size();
-    //Rprintf("nindep: %i\n", nindep);
-    //double* x, w, y;
     double *x = new double[nindep];
     double *w = new double[nindep];
     // load initial values
@@ -239,37 +237,36 @@ void operatingModel::project_timestep(const int timestep, const int min_iter, co
     adouble z = 0.0;
     adouble ssb_temp = 0.0;
     const int max_quant = f(1).get_nquant();
-
-    // Loop over iters - or should we do iter in Run loop?
     FLQuantAdolc discards_ratio_temp = fisheries(fishery_count)(catches_count).discards_ratio();
 
+    // Loop over iters - or should we do iter in Run loop?
     for (int iter_count = min_iter; iter_count <= max_iter; ++iter_count){
         // Calculate the landings and discards
         // quant_count is over the first dimension which is age
         for (int quant_count = 1; quant_count <= max_quant; ++quant_count){
-            z =  f(quant_count, year, 1, season, 1, iter_count, catches_count) + biol.m()(quant_count, year, 1, season, 1, iter_count);
+            z =  f(quant_count, year, 1, season, 1, iter_count, 1) + biol.m()(quant_count, year, 1, season, 1, iter_count);
             catch_temp = (f(quant_count, year, 1, season, 1, iter_count, 1) / z) * (1 - exp(-z)) * biol.n()(quant_count, year, 1, season, 1, iter_count);
             fisheries(fishery_count)(catches_count).landings_n()(quant_count, year, 1, season, 1, iter_count) = (1 - discards_ratio_temp(quant_count, year, 1, season, 1, iter_count)) * catch_temp;
             fisheries(fishery_count)(catches_count).discards_n()(quant_count, year, 1, season, 1, iter_count) = discards_ratio_temp(quant_count, year, 1, season, 1, iter_count) * catch_temp;
         }
 
         // Update population
-        // Calculate the SSB that will lead to the recruitment in the NEXT TIME STEP, e.g. SSB one year ago or whenever 
+        // Calculate the SSB that will lead to the recruitment in the NEXT TIME STEP, e.g. current SSB 
         // Add one to timestep because we are getting the recruitment in timestep+1
         ssb_temp = ssb(timestep - biol.srr.get_timelag() + 1, 1, 1, iter_count);  
-        // Get the recruitment
+        // Get the recruitment - year and season passed in for time varying SRR parameters
         rec_temp = biol.srr.eval_model(ssb_temp, next_year, 1, next_season, 1, iter_count);
+
         // Apply the residuals
         // Use of if statement is OK because for each taping it will only branch the same way (depending on residuals_mult)
-
         if (biol.srr.get_residuals_mult()){
             rec_temp = rec_temp * biol.srr.get_residuals()(1,next_year,1,next_season,1,iter_count);
         }
         else{
             rec_temp = rec_temp + biol.srr.get_residuals()(1,next_year,1,next_season,1,iter_count);
         }
-        // rec_temp = 1000;
         biol.n()(1, next_year, 1, next_season, 1, iter_count) = rec_temp;
+
         for (int quant_count = 1; quant_count < max_quant; ++quant_count){
             z =  f(quant_count, year, 1, season, 1, iter_count,1) + biol.m()(quant_count, year, 1, season, 1, iter_count);
             biol.n()(quant_count+1, next_year, 1, next_season, 1, iter_count) = biol.n()(quant_count, year, 1, season, 1, iter_count) * exp(-z);
@@ -280,6 +277,66 @@ void operatingModel::project_timestep(const int timestep, const int min_iter, co
     }
 
     return;
+}
+
+void operatingModel::eval_target(const int target_no) const{
+    // get the target type string from the control
+   fwdControlTargetType target_type = ctrl.get_target_type(target_no);
+   switch(target_type){
+       case target_f:
+           Rprintf("F!\n");
+           break;
+       case target_catch:
+           Rprintf("Catch!\n");
+           break;
+       default:
+           Rcpp::stop("target_type not found in switch statement - giving up\n");
+           break;
+   }
+}
+
+// fbar by catch
+std::vector<adouble> operatingModel::fbar(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int fishery_no, const int catch_no, const int biol_no) const{
+    // biol_no is not used yet
+    // catch_no is not used yet
+//    if ((max_iter < min_iter) | (min_iter < 1) | (max_iter > ctrl.get_niter())){
+//        Rcpp::stop("In fbar, problem with iter range");
+//    }
+    Rcpp::IntegerVector fbar_range = fisheries(fishery_no)(catch_no).get_fbar_range_indices(); // starts at 0 so need to +1 if we use for FLQ accessor - bit inconsistent, sorry
+    int fbar_range_nquant = fbar_range[1] - fbar_range[0] + 1;
+    const int niters = max_iter - min_iter + 1;
+    std::vector<adouble> fbar(niters,0.0);
+    adouble fbar_temp = 0;
+    for (int iter_count = 0; iter_count < niters; ++iter_count){
+        fbar_temp = 0;
+        for (int quant_count = (fbar_range[0]+1); quant_count <= (fbar_range[1]+1); ++quant_count){
+             fbar_temp = fbar_temp + f(quant_count, year, unit, season, area, min_iter + iter_count, fishery_no);
+        }
+        fbar[iter_count] = fbar_temp / (double)fbar_range_nquant;
+    }
+    return fbar;
+}
+
+
+// total fbar of FLBiol
+std::vector<adouble> operatingModel::fbar(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int biol_no) const{
+    // This line is dodgy as it assumes that fishery1 and catch1 is what is catching biol
+    Rcpp::IntegerVector fbar_range = fisheries(1)(1).get_fbar_range_indices(); // starts at 0 so need to +1 if we use for FLQ accessor - bit inconsistent, sorry
+    int fbar_range_nquant = fbar_range[1] - fbar_range[0] + 1;
+    const int niters = max_iter - min_iter + 1;
+    std::vector<adouble> fbar(niters,0.0);
+    const int nfisheries = fisheries.get_nfisheries();
+    adouble fbar_temp = 0;
+    for (int iter_count = 0; iter_count < niters; ++iter_count){
+        fbar_temp = 0;
+        for (int quant_count = (fbar_range[0]+1); quant_count <= (fbar_range[1]+1); ++quant_count){
+            for (int fishery_count = 1; fishery_count <= nfisheries; ++fishery_count){
+                fbar_temp = fbar_temp + f(quant_count, year, unit, season, area, min_iter + iter_count, fishery_count);
+            }
+        }
+        fbar[iter_count] = fbar_temp / (double)fbar_range_nquant;
+    }
+    return fbar;
 }
 
 void operatingModel::run(){
@@ -304,30 +361,27 @@ adouble test;
         target_year = ctrl.get_target_year(target_count);
         target_season = ctrl.get_target_season(target_count);
         year_season_to_timestep(target_year, target_season, biol.n(), target_timestep);
+        Rprintf("target_year: %i\n", target_year);
+        Rprintf("target_season: %i\n", target_season);
+        Rprintf("target_timestep: %i\n", target_timestep);
 
+fisheries(1)(1).get_fbar_range_indices();
         for (int iter_count = 1; iter_count <= niter; ++iter_count){
             Rprintf("Resolving iter: %i\n", iter_count);
 
             // Tape the process
-            trace_on(tape_tag);
-            fmult <<= fmult_initial;
+// trace_on(tape_tag);
+// fmult <<= fmult_initial; // Or move this above iter loop and do all iters at same time
+fmult = fmult_initial;
             // Update om.f = om.f * fmult in that year / season
             for (int quant_count = 1; quant_count <= f(1).get_nquant(); ++quant_count){
-                //f(quant_count,target_year,1,target_season,1,iter_count,1) = f(quant_count,target_year,1,target_season,1,iter_count,1) * fmult;
-                
-                test = f(quant_count,target_year,1,target_season,1,iter_count,1) * fmult;
+                f(quant_count,target_year,1,target_season,1,iter_count,1) = f(quant_count,target_year,1,target_season,1,iter_count,1) * fmult;
             }
-            // project_timestep(target_timestep) // How do we project an iter at a time? // Or do all iters at the same time?
+            project_timestep(target_timestep, iter_count, iter_count); 
 
 
 
-//    timestep_to_year_season(timestep, f(1), year, season);
-//    for (int quant_count = 1; quant_count <= f(1).get_nquant(); ++quant_count){
-//        f_tape(quant_count,year,1,season,1,iter_count,1) = f_tape(quant_count,year,1,season,1,iter_count,1) * fmult;
-//    }
 
-//    // Do 1 timestep projection
-//    //project_timestep(fisheries, biol, srr_model_name, srr_params, srr_residuals, srr_residuals_mult, f_tape, timestep);
 //    // Calculate catch or whatever
 //    //target_hat_ad = 1000;
 //    target_hat_ad = fisheries(1)(1).catches()(1, year, 1, season, 1, iter_count);
@@ -337,7 +391,7 @@ adouble test;
 //    // Set dependent variable
 //    target_hat_ad >>= target_hat;
 //    // stop the tape
-            trace_off();
+//trace_off();
 //
 //    // Do the solving for that timestep (and iter? should we do all iters at once?)
 //    indep[0] = fmult_initial;
@@ -391,12 +445,14 @@ operatingModel test_run (const FLFisheriesAdolc fisheries, SEXP FLBiolSEXP, cons
     om.run();
 
 
+    om.eval_target(1);
+    om.eval_target(2);
+    om.eval_target(3);
 
 
     return om;
 
 }
-
 
 
 

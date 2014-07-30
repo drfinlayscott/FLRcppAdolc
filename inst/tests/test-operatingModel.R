@@ -181,3 +181,59 @@ test_that("operatingModel project_timestep", {
 
     # What about SRR on a different timestep
 })
+
+
+test_that("operatingModel target values", {
+    # Make an FLFishery with X FLFishery objects. Each FLFishery has an FLCatch that catches the FLBiol
+
+    # Have at least 5 years and 10 ages, random number of seasons
+    flq <- random_FLQuant_generator(fixed_dim=c(10,5,NA,NA,NA,NA), sd=1)
+    # Single FLBiol
+    flb <- random_FLBiol_generator(fixed_dims = dim(flq), sd = 1 )
+    flfs <- random_FLFisheries_generator(fixed_dims = dim(flq), min_fisheries=2, max_fisheries=5, min_catches = 1, max_catches = 3, sd=1)
+    # Each element of F is F from an FLCatch attacking the same FLBiol
+    f <- random_FLQuant_list_generator(min_elements=length(flfs), max_elements=length(flfs), fixed_dims = dim(flq), sd=1)
+    f <- lapply(f,abs)
+    f_spwn <- random_FLQuant_list_generator(min_elements=length(flfs), max_elements=length(flfs), fixed_dims = dim(flq), sd=1)
+    f_spwn <- lapply(f_spwn,abs)
+    # SRR bits
+    srr_model_name <- "ricker"
+    params_sr <- as.FLQuant(FLPar(a=10, b = 4))
+    residuals_sr <- flq[1,]
+    residuals_mult <- TRUE
+    srr_timelag <- 1
+    fc <- dummy_fwdControl_generator(years = 1, niters = dim(n(flb))[6])
+    # Hack fbar range in catch
+    catch_no <- round(runif(n=1,min=1,max=min(unlist(lapply(flfs, length))))) # which catch no of each fishery
+    minfbar <- round(runif(n=1,min=1,max=4))
+    maxfbar <- round(runif(n=1,min=5,max=10))
+    for (i in 1:length(flfs)){
+        for (j in 1:length(flfs[[i]])){
+            flfs[[i]][[j]]@range <- c(flfs[[i]][[j]]@range, minfbar = minfbar, maxfbar = maxfbar)
+        }
+    }
+    # WTF? why does description get reset to nothing? flfs@desc
+    flfs@desc <- "xxx"
+    # FLQ dims to calc for
+    year <- round(runif(n=1,min=1,max=dim(flq)[2]))
+    season <- round(runif(n=1,min=1,max=dim(flq)[4]))
+    unit <- round(runif(n=1,min=1,max=dim(flq)[3]))
+    area <- round(runif(n=1,min=1,max=dim(flq)[5]))
+    min_iter <- 1
+    max_iter <- dim(flq)[6]
+
+    # Some tests
+    fishery_no <- round(runif(1, min=1, max=length(flfs)))
+    fbars <- test_operating_model_fbar(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, year, unit, season, area, min_iter, max_iter, fishery_no, catch_no)
+    # fbar of a single catch 
+    expect_that(fbars[["fbar_catch"]], equals(c(apply(f[[fishery_no]][minfbar:maxfbar, year, unit, season, area,],6,mean))))
+    # total fbar
+    f2 <- lapply(f, function(x) apply(x[minfbar:maxfbar, year, unit, season, area,],6,mean))
+    f_total <- f2[[1]]
+    f_total[] <- 0
+    for (i in 1:length(flfs)){
+        f_total <- f_total + f2[[i]]
+    }
+    c(f_total)
+    expect_that(fbars[["fbar"]], is_identical_to(c(fbars[["fbar"]])))
+})

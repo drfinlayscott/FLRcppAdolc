@@ -42,5 +42,9 @@ test_that("fwdControl accessors", {
     expect_that(fc@target[target_no, "year"], is_identical_to(year))
     season <- test_fwdControl_get_target_season(fc, target_no)
     expect_that(fc@target[target_no, "season"], is_identical_to(season))
+    # get target type / quantity
+    type <- test_fwdControl_get_target_quantity(fc, target_no)
+    expect_that(type, is_identical_to(as.character(fc@target[target_no, "quantity"])))
+    expect_that(test_fwdControl_get_target_quantity(fc, nrow(fc@target)+1), throws_error())
 
 })

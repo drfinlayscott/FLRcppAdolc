@@ -39,6 +39,7 @@ random_FLQuant_generator <- function(fixed_dims = rep(NA,6), max_dims = c(5,10,5
 #' Generate a list of randomly sized FLQuant objects filled with normally distributed random numbers with a mean of 0.
 #' Used for automatic testing, particularly of the FLQuant7_base<T> class in CPP.
 #' 
+#' @param min_elements The minimum number of elements in the list. Default is 1. 
 #' @param max_elements The maximum number of elements in the list. Default is 10. 
 #' @param fixed_dims A vector of length 6 with the fixed length of each of the FLQuant dimensions. If any value is NA it is randomly set using the max_dims argument. Default value is rep(NA,6).
 #' @param max_dims A vector of length 6 with maximum size of each of the FLQuant dimensions. Default value is c(5,5,5,4,4,10).
@@ -50,8 +51,8 @@ random_FLQuant_generator <- function(fixed_dims = rep(NA,6), max_dims = c(5,10,5
 #' length(flq_list)
 #' summary(flq_list)
 #' lapply(flq_list, summary)
-random_FLQuant_list_generator <- function(max_elements = 10, ...){
-    nelements <- round(runif(1,min=1, max=max_elements))
+random_FLQuant_list_generator <- function(min_elements = 1, max_elements = 10, ...){
+    nelements <- round(runif(1,min=min_elements, max=max_elements))
     op <- list()
     for (i in 1:nelements){
         op[[i]] <- random_FLQuant_generator(...)
@@ -128,6 +129,7 @@ random_FLCatch_generator <- function(sd=100, ...){
 #' Generates a list of randomly sized FLCatch objects filled with normally distributed random numbers with a mean of 0.
 #' Used for automatic testing, particularly of the FLCatches_base<T> class in CPP.
 #' 
+#' @param min_catches The minimum number of catches. Default is 2. 
 #' @param max_catches The maximum number of catches. Default is 5. 
 #' @param fixed_dims A vector of length 6 with the fixed length of each of the FLQuant dimensions. If any value is NA it is randomly set using the max_dims argument. 
 #' @param max_dims A vector of length 6 with maximum size of each of the FLQuant dimensions. Default value is c(5,5,5,4,4,10).
@@ -139,9 +141,9 @@ random_FLCatch_generator <- function(sd=100, ...){
 #' length(flcs)
 #' summary(flcs)
 #' lapply(flcs, summary)
-random_FLCatches_generator <- function(max_catches = 5, ...){
+random_FLCatches_generator <- function(min_catches = 2, max_catches = 5, ...){
     args <- list(...)
-    ncatches <- round(runif(1,min=2, max=max_catches))
+    ncatches <- round(runif(1,min=min_catches, max=max_catches))
     op_list <- list()
     flq <- random_FLQuant_generator(...)
     # cat("dim flq: ", dim(flq), "\n")
@@ -163,6 +165,7 @@ random_FLCatches_generator <- function(max_catches = 5, ...){
 #' Generate a randomly sized FLFishery object filled with normally distributed random numbers with a mean of 0.
 #' Used for automatic testing, particularly of the FLFishery_base<T> class in CPP.
 #' 
+#' @param min_catches The minimum number of catches. Default is 2. 
 #' @param max_catches The maximum number of FLCatches in the catches list. Default is 5. 
 #' @param fixed_dims A vector of length 6 with the fixed length of each of the FLQuant dimensions. If any value is NA it is randomly set using the max_dims argument. Default value is rep(NA,6).
 #' @param max_dims A vector of length 6 with maximum size of each of the FLQuant dimensions. Default value is c(5,5,5,4,4,10).
@@ -175,8 +178,8 @@ random_FLCatches_generator <- function(max_catches = 5, ...){
 #' flf <- random_FLFishery_generator(fixed_dims = c(NA,10,1,1,1,1))
 #' lapply(flf, summary)
 #' flf <- random_FLFishery_generator(fixed_dims = c(NA,10,1,1,1,1), max_dims = c(100,NA,NA,NA,NA,NA))
-random_FLFishery_generator <- function(max_catches = 5, sd = 100,  ...){
-    catches <- random_FLCatches_generator(max_catches, ...)
+random_FLFishery_generator <- function(min_catches = 2, max_catches = 5, sd = 100,  ...){
+    catches <- random_FLCatches_generator(min_catches, max_catches, ...)
     fishery <- FLFishery(catches)
     # fill up effort, vcost and fcost
     effort(fishery)[] <- rnorm(prod(dim(effort(fishery))),sd=sd)
@@ -193,8 +196,9 @@ random_FLFishery_generator <- function(max_catches = 5, sd = 100,  ...){
 #' Generate a randomly sized FLFisheries object filled with normally distributed random numbers with a mean of 0.
 #' Used for automatic testing, particularly of the FLFisheries_base<T> class in CPP.
 #' 
-#' @param max_fisheries The maximum number of FLFisheries in the fisheries list. Default is 5. 
 #' @param min_fisheries The minimum number of FLFisheries in the fisheries list. Default is 2. 
+#' @param max_fisheries The maximum number of FLFisheries in the fisheries list. Default is 5. 
+#' @param min_catches The minimum number of catches. Default is 2. 
 #' @param max_catches The maximum number of FLCatches in the catches list. Default is 5. 
 #' @param fixed_dims A vector of length 6 with the fixed length of each of the FLQuant dimensions. If any value is NA it is randomly set using the max_dims argument. Default value is rep(NA,6).
 #' @param max_dims A vector of length 6 with maximum size of each of the FLQuant dimensions. Default value is c(5,5,5,4,4,10).
@@ -308,6 +312,7 @@ dummy_fwdControl_generator <- function(years = 1:round(runif(1, min=1,max=10)), 
                        flcatch = NA, # what is this? a number or name? Some way of referring 
                        rel_flcatch = NA # as above
                        )
+    ctrl_df$quantity <- as.character(ctrl_df$quantity)
 
     target_iters <- array(NA, dim=c(nrow(ctrl_df),3,niters), dimnames=list(target_no=1:nrow(ctrl_df), c("min","value","max"), iter=1:niters))
     #target_iters[,"value",] <- 0.2

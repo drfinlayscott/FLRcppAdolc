@@ -3,9 +3,11 @@
 \alias{random_FLQuant_list_generator}
 \title{Generate lists of randomly sized and filled FLQuant objects}
 \usage{
-random_FLQuant_list_generator(max_elements = 10, ...)
+random_FLQuant_list_generator(min_elements = 1, max_elements = 10, ...)
 }
 \arguments{
+\item{min_elements}{The minimum number of elements in the list. Default is 1.}
+
 \item{max_elements}{The maximum number of elements in the list. Default is 10.}
 
 \item{fixed_dims}{A vector of length 6 with the fixed length of each of the FLQuant dimensions. If any value is NA it is randomly set using the max_dims argument. Default value is rep(NA,6).}

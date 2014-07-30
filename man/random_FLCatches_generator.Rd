@@ -3,9 +3,11 @@
 \alias{random_FLCatches_generator}
 \title{Generates an FLCatches object - a list of randomly sized and filled FLCatch objects}
 \usage{
-random_FLCatches_generator(max_catches = 5, ...)
+random_FLCatches_generator(min_catches = 2, max_catches = 5, ...)
 }
 \arguments{
+\item{min_catches}{The minimum number of catches. Default is 2.}
+
 \item{max_catches}{The maximum number of catches. Default is 5.}
 
 \item{fixed_dims}{A vector of length 6 with the fixed length of each of the FLQuant dimensions. If any value is NA it is randomly set using the max_dims argument.}

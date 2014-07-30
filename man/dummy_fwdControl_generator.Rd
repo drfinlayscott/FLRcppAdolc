@@ -3,12 +3,13 @@
 \alias{dummy_fwdControl_generator}
 \title{Dummy fwdControl object creator}
 \usage{
-dummy_fwdControl_generator(years = 1:10, niters = 10)
+dummy_fwdControl_generator(years = 1:round(runif(1, min = 1, max = 10)),
+  niters = round(runif(1, min = 1, max = 10)))
 }
 \arguments{
-\item{years}{numeric vector of years in the control object}
+\item{years}{numeric vector of years in the control object. Default value is 1:random interger (max = 10).}
 
-\item{niters}{the number of iterations}
+\item{niters}{the number of iterations. Default number is random integer (max = 10).}
 }
 \value{
 A fwdControl object

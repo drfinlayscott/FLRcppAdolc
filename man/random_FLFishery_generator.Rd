@@ -3,9 +3,12 @@
 \alias{random_FLFishery_generator}
 \title{Generate a randomly filled and sized FLFishery object}
 \usage{
-random_FLFishery_generator(max_catches = 5, sd = 100, ...)
+random_FLFishery_generator(min_catches = 2, max_catches = 5, sd = 100,
+  ...)
 }
 \arguments{
+\item{min_catches}{The minimum number of catches. Default is 2.}
+
 \item{max_catches}{The maximum number of FLCatches in the catches list. Default is 5.}
 
 \item{fixed_dims}{A vector of length 6 with the fixed length of each of the FLQuant dimensions. If any value is NA it is randomly set using the max_dims argument. Default value is rep(NA,6).}

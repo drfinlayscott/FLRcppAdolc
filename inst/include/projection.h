@@ -71,10 +71,23 @@ class operatingModel {
         void eval_target(const int target_no) const;
 
         // The target value calculations
-        // fbar by catch and fishery - i.e. partial F - will need to adapt this to include multiple biols in the future
-        std::vector<adouble> fbar(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int fishery_no, const int catch_no, const int biol_no = 1) const;
+        // fbar from a catch and fishery on a stock - i.e. partial F - will need to adapt this to include multiple biols in the future
+        //std::vector<adouble> fbar(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int fishery_no, const int catch_no, const int biol_no = 1) const;
         // Total fbar on a Biol - sum of Fbars from the catches and fisheries
-        std::vector<adouble> fbar(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int biol_no = 1) const;
+        //std::vector<adouble> fbar(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int biol_no = 1) const;
+        // Catch of a stock by a catch and fishery 
+        //std::vector<adouble> catches(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int fishery_no, const int catch_no, const int biol_no = 1) const;
+        // Total catch of a stock by all catches
+        //std::vector<adouble> catches(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int biol_no = 1) const;
+
+        // fbar from a catch and fishery on a stock - i.e. partial F - will need to adapt this to include multiple biols in the future
+        FLQuantAdolc fbar(const int fishery_no, const int catch_no, const int biol_no = 1) const;
+        // Total fbar on a biol
+        FLQuantAdolc fbar(const int biol_no = 1) const;
+        // catches from an FLCatch and fishery on a stock - i.e. partial F - will need to adapt this to include multiple biols in the future
+        FLQuantAdolc catches(const int fishery_no, const int catch_no, const int biol_no = 1) const;
+        // Total catches from a biol
+        FLQuantAdolc catches(const int biol_no = 1) const;
 
     private:
         FLFisheriesAdolc fisheries;

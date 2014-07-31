@@ -1541,8 +1541,8 @@ test_operating_model_project <- function(flfs, flb_sexp, model_name, params, tim
     .Call('FLRcppAdolc_test_operating_model_project', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, timestep, ctrl)
 }
 
-test_operating_model_fbar <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, year, unit, season, area, min_iter, max_iter, fishery_no, catch_no) {
-    .Call('FLRcppAdolc_test_operating_model_fbar', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, year, unit, season, area, min_iter, max_iter, fishery_no, catch_no)
+test_operating_model_targets <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, fishery_no, catch_no) {
+    .Call('FLRcppAdolc_test_operating_model_targets', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, fishery_no, catch_no)
 }
 
 test_year_season_to_timestep_FLQuant_double <- function(flq, year, season) {

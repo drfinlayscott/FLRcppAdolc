@@ -6611,9 +6611,9 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// test_operating_model_fbar
-Rcpp::List test_operating_model_fbar(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int fishery_no, const int catch_no);
-RcppExport SEXP FLRcppAdolc_test_operating_model_fbar(SEXP flfsSEXP, SEXP flb_sexpSEXP, SEXP model_nameSEXP, SEXP paramsSEXP, SEXP timelagSEXP, SEXP residualsSEXP, SEXP residuals_multSEXP, SEXP fSEXP, SEXP f_spwnSEXP, SEXP ctrlSEXP, SEXP yearSEXP, SEXP unitSEXP, SEXP seasonSEXP, SEXP areaSEXP, SEXP min_iterSEXP, SEXP max_iterSEXP, SEXP fishery_noSEXP, SEXP catch_noSEXP) {
+// test_operating_model_targets
+Rcpp::List test_operating_model_targets(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int fishery_no, const int catch_no);
+RcppExport SEXP FLRcppAdolc_test_operating_model_targets(SEXP flfsSEXP, SEXP flb_sexpSEXP, SEXP model_nameSEXP, SEXP paramsSEXP, SEXP timelagSEXP, SEXP residualsSEXP, SEXP residuals_multSEXP, SEXP fSEXP, SEXP f_spwnSEXP, SEXP ctrlSEXP, SEXP fishery_noSEXP, SEXP catch_noSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -6628,15 +6628,9 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< const FLQuant7Adolc >::type f(fSEXP );
         Rcpp::traits::input_parameter< const FLQuant7 >::type f_spwn(f_spwnSEXP );
         Rcpp::traits::input_parameter< const fwdControl >::type ctrl(ctrlSEXP );
-        Rcpp::traits::input_parameter< const int >::type year(yearSEXP );
-        Rcpp::traits::input_parameter< const int >::type unit(unitSEXP );
-        Rcpp::traits::input_parameter< const int >::type season(seasonSEXP );
-        Rcpp::traits::input_parameter< const int >::type area(areaSEXP );
-        Rcpp::traits::input_parameter< const int >::type min_iter(min_iterSEXP );
-        Rcpp::traits::input_parameter< const int >::type max_iter(max_iterSEXP );
         Rcpp::traits::input_parameter< const int >::type fishery_no(fishery_noSEXP );
         Rcpp::traits::input_parameter< const int >::type catch_no(catch_noSEXP );
-        Rcpp::List __result = test_operating_model_fbar(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, year, unit, season, area, min_iter, max_iter, fishery_no, catch_no);
+        Rcpp::List __result = test_operating_model_targets(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, fishery_no, catch_no);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

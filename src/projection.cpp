@@ -296,48 +296,137 @@ void operatingModel::eval_target(const int target_no) const{
 }
 
 // fbar by catch
-std::vector<adouble> operatingModel::fbar(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int fishery_no, const int catch_no, const int biol_no) const{
-    // biol_no is not used yet
-    // catch_no is not used yet
+//std::vector<adouble> operatingModel::fbar(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int fishery_no, const int catch_no, const int biol_no) const{
+//    // biol_no is not used yet
+//    // catch_no is not used yet
 //    if ((max_iter < min_iter) | (min_iter < 1) | (max_iter > ctrl.get_niter())){
 //        Rcpp::stop("In fbar, problem with iter range");
 //    }
+//    Rcpp::IntegerVector fbar_range = fisheries(fishery_no)(catch_no).get_fbar_range_indices(); // starts at 0 so need to +1 if we use for FLQ accessor - bit inconsistent, sorry
+//    int fbar_range_nquant = fbar_range[1] - fbar_range[0] + 1;
+//    const int niters = max_iter - min_iter + 1;
+//    std::vector<adouble> fbar(niters,0.0);
+//    adouble fbar_temp = 0;
+//    for (int iter_count = 0; iter_count < niters; ++iter_count){
+//        fbar_temp = 0;
+//        for (int quant_count = (fbar_range[0]+1); quant_count <= (fbar_range[1]+1); ++quant_count){
+//             fbar_temp = fbar_temp + f(quant_count, year, unit, season, area, min_iter + iter_count, fishery_no);
+//        }
+//        fbar[iter_count] = fbar_temp / (double)fbar_range_nquant;
+//    }
+//    return fbar;
+//}
+
+
+
+FLQuantAdolc operatingModel::fbar(const int fishery_no, const int catch_no, const int biol_no) const{
     Rcpp::IntegerVector fbar_range = fisheries(fishery_no)(catch_no).get_fbar_range_indices(); // starts at 0 so need to +1 if we use for FLQ accessor - bit inconsistent, sorry
-    int fbar_range_nquant = fbar_range[1] - fbar_range[0] + 1;
-    const int niters = max_iter - min_iter + 1;
-    std::vector<adouble> fbar(niters,0.0);
-    adouble fbar_temp = 0;
-    for (int iter_count = 0; iter_count < niters; ++iter_count){
-        fbar_temp = 0;
-        for (int quant_count = (fbar_range[0]+1); quant_count <= (fbar_range[1]+1); ++quant_count){
-             fbar_temp = fbar_temp + f(quant_count, year, unit, season, area, min_iter + iter_count, fishery_no);
-        }
-        fbar[iter_count] = fbar_temp / (double)fbar_range_nquant;
-    }
-    return fbar;
+    // Grab the Fs over this range
+    Rcpp::IntegerVector fdim = f(fishery_no).get_dim();
+    FLQuantAdolc f_age_trim = f(fishery_no)(fbar_range[0]+1, fbar_range[1]+1, 1, fdim[1], 1, fdim[2], 1, fdim[3], 1, fdim[4], 1, fdim[5]);  // subsetting
+    FLQuantAdolc fbar_out = quant_mean(f_age_trim);
+    // Age mean
+    // Return
+    return fbar_out;
+    //return f_age_trim;
+
 }
 
+// Assume that catch is catches[[1]] for the moment
+FLQuantAdolc operatingModel::fbar(const int biol_no) const{
+    //// Make an empty FLQ with the right dims - based on the first fishery
+    //Rcpp::IntegerVector dim = f(1).get_dim();
+    //// Make an empty FLQ with the right dim
+    //FLQuantAdolc fbar_out(1, dim[1], dim[2], dim[3], dim[4], dim[5]);
+    ////// Set dimnames and units
+    //Rcpp::List dimnames = f(1).get_dimnames();
+    //dimnames[0] = Rcpp::CharacterVector::create("all");
+    //fbar_out.set_dimnames(dimnames);
+    //fbar_out.set_units(f(1).get_units());
+    //// Sum the fbars from the fisheries
+    //for (unsigned int fishery_count = 1; fishery_count <= fisheries.get_nfisheries(); ++fishery_count){
+    //    fbar_out = fbar_out + fbar(fishery_count,1,biol_no);
+    //}
 
-// total fbar of FLBiol
-std::vector<adouble> operatingModel::fbar(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int biol_no) const{
-    // This line is dodgy as it assumes that fishery1 and catch1 is what is catching biol
-    Rcpp::IntegerVector fbar_range = fisheries(1)(1).get_fbar_range_indices(); // starts at 0 so need to +1 if we use for FLQ accessor - bit inconsistent, sorry
-    int fbar_range_nquant = fbar_range[1] - fbar_range[0] + 1;
-    const int niters = max_iter - min_iter + 1;
-    std::vector<adouble> fbar(niters,0.0);
-    const int nfisheries = fisheries.get_nfisheries();
-    adouble fbar_temp = 0;
-    for (int iter_count = 0; iter_count < niters; ++iter_count){
-        fbar_temp = 0;
-        for (int quant_count = (fbar_range[0]+1); quant_count <= (fbar_range[1]+1); ++quant_count){
-            for (int fishery_count = 1; fishery_count <= nfisheries; ++fishery_count){
-                fbar_temp = fbar_temp + f(quant_count, year, unit, season, area, min_iter + iter_count, fishery_count);
-            }
-        }
-        fbar[iter_count] = fbar_temp / (double)fbar_range_nquant;
+    FLQuantAdolc fbar_out = fbar(1,1,biol_no);
+    for (unsigned int fishery_count = 2; fishery_count <= fisheries.get_nfisheries(); ++fishery_count){
+        fbar_out = fbar_out + fbar(fishery_count,1,biol_no);
     }
-    return fbar;
+    return fbar_out;
 }
+
+// Catch of a particular fishery
+FLQuantAdolc operatingModel::catches(const int fishery_no, const int catch_no, const int biol_no) const{
+    return fisheries(fishery_no, catch_no).catches();
+}
+
+// Total catch from an FLBiol
+// Assumes the catch is the first FLCatch in the FLFishery
+FLQuantAdolc operatingModel::catches(const int biol_no) const{
+    // Get the catch from the first fishery
+    FLQuantAdolc catches_out = catches(1,1,biol_no);
+    for (unsigned int fishery_count = 2; fishery_count <= fisheries.get_nfisheries(); ++fishery_count){
+        catches_out = catches_out + catches(fishery_count,1,biol_no);
+    }
+    return catches_out;
+}
+
+//// total fbar of FLBiol
+//std::vector<adouble> operatingModel::fbar(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int biol_no) const{
+//    if ((max_iter < min_iter) | (min_iter < 1) | (max_iter > ctrl.get_niter())){
+//        Rcpp::stop("In fbar, problem with iter range");
+//    }
+//    // This line is dodgy as it assumes that fishery1 and catch1 of each fishery is what is catching biol
+//    Rcpp::IntegerVector fbar_range = fisheries(1)(1).get_fbar_range_indices(); // starts at 0 so need to +1 if we use for FLQ accessor - bit inconsistent, sorry
+//    int fbar_range_nquant = fbar_range[1] - fbar_range[0] + 1;
+//    const int niters = max_iter - min_iter + 1;
+//    std::vector<adouble> fbar(niters,0.0);
+//    const int nfisheries = fisheries.get_nfisheries();
+//    adouble fbar_temp = 0;
+//    for (int iter_count = 0; iter_count < niters; ++iter_count){
+//        fbar_temp = 0;
+//        for (int quant_count = (fbar_range[0]+1); quant_count <= (fbar_range[1]+1); ++quant_count){
+//            for (int fishery_count = 1; fishery_count <= nfisheries; ++fishery_count){
+//                fbar_temp = fbar_temp + f(quant_count, year, unit, season, area, min_iter + iter_count, fishery_count);
+//            }
+//        }
+//        fbar[iter_count] = fbar_temp / (double)fbar_range_nquant;
+//    }
+//    return fbar;
+//}
+
+//// Catch by an FLCatch of an FLBiol
+//std::vector<adouble> operatingModel::catches(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int fishery_no, const int catch_no, const int biol_no) const{
+//    // biol_no is not used yet
+//    // catch_no is not used yet
+//    if ((max_iter < min_iter) | (min_iter < 1) | (max_iter > ctrl.get_niter())){
+//        Rcpp::stop("In catches, problem with iter range");
+//    }
+//    const int niters = max_iter - min_iter + 1;
+//    std::vector<adouble> catches(niters,0.0);
+//    //FLQuantAdolc catches_flq = fisheries(fishery_no)(catch_no).catches();
+//    for (int iter_count = 0; iter_count < niters; ++iter_count){
+//        catches[iter_count] = fisheries(fishery_no)(catch_no).catches()(1, year, unit, season, area, iter_count+1);
+//    }
+//    return catches;
+//}
+//
+//// Total Catch of an FLBiol
+//std::vector<adouble> operatingModel::catches(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int biol_no) const{
+//    if ((max_iter < min_iter) | (min_iter < 1) | (max_iter > ctrl.get_niter())){
+//        Rcpp::stop("In total catches, problem with iter range");
+//    }
+//    const int niters = max_iter - min_iter + 1;
+//    std::vector<adouble> catches(niters,0.0);
+//    const int catch_no = 1; // Fixed
+//    for (int iter_count = 0; iter_count < niters; ++iter_count){
+//        for (unsigned int fishery_count = 1; fishery_count <= fisheries.get_nfisheries(); ++fishery_count){
+//            catches[iter_count] = catches[iter_count] + fisheries(fishery_count)(catch_no).catches()(1, year, unit, season, area, iter_count+1);
+//        }
+//    }
+//    return catches;
+//}
+
 
 void operatingModel::run(){
 

@@ -41,7 +41,7 @@ FLQuant_base<T>::FLQuant_base(const int nquant, const int nyear, const int nunit
     //Rprintf("Making a new FLQuant_base<T> with user defined dims\n");
 	units = std::string(); // Empty string - just ""
     dim = Rcpp::IntegerVector::create(nquant, nyear, nunit, nseason, narea, niter);
-    data = std::vector<T>(nquant * nyear * nunit * nseason * narea * niter);
+    data = std::vector<T>(nquant * nyear * nunit * nseason * narea * niter,0.0);
     // How to fill dimnames up appropriately?
     // Just of the right size at the moment.
     // Could use ::create to pass in actual characters, but then do we want just 1:nage, 1:nyear etc?
@@ -1129,7 +1129,7 @@ FLQuant_base<T> quant_mean(const FLQuant_base<T>& flq){
             for (int seasons=1; seasons <= flq.get_nseason(); ++seasons){
                 for (int units=1; units <= flq.get_nunit(); ++units){
                     for (int years=1; years <= flq.get_nyear(); ++years){
-                        flq_mean(1, years, units, seasons, areas, iters) = flq_mean(1, years, units, seasons, areas, iters) / flq.get_niter();
+                        flq_mean(1, years, units, seasons, areas, iters) = flq_mean(1, years, units, seasons, areas, iters) / flq.get_nquant();
     }}}}}
     return flq_mean;
 }

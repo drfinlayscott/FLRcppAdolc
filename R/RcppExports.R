@@ -333,6 +333,14 @@ test_FLQuantAdolc_quant_sum <- function(flq) {
     .Call('FLRcppAdolc_test_FLQuantAdolc_quant_sum', PACKAGE = 'FLRcppAdolc', flq)
 }
 
+test_FLQuant_quant_mean <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuant_quant_mean', PACKAGE = 'FLRcppAdolc', flq)
+}
+
+test_FLQuantAdolc_quant_mean <- function(flq) {
+    .Call('FLRcppAdolc_test_FLQuantAdolc_quant_mean', PACKAGE = 'FLRcppAdolc', flq)
+}
+
 test_FLQuant_max_quant <- function(flq) {
     .Call('FLRcppAdolc_test_FLQuant_max_quant', PACKAGE = 'FLRcppAdolc', flq)
 }

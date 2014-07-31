@@ -266,6 +266,22 @@ test_that("FLQuant and FLQuantAdolc summary functions", {
     expect_that(units(flq_out), is_identical_to(units(flq_sum)))
     expect_that(flq_out, equals(flq_sum)) # Not using identical as small numeric differences as + mathematical operation - see above
 
+    # quant_mean
+    flq_in <- random_FLQuant_generator()
+    flq_out <- test_FLQuant_quant_mean(flq_in)
+    flq_mean <- quantMeans(flq_in)
+    expect_that(dim(flq_out), is_identical_to(dim(flq_mean)))
+    expect_that(dimnames(flq_out), is_identical_to(dimnames(flq_mean)))
+    expect_that(units(flq_out), is_identical_to(units(flq_mean)))
+    expect_that(flq_out, equals(flq_mean)) # Not using identical as small numeric differences as + mathematical operation - see above
+    # Adolc quant mean
+    flq_out <- test_FLQuantAdolc_quant_mean(flq_in)
+    flq_mean <- quantMeans(flq_in)
+    expect_that(dim(flq_out), is_identical_to(dim(flq_mean)))
+    expect_that(dimnames(flq_out), is_identical_to(dimnames(flq_mean)))
+    expect_that(units(flq_out), is_identical_to(units(flq_mean)))
+    expect_that(flq_out, equals(flq_mean)) # Not using identical as small numeric differences as + mathematical operation - see above
+
     # max_quant
     flq_in <- random_FLQuant_generator()
     max_flq_in <- apply(flq_in,2:6, max)

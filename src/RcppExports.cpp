@@ -1334,6 +1334,36 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// test_FLQuant_quant_mean
+FLQuant test_FLQuant_quant_mean(FLQuant flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuant_quant_mean(SEXP flqSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuant >::type flq(flqSEXP );
+        FLQuant __result = test_FLQuant_quant_mean(flq);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_FLQuantAdolc_quant_mean
+FLQuantAdolc test_FLQuantAdolc_quant_mean(FLQuantAdolc flq);
+RcppExport SEXP FLRcppAdolc_test_FLQuantAdolc_quant_mean(SEXP flqSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLQuantAdolc >::type flq(flqSEXP );
+        FLQuantAdolc __result = test_FLQuantAdolc_quant_mean(flq);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // test_FLQuant_max_quant
 FLQuant test_FLQuant_max_quant(FLQuant flq);
 RcppExport SEXP FLRcppAdolc_test_FLQuant_max_quant(SEXP flqSEXP) {

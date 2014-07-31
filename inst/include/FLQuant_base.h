@@ -263,6 +263,11 @@ FLQuant_base<T> year_sum(const FLQuant_base<T>& flq);
 template <typename T>
 FLQuant_base<T> quant_sum(const FLQuant_base<T>& flq);
 
+// Means over various dimensions
+template <typename T>
+FLQuant_base<T> quant_mean(const FLQuant_base<T>& flq);  // collapse the quant dimension
+
+
 template <typename T>
 FLQuant_base<T> max_quant(const FLQuant_base<T>& flq);
 

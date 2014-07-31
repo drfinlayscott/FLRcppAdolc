@@ -596,6 +596,19 @@ FLQuantAdolc test_FLQuantAdolc_quant_sum(FLQuantAdolc flq){
     return flq_out;
 }
 
+// quant_mean
+// [[Rcpp::export]]
+FLQuant test_FLQuant_quant_mean(FLQuant flq){
+    FLQuant flq_out = quant_mean(flq);
+    return flq_out;
+}
+
+// [[Rcpp::export]]
+FLQuantAdolc test_FLQuantAdolc_quant_mean(FLQuantAdolc flq){
+    FLQuantAdolc flq_out = quant_mean(flq);
+    return flq_out;
+}
+
 // max_quant
 // [[Rcpp::export]]
 FLQuant test_FLQuant_max_quant(FLQuant flq){

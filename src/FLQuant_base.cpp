@@ -1120,6 +1120,21 @@ FLQuant_base<T> quant_sum(const FLQuant_base<T>& flq){
     return sum_flq;
 }
 
+template <typename T>
+FLQuant_base<T> quant_mean(const FLQuant_base<T>& flq){
+    FLQuant_base<T> flq_mean = quant_sum(flq);
+    // Divide by dim
+    for (int iters=1; iters <= flq.get_niter(); ++iters){
+        for (int areas=1; areas <= flq.get_narea(); ++areas){
+            for (int seasons=1; seasons <= flq.get_nseason(); ++seasons){
+                for (int units=1; units <= flq.get_nunit(); ++units){
+                    for (int years=1; years <= flq.get_nyear(); ++years){
+                        flq_mean(1, years, units, seasons, areas, iters) = flq_mean(1, years, units, seasons, areas, iters) / flq.get_niter();
+    }}}}}
+    return flq_mean;
+}
+
+
 // max_quant - returns an FLQuant with size 1 in first dimension containing the maximum value of the quant dimension
 // Would like to be able to use template functions max and max_element
 // But we have to be careful when using conditionals and Adolc adouble
@@ -1246,6 +1261,8 @@ template FLQuant_base<adouble> year_sum(const FLQuant_base<adouble>& flq);
 
 template FLQuant_base<double> quant_sum(const FLQuant_base<double>& flq);
 template FLQuant_base<adouble> quant_sum(const FLQuant_base<adouble>& flq);
+template FLQuant_base<double> quant_mean(const FLQuant_base<double>& flq);
+template FLQuant_base<adouble> quant_mean(const FLQuant_base<adouble>& flq);
 
 template FLQuant_base<double> max_quant(const FLQuant_base<double>& flq);
 template FLQuant_base<adouble> max_quant(const FLQuant_base<adouble>& flq);

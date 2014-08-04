@@ -187,7 +187,8 @@ test_that("operatingModel target values", {
     # Make an FLFishery with X FLFishery objects. Each FLFishery has an FLCatch that catches the FLBiol
     # This is all a massive faff
     # Have at least 5 years and 10 ages, random number of seasons
-    flq <- random_FLQuant_generator(fixed_dim=c(10,5,NA,NA,NA,NA), sd=1)
+    nyears <- 10
+    flq <- random_FLQuant_generator(fixed_dim=c(10,nyears,NA,NA,NA,NA), sd=1)
     # Single FLBiol
     flb <- random_FLBiol_generator(fixed_dims = dim(flq), sd = 1 )
     flfs <- random_FLFisheries_generator(fixed_dims = dim(flq), min_fisheries=2, max_fisheries=5, min_catches = 1, max_catches = 3, sd=1)
@@ -239,4 +240,50 @@ test_that("operatingModel target values", {
         catches_total <- catches_total + catch(flfs[[i]][[catch_no]])
     }
     expect_that(targets[["catches"]]@.Data, equals(catches_total@.Data))
+
+
+    # Test eval_target
+    # Set up fc to test the output
+    # By defaulf fishery = NA
+    fishery_no <- round(runif(1, min=1,max=length(f)))
+    fc <- dummy_fwdControl_generator(years = 1:dim(flb@n)[2], niters = dim(n(flb))[6])
+    # No fishery
+    fc@target[1,"quantity"] <- "f"
+    fc@target[2,"quantity"] <- "catch"
+    # With a fishery
+    fc@target[3,c("quantity","fishery")] <- c("f",fishery_no)
+    fc@target[4,c("quantity","fishery")] <- c("catch",fishery_no)
+    fc@target$fishery <- as.integer(fc@target$fishery)
+
+
+
+    min_iter <- 1
+    max_iter <- dim(fc@target_iters)[3]
+
+    target_no <- 1
+    # Different iter combinations
+    fout <- test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no, 1, max_iter)
+    fin <- c(f_total[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1:max_iter])
+    expect_that(fout, is_identical_to(fin))
+
+    fout <- test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no, 1, 1)
+    fin <- c(f_total[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1])
+    expect_that(fout, is_identical_to(fin))
+
+    fout <- test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no, max_iter-1, max_iter)
+    fin <- c(f_total[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,(max_iter-1):max_iter])
+    expect_that(fout, is_identical_to(fin))
+
+    target_no <- 3
+    fout <- test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no, 1, max_iter)
+    fin <- c(apply(f[[fishery_no]][minfbar:maxfbar,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1:max_iter],2:6,mean))
+    expect_that(fout, equals(fin))
+
+    #test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, 2, min_iter, max_iter)
+
+
+    ##test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, 3, min_iter, max_iter)
+    ##test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, 4, min_iter, max_iter)
+
+
 })

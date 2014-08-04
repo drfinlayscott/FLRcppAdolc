@@ -279,12 +279,30 @@ void operatingModel::project_timestep(const int timestep, const int min_iter, co
     return;
 }
 
-void operatingModel::eval_target(const int target_no) const{
+std::vector<adouble> operatingModel::eval_target(const int target_no, const int min_iter, const int max_iter) const{
     // get the target type string from the control
-   fwdControlTargetType target_type = ctrl.get_target_type(target_no);
-   switch(target_type){
-       case target_f:
-           Rprintf("F!\n");
+    fwdControlTargetType target_type = ctrl.get_target_type(target_no);
+    const int catch_no = 1;
+    const int biol_no = 1;
+    const int fishery_no = ctrl.get_target_fishery(target_no);
+    const int year = ctrl.get_target_year(target_no);
+    const int season = ctrl.get_target_season(target_no);
+    const int unit = 1;
+    const int area = 1;
+    FLQuantAdolc out_flq;
+    std::vector<adouble> out(max_iter - min_iter + 1, 0.0); // can we initialise at this point? Or pass in as reference?
+    switch(target_type){
+        case target_f:
+            Rprintf("F!\n");
+            // If no fishery in the control object get total fbar on biol
+            if (Rcpp::IntegerVector::is_na(fishery_no)){
+                Rprintf("No fishery\n");
+                out_flq = fbar(biol_no);
+            }
+            else {
+                Rprintf("Fishery: %i\n", fishery_no);
+                out_flq = fbar(fishery_no, catch_no, biol_no);
+            }
            break;
        case target_catch:
            Rprintf("Catch!\n");
@@ -292,8 +310,13 @@ void operatingModel::eval_target(const int target_no) const{
        default:
            Rcpp::stop("target_type not found in switch statement - giving up\n");
            break;
-   }
+    }
+    for (unsigned int iter_count = 0; iter_count <= (max_iter - min_iter); ++iter_count){
+        out[iter_count] = out_flq(1, year, unit, season, area, min_iter + iter_count);
+    }
+    return out;
 }
+
 
 // fbar by catch
 //std::vector<adouble> operatingModel::fbar(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int fishery_no, const int catch_no, const int biol_no) const{
@@ -439,8 +462,10 @@ void operatingModel::run(){
     adouble fmult; // independent variable
     double target_hat;
     adouble target_hat_ad; // dependent variable
+    double target_value; // from control object
     int tape_tag = 1;
     std::vector<double> indep(1); // For the solver
+    std::vector<double> dep(1); // For the solver
 
 adouble test;
 
@@ -454,7 +479,7 @@ adouble test;
         Rprintf("target_season: %i\n", target_season);
         Rprintf("target_timestep: %i\n", target_timestep);
 
-fisheries(1)(1).get_fbar_range_indices();
+        //fisheries(1)(1).get_fbar_range_indices();
         for (int iter_count = 1; iter_count <= niter; ++iter_count){
             Rprintf("Resolving iter: %i\n", iter_count);
 
@@ -467,6 +492,12 @@ fmult = fmult_initial;
                 f(quant_count,target_year,1,target_season,1,iter_count,1) = f(quant_count,target_year,1,target_season,1,iter_count,1) * fmult;
             }
             project_timestep(target_timestep, iter_count, iter_count); 
+
+            // Is it a min / max / value
+            target_value = ctrl.get_target_value(target_count, 2, iter_count); // better to return all iters and move to outside iter loop
+
+
+            
 
 
 
@@ -534,9 +565,9 @@ operatingModel test_run (const FLFisheriesAdolc fisheries, SEXP FLBiolSEXP, cons
     om.run();
 
 
-    om.eval_target(1);
-    om.eval_target(2);
-    om.eval_target(3);
+    //om.eval_target(1);
+    //om.eval_target(2);
+    //om.eval_target(3);
 
 
     return om;

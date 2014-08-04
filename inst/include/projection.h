@@ -68,7 +68,7 @@ class operatingModel {
         adouble ssb(const int timestep, const int unit, const int area, const int iter) const; // single iter in a timestep, unit and area
         adouble ssb(const int year, const int unit, const int season, const int area, const int iter) const; // single iter in a timestep, unit and area
 
-        void eval_target(const int target_no) const;
+        std::vector<adouble> eval_target(const int target_no, const int min_iter, const int max_iter) const;
 
         // The target value calculations
         // fbar from a catch and fishery on a stock - i.e. partial F - will need to adapt this to include multiple biols in the future

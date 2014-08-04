@@ -309,8 +309,10 @@ dummy_fwdControl_generator <- function(years = 1:round(runif(1, min=1,max=10)), 
                        max_value = NA,
                        rel_year = NA,
                        rel_season = NA,
-                       flcatch = NA, # what is this? a number or name? Some way of referring 
-                       rel_flcatch = NA # as above
+                       fishery = NA, # what is this? a number or name? Some way of referring 
+                       rel_fishery = NA, # as above
+                       catch = NA, # what is this? a number or name? Some way of referring 
+                       rel_catch = NA # as above
                        )
     ctrl_df$quantity <- as.character(ctrl_df$quantity)
 
@@ -319,6 +321,12 @@ dummy_fwdControl_generator <- function(years = 1:round(runif(1, min=1,max=10)), 
     target_iters[,"min",] <- runif(dim(target_iters)[1] * dim(target_iters)[3], min=0.1, max=0.2)
     target_iters[,"value",] <- runif(dim(target_iters)[1] * dim(target_iters)[3], min=0.3, max=0.4)
     target_iters[,"max",] <- runif(dim(target_iters)[1] * dim(target_iters)[3], min=0.5, max=0.6)
+
+    # Force integers
+    ctrl_df$fishery <- as.integer(ctrl_df$fishery)
+    ctrl_df$rel_fishery <- as.integer(ctrl_df$rel_fishery)
+    ctrl_df$year <- as.integer(ctrl_df$year)
+    ctrl_df$season <- as.integer(ctrl_df$season)
 
     fc <- new("fwdControl",
         target = ctrl_df,

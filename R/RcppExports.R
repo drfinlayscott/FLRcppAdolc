@@ -1461,6 +1461,10 @@ test_fwdControl_get_niter <- function(control) {
     .Call('FLRcppAdolc_test_fwdControl_get_niter', PACKAGE = 'FLRcppAdolc', control)
 }
 
+test_fwdControl_get_target_fishery <- function(control, target_no) {
+    .Call('FLRcppAdolc_test_fwdControl_get_target_fishery', PACKAGE = 'FLRcppAdolc', control, target_no)
+}
+
 test_fwdControl_get_target_year <- function(control, target_no) {
     .Call('FLRcppAdolc_test_fwdControl_get_target_year', PACKAGE = 'FLRcppAdolc', control, target_no)
 }
@@ -1543,6 +1547,10 @@ test_operating_model_project <- function(flfs, flb_sexp, model_name, params, tim
 
 test_operating_model_targets <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, fishery_no, catch_no) {
     .Call('FLRcppAdolc_test_operating_model_targets', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, fishery_no, catch_no)
+}
+
+test_operatingModel_eval_target <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no, min_iter, max_iter) {
+    .Call('FLRcppAdolc_test_operatingModel_eval_target', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no, min_iter, max_iter)
 }
 
 test_year_season_to_timestep_FLQuant_double <- function(flq, year, season) {

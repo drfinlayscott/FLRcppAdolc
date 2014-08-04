@@ -42,9 +42,11 @@ class fwdControl {
         Rcpp::DataFrame get_target() const;
         int get_ntarget() const;
         int get_niter() const;
+        // Return index values, starting at 1 (i.e. not the character string of year and season)
         int get_target_year(const int target_no) const;
+        int get_target_fishery(const int target_no) const;
         int get_target_season(const int target_no) const;
-        double get_target_value(const int target_no, const int col, const int iter) const;
+        double get_target_value(const int target_no, const int col, const int iter) const; // col: 1 = min, 2 = value, 3 = max
         std::string get_target_quantity(const int target_no) const;
         fwdControlTargetType get_target_type(const int target_no) const;
         void init_target_map();

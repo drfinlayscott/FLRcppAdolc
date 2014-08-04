@@ -36,12 +36,16 @@ test_that("fwdControl accessors", {
     iter <- round(runif(1,max=dim(fc@target_iters)[3]))
     value <- test_fwdControl_get_target_value(fc, target_no, col_no, iter)
     expect_that(fc@target_iters[target_no, col_no, iter], is_identical_to(value))
-    # get year and season of target
+    # get year, season, fishery of target
     target_no <- round(runif(1, min=1, max=nrow(fc@target)))
     year <- test_fwdControl_get_target_year(fc, target_no)
     expect_that(fc@target[target_no, "year"], is_identical_to(year))
     season <- test_fwdControl_get_target_season(fc, target_no)
     expect_that(fc@target[target_no, "season"], is_identical_to(season))
+    fc@target[target_no,"fishery"] <- as.integer(round(runif(1)))
+    # force fishery column to be integer
+    fishery <- test_fwdControl_get_target_fishery(fc, target_no)
+    expect_that(fc@target[target_no, "fishery"], is_identical_to(fishery))
     # get target type / quantity
     type <- test_fwdControl_get_target_quantity(fc, target_no)
     expect_that(type, is_identical_to(as.character(fc@target[target_no, "quantity"])))

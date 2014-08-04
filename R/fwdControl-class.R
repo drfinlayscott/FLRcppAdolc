@@ -17,6 +17,8 @@
 
 # Season and Year are NOT the names of the season or years (even if numeric). They are the indices.
 # e.g. ple4, year = 2006, year is actually 50
+# convert in R (need to convert back afterwards)
+# What if no target in a year - a hole - non-successive - need to add in fake target of f = fbar?
 
 # Before calling project, SRR residuals must have same time dimensions as fisheries and biol
 # Window everything beforehand

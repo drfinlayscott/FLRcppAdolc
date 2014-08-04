@@ -44,6 +44,11 @@ int test_fwdControl_get_niter(const fwdControl control){
 }
 
 // [[Rcpp::export]]
+int test_fwdControl_get_target_fishery(const fwdControl control, const int target_no){
+    return control.get_target_fishery(target_no);
+}
+
+// [[Rcpp::export]]
 int test_fwdControl_get_target_year(const fwdControl control, const int target_no){
     return control.get_target_year(target_no);
 }

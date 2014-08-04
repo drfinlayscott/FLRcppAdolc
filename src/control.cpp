@@ -84,6 +84,7 @@ int fwdControl::get_niter() const{
 }
 
 // Returns the year and season of the target - used to calculate the timestep in the projection loop
+// These are integer indices - not characters
 int fwdControl::get_target_year(const int target_no) const {
     Rcpp::IntegerVector year = target["year"];
     if (target_no > year.size()){
@@ -91,6 +92,15 @@ int fwdControl::get_target_year(const int target_no) const {
     }
     return year[target_no-1];
 }
+
+int fwdControl::get_target_fishery(const int target_no) const {
+    Rcpp::IntegerVector fishery = target["fishery"];
+    if (target_no > fishery.size()){
+        Rcpp::stop("In fwdControl::get_target_fishery. target_no > number of targets\n");
+    }
+    return fishery[target_no-1];
+}
+
 
 int fwdControl::get_target_season(const int target_no) const {
     Rcpp::IntegerVector season = target["season"];

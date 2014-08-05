@@ -30,12 +30,14 @@ test_that("fwdControl accessors", {
     # get niter
     niter <- test_fwdControl_get_niter(fc)
     expect_that(niter, is_identical_to(dim(fc@target_iters)[3]))
+
     # get target value
     target_no <- round(runif(1,min=1,max=dim(fc@target)[1]))
     col_no <- round(runif(1,min=1,max=3))
     iter <- round(runif(1,max=dim(fc@target_iters)[3]))
-    value <- test_fwdControl_get_target_value(fc, target_no, col_no, iter)
-    expect_that(fc@target_iters[target_no, col_no, iter], is_identical_to(value))
+    value_list <- test_fwdControl_get_target_value(fc, target_no, col_no, iter)
+    expect_that(fc@target_iters[target_no, col_no, iter], is_identical_to(value_list[["value"]]))
+    expect_that(unname(fc@target_iters[target_no, col_no,]), is_identical_to(value_list[["values"]]))
     # get year, season, fishery of target
     target_no <- round(runif(1, min=1, max=nrow(fc@target)))
     year <- test_fwdControl_get_target_year(fc, target_no)

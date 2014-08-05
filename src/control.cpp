@@ -119,6 +119,22 @@ double fwdControl::get_target_value(const int target_no, const int col, const in
     return target_iters(element);
 }
 
+// It's a 3D array and we want the 2nd column of the 2nd dimension
+// Indexing starts at 1
+// Get all iters
+// Could write this with some container magic
+std::vector<double> fwdControl::get_target_value(const int target_no, const int col) const{
+    Rcpp::IntegerVector dim = target_iters.attr("dim");
+    std::vector<double> out(dim[2], 0.0);
+    unsigned int element;
+    for (int iter_count = 0; iter_count < dim[2]; ++iter_count){
+        element = (dim[1] * dim[0] * (iter_count)) + (dim[0] * (col - 1)) + (target_no - 1); 
+        out[iter_count] = target_iters(element);
+    }
+    return out;
+}
+
+
 // target_no starts at 1
 std::string fwdControl::get_target_quantity(const int target_no) const{
     Rcpp::CharacterVector quantities = target["quantity"];

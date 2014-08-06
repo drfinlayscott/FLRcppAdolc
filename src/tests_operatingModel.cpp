@@ -77,12 +77,33 @@ Rcpp::List test_operating_model_targets(FLFisheriesAdolc flfs, SEXP flb_sexp, co
 }
 
 
+// Evaluate by target no
 // [[Rcpp::export]]
-std::vector<double> test_operatingModel_eval_target(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int target_no, const int min_iter, const int max_iter){
+std::vector<double> test_operatingModel_eval_target_hat(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int target_no, const int min_iter, const int max_iter){
     fwdBiolAdolc biol(flb_sexp, model_name, params, timelag, residuals, residuals_mult);
     operatingModel om(flfs, biol, f, f_spwn, ctrl);
 
-    std::vector<adouble> out_ad = om.eval_target(target_no, min_iter, max_iter);
+    std::vector<adouble> out_ad = om.eval_target_hat(target_no, min_iter, max_iter);
+    std::vector<double> out(out_ad.size(), 0.0);
+    for (int i=0; i<out.size(); ++i){
+        out[i] = out_ad[i].value();
+    }
+    return out;
+}
+
+
+// Evaluate by target type
+// [[Rcpp::export]]
+std::vector<double> test_operatingModel_eval_target_hat2(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int target_no){
+
+    fwdBiolAdolc biol(flb_sexp, model_name, params, timelag, residuals, residuals_mult);
+    operatingModel om(flfs, biol, f, f_spwn, ctrl);
+    const int year = ctrl.get_target_year(target_no); 
+    const int season = ctrl.get_target_season(target_no);
+    const int unit = 1;
+    const int area = 1;
+    fwdControlTargetType target_type = ctrl.get_target_type(target_no);
+    std::vector<adouble> out_ad = om.eval_target_hat(target_type, year, unit, season, area);
     std::vector<double> out(out_ad.size(), 0.0);
     for (int i=0; i<out.size(); ++i){
         out[i] = out_ad[i].value();

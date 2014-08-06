@@ -50,8 +50,3 @@ test_that("Newton-Raphson tests",{
     expect_that(fit$out, is_identical_to(0L))
 })
 
-test_that("Project", {
-          # Check time of biol is not exceeded
-          # biol update is timestep+1
-
-})

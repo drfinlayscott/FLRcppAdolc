@@ -43,6 +43,7 @@ double euclid_norm(double* x, const int size_x){
 }
 
 int newton_raphson(std::vector<double>& indep, const int adolc_tape, const int max_iters, const double max_limit, const double tolerance){
+    Rprintf("In Newton-Raphson\n");
     const int nindep = indep.size();
     double *x = new double[nindep];
     double *w = new double[nindep];
@@ -78,6 +79,7 @@ int newton_raphson(std::vector<double>& indep, const int adolc_tape, const int m
         //Rprintf("x0 %f\n", x[0]);
         //Rprintf("x1 %f\n\n", x[1]);
     }
+    Rprintf("NR iters: %i\n", iter_count);
     // load final values
     for (int i=0; i<nindep; ++i){
         indep[i] = x[i];
@@ -279,68 +281,64 @@ void operatingModel::project_timestep(const int timestep, const int min_iter, co
     return;
 }
 
-std::vector<adouble> operatingModel::eval_target(const int target_no, const int min_iter, const int max_iter) const{
-    // get the target type string from the control
-    fwdControlTargetType target_type = ctrl.get_target_type(target_no);
-    const int catch_no = 1;
-    const int biol_no = 1;
-    const int fishery_no = ctrl.get_target_fishery(target_no);
-    const int year = ctrl.get_target_year(target_no);
-    const int season = ctrl.get_target_season(target_no);
-    const int unit = 1;
-    const int area = 1;
+// Assume 1 fishery and 1 biol for now
+std::vector<adouble> operatingModel::eval_target_hat(const fwdControlTargetType target_type, const int year, const int unit, const int season, const int area) const{
+    int biol_no = 1;
     FLQuantAdolc out_flq;
-    std::vector<adouble> out(max_iter - min_iter + 1, 0.0); // can we initialise at this point? Or pass in as reference?
     switch(target_type){
         case target_f:
-            Rprintf("F!\n");
             // If no fishery in the control object get total fbar on biol
-            if (Rcpp::IntegerVector::is_na(fishery_no)){
-                Rprintf("No fishery\n");
+            //if (Rcpp::IntegerVector::is_na(fishery_no)){
                 out_flq = fbar(biol_no);
-            }
-            else {
-                Rprintf("Fishery: %i\n", fishery_no);
-                out_flq = fbar(fishery_no, catch_no, biol_no);
-            }
+            //}
+            //else {
+            //    out_flq = fbar(fishery_no, catch_no, biol_no);
+            //}
            break;
        case target_catch:
-           Rprintf("Catch!\n");
+            // If no fishery in the control object get total fbar on biol
+            //if (Rcpp::IntegerVector::is_na(fishery_no)){
+                out_flq = catches(biol_no);
+            //}
+            //else {
+            //    out_flq = catches(fishery_no, catch_no, biol_no);
+            //}
            break;
        default:
            Rcpp::stop("target_type not found in switch statement - giving up\n");
            break;
     }
-    for (unsigned int iter_count = 0; iter_count <= (max_iter - min_iter); ++iter_count){
-        out[iter_count] = out_flq(1, year, unit, season, area, min_iter + iter_count);
+    std::vector<adouble> out(out_flq.get_niter(), 0.0); 
+    for (unsigned int iter_count = 1; iter_count <= out_flq.get_niter(); ++iter_count){
+        out[iter_count-1] = out_flq(1, year, unit, season, area, iter_count);
     }
     return out;
 }
 
+// Given the target no, return the corresponding value from the operatingModel that can be compared to the desired target
+std::vector<adouble> operatingModel::eval_target_hat(const int target_no, const int min_iter, const int max_iter) const{
+    // get the target type string from the control
+    fwdControlTargetType target_type = ctrl.get_target_type(target_no);
+    // get fishery info - who is catching what
+    const int catch_no = 1; // not available yet
+    const int biol_no = 1; // not available yet
+    const int fishery_no = ctrl.get_target_fishery(target_no); // if NA it's total across fishery
+    const int year = ctrl.get_target_year(target_no); // these are indices of the FLQuant - not characters of actual years
+    const int season = ctrl.get_target_season(target_no);
+    const int unit = 1;
+    const int area = 1;
+    FLQuantAdolc out_flq;
+    // get all iterations
+    std::vector<adouble> out_all_iters = eval_target_hat(target_type, year, unit, season, area);
 
-// fbar by catch
-//std::vector<adouble> operatingModel::fbar(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int fishery_no, const int catch_no, const int biol_no) const{
-//    // biol_no is not used yet
-//    // catch_no is not used yet
-//    if ((max_iter < min_iter) | (min_iter < 1) | (max_iter > ctrl.get_niter())){
-//        Rcpp::stop("In fbar, problem with iter range");
-//    }
-//    Rcpp::IntegerVector fbar_range = fisheries(fishery_no)(catch_no).get_fbar_range_indices(); // starts at 0 so need to +1 if we use for FLQ accessor - bit inconsistent, sorry
-//    int fbar_range_nquant = fbar_range[1] - fbar_range[0] + 1;
-//    const int niters = max_iter - min_iter + 1;
-//    std::vector<adouble> fbar(niters,0.0);
-//    adouble fbar_temp = 0;
-//    for (int iter_count = 0; iter_count < niters; ++iter_count){
-//        fbar_temp = 0;
-//        for (int quant_count = (fbar_range[0]+1); quant_count <= (fbar_range[1]+1); ++quant_count){
-//             fbar_temp = fbar_temp + f(quant_count, year, unit, season, area, min_iter + iter_count, fishery_no);
-//        }
-//        fbar[iter_count] = fbar_temp / (double)fbar_range_nquant;
-//    }
-//    return fbar;
-//}
-
-
+    // subset would be better?
+    std::vector<adouble> out(max_iter - min_iter + 1, 0.0); // can we initialise at this point? Or pass in as reference?
+    for (unsigned int iter_count = 0; iter_count <= (max_iter - min_iter); ++iter_count){
+        //out[iter_count] = out_flq(1, year, unit, season, area, min_iter + iter_count);
+        out[iter_count] = out_all_iters[min_iter + iter_count - 1];
+    }
+    return out;
+}
 
 FLQuantAdolc operatingModel::fbar(const int fishery_no, const int catch_no, const int biol_no) const{
     Rcpp::IntegerVector fbar_range = fisheries(fishery_no)(catch_no).get_fbar_range_indices(); // starts at 0 so need to +1 if we use for FLQ accessor - bit inconsistent, sorry
@@ -358,19 +356,6 @@ FLQuantAdolc operatingModel::fbar(const int fishery_no, const int catch_no, cons
 // Assume that catch is catches[[1]] for the moment
 FLQuantAdolc operatingModel::fbar(const int biol_no) const{
     //// Make an empty FLQ with the right dims - based on the first fishery
-    //Rcpp::IntegerVector dim = f(1).get_dim();
-    //// Make an empty FLQ with the right dim
-    //FLQuantAdolc fbar_out(1, dim[1], dim[2], dim[3], dim[4], dim[5]);
-    ////// Set dimnames and units
-    //Rcpp::List dimnames = f(1).get_dimnames();
-    //dimnames[0] = Rcpp::CharacterVector::create("all");
-    //fbar_out.set_dimnames(dimnames);
-    //fbar_out.set_units(f(1).get_units());
-    //// Sum the fbars from the fisheries
-    //for (unsigned int fishery_count = 1; fishery_count <= fisheries.get_nfisheries(); ++fishery_count){
-    //    fbar_out = fbar_out + fbar(fishery_count,1,biol_no);
-    //}
-
     FLQuantAdolc fbar_out = fbar(1,1,biol_no);
     for (unsigned int fishery_count = 2; fishery_count <= fisheries.get_nfisheries(); ++fishery_count){
         fbar_out = fbar_out + fbar(fishery_count,1,biol_no);
@@ -394,62 +379,38 @@ FLQuantAdolc operatingModel::catches(const int biol_no) const{
     return catches_out;
 }
 
-//// total fbar of FLBiol
-//std::vector<adouble> operatingModel::fbar(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int biol_no) const{
-//    if ((max_iter < min_iter) | (min_iter < 1) | (max_iter > ctrl.get_niter())){
-//        Rcpp::stop("In fbar, problem with iter range");
-//    }
-//    // This line is dodgy as it assumes that fishery1 and catch1 of each fishery is what is catching biol
-//    Rcpp::IntegerVector fbar_range = fisheries(1)(1).get_fbar_range_indices(); // starts at 0 so need to +1 if we use for FLQ accessor - bit inconsistent, sorry
-//    int fbar_range_nquant = fbar_range[1] - fbar_range[0] + 1;
-//    const int niters = max_iter - min_iter + 1;
-//    std::vector<adouble> fbar(niters,0.0);
-//    const int nfisheries = fisheries.get_nfisheries();
-//    adouble fbar_temp = 0;
-//    for (int iter_count = 0; iter_count < niters; ++iter_count){
-//        fbar_temp = 0;
-//        for (int quant_count = (fbar_range[0]+1); quant_count <= (fbar_range[1]+1); ++quant_count){
-//            for (int fishery_count = 1; fishery_count <= nfisheries; ++fishery_count){
-//                fbar_temp = fbar_temp + f(quant_count, year, unit, season, area, min_iter + iter_count, fishery_count);
-//            }
-//        }
-//        fbar[iter_count] = fbar_temp / (double)fbar_range_nquant;
-//    }
-//    return fbar;
-//}
+// Similar to fwdControl::get_target_value but calcs value from relative values
+// gets all iters. col: 1 = min, 2 = value, 3 = max
+std::vector<double> operatingModel::calc_target_value(const int target_no, const int col) const{
+    //Rcpp::IntegerVector dim = target_iters.attr("dim");
+    //std::vector<double> out(dim[2], 0.0);
 
-//// Catch by an FLCatch of an FLBiol
-//std::vector<adouble> operatingModel::catches(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int fishery_no, const int catch_no, const int biol_no) const{
-//    // biol_no is not used yet
-//    // catch_no is not used yet
-//    if ((max_iter < min_iter) | (min_iter < 1) | (max_iter > ctrl.get_niter())){
-//        Rcpp::stop("In catches, problem with iter range");
-//    }
-//    const int niters = max_iter - min_iter + 1;
-//    std::vector<adouble> catches(niters,0.0);
-//    //FLQuantAdolc catches_flq = fisheries(fishery_no)(catch_no).catches();
-//    for (int iter_count = 0; iter_count < niters; ++iter_count){
-//        catches[iter_count] = fisheries(fishery_no)(catch_no).catches()(1, year, unit, season, area, iter_count+1);
-//    }
-//    return catches;
-//}
-//
-//// Total Catch of an FLBiol
-//std::vector<adouble> operatingModel::catches(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int biol_no) const{
-//    if ((max_iter < min_iter) | (min_iter < 1) | (max_iter > ctrl.get_niter())){
-//        Rcpp::stop("In total catches, problem with iter range");
-//    }
-//    const int niters = max_iter - min_iter + 1;
-//    std::vector<adouble> catches(niters,0.0);
-//    const int catch_no = 1; // Fixed
-//    for (int iter_count = 0; iter_count < niters; ++iter_count){
-//        for (unsigned int fishery_count = 1; fishery_count <= fisheries.get_nfisheries(); ++fishery_count){
-//            catches[iter_count] = catches[iter_count] + fisheries(fishery_count)(catch_no).catches()(1, year, unit, season, area, iter_count+1);
-//        }
-//    }
-//    return catches;
-//}
+    int target_year = ctrl.get_target_year(target_no);
+    int target_season = ctrl.get_target_season(target_no);
+    int target_rel_year = ctrl.get_target_rel_year(target_no);
+    int target_rel_season = ctrl.get_target_rel_season(target_no);
+    // Are rel_year and rel_season NAs or do they have values?
+    bool target_rel_year_na = Rcpp::IntegerVector::is_na(target_rel_year);
+    bool target_rel_season_na = Rcpp::IntegerVector::is_na(target_rel_season);
+    // Both are either NA, or neither are, if one or other is NA then something has gone wrong (XOR)
+    if (!(target_rel_year_na ^ target_rel_season_na)){
+        Rcpp::stop("in operatingModel::calc_target_value. Only one of rel_year or re_season is NA. Must be neither or both.\n");
+    }
+    // Target is not a relative value so just return the values
+    //if (target_rel_year_na){
+        std::vector<double> value = ctrl.get_target_value(target_no, col);
+    //}
+    // Target is relative so we have calc the value
+    //else {
 
+    //}
+
+    // Is it a relative value
+    // If no
+    // If yes
+    // eval_target * value
+    return value;
+}
 
 void operatingModel::run(){
 
@@ -458,19 +419,115 @@ void operatingModel::run(){
     int target_year = 0;
     int target_season = 0;
     int target_timestep = 0;
+    // independent variables
     double fmult_initial = 1;
-    adouble fmult; // independent variable
-    double target_hat;
-    adouble target_hat_ad; // dependent variable
-    double target_value; // from control object
-    int tape_tag = 1;
+    std::vector<double> fmult(1,fmult_initial); // For the solver
+    std::vector<adouble> fmult_ad(1,fmult_initial); 
+    //adouble fmult; 
+    // Only length 
     std::vector<double> indep(1); // For the solver
     std::vector<double> dep(1); // For the solver
+    // dependent variables
+    // Just doing 1 iter at a time for the moment 
+    std::vector<double> error(1,0.0);
+    std::vector<adouble> target_value_hat(1,0.0);
+    // from control object
+    //double target_value; 
+    std::vector<double> target_value(niter, 0.0); 
 
-adouble test;
+    int tape_tag = 1;
+
+    int nr_out = 0;
 
     for (int target_count = 1; target_count <= ntarget; ++target_count){
-        Rprintf("Resolving target: %i\n", target_count);
+        Rprintf("\nResolving target: %i\n", target_count);
+        // What time step are we hitting this target?
+        target_year = ctrl.get_target_year(target_count);
+        target_season = ctrl.get_target_season(target_count);
+        year_season_to_timestep(target_year, target_season, biol.n(), target_timestep);
+        //Rprintf("target_year: %i\n", target_year);
+        //Rprintf("target_season: %i\n", target_season);
+        Rprintf("target_timestep: %i\n", target_timestep);
+
+        target_value = ctrl.get_target_value(target_count, 2); // better to return all iters and move to outside iter loop
+        //fisheries(1)(1).get_fbar_range_indices();
+        for (int iter_count = 1; iter_count <= niter; ++iter_count){
+            Rprintf("Resolving iter: %i\n", iter_count);
+
+            // Tape the process
+            trace_on(tape_tag);
+            fmult_ad[0] <<= fmult_initial; // Or move this above iter loop and do all iters at same time
+            // Update om.f = om.f * fmult in that year / season
+            for (int quant_count = 1; quant_count <= f(1).get_nquant(); ++quant_count){
+                f(quant_count,target_year,1,target_season,1,iter_count,1) = f(quant_count,target_year,1,target_season,1,iter_count,1) * fmult_ad[0];
+            }
+            project_timestep(target_timestep, iter_count, iter_count); 
+
+            // Sort out target stuff to calculate error (difference)
+
+            // Is it a min / max / value?
+            //target_value = ctrl.get_target_value(target_count, 2, iter_count); // better to return all iters and move to outside iter loop
+
+            target_value_hat = eval_target_hat(target_count, iter_count, iter_count);
+
+            // Calculate the error term that we want to be 0
+            target_value_hat[0] = (target_value_hat[0] - target_value[iter_count-1]); // this works better - no need to reset initial fmult each time?
+            //target_value_hat[0] = (target_value_hat[0] - target_value) * (target_value_hat[0] - target_value); // squared error - less stable
+
+            // Set dependent variable
+            target_value_hat[0] >>= error[0];
+            trace_off();
+
+            // Solve
+            // reset initial solver value - also can just use: error = target_hat - target without squaring
+            // faster to do this outside of the iter loop and start NR with solution of previous iter - OK until a bad iter
+            fmult[0] = 1.0; 
+            //Rprintf("fmult pre NR: %f\n", fmult[0]);
+            nr_out = newton_raphson(fmult, tape_tag);
+            // Run some check on this
+
+
+            //Rprintf("fmult post NR: %f\n", fmult[0]);
+            // Test output code for what happened
+            // Correct values are now in fmult
+            // Project with these values
+            for (int quant_count = 1; quant_count <= f(1).get_nquant(); ++quant_count){
+                f(quant_count,target_year,1,target_season,1,iter_count,1) = f(quant_count,target_year,1,target_season,1,iter_count,1) * fmult[0];
+            }
+            project_timestep(target_timestep, iter_count, iter_count); 
+            // We're done!
+        }
+
+    }
+}
+
+/*
+void operatingModel::run_all_iters(){
+
+    const int ntarget = ctrl.get_ntarget();
+    const int niter = ctrl.get_niter(); // number of iters taken from control object - not from Biol or Fisheries
+    int target_year = 0;
+    int target_season = 0;
+    int target_timestep = 0;
+    // independent variables
+    double fmult_initial = 1;
+    std::vector<double> fmult(niter,fmult_initial); // For the solver
+    std::vector<adouble> fmult_ad(niter,fmult_initial); 
+    //adouble fmult; 
+    // dependent variables
+    // Just doing 1 iter at a time for the moment 
+    std::vector<double> target_value_hat(niter,0.0);
+    std::vector<adouble> target_value_hat_ad(niter,0.0);
+    // from control object
+    //double target_value; 
+    std::vector<double> target_value(niter, 0.0); 
+
+    int tape_tag = 1;
+
+    int nr_out = 0;
+
+    for (int target_count = 1; target_count <= ntarget; ++target_count){
+        Rprintf("\nResolving target: %i\n", target_count);
         // What time step are we hitting this target?
         target_year = ctrl.get_target_year(target_count);
         target_season = ctrl.get_target_season(target_count);
@@ -479,76 +536,52 @@ adouble test;
         Rprintf("target_season: %i\n", target_season);
         Rprintf("target_timestep: %i\n", target_timestep);
 
-        //fisheries(1)(1).get_fbar_range_indices();
-        for (int iter_count = 1; iter_count <= niter; ++iter_count){
-            Rprintf("Resolving iter: %i\n", iter_count);
-
-            // Tape the process
-// trace_on(tape_tag);
-// fmult <<= fmult_initial; // Or move this above iter loop and do all iters at same time
-fmult = fmult_initial;
-            // Update om.f = om.f * fmult in that year / season
+        target_value = ctrl.get_target_value(target_count, 2); // better to return all iters and move to outside iter loop
+        
+        // Tape the process
+        trace_on(tape_tag);
+        // Load up fmult and adjust f
+        for (int iter_count = 0; iter_count < niter; ++iter_count){
+            fmult_ad[iter_count] <<= fmult_initial; // Or move this above iter loop and do all iters at same time
             for (int quant_count = 1; quant_count <= f(1).get_nquant(); ++quant_count){
-                f(quant_count,target_year,1,target_season,1,iter_count,1) = f(quant_count,target_year,1,target_season,1,iter_count,1) * fmult;
+                f(quant_count,target_year,1,target_season,1,iter_count+1,1) = f(quant_count,target_year,1,target_season,1,iter_count+1,1) * fmult_ad[iter_count];
             }
-            project_timestep(target_timestep, iter_count, iter_count); 
-
-            // Is it a min / max / value
-            target_value = ctrl.get_target_value(target_count, 2, iter_count); // better to return all iters and move to outside iter loop
-
-
-            
-
-
-
-
-//    // Calculate catch or whatever
-//    //target_hat_ad = 1000;
-//    target_hat_ad = fisheries(1)(1).catches()(1, year, 1, season, 1, iter_count);
-//    Rprintf("target_hat_ad %f\n", target_hat_ad.value());
-//    // Offset by target
-//    target_hat_ad = target_hat_ad - catch_target;
-//    // Set dependent variable
-//    target_hat_ad >>= target_hat;
-//    // stop the tape
-//trace_off();
-//
-//    // Do the solving for that timestep (and iter? should we do all iters at once?)
-//    indep[0] = fmult_initial;
-//    int out = newton_raphson(indep, tape_tag);
-
-
-
-
-
-
-            // get target value
-
-
         }
 
+        project_timestep(target_timestep, 1, niter); 
+        // Is it a min / max / value?
+        //target_value = ctrl.get_target_value(target_count, 2, iter_count); // better to return all iters and move to outside iter loop
+        target_value_hat_ad = eval_target(target_count, 1, niter);
+        for (int iter_count = 0; iter_count < niter; ++iter_count){
+            // Calculate the error term that we want to be 0
+            target_value_hat_ad[iter_count] = (target_value_hat_ad[iter_count] - target_value[iter_count]); // this works better - no need to reset initial fmult each time?
+            // Set dependent variable
+            target_value_hat_ad[iter_count] >>= target_value_hat[iter_count];
+        }
+        trace_off();
+
+        // Solve
+        // reset initial solver value - also can just use: error = target_hat - target without squaring
+        // faster to do this outside of the iter loop and start NR with solution of previous iter - OK until a bad iter
+        for (int iter_count = 0; iter_count < niter; ++iter_count){
+            fmult[iter_count] = 1.0; 
+        }
+        nr_out = newton_raphson(fmult, tape_tag);
+
+
+        // Test output code for what happened
+        // Correct values are now in fmult
+        // Project with these values
+        for (int iter_count = 0; iter_count < niter; ++iter_count){
+            for (int quant_count = 1; quant_count <= f(1).get_nquant(); ++quant_count){
+                f(quant_count,target_year,1,target_season,1,iter_count+1,1) = f(quant_count,target_year,1,target_season,1,iter_count+1,1) * fmult[iter_count];
+            }
+        }
+        project_timestep(target_timestep, 1, niter); 
+        // We're done!
     }
-
-// Loop over targets
-// Loop over iters
-    // get_ntargets()
-    // get_target_value(int target_no, int iter)
-    // get timestep of target
-    // indep = fmult = 1;
-    // tape_on
-    // f(ts) = f(ts) * fmult
-    // project(ts)
-    // get_target_hat
-    // calc error
-    // depend = error
-    // tape off
-    // solve tape
-    // f(ts) = f(ts) * fmult
-    // project(ts)
-
-
-
 }
+*/
 
 /*----------------------------------------------------------------------------------*/
 
@@ -564,144 +597,23 @@ operatingModel test_run (const FLFisheriesAdolc fisheries, SEXP FLBiolSEXP, cons
 
     om.run();
 
+    return om;
 
-    //om.eval_target(1);
-    //om.eval_target(2);
-    //om.eval_target(3);
+}
 
+
+// [[Rcpp::export]]
+operatingModel test_run_all_iters(const FLFisheriesAdolc fisheries, SEXP FLBiolSEXP, const std::string srr_model_name, const FLQuant srr_params, const FLQuant srr_residuals, const bool srr_residuals_mult, const int srr_timelag, FLQuant7Adolc f, FLQuant7 f_spwn, fwdControl ctrl){
+
+    // Make the fwdBiol from the FLBiol and SRR bits
+    fwdBiolAdolc biol(FLBiolSEXP, srr_model_name, srr_params, srr_timelag, srr_residuals, TRUE); 
+    // Make the OM
+    operatingModel om(fisheries, biol, f, f_spwn, ctrl);
+
+    //om.run_all_iters();
 
     return om;
 
 }
 
 
-
-// Stuff to migrate
-// Need to figure out how this is going to work...
-//// [[Rcpp::export]]
-//std::vector<double> run(FLFisheriesAdolc fisheries, fwdBiolAdolc biol, std::string srr_model_name, FLQuant srr_params, FLQuant srr_residuals, bool srr_residuals_mult, FLQuant7Adolc f){
-//    //Rprintf("In run\n");
-//
-//    FLQuant7Adolc f_tape = f; // Make a copy to be used in the tape loop
-//    // Where does the iter loop go? Here or in project_timestep?
-//    int iter_count = 1;
-//    int max_timestep = 3;
-//    adouble fmult; // independent variable
-//    double target_hat;
-//    adouble target_hat_ad; // dependent variable
-//    double fmult_initial = 1;//0.5;
-//    int tape_tag = 1;
-//    int year = 0;
-//    int season = 0;
-//    double catch_target = 5;
-//    std::vector<double> indep(1); // For the solver
-////for (int timestep = 1; timestep < max_timestep; ++timestep){
-//    int timestep=1;
-//
-//    // Turn on tape
-//    Rprintf("Turning on the tape\n");
-//    trace_on(tape_tag);
-//    // Dim checking
-//    fmult <<= fmult_initial;
-//    // Update f
-//    timestep_to_year_season(timestep, f(1), year, season);
-//    for (int quant_count = 1; quant_count <= f(1).get_nquant(); ++quant_count){
-//        f_tape(quant_count,year,1,season,1,iter_count,1) = f_tape(quant_count,year,1,season,1,iter_count,1) * fmult;
-//    }
-//    // Do 1 timestep projection
-//    //project_timestep(fisheries, biol, srr_model_name, srr_params, srr_residuals, srr_residuals_mult, f_tape, timestep);
-//    // Calculate catch or whatever
-//    //target_hat_ad = 1000;
-//    target_hat_ad = fisheries(1)(1).catches()(1, year, 1, season, 1, iter_count);
-//    Rprintf("target_hat_ad %f\n", target_hat_ad.value());
-//    // Offset by target
-//    target_hat_ad = target_hat_ad - catch_target;
-//    // Set dependent variable
-//    target_hat_ad >>= target_hat;
-//    // stop the tape
-//    Rprintf("Turning off the tape\n");
-//    trace_off();
-//
-//    // Do the solving for that timestep (and iter? should we do all iters at once?)
-//    indep[0] = fmult_initial;
-//    int out = newton_raphson(indep, tape_tag);
-//
-////}
-//
-//    // Do something with the tape
-//    //double *x = new double[1];
-//    //double *y = new double[1];
-//    //x[0] = fmult_initial;
-//    //y[0] = 0.0;
-//    //function(tape_tag,1,1,x,y);
-//    //jac_solv(tape_tag,1,x,y,2);
-//    ////gradient(tape_tag, 1, x, y);
-//
-////double yout = y[0];
-//
-// //   delete [] x;
-// //   delete [] y;
-//    //return 1;
-//    //return f_tape;
-//    //return flfs;
-//    //return biol;
-// //   return yout;
-// return indep;
-//
-//}
-
-// Currently only for a single biol and a single catch
-// Updates catch in timestep and biol in timestep+1
-/*
-void project_timestep(FLFisheriesAdolc& fisheries, fwdBiolAdolc& biol, std::string srr_model_name, FLQuant params, FLQuant residuals, bool residuals_mult, FLQuant7Adolc& f, const int timestep){
-    Rprintf("In project_timestep.\n");
-    // Check dims of landings slots, F and biol are the same
-    int year = 0;
-    int season = 0;
-    int next_year = 0;
-    int next_season = 0;
-    timestep_to_year_season(timestep, f(1), year, season);
-    timestep_to_year_season(timestep+1, f(1), next_year, next_season); // check for bounds on these
-    // Check that timestep does not exceed biol
-    if (next_year > biol.n().get_nyear()){
-        Rcpp::stop("In project_timestep. Trying to access year larger than biol years.\n");
-    }
-    adouble rec_temp = 0;
-    adouble z = 0;
-    adouble catch_temp = 0;
-    const int max_quant = f(1).get_nquant();
-
-    // Loop over iters
-    int iter_count = 1;
-
-    // Calculate the landings and discards
-    FLQuantAdolc discards_ratio_temp = fisheries(1)(1).discards_ratio();
-    for (int quant_count = 1; quant_count <= max_quant; ++quant_count){
-        z =  f(quant_count, year, 1, season, 1, iter_count, 1) + biol.m()(quant_count, year, 1, season, 1, iter_count);
-        catch_temp = (f(quant_count, year, 1, season, 1, iter_count, 1) / z) * (1 - exp(-z)) * biol.n()(quant_count, year, 1, season, 1, iter_count);
-        fisheries(1)(1).landings_n()(quant_count, year, 1, season, 1, iter_count) = (1 - discards_ratio_temp(quant_count, year, 1, season, 1, iter_count)) * catch_temp;
-        fisheries(1)(1).discards_n()(quant_count, year, 1, season, 1, iter_count) = discards_ratio_temp(quant_count, year, 1, season, 1, iter_count) * catch_temp;
-    }
-
-    // Update population
-    // Get the recruitment
-    // ssb = ssb in timestep = current
-    rec_temp = 1000;
-    biol.n()(1, next_year, 1, next_season, 1, iter_count) = rec_temp;
-    for (int quant_count = 1; quant_count < max_quant; ++quant_count){
-        z =  f(quant_count, year, 1, season, 1, iter_count,1) + biol.m()(quant_count, year, 1, season, 1, iter_count);
-        biol.n()(quant_count+1, next_year, 1, next_season, 1, iter_count) = biol.n()(quant_count, year, 1, season, 1, iter_count) * exp(-z);
-    }
-    // Assume the last age is a plus group
-    z =  f(max_quant, year, 1, season, 1, iter_count, 1) + biol.m()(max_quant, year, 1, season, 1, iter_count);
-    biol.n()(max_quant, next_year, 1, next_season, 1, iter_count) = biol.n()(max_quant, next_year, 1, next_season, 1, iter_count) + (biol.n()(max_quant, year, 1, season, 1, iter_count) * exp(-z));
-
-}
-
-// [[Rcpp::export]]
-Rcpp::List test_project_timestep(FLFisheriesAdolc fisheries, fwdBiolAdolc biol, std::string srr_model_name, FLQuant params, FLQuant residuals, bool residuals_mult, FLQuant7Adolc f, const int timestep){
-    project_timestep(fisheries, biol, srr_model_name, params, residuals, residuals_mult, f, timestep);
-	return Rcpp::List::create(Rcpp::Named("fisheries", fisheries),
-                            Rcpp::Named("biol",biol));
-}
-*/

@@ -60,6 +60,7 @@ class operatingModel {
 		operatingModel& operator = (const operatingModel& operatingModel_source); // Assignment operator for a deep copy
 
         void run(); 
+        void run_all_iters(); 
         void project_timestep(const int timestep, const int min_iter=1, const int max_iter=1);
 
         // Various ways of calculating reproductive potential
@@ -68,18 +69,14 @@ class operatingModel {
         adouble ssb(const int timestep, const int unit, const int area, const int iter) const; // single iter in a timestep, unit and area
         adouble ssb(const int year, const int unit, const int season, const int area, const int iter) const; // single iter in a timestep, unit and area
 
-        std::vector<adouble> eval_target(const int target_no, const int min_iter, const int max_iter) const;
+        // Given the target no, evaluate the current value in the operatingModel using the year and season info in the target control
+        std::vector<adouble> eval_target_hat(const int target_no, const int min_iter, const int max_iter) const;
+        // Given the target type and the FLQuant information, return all iterations from the operatingModel
+        std::vector<adouble> eval_target_hat(const fwdControlTargetType target_type, const int year, const int unit, const int season, const int area) const;
+        // Similar to fwdControl::get_target_value but calcs value from relative values
+        std::vector<double> calc_target_value(const int target_no, const int col) const; // gets all iters. col: 1 = min, 2 = value, 3 = max
 
         // The target value calculations
-        // fbar from a catch and fishery on a stock - i.e. partial F - will need to adapt this to include multiple biols in the future
-        //std::vector<adouble> fbar(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int fishery_no, const int catch_no, const int biol_no = 1) const;
-        // Total fbar on a Biol - sum of Fbars from the catches and fisheries
-        //std::vector<adouble> fbar(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int biol_no = 1) const;
-        // Catch of a stock by a catch and fishery 
-        //std::vector<adouble> catches(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int fishery_no, const int catch_no, const int biol_no = 1) const;
-        // Total catch of a stock by all catches
-        //std::vector<adouble> catches(const int year, const int unit, const int season, const int area, const int min_iter, const int max_iter, const int biol_no = 1) const;
-
         // fbar from a catch and fishery on a stock - i.e. partial F - will need to adapt this to include multiple biols in the future
         FLQuantAdolc fbar(const int fishery_no, const int catch_no, const int biol_no = 1) const;
         // Total fbar on a biol

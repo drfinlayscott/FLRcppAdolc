@@ -302,7 +302,8 @@ dummy_fwdControl_generator <- function(years = 1:round(runif(1, min=1,max=10)), 
     # And an automatic generator
     ctrl_df <- data.frame(
                        year = years,
-                       season = 1L, # Cannot be NA in C++ code
+                       season = 1L, # Each target must have a timestep, if season is NA it implies that no seasons in projection so only 1 season in FLQuants so season = 1 
+                       # fix this before dispatching to C++
                        quantity = "f", # the target type
                        value =  0.2,
                        min_value = NA,

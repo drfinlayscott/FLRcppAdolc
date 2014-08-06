@@ -59,6 +59,16 @@ int test_fwdControl_get_target_season(const fwdControl control, const int target
 }
 
 // [[Rcpp::export]]
+int test_fwdControl_get_target_rel_year(const fwdControl control, const int target_no){
+    return control.get_target_rel_year(target_no);
+}
+
+// [[Rcpp::export]]
+int test_fwdControl_get_target_rel_season(const fwdControl control, const int target_no){
+    return control.get_target_rel_season(target_no);
+}
+
+// [[Rcpp::export]]
 Rcpp::List test_fwdControl_get_target_value(const fwdControl control, const int target_no, const int col, const int iter){
     double value =  control.get_target_value(target_no, col, iter);
     std::vector<double> values =  control.get_target_value(target_no, col);

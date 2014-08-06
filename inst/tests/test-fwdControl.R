@@ -45,6 +45,20 @@ test_that("fwdControl accessors", {
     season <- test_fwdControl_get_target_season(fc, target_no)
     expect_that(fc@target[target_no, "season"], is_identical_to(season))
     fc@target[target_no,"fishery"] <- as.integer(round(runif(1)))
+    # get rel_year and rel_season of target
+    target_no <- round(runif(1, min=1, max=nrow(fc@target)))
+    fc@target$rel_year <- as.integer(NA)
+    fc@target$rel_season <- as.integer(NA)
+    rel_year <- test_fwdControl_get_target_rel_year(fc, target_no)
+    rel_season <- test_fwdControl_get_target_rel_season(fc, target_no)
+    expect_that(rel_year, is_identical_to(fc@target[target_no, "rel_year"]))
+    expect_that(rel_season, is_identical_to(fc@target[target_no, "rel_season"]))
+    fc@target$rel_year <- fc@target[target_no, "year"]
+    fc@target$rel_season <- fc@target[target_no, "season"]
+    rel_year <- test_fwdControl_get_target_rel_year(fc, target_no)
+    rel_season <- test_fwdControl_get_target_rel_season(fc, target_no)
+    expect_that(rel_year, is_identical_to(fc@target[target_no, "rel_year"]))
+    expect_that(rel_season, is_identical_to(fc@target[target_no, "rel_season"]))
     # force fishery column to be integer
     fishery <- test_fwdControl_get_target_fishery(fc, target_no)
     expect_that(fc@target[target_no, "fishery"], is_identical_to(fishery))

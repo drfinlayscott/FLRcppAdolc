@@ -93,14 +93,13 @@ int fwdControl::get_target_year(const int target_no) const {
     return year[target_no-1];
 }
 
-int fwdControl::get_target_fishery(const int target_no) const {
-    Rcpp::IntegerVector fishery = target["fishery"];
-    if (target_no > fishery.size()){
-        Rcpp::stop("In fwdControl::get_target_fishery. target_no > number of targets\n");
+int fwdControl::get_target_rel_year(const int target_no) const {
+    Rcpp::IntegerVector rel_year = target["rel_year"];
+    if (target_no > rel_year.size()){
+        Rcpp::stop("In fwdControl::get_target_rel_year. target_no > number of targets\n");
     }
-    return fishery[target_no-1];
+    return rel_year[target_no-1];
 }
-
 
 int fwdControl::get_target_season(const int target_no) const {
     Rcpp::IntegerVector season = target["season"];
@@ -109,6 +108,23 @@ int fwdControl::get_target_season(const int target_no) const {
     }
     return season[target_no-1];
 }
+
+int fwdControl::get_target_rel_season(const int target_no) const {
+    Rcpp::IntegerVector rel_season = target["rel_season"];
+    if (target_no > rel_season.size()){
+        Rcpp::stop("In fwdControl::get_target_rel)season. target_no > number of targets\n");
+    }
+    return rel_season[target_no-1];
+}
+
+int fwdControl::get_target_fishery(const int target_no) const {
+    Rcpp::IntegerVector fishery = target["fishery"];
+    if (target_no > fishery.size()){
+        Rcpp::stop("In fwdControl::get_target_fishery. target_no > number of targets\n");
+    }
+    return fishery[target_no-1];
+}
+
 
 
 // It's a 3D array and we want the 2nd column of the 2nd dimension

@@ -1569,6 +1569,10 @@ test_operatingModel_eval_target_hat2 <- function(flfs, flb_sexp, model_name, par
     .Call('FLRcppAdolc_test_operatingModel_eval_target_hat2', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no)
 }
 
+test_operatingModel_calc_target_value <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no) {
+    .Call('FLRcppAdolc_test_operatingModel_calc_target_value', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no)
+}
+
 test_year_season_to_timestep_FLQuant_double <- function(flq, year, season) {
     .Call('FLRcppAdolc_test_year_season_to_timestep_FLQuant_double', PACKAGE = 'FLRcppAdolc', flq, year, season)
 }

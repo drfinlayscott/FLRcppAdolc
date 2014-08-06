@@ -288,4 +288,26 @@ test_that("operatingModel target values and eval_target_hat method", {
     cin <- c(catches_total[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1:max_iter])
     expect_that(cout, equals(cin))
 
+    #----------- Test calc target by target type ----------
+    # Not a relative target - should just the values in the target_iter slot
+    target_no <- 1
+    fout <- test_operatingModel_calc_target_value(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
+    expect_that(fout, is_identical_to(unname(c(fc@target_iters[target_no,"value",]))))
+    target_no <- 2
+    cout <- test_operatingModel_calc_target_value(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
+    expect_that(cout, is_identical_to(unname(c(fc@target_iters[target_no,"value",]))))
+    # Add a relative f target
+    fc@target[3,"quantity"] <- "f"
+    fc@target[3,"rel_year"] <- 1
+    fc@target[3,"rel_season"] <- 1
+    target_no <- 3
+    fout <- test_operatingModel_calc_target_value(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
+    expect_that(unname(c(f_total[1,1,1,1,1,]) * fc@target_iters[target_no,"value",]), equals(fout))
+    # Add a relative catch target
+    fc@target[4,"quantity"] <- "catch"
+    fc@target[4,"rel_year"] <- 2
+    fc@target[4,"rel_season"] <- 1
+    target_no <- 4
+    cout <- test_operatingModel_calc_target_value(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
+    expect_that(unname(c(catches_total[1,2,1,1,1,]) * fc@target_iters[target_no,"value",]), equals(cout))
 })

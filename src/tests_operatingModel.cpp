@@ -110,3 +110,14 @@ std::vector<double> test_operatingModel_eval_target_hat2(FLFisheriesAdolc flfs, 
     }
     return out;
 }
+
+
+
+// [[Rcpp::export]]
+std::vector<double> test_operatingModel_calc_target_value(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int target_no){
+    fwdBiolAdolc biol(flb_sexp, model_name, params, timelag, residuals, residuals_mult);
+    operatingModel om(flfs, biol, f, f_spwn, ctrl);
+    // Pull out value
+    std::vector<double> out = om.calc_target_value(target_no, 2);
+    return out;
+}

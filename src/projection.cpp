@@ -327,17 +327,11 @@ std::vector<adouble> operatingModel::eval_target_hat(const int target_no, const 
     const int season = ctrl.get_target_season(target_no);
     const int unit = 1;
     const int area = 1;
-    FLQuantAdolc out_flq;
     // get all iterations
     std::vector<adouble> out_all_iters = eval_target_hat(target_type, year, unit, season, area);
+    // return a subset with some iterator magic
+    return std::vector<adouble>(out_all_iters.begin() + min_iter - 1, out_all_iters.begin() + max_iter);
 
-    // subset would be better?
-    std::vector<adouble> out(max_iter - min_iter + 1, 0.0); // can we initialise at this point? Or pass in as reference?
-    for (unsigned int iter_count = 0; iter_count <= (max_iter - min_iter); ++iter_count){
-        //out[iter_count] = out_flq(1, year, unit, season, area, min_iter + iter_count);
-        out[iter_count] = out_all_iters[min_iter + iter_count - 1];
-    }
-    return out;
 }
 
 FLQuantAdolc operatingModel::fbar(const int fishery_no, const int catch_no, const int biol_no) const{
@@ -384,7 +378,6 @@ FLQuantAdolc operatingModel::catches(const int biol_no) const{
 std::vector<double> operatingModel::calc_target_value(const int target_no, const int col) const{
     //Rcpp::IntegerVector dim = target_iters.attr("dim");
     //std::vector<double> out(dim[2], 0.0);
-
     int target_year = ctrl.get_target_year(target_no);
     int target_season = ctrl.get_target_season(target_no);
     int target_rel_year = ctrl.get_target_rel_year(target_no);
@@ -393,22 +386,24 @@ std::vector<double> operatingModel::calc_target_value(const int target_no, const
     bool target_rel_year_na = Rcpp::IntegerVector::is_na(target_rel_year);
     bool target_rel_season_na = Rcpp::IntegerVector::is_na(target_rel_season);
     // Both are either NA, or neither are, if one or other is NA then something has gone wrong (XOR)
-    if (!(target_rel_year_na ^ target_rel_season_na)){
+    if ((target_rel_year_na ^ target_rel_season_na)){
         Rcpp::stop("in operatingModel::calc_target_value. Only one of rel_year or re_season is NA. Must be neither or both.\n");
     }
+    std::vector<double> value(ctrl.get_niter(),0.0); 
     // Target is not a relative value so just return the values
-    //if (target_rel_year_na){
-        std::vector<double> value = ctrl.get_target_value(target_no, col);
-    //}
+    if (target_rel_year_na){
+        value = ctrl.get_target_value(target_no, col);
+    }
     // Target is relative so we have calc the value
-    //else {
-
-    //}
-
-    // Is it a relative value
-    // If no
-    // If yes
-    // eval_target * value
+    else {
+        //std::vector<adouble> operatingModel::eval_target_hat(const fwdControlTargetType target_type, const int year, const int unit, const int season, const int area) const{
+        value = ctrl.get_target_value(target_no, col);
+        fwdControlTargetType target_type = ctrl.get_target_type(target_no);
+        std::vector<adouble> rel_value = eval_target_hat(target_type, target_rel_year, 1, target_rel_season, 1);
+        for (int i = 0; i < value.size(); ++i){
+            value[i] = value[i] * rel_value[i].value();
+        }
+    }
     return value;
 }
 
@@ -449,7 +444,8 @@ void operatingModel::run(){
         //Rprintf("target_season: %i\n", target_season);
         Rprintf("target_timestep: %i\n", target_timestep);
 
-        target_value = ctrl.get_target_value(target_count, 2); // better to return all iters and move to outside iter loop
+        target_value = calc_target_value(target_count, 2); 
+        //target_value = ctrl.get_target_value(target_count, 2); // better to return all iters and move to outside iter loop
         //fisheries(1)(1).get_fbar_range_indices();
         for (int iter_count = 1; iter_count <= niter; ++iter_count){
             Rprintf("Resolving iter: %i\n", iter_count);

@@ -73,8 +73,9 @@ class operatingModel {
         std::vector<adouble> eval_target_hat(const int target_no, const int min_iter, const int max_iter) const;
         // Given the target type and the FLQuant information, return all iterations from the operatingModel
         std::vector<adouble> eval_target_hat(const fwdControlTargetType target_type, const int year, const int unit, const int season, const int area) const;
-        // Similar to fwdControl::get_target_value but calcs value from relative values
-        std::vector<double> calc_target_value(const int target_no, const int col) const; // gets all iters. col: 1 = min, 2 = value, 3 = max
+
+        // The target value we are trying to hit - either directly from the control object or a min / max / rel value calculation
+        std::vector<double> calc_target_value(const int target_no) const; // gets all iters. 
 
         // The target value calculations
         // fbar from a catch and fishery on a stock - i.e. partial F - will need to adapt this to include multiple biols in the future

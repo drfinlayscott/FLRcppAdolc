@@ -21,6 +21,14 @@ test_run_all_iters <- function(fisheries, FLBiolSEXP, srr_model_name, srr_params
     .Call('FLRcppAdolc_test_run_all_iters', PACKAGE = 'FLRcppAdolc', fisheries, FLBiolSEXP, srr_model_name, srr_params, srr_residuals, srr_residuals_mult, srr_timelag, f, f_spwn, ctrl)
 }
 
+get_data_element_speed_test1 <- function(flq, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_get_data_element_speed_test1', PACKAGE = 'FLRcppAdolc', flq, quant, year, unit, season, area, iter)
+}
+
+get_data_element_speed_test2 <- function(flq, quant, year, unit, season, area, iter) {
+    .Call('FLRcppAdolc_get_data_element_speed_test2', PACKAGE = 'FLRcppAdolc', flq, quant, year, unit, season, area, iter)
+}
+
 test_FLQuant_FLQuant_multiplier_assignment_operator <- function(flq1, flq2) {
     .Call('FLRcppAdolc_test_FLQuant_FLQuant_multiplier_assignment_operator', PACKAGE = 'FLRcppAdolc', flq1, flq2)
 }

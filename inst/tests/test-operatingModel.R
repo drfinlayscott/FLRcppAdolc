@@ -296,6 +296,7 @@ test_that("operatingModel target values and eval_target_hat method", {
     target_no <- 2
     cout <- test_operatingModel_calc_target_value(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
     expect_that(cout, is_identical_to(unname(c(fc@target_iters[target_no,"value",]))))
+
     # Add a relative f target
     fc@target[3,"quantity"] <- "f"
     fc@target[3,"rel_year"] <- 1
@@ -310,4 +311,76 @@ test_that("operatingModel target values and eval_target_hat method", {
     target_no <- 4
     cout <- test_operatingModel_calc_target_value(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
     expect_that(unname(c(catches_total[1,2,1,1,1,]) * fc@target_iters[target_no,"value",]), equals(cout))
+
+    # Min and max values
+    # Set a Min bound to start with
+    fc@target[5,"quantity"] <- "catch"
+    fc@target_iters[5,"value",] <- NA
+    fc@target_iters[5,"max",] <- NA
+    fc@target_iters[5,"min",] <- rnorm(dim(fc@target_iters)[3], mean = 1000)
+    # Set Catch in that year to be 0 so that catch should be 0 - but will be constrained by min catch
+    flfs_min <- flfs
+    for (i in 1:length(flfs_min)){
+        flfs_min[[i]][[1]]@landings.n[,fc@target[5,"year"],,fc@target[5,"season"],,] <- 0
+        flfs_min[[i]][[1]]@discards.n[,fc@target[5,"year"],,fc@target[5,"season"],,] <- 0
+    }
+    flfs_min@desc <- flfs@desc # eck
+    cout <- test_operatingModel_calc_target_value(flfs_min, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, 5) 
+    expect_that(cout, is_identical_to(unname(fc@target_iters[5,"min",])))
+    # Try a Max value
+    fc@target[6,"quantity"] <- "catch"
+    fc@target_iters[6,"value",] <- NA
+    fc@target_iters[6,"min",] <- NA
+    fc@target_iters[6,"max",] <- rnorm(dim(fc@target_iters)[3], mean = 1000)
+    # Set Catch in that year to be larger than the catch in that year so that catch should be very big - but will be constrained by max catch
+    flfs_max <- flfs
+    for (i in 1:length(flfs_max)){
+        flfs_max[[i]][[1]]@landings.n[,fc@target[6,"year"],,fc@target[6,"season"],,] <- fc@target_iters[6,"max",] + 1
+        flfs_max[[i]][[1]]@discards.n[,fc@target[6,"year"],,fc@target[6,"season"],,] <- fc@target_iters[6,"max",] + 1
+    }
+    flfs_max@desc <- flfs@desc # eck
+    cout <- test_operatingModel_calc_target_value(flfs_max, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, 6) 
+    expect_that(cout, is_identical_to(unname(fc@target_iters[6,"max",])))
+
+    # Try Min and Max values
+    # some iters are min, some are max, some are OK
+    catches_total <- catch(flfs[[1]][[1]])
+    catches_total[] <- 0
+    for (i in 1:length(flfs)){
+        catches_total <- catches_total + catch(flfs[[i]][[1]])
+    }
+    current_catches <- c(catches_total[,fc@target[7,"year"],1,fc@target[7,"season"],1,])
+    min_iters <- as.logical(round(runif(dim(flq)[6], min = 0, max = 1)))
+    max_iters <- !min_iters
+    max_catches <- current_catches
+    min_catches <- current_catches
+    min_catches[min_iters] <- min_catches[min_iters] * 1.01
+    max_catches[min_iters] <- max_catches[min_iters] * 1.1
+    min_catches[max_iters] <- min_catches[max_iters] * 0.9
+    max_catches[max_iters] <- max_catches[max_iters] * 0.99
+    fc@target[7,"quantity"] <- "catch"
+    fc@target_iters[7,"value",] <- NA
+    fc@target_iters[7,"min",] <- min_catches
+    fc@target_iters[7,"max",] <- max_catches
+    cout <- test_operatingModel_calc_target_value(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, 7) 
+    expect_that(cout[min_iters], is_identical_to(min_catches[min_iters]))
+    expect_that(cout[max_iters], is_identical_to(max_catches[max_iters]))
+    
+    # Try Min and Max relative values
+    # Catch cannot change by more than 5% in year 4
+    fc@target[8,"rel_year"] <- 4L
+    fc@target[8,"rel_season"] <- 1L
+    fc@target[8,"quantity"] <- "catch"
+    fc@target_iters[8,"value",] <- NA
+    fc@target_iters[8,"min",] <- 0.95
+    fc@target_iters[8,"max",] <- 1.05
+    cout <- test_operatingModel_calc_target_value(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, 8) 
+    current_catches4 <- c(catches_total[,fc@target[4,"year"],1,fc@target[4,"season"],1,])
+    current_catches8 <- c(catches_total[,fc@target[8,"year"],1,fc@target[8,"season"],1,])
+    min_lim <- current_catches8 > current_catches4
+    expect_that(current_catches4[min_lim] * 1.05, equals(cout[min_lim]))
+    max_lim <- current_catches8 < current_catches4
+    expect_that(current_catches4[max_lim] * 0.95, equals(cout[max_lim]))
+
 })
+

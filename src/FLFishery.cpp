@@ -10,7 +10,6 @@
 // Just an empty object
 template <typename T>
 FLFishery_base<T>::FLFishery_base(){
-    //Rprintf("In FLFishery empty constructor\n");
     name = std::string();
     effort_flq = FLQuant();
     vcost_flq = FLQuant();
@@ -21,7 +20,6 @@ FLFishery_base<T>::FLFishery_base(){
 // Used as intrusive 'as'
 template <typename T>
 FLFishery_base<T>::FLFishery_base(SEXP flf_sexp) : FLCatches_base<T>(flf_sexp){ // Force the FLCatches SEXP constructor to be called first
-    //Rprintf("In FLFishery SEXP constructor\n");
     Rcpp::S4 flf_s4 = Rcpp::as<Rcpp::S4>(flf_sexp);
     name = Rcpp::as<std::string>(flf_s4.slot("name"));
     effort_flq = flf_s4.slot("effort");
@@ -121,7 +119,7 @@ FLFisheries_base<T>::FLFisheries_base(){
     //Rprintf("In FLFisheries empty constructor\n");
 }
 
-// Constructor from a SEXP S4 FLFishery
+// Constructor from a SEXP S4 FLFisheries
 // Used as intrusive 'as'
 template <typename T>
 FLFisheries_base<T>::FLFisheries_base(SEXP flfs_sexp) { 
@@ -139,7 +137,6 @@ FLFisheries_base<T>::FLFisheries_base(SEXP flfs_sexp) {
 // Returns an FLFisheries
 template <typename T>
 FLFisheries_base<T>::operator SEXP() const{
-    //Rprintf("Wrapping FLFisheries_base<T>.\n");
     Rcpp::S4 flfs_s4("FLFisheries");
     Rcpp::List list_out;
     for (unsigned int i = 0; i < get_nfisheries(); i++){
@@ -154,7 +151,6 @@ FLFisheries_base<T>::operator SEXP() const{
 // Copy constructor - else 'data' can be pointed at by multiple instances
 template<typename T>
 FLFisheries_base<T>::FLFisheries_base(const FLFisheries_base<T>& FLFisheries_source){
-    //Rprintf("In FLFisheries_base<T> copy constructor\n");
 	fisheries  = FLFisheries_source.fisheries; // std::vector always does deep copy
     desc = FLFisheries_source.desc;
     names = Rcpp::clone<Rcpp::CharacterVector>(FLFisheries_source.names);
@@ -163,7 +159,6 @@ FLFisheries_base<T>::FLFisheries_base(const FLFisheries_base<T>& FLFisheries_sou
 // Assignment operator to ensure deep copy - else 'data' can be pointed at by multiple instances
 template<typename T>
 FLFisheries_base<T>& FLFisheries_base<T>::operator = (const FLFisheries_base<T>& FLFisheries_source){
-    //Rprintf("In FLFisheries_base<T> assignment operator\n");
 	if (this != &FLFisheries_source){
         fisheries  = FLFisheries_source.fisheries; // std::vector always does deep copy
         desc = FLFisheries_source.desc;
@@ -181,7 +176,6 @@ unsigned int FLFisheries_base<T>::get_nfisheries() const {
 // Get only data accessor - single element - starts at 1
 template <typename T>
 FLFishery_base<T> FLFisheries_base<T>::operator () (const unsigned int fishery) const{
-    //Rprintf("FLFisheries const single accessor\n");
     if (fishery > get_nfisheries()){
         Rcpp::stop("FLFisheries_base: Trying to access fishery larger than data size.");
     }
@@ -191,7 +185,6 @@ FLFishery_base<T> FLFisheries_base<T>::operator () (const unsigned int fishery) 
 // Data accessor - single element - starts at 1
 template <typename T>
 FLFishery_base<T>& FLFisheries_base<T>::operator () (const unsigned int fishery){
-    //Rprintf("FLFisheries single accessor\n");
     if (fishery > get_nfisheries()){
         Rcpp::stop("FLFisheries_base: Trying to access fishery larger than data size.");
     }
@@ -201,7 +194,6 @@ FLFishery_base<T>& FLFisheries_base<T>::operator () (const unsigned int fishery)
 // Get only data accessor - two elements - both start at 1
 template <typename T>
 FLCatch_base<T> FLFisheries_base<T>::operator () (const unsigned int fishery, const unsigned int catches) const{
-    //Rprintf("FLFisheries const double accessor\n");
     if (fishery > get_nfisheries()){
         Rcpp::stop("FLFisheries_base: Trying to access fishery larger than data size.");
     }
@@ -214,7 +206,6 @@ FLCatch_base<T> FLFisheries_base<T>::operator () (const unsigned int fishery, co
 // Data accessor - two elements - both start at 1
 template <typename T>
 FLCatch_base<T>& FLFisheries_base<T>::operator () (const unsigned int fishery, const unsigned int catches) {
-    //Rprintf("FLFisheries double accessor\n");
     if (fishery > get_nfisheries()){
         Rcpp::stop("FLFisheries_base: Trying to access fishery larger than data size.");
     }

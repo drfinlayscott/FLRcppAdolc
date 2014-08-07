@@ -29,6 +29,10 @@
 # f
 # catch
 
+# min / max targets are only acceptable if there is another non min / max target in that same time step
+# But that non min / max target cannot be the same target type / biol / fishery
+# Else doesn't make sense
+
 
 # Soundtrack: Electric Wizard - Let Us Prey
 #' fwdControl

@@ -133,7 +133,7 @@ operatingModel::operatingModel(const FLFisheriesAdolc fisheries_in, const fwdBio
             }
         }
     }
-    // Add ITER check
+    // Add ITER check for ctrl
     biol = biol_in;
     fisheries = fisheries_in;
     f = f_in;
@@ -245,6 +245,7 @@ void operatingModel::project_timestep(const int timestep, const int min_iter, co
     for (int iter_count = min_iter; iter_count <= max_iter; ++iter_count){
         // Calculate the landings and discards
         // quant_count is over the first dimension which is age
+        // for looping when could add FLQuant - but need to subset by year and season
         for (int quant_count = 1; quant_count <= max_quant; ++quant_count){
             z =  f(quant_count, year, 1, season, 1, iter_count, 1) + biol.m()(quant_count, year, 1, season, 1, iter_count);
             catch_temp = (f(quant_count, year, 1, season, 1, iter_count, 1) / z) * (1 - exp(-z)) * biol.n()(quant_count, year, 1, season, 1, iter_count);
@@ -375,11 +376,14 @@ FLQuantAdolc operatingModel::catches(const int biol_no) const{
 
 // Similar to fwdControl::get_target_value but calcs value from relative values
 // gets all iters. col: 1 = min, 2 = value, 3 = max
-std::vector<double> operatingModel::calc_target_value(const int target_no, const int col) const{
-    //Rcpp::IntegerVector dim = target_iters.attr("dim");
-    //std::vector<double> out(dim[2], 0.0);
-    int target_year = ctrl.get_target_year(target_no);
-    int target_season = ctrl.get_target_season(target_no);
+std::vector<double> operatingModel::calc_target_value(const int target_no) const{
+    // Pull out the min, value and max iterations from the control object
+    std::vector<double> value = ctrl.get_target_value(target_no, 2);
+    std::vector<double> min_value = ctrl.get_target_value(target_no, 1);
+    std::vector<double> max_value = ctrl.get_target_value(target_no, 3);
+    fwdControlTargetType target_type = ctrl.get_target_type(target_no);
+
+    // Are we dealing with absolute or relative values?
     int target_rel_year = ctrl.get_target_rel_year(target_no);
     int target_rel_season = ctrl.get_target_rel_season(target_no);
     // Are rel_year and rel_season NAs or do they have values?
@@ -387,21 +391,55 @@ std::vector<double> operatingModel::calc_target_value(const int target_no, const
     bool target_rel_season_na = Rcpp::IntegerVector::is_na(target_rel_season);
     // Both are either NA, or neither are, if one or other is NA then something has gone wrong (XOR)
     if ((target_rel_year_na ^ target_rel_season_na)){
-        Rcpp::stop("in operatingModel::calc_target_value. Only one of rel_year or re_season is NA. Must be neither or both.\n");
+        Rcpp::stop("in operatingModel::calc_target_value. Only one of rel_year or rel_season is NA. Must be neither or both.\n");
     }
-    std::vector<double> value(ctrl.get_niter(),0.0); 
-    // Target is not a relative value so just return the values
-    if (target_rel_year_na){
-        value = ctrl.get_target_value(target_no, col);
-    }
-    // Target is relative so we have calc the value
-    else {
-        //std::vector<adouble> operatingModel::eval_target_hat(const fwdControlTargetType target_type, const int year, const int unit, const int season, const int area) const{
-        value = ctrl.get_target_value(target_no, col);
-        fwdControlTargetType target_type = ctrl.get_target_type(target_no);
+    // If target is relative we have to calc the value
+    if (!target_rel_year_na){
+        Rprintf("Relative target\n");
+        // Get the value we are relative to from the operatingModel
         std::vector<adouble> rel_value = eval_target_hat(target_type, target_rel_year, 1, target_rel_season, 1);
-        for (int i = 0; i < value.size(); ++i){
-            value[i] = value[i] * rel_value[i].value();
+        // Modify it by the relative amount
+        for (int iter_count = 0; iter_count < value.size(); ++iter_count){
+            value[iter_count] = value[iter_count] * rel_value[iter_count].value();
+            min_value[iter_count] = min_value[iter_count] * rel_value[iter_count].value();
+            max_value[iter_count] = max_value[iter_count] * rel_value[iter_count].value();
+        }
+    }
+
+    // Sort out minimum and maximum stuff
+    int target_year = ctrl.get_target_year(target_no);
+    int target_season = ctrl.get_target_season(target_no);
+    // If we have minimum and maximum values then we shouldn't have values (values == NA)
+    // If values are NA, then calculate them from the operatingModel
+    // As all iterations should be either NA or a real value, just check the first iteration
+    if(Rcpp::NumericVector::is_na(value[0])){
+        // Annoyingly eval_target_hat returns adouble, so we need to take the value
+        std::vector<adouble> value_ad = eval_target_hat(target_type, target_year, 1, target_season, 1);
+        for (int iter_count = 0; iter_count < value.size(); ++iter_count){
+            value[iter_count] = value_ad[iter_count].value();
+            Rprintf("value[%i]: %f\n", iter_count, value[iter_count]);
+        }
+    }
+    // If first iter of min_value is NA, then all of them are
+    if(!Rcpp::NumericVector::is_na(min_value[0])){ 
+    Rprintf("Minimum target set\n");
+    // Update each iter accordingly
+        for (int iter_count = 0; iter_count < value.size(); ++iter_count){
+            if(value[iter_count] < min_value[iter_count]){
+                Rprintf("value is less than min_value\n");
+                value[iter_count] = min_value[iter_count];
+            }
+        }
+    }
+    // If first iter of max_value is NA, then all of them are
+    if(!Rcpp::NumericVector::is_na(max_value[0])){ 
+    Rprintf("Maximum target set\n");
+    // Update each iter accordingly
+        for (int iter_count = 0; iter_count < value.size(); ++iter_count){
+            if(value[iter_count] > max_value[iter_count]){
+                Rprintf("value is greater than max_value\n");
+                value[iter_count] = max_value[iter_count];
+            }
         }
     }
     return value;
@@ -444,9 +482,11 @@ void operatingModel::run(){
         //Rprintf("target_season: %i\n", target_season);
         Rprintf("target_timestep: %i\n", target_timestep);
 
-        target_value = calc_target_value(target_count, 2); 
-        //target_value = ctrl.get_target_value(target_count, 2); // better to return all iters and move to outside iter loop
-        //fisheries(1)(1).get_fbar_range_indices();
+        // Get the value thar we are trying to hit
+        // This either comes directly from the control object
+        // or is calculated if not a min / max or rel value)
+        target_value = calc_target_value(target_count); 
+
         for (int iter_count = 1; iter_count <= niter; ++iter_count){
             Rprintf("Resolving iter: %i\n", iter_count);
 
@@ -464,6 +504,7 @@ void operatingModel::run(){
             // Is it a min / max / value?
             //target_value = ctrl.get_target_value(target_count, 2, iter_count); // better to return all iters and move to outside iter loop
 
+            // What is the current value of the predicted target in the operatingModel
             target_value_hat = eval_target_hat(target_count, iter_count, iter_count);
 
             // Calculate the error term that we want to be 0
@@ -612,4 +653,15 @@ operatingModel test_run_all_iters(const FLFisheriesAdolc fisheries, SEXP FLBiolS
 
 }
 
+// [[Rcpp::export]]
+int get_data_element_speed_test1(const FLQuant flq, const int quant, const int year, const int unit, const int season, const int area, int iter){
+    return flq.get_data_element(quant, year, unit, season, area, iter);
+
+}
+
+// [[Rcpp::export]]
+int get_data_element_speed_test2(const FLQuant flq, const int quant, const int year, const int unit, const int season, const int area, int iter){
+    return flq.get_data_element2(quant, year, unit, season, area, iter);
+
+}
 

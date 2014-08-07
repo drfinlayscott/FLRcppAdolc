@@ -240,6 +240,31 @@ int FLQuant_base<T>::get_data_element(const int quant, const int year, const int
 	return element;
 }
 
+// Remove all the calls to get_nxxxx() to speed up?
+template <typename T>
+int FLQuant_base<T>::get_data_element2(const int quant, const int year, const int unit, const int season, const int area, int iter) const{
+    Rcpp::IntegerVector dim = get_dim();
+    if ((quant > dim(0)) || (year > dim(1)) || (unit > dim(2)) || (season > dim(3)) || (area > dim(4))){
+            Rcpp::stop("Trying to access element outside of quant, year, unit, season or area dim range.");
+    }
+    // If only 1 iter and trying to get n iter, set iter to 1
+    if ((iter > 1) && (dim(5) == 1)){
+        //get_data_element(quant, year, unit, season, area, 1);
+        iter = 1;
+    }
+    if ((iter > dim(5)) && (dim(5) > 1)){
+        Rcpp::stop("In get_data_element: trying to access iter > niter\n");
+    } 
+	unsigned int element = (dim(4) * dim(3) * dim(2) * dim(1) * dim(0) * (iter - 1)) +
+			(dim(3) * dim(2) * dim(1) * dim(0) * (area - 1)) +
+			(dim(2) * dim(1) * dim(0) * (season - 1)) +
+			(dim(1) * dim(0) * (unit - 1)) +
+			(dim(0) * (year - 1)) +
+			(quant - 1); 
+	return element;
+}
+
+
 // Get only data accessor - single element
 template <typename T>
 T FLQuant_base<T>::operator () (const unsigned int element) const{

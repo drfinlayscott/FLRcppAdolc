@@ -321,9 +321,9 @@ dummy_fwdControl_generator <- function(years = 1:round(runif(1, min=1,max=10)), 
 
     target_iters <- array(NA, dim=c(nrow(ctrl_df),3,niters), dimnames=list(target_no=1:nrow(ctrl_df), c("min","value","max"), iter=1:niters))
     #target_iters[,"value",] <- 0.2
-    target_iters[,"min",] <- runif(dim(target_iters)[1] * dim(target_iters)[3], min=0.1, max=0.2)
+    target_iters[,"min",] <- NA#runif(dim(target_iters)[1] * dim(target_iters)[3], min=0.1, max=0.2)
     target_iters[,"value",] <- runif(dim(target_iters)[1] * dim(target_iters)[3], min=0.3, max=0.4)
-    target_iters[,"max",] <- runif(dim(target_iters)[1] * dim(target_iters)[3], min=0.5, max=0.6)
+    target_iters[,"max",] <- NA#runif(dim(target_iters)[1] * dim(target_iters)[3], min=0.5, max=0.6)
 
     # Force integers
     ctrl_df$fishery <- as.integer(ctrl_df$fishery)

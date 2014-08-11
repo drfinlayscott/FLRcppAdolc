@@ -203,36 +203,54 @@ test_that("operatingModel target values and eval_target_hat method", {
     residuals_sr <- flq[1,]
     residuals_mult <- TRUE
     srr_timelag <- 1
-    fc <- dummy_fwdControl_generator(years = 1, niters = dim(n(flb))[6])
-    # Hack fbar range in catch
-    minfbar <- round(runif(n=1,min=1,max=4))
-    maxfbar <- round(runif(n=1,min=5,max=10))
-    for (i in 1:length(flfs)){
-        for (j in 1:length(flfs[[i]])){
-            flfs[[i]][[j]]@range <- c(flfs[[i]][[j]]@range, minfbar = minfbar, maxfbar = maxfbar)
-        }
-    }
-    # WTF? why does description get reset to nothing? flfs@desc
-    flfs@desc <- "xxx"
     # Catch no has be to 1 at the moment - we only have 1 biol and we need to think about how to link a biol to a catch
     catch_no <- 1 # round(runif(n=1,min=1,max=min(unlist(lapply(flfs, length))))) # which catch no of each fishery
     fishery_no <- round(runif(1, min=1, max=length(flfs)))
 
+    #------------ Test age range indices --------------------
+    fc <- dummy_fwdControl_generator(years = 1:6, niters = dim(n(flb))[6])
+    fc@target[1,c("min_age","max_age")] <- c(1L,5L)
+    fc@target[2,c("min_age","max_age")] <- c(2L,3L)
+    fc@target[3,c("min_age","max_age")] <- c(20L,30L)
+    fc@target[4,c("min_age","max_age")] <- c(2L,30L)
+    fc@target[5,c("min_age","max_age")] <- c(0L,30L)
+
+    age_indices <- test_operating_model_get_target_age_range_indices(flfs, flb, "ricker", params_sr, srr_timelag, residuals_sr, residuals_mult, f, f_spwn, fc, 1)
+    expect_that(age_indices, equals(unname(unlist(fc@target[1,c("min_age","max_age")])) - as.numeric(dimnames(n(flb))[[1]][1])))
+    age_indices <- test_operating_model_get_target_age_range_indices(flfs, flb, "ricker", params_sr, srr_timelag, residuals_sr, residuals_mult, f, f_spwn, fc, 2)
+    expect_that(age_indices, equals(unname(unlist(fc@target[2,c("min_age","max_age")])) - as.numeric(dimnames(n(flb))[[1]][1])))
+    # outside range - error
+    expect_that(test_operating_model_get_target_age_range_indices(flfs, flb, "ricker", params_sr, srr_timelag, residuals_sr, residuals_mult, f, f_spwn, fc, 3), throws_error())
+    expect_that(test_operating_model_get_target_age_range_indices(flfs, flb, "ricker", params_sr, srr_timelag, residuals_sr, residuals_mult, f, f_spwn, fc, 4), throws_error())
+    expect_that(test_operating_model_get_target_age_range_indices(flfs, flb, "ricker", params_sr, srr_timelag, residuals_sr, residuals_mult, f, f_spwn, fc, 5), throws_error())
+    # range not set
+    expect_that(test_operating_model_get_target_age_range_indices(flfs, flb, "ricker", params_sr, srr_timelag, residuals_sr, residuals_mult, f, f_spwn, fc, 6), throws_error())
+    expect_that(test_operating_model_get_target_age_range_indices(flfs, flb, "ricker", params_sr, srr_timelag, residuals_sr, residuals_mult, f, f_spwn, fc, 7), throws_error())
+
+
     #---------- Test target methods ---------------
     # Get the target values from the C++ code
-    targets <- test_operating_model_targets(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, fishery_no, catch_no)
+    targets <- test_operating_model_targets(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, fishery_no, catch_no, 1)
     # fbar of a single catch 
-    expect_that(targets[["fbar_catch"]], equals(apply(f[[fishery_no]][minfbar:maxfbar,],2:6,mean)))
+    expect_that(targets[["fbar_catch"]], equals(apply(f[[fishery_no]][fc@target[1,"min_age"]:fc@target[1,"max_age"],],2:6,mean)))
+    # a different range
+    targets <- test_operating_model_targets(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, fishery_no, catch_no, 2)
+    # fbar of a single catch 
+    expect_that(targets[["fbar_catch"]], equals(apply(f[[fishery_no]][fc@target[2,"min_age"]:fc@target[2,"max_age"],],2:6,mean)))
+
     # total fbar of all fisheries
-    f2 <- lapply(f, function(x) apply(x[minfbar:maxfbar,],2:6,mean))
+    f2 <- lapply(f, function(x) 
+        apply(x[fc@target[2,"min_age"]:fc@target[2,"max_age"],],2:6,mean)
+    )
     f_total <- f2[[1]]
     f_total[] <- 0
     for (i in 1:length(flfs)){
         f_total <- f_total + f2[[i]]
     }
-    expect_that(targets[["fbar"]], is_identical_to(targets[["fbar"]]))
+    expect_that(targets[["fbar"]]@.Data, is_identical_to(f_total@.Data))
+
     # catches - single
-    expect_that( targets[["catches_catch"]]@.Data , equals(catch(flfs[[fishery_no]][[catch_no]])@.Data))
+    expect_that(targets[["catches_catch"]]@.Data , equals(catch(flfs[[fishery_no]][[catch_no]])@.Data))
     # catches - total
     catches_total <- catch(flfs[[fishery_no]][[catch_no]])
     catches_total[] <- 0
@@ -241,19 +259,26 @@ test_that("operatingModel target values and eval_target_hat method", {
     }
     expect_that(targets[["catches"]]@.Data, equals(catches_total@.Data))
 
+
     #-------- Test eval_target by target number----------
     #--------- Only testing with a single fishery and biol for the moment -------
     # Set up fc to test the output
     # By defaulf fishery = NA
     fishery_no <- round(runif(1, min=1,max=length(f)))
     fc <- dummy_fwdControl_generator(years = 1:dim(flb@n)[2], niters = dim(n(flb))[6])
+    fc@target$min_age <- 2
+    fc@target$max_age <- 5
+    f2 <- lapply(f, function(x) 
+        apply(x[fc@target[1,"min_age"]:fc@target[1,"max_age"],],2:6,mean)
+    )
+    f_total <- f2[[1]]
+    f_total[] <- 0
+    for (i in 1:length(flfs)){
+        f_total <- f_total + f2[[i]]
+    }
     # No fishery
     fc@target[1,"quantity"] <- "f"
     fc@target[2,"quantity"] <- "catch"
-    # With a fishery
-    #fc@target[3,c("quantity","fishery")] <- c("f",fishery_no)
-    #fc@target[4,c("quantity","fishery")] <- c("catch",fishery_no)
-    #fc@target$fishery <- as.integer(fc@target$fishery)
 
     # Testing eval_target
     min_iter <- 1
@@ -377,10 +402,9 @@ test_that("operatingModel target values and eval_target_hat method", {
     cout <- test_operatingModel_calc_target_value(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, 8) 
     current_catches4 <- c(catches_total[,fc@target[4,"year"],1,fc@target[4,"season"],1,])
     current_catches8 <- c(catches_total[,fc@target[8,"year"],1,fc@target[8,"season"],1,])
-    min_lim <- current_catches8 > current_catches4
-    expect_that(current_catches4[min_lim] * 1.05, equals(cout[min_lim]))
+    min_lim <- current_catches8 >= current_catches4
+    expect_that(all((cout[min_lim] / current_catches4[min_lim]) >= 0.95), is_true())
     max_lim <- current_catches8 < current_catches4
-    expect_that(current_catches4[max_lim] * 0.95, equals(cout[max_lim]))
-
+    expect_that(all((cout[max_lim] / current_catches4[max_lim]) <= 1.05), is_true())
 })
 

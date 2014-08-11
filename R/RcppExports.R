@@ -509,14 +509,6 @@ test_FLCatchAdolc_discards_sel <- function(flc) {
     .Call('FLRcppAdolc_test_FLCatchAdolc_discards_sel', PACKAGE = 'FLRcppAdolc', flc)
 }
 
-test_FLCatch_get_fbar_range <- function(flc) {
-    .Call('FLRcppAdolc_test_FLCatch_get_fbar_range', PACKAGE = 'FLRcppAdolc', flc)
-}
-
-test_FLCatch_get_fbar_range_indices <- function(flc) {
-    .Call('FLRcppAdolc_test_FLCatch_get_fbar_range_indices', PACKAGE = 'FLRcppAdolc', flc)
-}
-
 test_FLCatches_as_wrap <- function(flcs) {
     .Call('FLRcppAdolc_test_FLCatches_as_wrap', PACKAGE = 'FLRcppAdolc', flcs)
 }
@@ -1501,6 +1493,10 @@ test_fwdControl_get_target_quantity <- function(control, target_no) {
     .Call('FLRcppAdolc_test_fwdControl_get_target_quantity', PACKAGE = 'FLRcppAdolc', control, target_no)
 }
 
+test_fwdControl_get_age_range <- function(control, target_no) {
+    .Call('FLRcppAdolc_test_fwdControl_get_age_range', PACKAGE = 'FLRcppAdolc', control, target_no)
+}
+
 test_fwdSR_empty_constructor <- function() {
     invisible(.Call('FLRcppAdolc_test_fwdSR_empty_constructor', PACKAGE = 'FLRcppAdolc'))
 }
@@ -1565,8 +1561,12 @@ test_operating_model_project <- function(flfs, flb_sexp, model_name, params, tim
     .Call('FLRcppAdolc_test_operating_model_project', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, timestep, ctrl)
 }
 
-test_operating_model_targets <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, fishery_no, catch_no) {
-    .Call('FLRcppAdolc_test_operating_model_targets', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, fishery_no, catch_no)
+test_operating_model_get_target_age_range_indices <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no) {
+    .Call('FLRcppAdolc_test_operating_model_get_target_age_range_indices', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no)
+}
+
+test_operating_model_targets <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, fishery_no, catch_no, target_no) {
+    .Call('FLRcppAdolc_test_operating_model_targets', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, fishery_no, catch_no, target_no)
 }
 
 test_operatingModel_eval_target_hat <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no, min_iter, max_iter) {

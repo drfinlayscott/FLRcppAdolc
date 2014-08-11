@@ -69,19 +69,22 @@ class operatingModel {
         adouble ssb(const int timestep, const int unit, const int area, const int iter) const; // single iter in a timestep, unit and area
         adouble ssb(const int year, const int unit, const int season, const int area, const int iter) const; // single iter in a timestep, unit and area
 
+        // age range indices for the f based targets
+        Rcpp::IntegerVector get_target_age_range_indices(const int target_no, const int biol_no) const; // Returns the indices of the age range, starts at 0
+
         // Given the target no, evaluate the current value in the operatingModel using the year and season info in the target control
         std::vector<adouble> eval_target_hat(const int target_no, const int min_iter, const int max_iter) const;
         // Given the target type and the FLQuant information, return all iterations from the operatingModel
-        std::vector<adouble> eval_target_hat(const fwdControlTargetType target_type, const int year, const int unit, const int season, const int area) const;
+        std::vector<adouble> eval_target_hat(const fwdControlTargetType target_type, const Rcpp::IntegerVector age_range_indices, const int year, const int unit, const int season, const int area) const;
 
         // The target value we are trying to hit - either directly from the control object or a min / max / rel value calculation
         std::vector<double> calc_target_value(const int target_no) const; // gets all iters. 
 
         // The target value calculations
         // fbar from a catch and fishery on a stock - i.e. partial F - will need to adapt this to include multiple biols in the future
-        FLQuantAdolc fbar(const int fishery_no, const int catch_no, const int biol_no = 1) const;
+        FLQuantAdolc fbar(const Rcpp::IntegerVector age_range_indices, const int fishery_no, const int catch_no, const int biol_no = 1) const;
         // Total fbar on a biol
-        FLQuantAdolc fbar(const int biol_no = 1) const;
+        FLQuantAdolc fbar(const Rcpp::IntegerVector age_range_indices, const int biol_no = 1) const;
         // catches from an FLCatch and fishery on a stock - i.e. partial F - will need to adapt this to include multiple biols in the future
         FLQuantAdolc catches(const int fishery_no, const int catch_no, const int biol_no = 1) const;
         // Total catches from a biol

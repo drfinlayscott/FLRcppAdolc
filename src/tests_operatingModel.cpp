@@ -61,12 +61,25 @@ operatingModel test_operating_model_project(FLFisheriesAdolc flfs, SEXP flb_sexp
 
 
 // [[Rcpp::export]]
-Rcpp::List test_operating_model_targets(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int fishery_no, const int catch_no){
+Rcpp::IntegerVector test_operating_model_get_target_age_range_indices(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int target_no){
     fwdBiolAdolc biol(flb_sexp, model_name, params, timelag, residuals, residuals_mult);
     operatingModel om(flfs, biol, f, f_spwn, ctrl);
+    const int biol_no = 1;
+    Rcpp::IntegerVector age_range_indices = om.get_target_age_range_indices(target_no, biol_no);
+    return age_range_indices;
+}
 
-    FLQuantAdolc fbar_catch = om.fbar(fishery_no, catch_no, 1);
-    FLQuantAdolc fbar = om.fbar(1);
+
+
+
+// [[Rcpp::export]]
+Rcpp::List test_operating_model_targets(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int fishery_no, const int catch_no, const int target_no){
+    fwdBiolAdolc biol(flb_sexp, model_name, params, timelag, residuals, residuals_mult);
+    operatingModel om(flfs, biol, f, f_spwn, ctrl);
+    const int biol_no = 1;
+    Rcpp::IntegerVector age_range_indices = om.get_target_age_range_indices(target_no, biol_no);
+    FLQuantAdolc fbar_catch = om.fbar(age_range_indices, fishery_no, catch_no, biol_no);
+    FLQuantAdolc fbar = om.fbar(age_range_indices, biol_no);
     FLQuantAdolc catches_catch_out = om.catches(fishery_no, catch_no, 1);
     FLQuantAdolc catches_out = om.catches(1);
 
@@ -82,7 +95,6 @@ Rcpp::List test_operating_model_targets(FLFisheriesAdolc flfs, SEXP flb_sexp, co
 std::vector<double> test_operatingModel_eval_target_hat(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int target_no, const int min_iter, const int max_iter){
     fwdBiolAdolc biol(flb_sexp, model_name, params, timelag, residuals, residuals_mult);
     operatingModel om(flfs, biol, f, f_spwn, ctrl);
-
     std::vector<adouble> out_ad = om.eval_target_hat(target_no, min_iter, max_iter);
     std::vector<double> out(out_ad.size(), 0.0);
     for (int i=0; i<out.size(); ++i){
@@ -103,7 +115,9 @@ std::vector<double> test_operatingModel_eval_target_hat2(FLFisheriesAdolc flfs, 
     const int unit = 1;
     const int area = 1;
     fwdControlTargetType target_type = ctrl.get_target_type(target_no);
-    std::vector<adouble> out_ad = om.eval_target_hat(target_type, year, unit, season, area);
+    const int biol_no = 1;
+    Rcpp::IntegerVector age_range_indices = om.get_target_age_range_indices(target_no, biol_no);
+    std::vector<adouble> out_ad = om.eval_target_hat(target_type, age_range_indices, year, unit, season, area);
     std::vector<double> out(out_ad.size(), 0.0);
     for (int i=0; i<out.size(); ++i){
         out[i] = out_ad[i].value();

@@ -282,18 +282,46 @@ void operatingModel::project_timestep(const int timestep, const int min_iter, co
     return;
 }
 
+
+
+// Returns the indices of the age range, starts at 0
+// biol_no not used yet
+Rcpp::IntegerVector operatingModel::get_target_age_range_indices(const int target_no, const int biol_no) const {
+    Rcpp::IntegerVector age_range = ctrl.get_age_range(target_no);
+    Rcpp::IntegerVector age_range_indices(2);
+    // Convert the age names to a vector of strings
+    std::vector<std::string> age_names = Rcpp::as<std::vector<std::string> >(biol.n().get_dimnames()[0]);
+    // Use find() to match names - precheck in R that they exist - if not find, returns the last
+    std::vector<string>::iterator age_min_iterator = find(age_names.begin(), age_names.end(), number_to_string(age_range[0]));
+    if(age_min_iterator != age_names.end()){
+        age_range_indices[0] = std::distance(age_names.begin(), age_min_iterator);
+    }
+    else {
+        Rcpp::stop("min_age in control not found in dimnames of FLBiol\n");
+    }
+    std::vector<string>::iterator age_max_iterator = find(age_names.begin(), age_names.end(), number_to_string(age_range[1]));
+    if(age_max_iterator != age_names.end()){
+        age_range_indices[1] = std::distance(age_names.begin(), age_max_iterator);
+    }
+    else {
+        Rcpp::stop("max_age in control not found in dimnames of FLBiol\n");
+    }
+    return age_range_indices;
+}
+
+
 // Assume 1 fishery and 1 biol for now
-std::vector<adouble> operatingModel::eval_target_hat(const fwdControlTargetType target_type, const int year, const int unit, const int season, const int area) const{
+std::vector<adouble> operatingModel::eval_target_hat(const fwdControlTargetType target_type, const Rcpp::IntegerVector age_range_indices, const int year, const int unit, const int season, const int area) const{
     int biol_no = 1;
     FLQuantAdolc out_flq;
     switch(target_type){
         case target_f:
             // If no fishery in the control object get total fbar on biol
             //if (Rcpp::IntegerVector::is_na(fishery_no)){
-                out_flq = fbar(biol_no);
+                out_flq = fbar(age_range_indices, biol_no);
             //}
             //else {
-            //    out_flq = fbar(fishery_no, catch_no, biol_no);
+            //    out_flq = fbar(age_range_indices, fishery_no, catch_no, biol_no);
             //}
            break;
        case target_catch:
@@ -328,18 +356,20 @@ std::vector<adouble> operatingModel::eval_target_hat(const int target_no, const 
     const int season = ctrl.get_target_season(target_no);
     const int unit = 1;
     const int area = 1;
+    const Rcpp::IntegerVector age_range_indices = get_target_age_range_indices(target_no, biol_no);
     // get all iterations
-    std::vector<adouble> out_all_iters = eval_target_hat(target_type, year, unit, season, area);
+    std::vector<adouble> out_all_iters = eval_target_hat(target_type, age_range_indices, year, unit, season, area);
     // return a subset with some iterator magic
     return std::vector<adouble>(out_all_iters.begin() + min_iter - 1, out_all_iters.begin() + max_iter);
 
 }
 
-FLQuantAdolc operatingModel::fbar(const int fishery_no, const int catch_no, const int biol_no) const{
-    Rcpp::IntegerVector fbar_range = fisheries(fishery_no)(catch_no).get_fbar_range_indices(); // starts at 0 so need to +1 if we use for FLQ accessor - bit inconsistent, sorry
+FLQuantAdolc operatingModel::fbar(const Rcpp::IntegerVector age_range_indices, const int fishery_no, const int catch_no, const int biol_no) const{
+    //Rcpp::IntegerVector fbar_range = fisheries(fishery_no)(catch_no).get_fbar_range_indices(); // starts at 0 so need to +1 if we use for FLQ accessor - bit inconsistent, sorry
+    //Rcpp::IntegerVector fbar_range = get_target_age_range_indices(); // starts at 0 so need to +1 if we use for FLQ accessor - bit inconsistent, sorry
     // Grab the Fs over this range
     Rcpp::IntegerVector fdim = f(fishery_no).get_dim();
-    FLQuantAdolc f_age_trim = f(fishery_no)(fbar_range[0]+1, fbar_range[1]+1, 1, fdim[1], 1, fdim[2], 1, fdim[3], 1, fdim[4], 1, fdim[5]);  // subsetting
+    FLQuantAdolc f_age_trim = f(fishery_no)(age_range_indices[0]+1, age_range_indices[1]+1, 1, fdim[1], 1, fdim[2], 1, fdim[3], 1, fdim[4], 1, fdim[5]);  // subsetting
     FLQuantAdolc fbar_out = quant_mean(f_age_trim);
     // Age mean
     // Return
@@ -349,11 +379,11 @@ FLQuantAdolc operatingModel::fbar(const int fishery_no, const int catch_no, cons
 }
 
 // Assume that catch is catches[[1]] for the moment
-FLQuantAdolc operatingModel::fbar(const int biol_no) const{
+FLQuantAdolc operatingModel::fbar(const Rcpp::IntegerVector age_range_indices, const int biol_no) const{
     //// Make an empty FLQ with the right dims - based on the first fishery
-    FLQuantAdolc fbar_out = fbar(1,1,biol_no);
+    FLQuantAdolc fbar_out = fbar(age_range_indices, 1,1,biol_no);
     for (unsigned int fishery_count = 2; fishery_count <= fisheries.get_nfisheries(); ++fishery_count){
-        fbar_out = fbar_out + fbar(fishery_count,1,biol_no);
+        fbar_out = fbar_out + fbar(age_range_indices, fishery_count,1,biol_no);
     }
     return fbar_out;
 }
@@ -379,9 +409,12 @@ FLQuantAdolc operatingModel::catches(const int biol_no) const{
 std::vector<double> operatingModel::calc_target_value(const int target_no) const{
     // Pull out the min, value and max iterations from the control object
     std::vector<double> value = ctrl.get_target_value(target_no, 2);
+    Rprintf("value[0]: %f\n", value[0]);
     std::vector<double> min_value = ctrl.get_target_value(target_no, 1);
     std::vector<double> max_value = ctrl.get_target_value(target_no, 3);
     fwdControlTargetType target_type = ctrl.get_target_type(target_no);
+    const int biol_no = 1;
+    const Rcpp::IntegerVector age_range_indices = get_target_age_range_indices(target_no, biol_no);
 
     // Are we dealing with absolute or relative values?
     int target_rel_year = ctrl.get_target_rel_year(target_no);
@@ -397,12 +430,15 @@ std::vector<double> operatingModel::calc_target_value(const int target_no) const
     if (!target_rel_year_na){
         Rprintf("Relative target\n");
         // Get the value we are relative to from the operatingModel
-        std::vector<adouble> rel_value = eval_target_hat(target_type, target_rel_year, 1, target_rel_season, 1);
+        std::vector<adouble> rel_value = eval_target_hat(target_type, age_range_indices, target_rel_year, 1, target_rel_season, 1);
         // Modify it by the relative amount
         for (int iter_count = 0; iter_count < value.size(); ++iter_count){
+            Rprintf("rel_value: %f\n", rel_value[iter_count].value());
+            Rprintf("min_value before rel calc: %f\n", min_value[iter_count]);
             value[iter_count] = value[iter_count] * rel_value[iter_count].value();
             min_value[iter_count] = min_value[iter_count] * rel_value[iter_count].value();
             max_value[iter_count] = max_value[iter_count] * rel_value[iter_count].value();
+            Rprintf("min_value after rel calc: %f\n", min_value[iter_count]);
         }
     }
 
@@ -414,7 +450,7 @@ std::vector<double> operatingModel::calc_target_value(const int target_no) const
     // As all iterations should be either NA or a real value, just check the first iteration
     if(Rcpp::NumericVector::is_na(value[0])){
         // Annoyingly eval_target_hat returns adouble, so we need to take the value
-        std::vector<adouble> value_ad = eval_target_hat(target_type, target_year, 1, target_season, 1);
+        std::vector<adouble> value_ad = eval_target_hat(target_type, age_range_indices, target_year, 1, target_season, 1);
         for (int iter_count = 0; iter_count < value.size(); ++iter_count){
             value[iter_count] = value_ad[iter_count].value();
             Rprintf("value[%i]: %f\n", iter_count, value[iter_count]);
@@ -439,6 +475,7 @@ std::vector<double> operatingModel::calc_target_value(const int target_no) const
             if(value[iter_count] > max_value[iter_count]){
                 Rprintf("value is greater than max_value\n");
                 value[iter_count] = max_value[iter_count];
+                Rprintf("New value (set from max_value: %f\n ", value[iter_count]);
             }
         }
     }
@@ -506,6 +543,8 @@ void operatingModel::run(){
 
             // What is the current value of the predicted target in the operatingModel
             target_value_hat = eval_target_hat(target_count, iter_count, iter_count);
+            Rprintf("target_value_hat: %f\n", target_value_hat[0].value());
+            Rprintf("target_value: %f\n", target_value[0]);
 
             // Calculate the error term that we want to be 0
             target_value_hat[0] = (target_value_hat[0] - target_value[iter_count-1]); // this works better - no need to reset initial fmult each time?
@@ -518,9 +557,9 @@ void operatingModel::run(){
             // Solve
             // reset initial solver value - also can just use: error = target_hat - target without squaring
             // faster to do this outside of the iter loop and start NR with solution of previous iter - OK until a bad iter
-            fmult[0] = 1.0; 
+            fmult[0] = 1.0;  // Needs to be rethought. If previous target ends up with high F, this is a bad start
             //Rprintf("fmult pre NR: %f\n", fmult[0]);
-            nr_out = newton_raphson(fmult, tape_tag);
+            nr_out = newton_raphson(fmult, tape_tag, 200, 10000);
             // Run some check on this
 
 

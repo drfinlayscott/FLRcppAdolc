@@ -160,21 +160,6 @@ test_that("FLCatch get and set data accessors", {
     #expect_that(c(catch.q(flc_out))[-element], is_identical_to(c(catch.q(flc_in))[-element]))
 })
 
-test_that("FLCatch fbar_mehods", {
-    flc <- random_FLCatch_generator()
-    flc2 <- flc
-    ages <- as.integer(dimnames(flc@landings.wt)[[1]])
-    fbar_age_range <- as.integer(round(runif(2,min=min(ages), max=max(ages))))
-    fbar_age_range <- sort(fbar_age_range)
-    flc2@range <- c(range(flc2), minfbar = fbar_age_range[1], maxfbar = fbar_age_range[2])
-    expect_that(test_FLCatch_get_fbar_range(flc), throws_error())
-    expect_that(test_FLCatch_get_fbar_range(flc2), is_identical_to(fbar_age_range))
-    expect_that(test_FLCatch_get_fbar_range_indices(flc), throws_error())
-fbar_indices <- test_FLCatch_get_fbar_range_indices(flc2)
-    expect_that(fbar_indices[1], is_identical_to(which(ages %in% fbar_age_range[1]) - 1L))
-    expect_that(fbar_indices[2], is_identical_to(which(ages %in% fbar_age_range[2]) - 1L))
-})
-
 test_that("FLCatch methods", {
     flc_in <- random_FLCatch_generator()
     # landings

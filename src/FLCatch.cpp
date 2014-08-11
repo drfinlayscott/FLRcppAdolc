@@ -218,32 +218,6 @@ Rcpp::NumericVector FLCatch_base<T>::get_range() const {
     return range;
 }
 
-template <typename T>
-Rcpp::IntegerVector FLCatch_base<T>::get_fbar_range() const {
-    if (range.size() < 6){
-        Rcpp::stop("Fbar range has not been set\n");
-    }
-    Rcpp::IntegerVector fbar_range(2);
-    fbar_range[0] = (int)range[5];
-    fbar_range[1] = (int)range[6];
-    return fbar_range;
-}
-
-template <typename T>
-Rcpp::IntegerVector FLCatch_base<T>::get_fbar_range_indices() const {
-    Rcpp::IntegerVector fbar_range = get_fbar_range();
-    Rcpp::IntegerVector fbar_range_indices(2);
-    // Convert the age names to a vector of strings
-    std::vector<std::string> age_names = Rcpp::as<std::vector<std::string> >(landings_n().get_dimnames()[0]);
-    // Use find() to match names
-    std::vector<string>::iterator fbar_min_iterator = find(age_names.begin(), age_names.end(), number_to_string(fbar_range[0]));
-    std::vector<string>::iterator fbar_max_iterator = find(age_names.begin(), age_names.end(), number_to_string(fbar_range[1]));
-    fbar_range_indices[0] = std::distance(age_names.begin(), fbar_min_iterator);
-    fbar_range_indices[1] = std::distance(age_names.begin(), fbar_max_iterator);
-    return fbar_range_indices;
-}
-
-
 
 /*------------------------------------------------------------*/
 // FLCatches class

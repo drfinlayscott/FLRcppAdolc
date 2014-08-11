@@ -48,6 +48,7 @@ class fwdControl {
         int get_target_rel_year(const int target_no) const;
         int get_target_rel_season(const int target_no) const;
         int get_target_fishery(const int target_no) const;
+        Rcpp::IntegerVector get_age_range(const int target_no) const; // Returns the age range - literally just the values in target
         double get_target_value(const int target_no, const int col, const int iter) const; // col: 1 = min, 2 = value, 3 = max
         std::vector<double> get_target_value(const int target_no, const int col) const; // gets all iters. col: 1 = min, 2 = value, 3 = max
         std::string get_target_quantity(const int target_no) const;

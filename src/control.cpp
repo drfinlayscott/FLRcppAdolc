@@ -125,6 +125,17 @@ int fwdControl::get_target_fishery(const int target_no) const {
     return fishery[target_no-1];
 }
 
+// Returns the age range - literally just the values in target
+Rcpp::IntegerVector fwdControl::get_age_range(const int target_no) const{
+    Rcpp::IntegerVector age_range(2);
+    Rcpp::IntegerVector min_age = target["min_age"];
+    Rcpp::IntegerVector max_age = target["max_age"];
+    age_range[0] = min_age[target_no-1];
+    age_range[1] = max_age[target_no-1];
+    return age_range;
+
+} 
+
 
 
 // It's a 3D array and we want the 2nd column of the 2nd dimension

@@ -21,6 +21,8 @@ test_that("fwdControl copy constructor and assignement operator", {
 
 test_that("fwdControl accessors", {
     fc <- dummy_fwdControl_generator()
+    fc@target$min_age <- as.integer(round(runif(dim(fc@target)[1], min=1, max = 10)))
+    fc@target$max_age <- as.integer(fc@target$min_age * 2)
     # get target
     target <- test_fwdControl_get_target(fc)
     expect_that(target, is_identical_to(fc@target))
@@ -66,5 +68,8 @@ test_that("fwdControl accessors", {
     type <- test_fwdControl_get_target_quantity(fc, target_no)
     expect_that(type, is_identical_to(as.character(fc@target[target_no, "quantity"])))
     expect_that(test_fwdControl_get_target_quantity(fc, nrow(fc@target)+1), throws_error())
+    # age range    
+    age_range <- test_fwdControl_get_age_range(fc, target_no)
+    expect_that(unname(unlist(fc@target[target_no,c("min_age", "max_age")])), is_identical_to(age_range))
 
 })

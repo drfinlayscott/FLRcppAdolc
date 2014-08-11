@@ -305,9 +305,11 @@ dummy_fwdControl_generator <- function(years = 1:round(runif(1, min=1,max=10)), 
                        season = 1L, # Each target must have a timestep, if season is NA it implies that no seasons in projection so only 1 season in FLQuants so season = 1 
                        # fix this before dispatching to C++
                        quantity = "f", # the target type
-                       value =  0.2,
+                       value =  0.2, # this don't get used in the C++ code
                        min_value = NA,
                        max_value = NA,
+                       min_age = NA,
+                       max_age = NA,
                        rel_year = NA,
                        rel_season = NA,
                        fishery = NA, # what is this? a number or name? Some way of referring 

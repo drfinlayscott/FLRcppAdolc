@@ -21,9 +21,13 @@
 
 
 // Enumerated type for the target types
+// If you add something here you have to also add it to the map in control.cpp
+// Also, if it's an abundance based target, add it to operatingModel::get_target_fmult_timestep(const int target_no)
 enum fwdControlTargetType {
     target_f,
-    target_catch
+    target_catch,
+    target_ssb,
+    target_biomass
 };
 
 // Map the target type as string to the enumerated type - typedef so we can make iterators to it later

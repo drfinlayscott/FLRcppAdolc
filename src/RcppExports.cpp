@@ -6763,9 +6763,34 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// test_operatingModel_eval_target_hat
-std::vector<double> test_operatingModel_eval_target_hat(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int target_no, const int min_iter, const int max_iter);
-RcppExport SEXP FLRcppAdolc_test_operatingModel_eval_target_hat(SEXP flfsSEXP, SEXP flb_sexpSEXP, SEXP model_nameSEXP, SEXP paramsSEXP, SEXP timelagSEXP, SEXP residualsSEXP, SEXP residuals_multSEXP, SEXP fSEXP, SEXP f_spwnSEXP, SEXP ctrlSEXP, SEXP target_noSEXP, SEXP min_iterSEXP, SEXP max_iterSEXP) {
+// test_operatingModel_get_target_fmult_timestep
+int test_operatingModel_get_target_fmult_timestep(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int target_no);
+RcppExport SEXP FLRcppAdolc_test_operatingModel_get_target_fmult_timestep(SEXP flfsSEXP, SEXP flb_sexpSEXP, SEXP model_nameSEXP, SEXP paramsSEXP, SEXP timelagSEXP, SEXP residualsSEXP, SEXP residuals_multSEXP, SEXP fSEXP, SEXP f_spwnSEXP, SEXP ctrlSEXP, SEXP target_noSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< FLFisheriesAdolc >::type flfs(flfsSEXP );
+        Rcpp::traits::input_parameter< SEXP >::type flb_sexp(flb_sexpSEXP );
+        Rcpp::traits::input_parameter< const std::string >::type model_name(model_nameSEXP );
+        Rcpp::traits::input_parameter< const FLQuant >::type params(paramsSEXP );
+        Rcpp::traits::input_parameter< const int >::type timelag(timelagSEXP );
+        Rcpp::traits::input_parameter< const FLQuant >::type residuals(residualsSEXP );
+        Rcpp::traits::input_parameter< const bool >::type residuals_mult(residuals_multSEXP );
+        Rcpp::traits::input_parameter< const FLQuant7Adolc >::type f(fSEXP );
+        Rcpp::traits::input_parameter< const FLQuant7 >::type f_spwn(f_spwnSEXP );
+        Rcpp::traits::input_parameter< const fwdControl >::type ctrl(ctrlSEXP );
+        Rcpp::traits::input_parameter< const int >::type target_no(target_noSEXP );
+        int __result = test_operatingModel_get_target_fmult_timestep(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// test_operatingModel_eval_target
+std::vector<double> test_operatingModel_eval_target(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int target_no, const int min_iter, const int max_iter);
+RcppExport SEXP FLRcppAdolc_test_operatingModel_eval_target(SEXP flfsSEXP, SEXP flb_sexpSEXP, SEXP model_nameSEXP, SEXP paramsSEXP, SEXP timelagSEXP, SEXP residualsSEXP, SEXP residuals_multSEXP, SEXP fSEXP, SEXP f_spwnSEXP, SEXP ctrlSEXP, SEXP target_noSEXP, SEXP min_iterSEXP, SEXP max_iterSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -6783,16 +6808,16 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< const int >::type target_no(target_noSEXP );
         Rcpp::traits::input_parameter< const int >::type min_iter(min_iterSEXP );
         Rcpp::traits::input_parameter< const int >::type max_iter(max_iterSEXP );
-        std::vector<double> __result = test_operatingModel_eval_target_hat(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no, min_iter, max_iter);
+        std::vector<double> __result = test_operatingModel_eval_target(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no, min_iter, max_iter);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP
 }
-// test_operatingModel_eval_target_hat2
-std::vector<double> test_operatingModel_eval_target_hat2(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int target_no);
-RcppExport SEXP FLRcppAdolc_test_operatingModel_eval_target_hat2(SEXP flfsSEXP, SEXP flb_sexpSEXP, SEXP model_nameSEXP, SEXP paramsSEXP, SEXP timelagSEXP, SEXP residualsSEXP, SEXP residuals_multSEXP, SEXP fSEXP, SEXP f_spwnSEXP, SEXP ctrlSEXP, SEXP target_noSEXP) {
+// test_operatingModel_eval_target2
+std::vector<double> test_operatingModel_eval_target2(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int target_no);
+RcppExport SEXP FLRcppAdolc_test_operatingModel_eval_target2(SEXP flfsSEXP, SEXP flb_sexpSEXP, SEXP model_nameSEXP, SEXP paramsSEXP, SEXP timelagSEXP, SEXP residualsSEXP, SEXP residuals_multSEXP, SEXP fSEXP, SEXP f_spwnSEXP, SEXP ctrlSEXP, SEXP target_noSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -6808,7 +6833,7 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< const FLQuant7 >::type f_spwn(f_spwnSEXP );
         Rcpp::traits::input_parameter< const fwdControl >::type ctrl(ctrlSEXP );
         Rcpp::traits::input_parameter< const int >::type target_no(target_noSEXP );
-        std::vector<double> __result = test_operatingModel_eval_target_hat2(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no);
+        std::vector<double> __result = test_operatingModel_eval_target2(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

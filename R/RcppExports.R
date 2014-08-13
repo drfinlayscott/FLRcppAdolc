@@ -1569,12 +1569,16 @@ test_operating_model_targets <- function(flfs, flb_sexp, model_name, params, tim
     .Call('FLRcppAdolc_test_operating_model_targets', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, fishery_no, catch_no, target_no)
 }
 
-test_operatingModel_eval_target_hat <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no, min_iter, max_iter) {
-    .Call('FLRcppAdolc_test_operatingModel_eval_target_hat', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no, min_iter, max_iter)
+test_operatingModel_get_target_fmult_timestep <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no) {
+    .Call('FLRcppAdolc_test_operatingModel_get_target_fmult_timestep', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no)
 }
 
-test_operatingModel_eval_target_hat2 <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no) {
-    .Call('FLRcppAdolc_test_operatingModel_eval_target_hat2', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no)
+test_operatingModel_eval_target <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no, min_iter, max_iter) {
+    .Call('FLRcppAdolc_test_operatingModel_eval_target', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no, min_iter, max_iter)
+}
+
+test_operatingModel_eval_target2 <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no) {
+    .Call('FLRcppAdolc_test_operatingModel_eval_target2', PACKAGE = 'FLRcppAdolc', flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no)
 }
 
 test_operatingModel_calc_target_value <- function(flfs, flb_sexp, model_name, params, timelag, residuals, residuals_mult, f, f_spwn, ctrl, target_no) {

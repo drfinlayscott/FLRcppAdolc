@@ -359,46 +359,21 @@ test_that("operatingModel target values and eval_target method", {
 
     # fbar
     target_no <- 1 
-    # Different iter combinations
-    fout <- test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no, 1, max_iter)
-    fin <- c(f_total[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1:max_iter])
-    expect_that(fout, equals(fin))
-    fout <- test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no, 1, 1)
-    fin <- c(f_total[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1])
-    expect_that(fout, equals(fin))
-    fout <- test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no, max_iter-1, max_iter)
-    fin <- c(f_total[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,(max_iter-1):max_iter])
-    expect_that(fout, equals(fin))
+    fout <- test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no)
+    expect_that(fout@.Data, equals(f_total@.Data))
     # catch
     target_no <- 2 
-    cout <- test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no, 1, max_iter)
-    cin <- c(catches_total[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1:max_iter])
-    expect_that(cout, equals(cin))
-
+    cout <- test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no)
+    expect_that(cout@.Data, equals(catches_total@.Data))
     # ssb 
     target_no <- 3 
-    ssb_out <- test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no, 1, max_iter)
-    expect_that(ssb_out, equals(c(ssb_in[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1:max_iter]))) 
-
+    ssb_out <- test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no)
+    expect_that(ssb_out@.Data, equals(ssb_in@.Data))
     # biomass
     target_no <- 4 
-    biomass_out <- test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no, 1, max_iter)
+    biomass_out <- test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no)
     biomass_in <- quantSums(n(flb) * wt(flb))
-    expect_that(biomass_out, equals(c(biomass_in[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1:max_iter])))
-
-
-
-    # Need to update and eval_target_hat dispatch
-    #----------- Test eval target by target type ----------
-#    target_no <- 1
-#    fout <- test_operatingModel_eval_target2(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
-#    fin <- c(f_total[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1:max_iter])
-#    expect_that(fout, equals(fin))
-#
-#    target_no <- 2
-#    cout <- test_operatingModel_eval_target2(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
-#    cin <- c(catches_total[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1:max_iter])
-#    expect_that(cout, equals(cin))
+    expect_that(biomass_out@.Data, equals(biomass_in@.Data))
 
     #----------- Test calc_target_value  ----------
     # Not a relative target - should just the values in the target_iter slot

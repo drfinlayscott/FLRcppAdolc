@@ -69,14 +69,11 @@ class operatingModel {
         // Timestep in which to use fmult to affect the target value
         int get_target_fmult_timestep(const int target_no);
 
-        // Given the target no, evaluate the current value in the operatingModel using the year and season info in the target control
-        std::vector<adouble> eval_target(const int target_no, const int min_iter, const int max_iter) const;
-        //// Given the target type and the FLQuant information, return all iterations from the operatingModel
-        //std::vector<adouble> eval_target_hat(const fwdControlTargetType target_type, const Rcpp::IntegerVector age_range_indices, const int year, const int unit, const int season, const int area) const;
-        std::vector<adouble> eval_target(const int target_no, const int year, const int unit, const int season, const int area) const;
+        // Given the target no, evaluate the current value in the operatingModel
+        FLQuantAdolc eval_target(const int target_no) const;
 
         // The target value we are trying to hit - either directly from the control object or a min / max / rel value calculation
-        std::vector<double> calc_target_value(const int target_no) const; // gets all iters. 
+        std::vector<double> calc_target_value(const int target_no) const; 
 
         // The target value calculations
         // fbar from a catch and fishery on a stock - i.e. partial F - will need to adapt this to include multiple biols in the future

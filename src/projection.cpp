@@ -288,68 +288,46 @@ Rcpp::IntegerVector operatingModel::get_target_age_range_indices(const int targe
     return age_range_indices;
 }
 
-// Assume 1 fishery and 1 biol for now
-std::vector<adouble> operatingModel::eval_target(const int target_no, const int year, const int unit, const int season, const int area) const{
-    int biol_no = 1;
+
+FLQuantAdolc operatingModel::eval_target(const int target_no) const {
+    // Scrape biol, fishery and catch no from the control object
+    // For the time being, assume that biol_no = 1, and fishery and catch are NA (i.e. all)
+    const int biol_no = 1;
     fwdControlTargetType target_type = ctrl.get_target_type(target_no);
-    FLQuantAdolc out_flq;
-    int timestep = 0; // in case we need to adjust timestep for biol based targets
     Rcpp::IntegerVector age_range_indices;
+    FLQuantAdolc out;
+    // Get the output depending on target type
     switch(target_type){
         case target_f:
             // If no fishery in the control object get total fbar on biol
             //if (Rcpp::IntegerVector::is_na(fishery_no)){
             age_range_indices = get_target_age_range_indices(target_no, biol_no);
-            out_flq = fbar(age_range_indices, biol_no);
+            out = fbar(age_range_indices, biol_no);
             //}
             //else {
             //    out_flq = fbar(age_range_indices, fishery_no, catch_no, biol_no);
             //}
            break;
-       case target_catch:
+        case target_catch:
             // If no fishery in the control object get total fbar on biol
             //if (Rcpp::IntegerVector::is_na(fishery_no)){
-            out_flq = catches(biol_no);
+            out = catches(biol_no);
             //}
             //else {
             //    out_flq = catches(fishery_no, catch_no, biol_no);
             //}
             break;
-       case target_ssb:
-            out_flq = ssb(biol_no);
+        case target_ssb:
+            out = ssb(biol_no);
             break;
-       case target_biomass:
-            out_flq = biomass(biol_no);
+        case target_biomass:
+            out = biomass(biol_no);
             break;
-       default:
+        default:
             Rcpp::stop("target_type not found in switch statement - giving up\n");
             break;
     }
-    std::vector<adouble> out(out_flq.get_niter(), 0.0); 
-    for (unsigned int iter_count = 1; iter_count <= out_flq.get_niter(); ++iter_count){
-        out[iter_count-1] = out_flq(1, year, unit, season, area, iter_count);
-    }
     return out;
-}
-
-// Given the target no, return the corresponding value from the operatingModel that can be compared to the desired target
-std::vector<adouble> operatingModel::eval_target(const int target_no, const int min_iter, const int max_iter) const{
-    // get the target type string from the control
-    //fwdControlTargetType target_type = ctrl.get_target_type(target_no);
-    // get fishery info - who is catching what
-    const int catch_no = 1; // not available yet
-    const int biol_no = 1; // not available yet
-    const int fishery_no = ctrl.get_target_fishery(target_no); // if NA it's total across fishery
-    const int year = ctrl.get_target_year(target_no); // these are indices of the FLQuant - not characters of actual years
-    const int season = ctrl.get_target_season(target_no);
-    const int unit = 1;
-    const int area = 1;
-    //const Rcpp::IntegerVector age_range_indices = get_target_age_range_indices(target_no, biol_no);
-    // get all iterations
-    std::vector<adouble> out_all_iters = eval_target(target_no, year, unit, season, area);
-    // return a subset with some iterator magic
-    return std::vector<adouble>(out_all_iters.begin() + min_iter - 1, out_all_iters.begin() + max_iter);
-
 }
 
 // Similar to fwdControl::get_target_value but calcs value from relative values
@@ -376,18 +354,16 @@ std::vector<double> operatingModel::calc_target_value(const int target_no) const
     if (!target_rel_year_na){
         Rprintf("Relative target\n");
         // Get the value we are relative to from the operatingModel
-        std::vector<adouble> rel_value = eval_target(target_no, target_rel_year, 1, target_rel_season, 1);
+        FLQuantAdolc rel_value = eval_target(target_no);
         // Modify it by the relative amount
+        double rel_single_value = 0.0;
         for (int iter_count = 0; iter_count < value.size(); ++iter_count){
-            //Rprintf("rel_value: %f\n", rel_value[iter_count].value());
-            //Rprintf("min_value before rel calc: %f\n", min_value[iter_count]);
-            value[iter_count] = value[iter_count] * rel_value[iter_count].value();
-            min_value[iter_count] = min_value[iter_count] * rel_value[iter_count].value();
-            max_value[iter_count] = max_value[iter_count] * rel_value[iter_count].value();
-            //Rprintf("min_value after rel calc: %f\n", min_value[iter_count]);
+            rel_single_value = rel_value(1,target_rel_year,1,target_rel_season, 1, iter_count+1).value();
+            value[iter_count] = value[iter_count] * rel_single_value;
+            min_value[iter_count] = min_value[iter_count] * rel_single_value;
+            max_value[iter_count] = max_value[iter_count] * rel_single_value;
         }
     }
-
     // Sort out minimum and maximum stuff
     int target_year = ctrl.get_target_year(target_no);
     int target_season = ctrl.get_target_season(target_no);
@@ -396,9 +372,9 @@ std::vector<double> operatingModel::calc_target_value(const int target_no) const
     // As all iterations should be either NA or a real value, just check the first iteration
     if(Rcpp::NumericVector::is_na(value[0])){
         // Annoyingly eval_target returns adouble, so we need to take the value
-        std::vector<adouble> value_ad = eval_target(target_no, target_year, 1, target_season, 1);
+        FLQuantAdolc value_ad = eval_target(target_no);
         for (int iter_count = 0; iter_count < value.size(); ++iter_count){
-            value[iter_count] = value_ad[iter_count].value();
+            value[iter_count] = value_ad(1, target_year, 1, target_season, 1, iter_count+1).value();
         }
     }
     // If first iter of min_value is NA, then all of them are
@@ -450,6 +426,7 @@ void operatingModel::run(){
     // Just doing 1 iter at a time for the moment 
     std::vector<double> error(1,0.0);
     std::vector<adouble> target_value_hat(1,0.0);
+    FLQuantAdolc target_value_hat_flq;
     // from control object
     //double target_value; 
     std::vector<double> target_value(niter, 0.0); 
@@ -500,16 +477,21 @@ void operatingModel::run(){
             //target_value = ctrl.get_target_value(target_count, 2, iter_count); // better to return all iters and move to outside iter loop
 
             // What is the current value of the predicted target in the operatingModel
-            target_value_hat = eval_target(target_count, iter_count, iter_count);
+            //target_value_hat = eval_target(target_count, iter_count, iter_count);
+            target_value_hat_flq = eval_target(target_count);
+            target_value_hat[0] = target_value_hat_flq(1,target_year, 1, target_season, 1, iter_count);
+
             Rprintf("target_value_hat: %f\n", target_value_hat[0].value());
             Rprintf("target_value: %f\n", target_value[0]);
 
             // Calculate the error term that we want to be 0
+            //target_value_hat_flq(1,target_year, 1, target_season, 1, iter_count) = (target_value_hat_flq(1,target_year, 1, target_season, 1, iter_count) - target_value[iter_count-1]); // this works better - no need to reset initial fmult each time?
             target_value_hat[0] = (target_value_hat[0] - target_value[iter_count-1]); // this works better - no need to reset initial fmult each time?
             //target_value_hat[0] = (target_value_hat[0] - target_value) * (target_value_hat[0] - target_value); // squared error - less stable
 
             // Set dependent variable
             target_value_hat[0] >>= error[0];
+            //target_value_hat_flq(1,target_year, 1, target_season, 1, iter_count) >>= error[0];
             trace_off();
 
             // Solve

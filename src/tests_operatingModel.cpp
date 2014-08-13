@@ -105,36 +105,45 @@ int test_operatingModel_get_target_fmult_timestep(FLFisheriesAdolc flfs, SEXP fl
     return om.get_target_fmult_timestep(target_no);
 }
 
-// Evaluate by target no
+//// Evaluate by target no
+//// [[Rcpp::export]]
+//std::vector<double> test_operatingModel_eval_target(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int target_no, const int min_iter, const int max_iter){
+//    fwdBiolAdolc biol(flb_sexp, model_name, params, timelag, residuals, residuals_mult);
+//    operatingModel om(flfs, biol, f, f_spwn, ctrl);
+//    std::vector<adouble> out_ad = om.eval_target(target_no, min_iter, max_iter);
+//    std::vector<double> out(out_ad.size(), 0.0);
+//    for (int i=0; i<out.size(); ++i){
+//        out[i] = out_ad[i].value();
+//    }
+//    return out;
+//}
+
+
+
+//// Evaluate by target type
+//// [[Rcpp::export]]
+//std::vector<double> test_operatingModel_eval_target2(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int target_no){
+//
+//    fwdBiolAdolc biol(flb_sexp, model_name, params, timelag, residuals, residuals_mult);
+//    operatingModel om(flfs, biol, f, f_spwn, ctrl);
+//    const int year = ctrl.get_target_year(target_no); 
+//    const int season = ctrl.get_target_season(target_no);
+//    const int unit = 1;
+//    const int area = 1;
+//    const int biol_no = 1;
+//    std::vector<adouble> out_ad = om.eval_target(target_no, year, unit, season, area);
+//    std::vector<double> out(out_ad.size(), 0.0);
+//    for (int i=0; i<out.size(); ++i){
+//        out[i] = out_ad[i].value();
+//    }
+//    return out;
+//}
+
 // [[Rcpp::export]]
-std::vector<double> test_operatingModel_eval_target(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int target_no, const int min_iter, const int max_iter){
+FLQuantAdolc test_operatingModel_eval_target(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int target_no){
     fwdBiolAdolc biol(flb_sexp, model_name, params, timelag, residuals, residuals_mult);
     operatingModel om(flfs, biol, f, f_spwn, ctrl);
-    std::vector<adouble> out_ad = om.eval_target(target_no, min_iter, max_iter);
-    std::vector<double> out(out_ad.size(), 0.0);
-    for (int i=0; i<out.size(); ++i){
-        out[i] = out_ad[i].value();
-    }
-    return out;
-}
-
-
-// Evaluate by target type
-// [[Rcpp::export]]
-std::vector<double> test_operatingModel_eval_target2(FLFisheriesAdolc flfs, SEXP flb_sexp, const std::string model_name, const FLQuant params, const int timelag, const FLQuant residuals, const bool residuals_mult, const FLQuant7Adolc f, const FLQuant7 f_spwn, const fwdControl ctrl, const int target_no){
-
-    fwdBiolAdolc biol(flb_sexp, model_name, params, timelag, residuals, residuals_mult);
-    operatingModel om(flfs, biol, f, f_spwn, ctrl);
-    const int year = ctrl.get_target_year(target_no); 
-    const int season = ctrl.get_target_season(target_no);
-    const int unit = 1;
-    const int area = 1;
-    const int biol_no = 1;
-    std::vector<adouble> out_ad = om.eval_target(target_no, year, unit, season, area);
-    std::vector<double> out(out_ad.size(), 0.0);
-    for (int i=0; i<out.size(); ++i){
-        out[i] = out_ad[i].value();
-    }
+    FLQuantAdolc out = om.eval_target(target_no);
     return out;
 }
 

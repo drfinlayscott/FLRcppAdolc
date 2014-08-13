@@ -636,16 +636,20 @@ void operatingModel::run_all_iters(){
 // Total biomass at the beginning of the timestep
 // biol_no not currently used
 FLQuantAdolc operatingModel::biomass(const int biol_no) const {
-    FLQuantAdolc ssb = quant_sum(biol.n() * biol.wt());
-    return ssb;
+    FLQuantAdolc biomass = quant_sum(biol.n() * biol.wt());
+    return biomass;
 }
-
 
 // SSB calculations - Actual SSB that results in recruitment
 // Return an FLQuant
 // biol_no not currently used
 FLQuantAdolc operatingModel::ssb(const int biol_no) const {
-    FLQuantAdolc ssb = quant_sum(biol.n() * biol.wt() * biol.fec() * exp(-1.0*(biol.m() * biol.spwn() + f() * f_spwn())));
+    // Loop over all the Fs that catch the biol
+    FLQuantAdolc f_portion = f(1) * f_spwn(1);
+    for (int f_count = 2; f_count <= f.get_ndim7(); ++f_count){
+        f_portion = f_portion + f(f_count) * f_spwn(f_count);
+    }
+    FLQuantAdolc ssb = quant_sum(biol.n() * biol.wt() * biol.fec() * exp(-1.0*(biol.m() * biol.spwn() + f_portion)));
     return ssb;
 }
 
@@ -677,16 +681,10 @@ adouble operatingModel::ssb(const int year, const int unit, const int season, co
 }
 
 FLQuantAdolc operatingModel::fbar(const Rcpp::IntegerVector age_range_indices, const int fishery_no, const int catch_no, const int biol_no) const{
-    //Rcpp::IntegerVector fbar_range = fisheries(fishery_no)(catch_no).get_fbar_range_indices(); // starts at 0 so need to +1 if we use for FLQ accessor - bit inconsistent, sorry
-    //Rcpp::IntegerVector fbar_range = get_target_age_range_indices(); // starts at 0 so need to +1 if we use for FLQ accessor - bit inconsistent, sorry
-    // Grab the Fs over this range
     Rcpp::IntegerVector fdim = f(fishery_no).get_dim();
     FLQuantAdolc f_age_trim = f(fishery_no)(age_range_indices[0]+1, age_range_indices[1]+1, 1, fdim[1], 1, fdim[2], 1, fdim[3], 1, fdim[4], 1, fdim[5]);  // subsetting
     FLQuantAdolc fbar_out = quant_mean(f_age_trim);
-    // Age mean
-    // Return
     return fbar_out;
-    //return f_age_trim;
 
 }
 

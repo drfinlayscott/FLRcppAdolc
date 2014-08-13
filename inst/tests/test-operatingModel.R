@@ -65,18 +65,21 @@ test_that("operatingModel SSB methods", {
     params_ricker <- as.FLQuant(params(ple4_sr_ricker))
     flq <- random_FLQuant_generator(sd=1)
     flb <- random_FLBiol_generator(fixed_dims = dim(flq), sd = 1 )
-    flfs <- random_FLFisheries_generator(fixed_dims = dim(flq), min_fisheries=1, max_fisheries=1, sd=1)
-    f <- random_FLQuant_list_generator(max_elements=1, fixed_dims = dim(flq), sd=1)
+    flfs <- random_FLFisheries_generator(fixed_dims = dim(flq), min_fisheries=2, max_fisheries=5, sd=1)
+    f <- random_FLQuant_list_generator(min_elements=length(flfs), max_elements=length(flfs), fixed_dims = dim(flq), sd=1)
     f <- lapply(f,abs)
-    f_spwn <- random_FLQuant_list_generator(max_elements=1, fixed_dims = dim(flq), sd=1)
+    f_spwn <- random_FLQuant_list_generator(min_elements=length(flfs), max_elements=length(flfs), fixed_dims = dim(flq), sd=1)
     f_spwn <- lapply(f_spwn,abs)
     residuals_ricker <- FLQuant(rnorm(dim(flq)[2] * dim(flq)[6]), dimnames = list(year = 1:dim(flq)[2], iter = 1:dim(flq)[6]))
     residuals_mult <- TRUE
     timelag <- 0
     fc <- dummy_fwdControl_generator(years = 1, niters = dim(n(flb))[6])
-
     # SSB - FLQuant - lots of time steps
-    ssb_in <- quantSums(n(flb) * wt(flb) * fec(flb) * exp(-f[[1]]*f_spwn[[1]] - m(flb) * spwn(flb)))
+    f_portion <- f[[1]] * f_spwn[[1]]
+    for (i in 2:length(f)){
+        f_portion <- f_portion + f[[i]] * f_spwn[[i]]
+    }
+    ssb_in <- quantSums(n(flb) * wt(flb) * fec(flb) * exp(-f_portion - m(flb) * spwn(flb)))
     ssb_out <- test_operatingModel_SSB_FLQ(flfs, flb, 'ricker', params_ricker, timelag, residuals_ricker, residuals_mult, f, f_spwn, fc)
     expect_that(ssb_in@.Data, equals(ssb_out@.Data))
     # SSB - FLQuant - single single timestep - all iters
@@ -91,6 +94,7 @@ test_that("operatingModel SSB methods", {
     iter <- floor(runif(1, min=1, max = dim(flq)[6]))
     ssb_out <- test_operatingModel_SSB_single_iter(flfs, flb, 'ricker', params_ricker, timelag, residuals_ricker, residuals_mult, f, f_spwn, timestep, unit, area, iter, fc)
     expect_that(c(ssb_in[,year,unit,season,area,iter]), equals(c(ssb_out)))
+
     # SSB non-conformable FLQuant iters, e.g. wt has only 1 iter, but n has many
     single_iter <- round(runif(1,min=1,max=dim(flq)[6]))
     flb2 <- flb
@@ -98,7 +102,7 @@ test_that("operatingModel SSB methods", {
     fec(flb2) <- iter(fec(flb2),single_iter)
     m(flb2) <- iter(m(flb2),single_iter)
     ssb_out <- test_operatingModel_SSB_single_iter(flfs, flb2, 'ricker', params_ricker, timelag, residuals_ricker, residuals_mult, f, f_spwn, timestep, unit, area, iter, fc)
-    ssb_in <- quantSums(n(flb2) * wt(flb2) * fec(flb2) * exp(-f[[1]]*f_spwn[[1]] - m(flb2) * spwn(flb2)))
+    ssb_in <- quantSums(n(flb2) * wt(flb2) * fec(flb2) * exp(-f_portion - m(flb2) * spwn(flb2)))
     expect_that(c(ssb_in[,year,unit,season,area,iter]), equals(c(ssb_out)))
     # SSB with year and season
     ssb_out <- test_operatingModel_SSB_single_iter_year_season(flfs, flb2, 'ricker', params_ricker, timelag, residuals_ricker, residuals_mult, f, f_spwn, year, unit, season, area, iter, fc)
@@ -183,6 +187,7 @@ test_that("operatingModel project_timestep", {
 })
 
 
+# Biomass, SSB and other abundance based targets need to change F in the previous timestep
 test_that("operatingModel get_target_fmult_timestep",{
     # Make an FLFishery with X FLFishery objects. Each FLFishery has an FLCatch that catches the FLBiol
     # This is all a massive faff
@@ -286,10 +291,11 @@ test_that("operatingModel target values and eval_target method", {
 
     #---------- Test target methods ---------------
     # Get the target values from the C++ code
+    # Nothing to do with the target quantities in the control here - just testing internal methods
     targets <- test_operating_model_targets(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, fishery_no, catch_no, 1)
     # fbar of a single catch 
     expect_that(targets[["fbar_catch"]], equals(apply(f[[fishery_no]][fc@target[1,"min_age"]:fc@target[1,"max_age"],],2:6,mean)))
-    # a different range
+    # a different age range
     targets <- test_operating_model_targets(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, fishery_no, catch_no, 2)
     # fbar of a single catch 
     expect_that(targets[["fbar_catch"]], equals(apply(f[[fishery_no]][fc@target[2,"min_age"]:fc@target[2,"max_age"],],2:6,mean)))
@@ -315,25 +321,18 @@ test_that("operatingModel target values and eval_target method", {
     }
     expect_that(targets[["catches"]]@.Data, equals(catches_total@.Data))
 
-    # SSB - wrong at the moment - needs F from all fisheries
-    targets[["ssb"]]
-    ssb(flb)
-    total_f <- f_spwn[[1]] * f[[1]]
-    #for (i in 2:length(f)){
-    #    total_f <- total_f + (f_spwn[[i]] * f[[i]])
-    #}
-    # Just the first fishery for the moment
-    #total_f <- f[[1]] * f_spwn[[1]]
-    ssb_in <- quantSums(n(flb) * wt(flb) * fec(flb) * exp(-total_f - m(flb) * spwn(flb)))
+    # SSB - f portion from all catches
+    f_portion <- f_spwn[[1]] * f[[1]]
+    for (i in 2:length(f)){
+        f_portion <- f_portion + (f_spwn[[i]] * f[[i]])
+    }
+    ssb_in <- quantSums(n(flb) * wt(flb) * fec(flb) * exp(-f_portion - m(flb) * spwn(flb)))
     expect_that(ssb_in@.Data, equals(targets[["ssb"]]@.Data))
 
     # Biomass
     expect_that(targets[["biomass"]]@.Data, equals(quantSums(n(flb) * wt(flb))@.Data))
 
-
-
     #-------- Test eval_target by target number----------
-    #--------- Only testing with a single fishery and biol for the moment -------
     # Set up fc to test the output
     # By defaulf fishery = NA
     fishery_no <- round(runif(1, min=1,max=length(f)))
@@ -352,6 +351,7 @@ test_that("operatingModel target values and eval_target method", {
     fc@target[1,"quantity"] <- "f"
     fc@target[2,"quantity"] <- "catch"
     fc@target[3,"quantity"] <- "ssb"
+    fc@target[4,"quantity"] <- "biomass"
 
     # Testing eval_target
     min_iter <- 1
@@ -375,96 +375,104 @@ test_that("operatingModel target values and eval_target method", {
     cin <- c(catches_total[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1:max_iter])
     expect_that(cout, equals(cin))
 
-    # ssb - gets ssb in time step after
+    # ssb 
     target_no <- 3 
     ssb_out <- test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no, 1, max_iter)
-    #in <- c(catches_total[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1:max_iter])
-    # next time step
-    year <- fc@target[target_no,"year"]
-    season <- fc@target[target_no,"season"]
-    timestep <- (year-1) * dim(flq)[4] + season;
-    next_year <-  (timestep+1-1) %/% dim(flq)[4] + 1 
-    next_season <- (timestep+1-1) %% dim(flq)[4] + 1;
-    expect_that(ssb_out, equals(c(ssb_in[1,next_year,1,next_season,1,1:max_iter])))
+    expect_that(ssb_out, equals(c(ssb_in[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1:max_iter]))) 
 
+    # biomass
+    target_no <- 4 
+    biomass_out <- test_operatingModel_eval_target(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no, 1, max_iter)
+    biomass_in <- quantSums(n(flb) * wt(flb))
+    expect_that(biomass_out, equals(c(biomass_in[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1:max_iter])))
+
+
+
+    # Need to update and eval_target_hat dispatch
     #----------- Test eval target by target type ----------
-    target_no <- 1
-    fout <- test_operatingModel_eval_target2(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
-    fin <- c(f_total[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1:max_iter])
-    expect_that(fout, equals(fin))
+#    target_no <- 1
+#    fout <- test_operatingModel_eval_target2(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
+#    fin <- c(f_total[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1:max_iter])
+#    expect_that(fout, equals(fin))
+#
+#    target_no <- 2
+#    cout <- test_operatingModel_eval_target2(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
+#    cin <- c(catches_total[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1:max_iter])
+#    expect_that(cout, equals(cin))
 
-    target_no <- 2
-    cout <- test_operatingModel_eval_target2(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
-    cin <- c(catches_total[1,fc@target[target_no,"year"],1,fc@target[target_no,"season"],1,1:max_iter])
-    expect_that(cout, equals(cin))
-
-    #----------- Test calc target by target type ----------
+    #----------- Test calc_target_value  ----------
     # Not a relative target - should just the values in the target_iter slot
-    target_no <- 1
+    target_no <- 1 # f target
     fout <- test_operatingModel_calc_target_value(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
     expect_that(fout, is_identical_to(unname(c(fc@target_iters[target_no,"value",]))))
-    target_no <- 2
+    target_no <- 2 # catch target
     cout <- test_operatingModel_calc_target_value(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
     expect_that(cout, is_identical_to(unname(c(fc@target_iters[target_no,"value",]))))
-
-    target_no <- 3
+    target_no <- 3 # ssb target
     ssb_out <- test_operatingModel_calc_target_value(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
     expect_that(ssb_out, is_identical_to(unname(c(fc@target_iters[target_no,"value",]))))
+    target_no <- 4 # biomass target
+    biomass_out <- test_operatingModel_calc_target_value(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
+    expect_that(biomass_out, is_identical_to(unname(c(fc@target_iters[target_no,"value",]))))
 
     # Add a relative f target
     fc@target[3,"quantity"] <- "f"
     fc@target[3,"rel_year"] <- 1
-    fc@target[3,"rel_season"] <- 1
+    fc@target[3,"rel_season"] <- round(runif(1,min=1,max=dim(flq)[4]))
     target_no <- 3
     fout <- test_operatingModel_calc_target_value(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
-    expect_that(unname(c(f_total[1,1,1,1,1,]) * fc@target_iters[target_no,"value",]), equals(fout))
+    expect_that(unname(c(f_total[1,1,1,fc@target[3,"rel_season"],1,]) * fc@target_iters[target_no,"value",]), equals(fout))
     # Add a relative catch target
     fc@target[4,"quantity"] <- "catch"
     fc@target[4,"rel_year"] <- 2
-    fc@target[4,"rel_season"] <- 1
+    fc@target[4,"rel_season"] <- round(runif(1,min=1,max=dim(flq)[4]))
     target_no <- 4
     cout <- test_operatingModel_calc_target_value(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
-    expect_that(unname(c(catches_total[1,2,1,1,1,]) * fc@target_iters[target_no,"value",]), equals(cout))
+    expect_that(unname(c(catches_total[1,2,1,fc@target[4,"rel_season"],1,]) * fc@target_iters[target_no,"value",]), equals(cout))
     # Add a relative ssb target
     fc@target[5,"quantity"] <- "ssb"
     fc@target[5,"rel_year"] <- 3
-    fc@target[5,"rel_season"] <- 1
+    fc@target[5,"rel_season"] <- round(runif(1,min=1,max=dim(flq)[4]))
     target_no <- 5
     ssb_out <- test_operatingModel_calc_target_value(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
-    #expect_that(unname(c(catches_total[1,2,1,1,1,]) * fc@target_iters[target_no,"value",]), equals(cout))
-    #ssb_out
-    ## Relative to SSB + one timestep - is this right?
-    #c(ssb_in[1,3,1,2,1,]) * fc@target_iters[target_no,"value",]
+    expect_that(unname(c(ssb_in[1,3,1,fc@target[5,"rel_season"],1,]) * fc@target_iters[target_no,"value",]), equals(ssb_out))
+    # Relative biomass target
+    fc@target[6,"quantity"] <- "biomass"
+    fc@target[6,"rel_year"] <- 4
+    fc@target[6,"rel_season"] <- round(runif(1,min=1,max=dim(flq)[4]))
+    target_no <- 6
+    biomass_out <- test_operatingModel_calc_target_value(flfs, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, target_no) 
+    expect_that(unname(c(biomass_in[1,4,1,fc@target[6,"rel_season"],1,]) * fc@target_iters[target_no,"value",]), equals(biomass_out))
 
     # Min and max values
     # Set a Min bound to start with
-    fc@target[5,"quantity"] <- "catch"
-    fc@target_iters[5,"value",] <- NA
-    fc@target_iters[5,"max",] <- NA
-    fc@target_iters[5,"min",] <- rnorm(dim(fc@target_iters)[3], mean = 1000)
+    fc@target[7,"quantity"] <- "catch"
+    fc@target_iters[7,"value",] <- NA
+    fc@target_iters[7,"max",] <- NA
+    fc@target_iters[7,"min",] <- rnorm(dim(fc@target_iters)[3], mean = 1000)
     # Set Catch in that year to be 0 so that catch should be 0 - but will be constrained by min catch
     flfs_min <- flfs
     for (i in 1:length(flfs_min)){
-        flfs_min[[i]][[1]]@landings.n[,fc@target[5,"year"],,fc@target[5,"season"],,] <- 0
-        flfs_min[[i]][[1]]@discards.n[,fc@target[5,"year"],,fc@target[5,"season"],,] <- 0
+        flfs_min[[i]][[1]]@landings.n[,fc@target[7,"year"],,fc@target[7,"season"],,] <- 0
+        flfs_min[[i]][[1]]@discards.n[,fc@target[7,"year"],,fc@target[7,"season"],,] <- 0
     }
     flfs_min@desc <- flfs@desc # eck
-    cout <- test_operatingModel_calc_target_value(flfs_min, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, 5) 
-    expect_that(cout, is_identical_to(unname(fc@target_iters[5,"min",])))
+    cout <- test_operatingModel_calc_target_value(flfs_min, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, 7) 
+    expect_that(cout, is_identical_to(unname(fc@target_iters[7,"min",])))
     # Try a Max value
-    fc@target[6,"quantity"] <- "catch"
-    fc@target_iters[6,"value",] <- NA
-    fc@target_iters[6,"min",] <- NA
-    fc@target_iters[6,"max",] <- rnorm(dim(fc@target_iters)[3], mean = 1000)
+    fc@target[8,"quantity"] <- "catch"
+    fc@target_iters[8,"value",] <- NA
+    fc@target_iters[8,"min",] <- NA
+    fc@target_iters[8,"max",] <- rnorm(dim(fc@target_iters)[3], mean = 1000)
     # Set Catch in that year to be larger than the catch in that year so that catch should be very big - but will be constrained by max catch
     flfs_max <- flfs
     for (i in 1:length(flfs_max)){
-        flfs_max[[i]][[1]]@landings.n[,fc@target[6,"year"],,fc@target[6,"season"],,] <- fc@target_iters[6,"max",] + 1
-        flfs_max[[i]][[1]]@discards.n[,fc@target[6,"year"],,fc@target[6,"season"],,] <- fc@target_iters[6,"max",] + 1
+        flfs_max[[i]][[1]]@landings.n[,fc@target[8,"year"],,fc@target[8,"season"],,] <- fc@target_iters[8,"max",] + 1
+        flfs_max[[i]][[1]]@discards.n[,fc@target[8,"year"],,fc@target[8,"season"],,] <- fc@target_iters[8,"max",] + 1
     }
     flfs_max@desc <- flfs@desc # eck
-    cout <- test_operatingModel_calc_target_value(flfs_max, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, 6) 
-    expect_that(cout, is_identical_to(unname(fc@target_iters[6,"max",])))
+    cout <- test_operatingModel_calc_target_value(flfs_max, flb, "ricker", params_sr, 1, residuals_sr, residuals_mult, f, f_spwn, fc, 8) 
+    expect_that(cout, is_identical_to(unname(fc@target_iters[8,"max",])))
 
     # Try Min and Max values
     # some iters are min, some are max, some are OK

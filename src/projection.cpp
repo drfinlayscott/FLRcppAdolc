@@ -76,7 +76,7 @@ int newton_raphson(std::vector<double>& indep, const int adolc_tape, const int m
         for (int i=0; i<nindep; ++i){
             x[i] -= w[i];	   
         }
-        Rprintf("x0 %f\n", x[0]);
+        //Rprintf("x0 %f\n", x[0]);
         //Rprintf("x1 %f\n\n", x[1]);
     }
     Rprintf("NR iters: %i\n", iter_count);
@@ -181,7 +181,6 @@ int operatingModel::get_target_fmult_timestep(const int target_no){
     int target_timestep = 0;
     year_season_to_timestep(target_year, target_season, biol.n(), target_timestep);
     if((target_type == target_ssb) || (target_type == target_biomass)){
-        Rprintf("SSB or biomass target, shifting target timestep back by 1\n");
         target_timestep = target_timestep - 1;
     }
     return target_timestep;
@@ -317,17 +316,10 @@ std::vector<adouble> operatingModel::eval_target(const int target_no, const int 
             //}
             break;
        case target_ssb:
-            Rprintf("SSB target\n");
-            // Need to look one step ahead for biol based targets
-            // So bump timestep and calc appropriate year and season
-//            year_season_to_timestep(year, season, biol.n(), timestep);
-//            timestep_to_year_season(timestep + 1, biol.n(), year, season);
             out_flq = ssb(biol_no);
             break;
        case target_biomass:
-            Rprintf("Biomass target\n");
             out_flq = biomass(biol_no);
-
             break;
        default:
             Rcpp::stop("target_type not found in switch statement - giving up\n");
@@ -365,7 +357,6 @@ std::vector<adouble> operatingModel::eval_target(const int target_no, const int 
 std::vector<double> operatingModel::calc_target_value(const int target_no) const{
     // Pull out the min, value and max iterations from the control object
     std::vector<double> value = ctrl.get_target_value(target_no, 2);
-    Rprintf("value[0]: %f\n", value[0]);
     std::vector<double> min_value = ctrl.get_target_value(target_no, 1);
     std::vector<double> max_value = ctrl.get_target_value(target_no, 3);
     //fwdControlTargetType target_type = ctrl.get_target_type(target_no);
@@ -388,12 +379,12 @@ std::vector<double> operatingModel::calc_target_value(const int target_no) const
         std::vector<adouble> rel_value = eval_target(target_no, target_rel_year, 1, target_rel_season, 1);
         // Modify it by the relative amount
         for (int iter_count = 0; iter_count < value.size(); ++iter_count){
-            Rprintf("rel_value: %f\n", rel_value[iter_count].value());
-            Rprintf("min_value before rel calc: %f\n", min_value[iter_count]);
+            //Rprintf("rel_value: %f\n", rel_value[iter_count].value());
+            //Rprintf("min_value before rel calc: %f\n", min_value[iter_count]);
             value[iter_count] = value[iter_count] * rel_value[iter_count].value();
             min_value[iter_count] = min_value[iter_count] * rel_value[iter_count].value();
             max_value[iter_count] = max_value[iter_count] * rel_value[iter_count].value();
-            Rprintf("min_value after rel calc: %f\n", min_value[iter_count]);
+            //Rprintf("min_value after rel calc: %f\n", min_value[iter_count]);
         }
     }
 
@@ -408,7 +399,6 @@ std::vector<double> operatingModel::calc_target_value(const int target_no) const
         std::vector<adouble> value_ad = eval_target(target_no, target_year, 1, target_season, 1);
         for (int iter_count = 0; iter_count < value.size(); ++iter_count){
             value[iter_count] = value_ad[iter_count].value();
-            Rprintf("value[%i]: %f\n", iter_count, value[iter_count]);
         }
     }
     // If first iter of min_value is NA, then all of them are
@@ -417,7 +407,6 @@ std::vector<double> operatingModel::calc_target_value(const int target_no) const
     // Update each iter accordingly
         for (int iter_count = 0; iter_count < value.size(); ++iter_count){
             if(value[iter_count] < min_value[iter_count]){
-                Rprintf("value is less than min_value\n");
                 value[iter_count] = min_value[iter_count];
             }
         }
@@ -428,9 +417,7 @@ std::vector<double> operatingModel::calc_target_value(const int target_no) const
     // Update each iter accordingly
         for (int iter_count = 0; iter_count < value.size(); ++iter_count){
             if(value[iter_count] > max_value[iter_count]){
-                Rprintf("value is greater than max_value\n");
                 value[iter_count] = max_value[iter_count];
-                Rprintf("New value (set from max_value: %f\n ", value[iter_count]);
             }
         }
     }
@@ -482,9 +469,9 @@ void operatingModel::run(){
         target_fmult_timestep = get_target_fmult_timestep(target_count);
         timestep_to_year_season(target_fmult_timestep, biol.n(), target_fmult_year, target_fmult_season);
 
-        Rprintf("target_fmult_year: %i\n", target_fmult_year);
-        Rprintf("target_fmult_season: %i\n", target_fmult_season);
-        Rprintf("target_fmult_timestep: %i\n", target_fmult_timestep);
+        //Rprintf("target_fmult_year: %i\n", target_fmult_year);
+        //Rprintf("target_fmult_season: %i\n", target_fmult_season);
+        //Rprintf("target_fmult_timestep: %i\n", target_fmult_timestep);
 
         // Get the value that we are trying to hit
         // This either comes directly from the control object

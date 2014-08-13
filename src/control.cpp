@@ -36,7 +36,6 @@ fwdControl::fwdControl(){
 
 // Constructor used as intrinsic 'as'
 fwdControl::fwdControl(SEXP fwd_control_sexp){
-    Rprintf("In fwdControl as\n");
 	Rcpp::S4 fwd_control_s4 = Rcpp::as<Rcpp::S4>(fwd_control_sexp);
     target_iters = fwd_control_s4.slot("target_iters");
     target = fwd_control_s4.slot("target");
@@ -45,7 +44,6 @@ fwdControl::fwdControl(SEXP fwd_control_sexp){
 
 // intrinsic 'wrap' 
 fwdControl::operator SEXP() const{
-    Rprintf("In fwdControl wrap\n");
     Rcpp::S4 fwd_control_s4("fwdControl");
     fwd_control_s4.slot("target") = target;
     fwd_control_s4.slot("target_iters") = target_iters;
@@ -70,7 +68,6 @@ fwdControl& fwdControl::operator = (const fwdControl& fwdControl_source){
 }
 
 Rcpp::DataFrame fwdControl::get_target() const{
-    Rprintf("In fwdControl get_target\n");
     return target;
 }
 

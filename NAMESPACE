@@ -12,3 +12,6 @@ export(simple_fisheries_project)
 exportClasses(fwdControl)
 import(FLCore)
 useDynLib(FLRcppAdolc)
+exportPattern("^[[:alpha:]]+")
+importFrom(Rcpp, evalCpp)
+

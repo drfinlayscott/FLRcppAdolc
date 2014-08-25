@@ -3,6 +3,7 @@
  * Maintainer: Finlay Scott, JRC
  */
 
+#include <time.h>
 #include "../inst/include/FLQuant_base.h"
 
 // Default constructor
@@ -489,6 +490,7 @@ FLQuant_base<T>& FLQuant_base<T>::operator *= (const FLQuant_base<T>& rhs){
 template <typename T>
 template <typename T2>
 FLQuant_base<T>& FLQuant_base<T>::operator *= (const FLQuant_base<T2>& rhs){
+
     if (dim5_matcher(get_dim(), rhs.get_dim()) != 1){
         Rcpp::stop("You cannot multiply FLQuants as dimensions 1-5 do not match.");
     }
@@ -502,7 +504,13 @@ FLQuant_base<T>& FLQuant_base<T>::operator *= (const FLQuant_base<T2>& rhs){
         *this = (*this).propagate_iters(rhs.get_niter() - get_niter() + 1);
     }
     std::vector<T2> new_rhs_data = new_rhs.get_data();
+
     std::transform((*this).data.begin(), (*this).data.end(), new_rhs_data.begin(), (*this).data.begin(), std::multiplies<T>());
+
+    //std::vector<T2> rhs_data = rhs.get_data();
+    //for (unsigned int i = 0; i < rhs.get_size(); ++i){
+    //    data[i] = data[i] * rhs_data[i];
+    //}
     return *this;
 }
 
